@@ -24,7 +24,7 @@ struct FeedView: View {
                     
                     VStack(alignment: .trailing, spacing: 0) {
                         Text("구독중")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundStyle(Color.gray)
                             .padding(.bottom, 4)
                         
@@ -36,7 +36,7 @@ struct FeedView: View {
                     
                     VStack(alignment: .trailing, spacing: 0) {
                         Text("구독자")
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundStyle(Color.gray)
                             .padding(.bottom, 4)
                         
