@@ -18,7 +18,7 @@ struct FeedView: View {
         VStack(spacing: 0) {
             ScrollView {
                 
-                //MARK: 구독중, 구독자 Text
+                //MARK: subCountTexts
                 HStack {
                     Spacer()
                     
@@ -51,6 +51,7 @@ struct FeedView: View {
                 
             }
         }
+        //MARK: NavBar
         .navigationTitle(Text("피드"))
         .navigationBarTitleDisplayMode(.large)
 //        .toolbarBackground(Color.blue, for: .navigationBar)
