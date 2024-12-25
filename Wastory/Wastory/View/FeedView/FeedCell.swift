@@ -11,12 +11,13 @@ import SwiftUI
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct FeedCell: View {
     var body: some View {
+        
         HStack(alignment: .top, spacing: 0) {
             VStack(alignment: .leading, spacing: 8) {
                 
                 //MARK: title Text
                 Text("TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(.system(size: 18, weight: .regular))
                     .lineLimit(1)
                 
                 //MARK: content Text
@@ -75,11 +76,25 @@ struct FeedCell: View {
                     Text("Blog name")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(Color.gray)
-                        
                 }
+                
             }
+            .padding(.trailing, 28)
+            
+            //MARK: content Image
+            //글 내용에 이미지가 없을 경우 표시하지 않음
+            Image(systemName: "questionmark.text.page.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
+                .frame(width: 100, height: 100)
+                .clipped()
+                
         }
         .padding(.horizontal, 20)
+        .padding(.vertical, 15)
+        .onTapGesture {
+            //TODO: 해당 글 View로 이동
+        }
     }
 }
 
