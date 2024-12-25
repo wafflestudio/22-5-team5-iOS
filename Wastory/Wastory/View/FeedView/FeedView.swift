@@ -10,7 +10,13 @@ import SwiftUI
 //"피드" View에 구독 중인 블로그의 최신 글을 표시
 struct FeedView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 0) {
+            ScrollView {
+                
+            }
+        }
+        .navigationTitle(Text("피드"))
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
