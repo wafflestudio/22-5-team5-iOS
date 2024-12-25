@@ -17,12 +17,12 @@ struct FeedCell: View {
                 
                 //MARK: title Text
                 Text("TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle")
-                    .font(.system(size: 18, weight: .regular))
+                    .font(.system(size: 16, weight: .regular))
                     .lineLimit(1)
                 
                 //MARK: content Text
                 Text("Content Content Content Content Content Content Content Content Content Content Content")
-                    .font(.system(size: 16, weight: .regular))
+                    .font(.system(size: 14, weight: .regular))
                     .lineLimit(2)
                     .foregroundStyle(Color.gray)
                 
@@ -35,7 +35,7 @@ struct FeedCell: View {
                         
                         Text("50")
                     }
-                    .font(.system(size: 16, weight: .regular))
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundStyle(Color.gray)
                     
                     Image(systemName: "circle.fill")
@@ -49,7 +49,7 @@ struct FeedCell: View {
                         
                         Text("5")
                     }
-                    .font(.system(size: 16, weight: .regular))
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundStyle(Color.gray)
                     
                     Image(systemName: "circle.fill")
@@ -58,7 +58,7 @@ struct FeedCell: View {
                     
                     //timeAgo Text
                     Text("5분 전") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
-                        .font(.system(size: 16, weight: .regular))
+                        .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(Color.gray)
                 }
                 
@@ -67,14 +67,14 @@ struct FeedCell: View {
                     //blog image
                     Image(systemName: "questionmark.app.dashed")
                         .resizable()
-                        .frame(width: 27, height: 27)
+                        .frame(width: 20, height: 20)
                         .background(Color.gray.opacity(0.3))
                         .clipped()
-                        .cornerRadius(7)
+                        .cornerRadius(5)
                     
                     //blog name
                     Text("Blog name")
-                        .font(.system(size: 16, weight: .regular))
+                        .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(Color.gray)
                 }
                 
@@ -91,7 +91,7 @@ struct FeedCell: View {
                 
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 15)
+        .padding(.vertical, 22)
         .onTapGesture {
             //TODO: 해당 글 View로 이동
         }
