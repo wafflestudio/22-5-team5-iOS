@@ -43,6 +43,14 @@ import Observation
         return loginAutoSaveOn
     }
     
+    func clearIdTextField() {
+        id = ""
+    }
+    
+    func isClearButtonInactive() -> Bool {
+        return id.isEmpty
+    }
+    
     func togglePasswordVisibility() {
         isPasswordInvisible.toggle()
     }

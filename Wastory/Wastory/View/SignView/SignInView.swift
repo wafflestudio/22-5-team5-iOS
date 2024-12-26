@@ -20,15 +20,29 @@ struct SignInView: View {
                 Spacer()
                     .frame(height: 60)
                 
-                TextField("", text: $viewModel.id, prompt: Text("와스토리 아이디")
-                        .font(.system(size: 17))
-                        .foregroundStyle(Color.promptLabelColor))
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 20)
-                    .autocapitalization(.none)
-                    .onAppear {
-                        UITextField.appearance().clearButtonMode = .whileEditing
+                ZStack() {
+                    TextField("", text: $viewModel.id, prompt: Text("와스토리 아이디")
+                            .font(.system(size: 17))
+                            .foregroundStyle(Color.promptLabelColor))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .autocapitalization(.none)
+                    
+                    HStack() {
+                        Spacer()
+                        Button {
+                            viewModel.clearIdTextField()
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                                .font(.system(size: 15))
+                                .foregroundStyle(Color.promptLabelColor)
+                        }
+                        .frame(width: 10, height: 10)
+                        .padding(.trailing, 30)
+                        .disabled(viewModel.isClearButtonInactive())
+                        .opacity(viewModel.isClearButtonInactive() ? 0 : 1)
                     }
+                }
                 
                 Divider()
                     .foregroundStyle(Color.promptLabelColor)
