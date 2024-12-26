@@ -12,8 +12,8 @@ struct SignInView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack() {
-                VStack() {
+            ZStack {
+                VStack {
                     Text("waffle")
                         .font(.system(size: 32, weight: .regular))
                         .padding(.top, 60)
@@ -21,7 +21,7 @@ struct SignInView: View {
                     Spacer()
                         .frame(height: 60)
                     
-                    ZStack() {
+                    ZStack {
                         TextField("", text: $viewModel.id, prompt: Text("와스토리 아이디")
                             .font(.system(size: 17))
                             .foregroundStyle(Color.promptLabelColor))
@@ -29,7 +29,7 @@ struct SignInView: View {
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
                         
-                        HStack() {
+                        HStack {
                             Spacer()
                             Button {
                                 viewModel.clearIdTextField()
@@ -49,7 +49,7 @@ struct SignInView: View {
                         .foregroundStyle(Color.promptLabelColor)
                         .padding(.horizontal, 20)
                     
-                    ZStack() {
+                    ZStack {
                         SecureField("", text: $viewModel.password, prompt: Text("비밀번호")
                             .font(.system(size: 17))
                             .foregroundStyle(Color.promptLabelColor))
@@ -65,7 +65,7 @@ struct SignInView: View {
                         .autocapitalization(.none)
                         .opacity(viewModel.isPasswordVisible() ? 1 : 0)
                         
-                        HStack() {
+                        HStack {
                             Spacer()
                             Button {
                                 viewModel.togglePasswordVisibility()
