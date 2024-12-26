@@ -16,6 +16,7 @@ import Observation
     var id = ""
     var password = ""
     private var loginAutoSaveOn = false
+    private var isPasswordInvisible: Bool = true
     
     init() {
         id = userID
@@ -40,5 +41,17 @@ import Observation
     
     func isAutoSaveOn() -> Bool {
         return loginAutoSaveOn
+    }
+    
+    func togglePasswordVisibility() {
+        isPasswordInvisible.toggle()
+    }
+    
+    func isPasswordVisible() -> Bool {
+        return !isPasswordInvisible
+    }
+    
+    func isEyeButtonInactive() -> Bool {
+        return password.isEmpty
     }
 }

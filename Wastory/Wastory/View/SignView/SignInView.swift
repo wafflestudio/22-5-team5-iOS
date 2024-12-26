@@ -34,12 +34,37 @@ struct SignInView: View {
                     .foregroundStyle(Color.promptLabelColor)
                     .padding(.horizontal, 20)
                 
-                SecureField("", text: $viewModel.password, prompt: Text("비밀번호")
-                        .font(.system(size: 17))
-                        .foregroundStyle(Color.promptLabelColor))
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 20)
-                    .autocapitalization(.none)
+                ZStack() {
+                    SecureField("", text: $viewModel.password, prompt: Text("비밀번호")
+                            .font(.system(size: 17))
+                            .foregroundStyle(Color.promptLabelColor))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .autocapitalization(.none)
+                        .opacity(viewModel.isPasswordVisible() ? 0 : 1)
+                    TextField("", text: $viewModel.password, prompt: Text("비밀번호")
+                            .font(.system(size: 17))
+                            .foregroundStyle(Color.promptLabelColor))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .autocapitalization(.none)
+                        .opacity(viewModel.isPasswordVisible() ? 1 : 0)
+                    
+                    HStack() {
+                        Spacer()
+                        Button {
+                            viewModel.togglePasswordVisibility()
+                        } label: {
+                            Image(systemName: viewModel.isPasswordVisible() ? "eye.slash" : "eye")
+                                .font(.system(size: 15))
+                                .foregroundStyle(Color.promptLabelColor)
+                        }
+                        .frame(width: 10, height: 10)
+                        .padding(.trailing, 30)
+                        .disabled(viewModel.isEyeButtonInactive())
+                        .opacity(viewModel.isEyeButtonInactive() ? 0 : 1)
+                    }
+                }
                 
                 Divider()
                     .foregroundStyle(Color.promptLabelColor)
