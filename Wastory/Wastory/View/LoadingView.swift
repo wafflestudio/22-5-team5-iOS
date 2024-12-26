@@ -61,5 +61,5 @@ struct LoadingCircleUnit: View {
 }
 
 extension Color {
-    static let loadingCoralRed: Color = .init(red: 255 / 255, green: 85 / 255, blue: 68 / 255)
+    static let loadingCoralRed: Color = .init(red: 255 / 255, green: 85 / 255, blue: 68 / 255)  // 앱 실행 시 나타나는 로딩 화면 색상
 }
