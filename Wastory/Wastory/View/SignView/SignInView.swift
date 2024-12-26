@@ -85,11 +85,11 @@ struct SignInView: View {
                     .padding(.horizontal, 20)
                 
                 HStack(spacing: 8) {
-                    Image(systemName: viewModel.isAutoSaveOn() ? "checkmark.circle.fill" : "circle")
+                    Image(systemName: viewModel.isInfoSaveOn() ? "checkmark.circle.fill" : "circle")
                         .font(.system(size: 17))
                         .foregroundStyle(
-                            viewModel.isAutoSaveOn() ? .black : Color.autoSaveLabelColor,
-                            viewModel.isAutoSaveOn() ? Color.kakaoYellow : Color.autoSaveLabelColor
+                            viewModel.isInfoSaveOn() ? .black : Color.autoSaveLabelColor,
+                            viewModel.isInfoSaveOn() ? Color.kakaoYellow : Color.autoSaveLabelColor
                         )
                     Text("간편로그인 정보 저장")
                         .font(.system(size: 16, weight: .medium))

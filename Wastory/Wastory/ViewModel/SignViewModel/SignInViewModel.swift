@@ -11,20 +11,21 @@ import Observation
 @Observable final class SignInViewModel {
     @AppStorage("userID") @ObservationIgnored private var userID: String = ""
     @AppStorage("userPW") @ObservationIgnored private var userPW: String = ""
-    @AppStorage("loginAutoSave") @ObservationIgnored private var loginAutoSave: Bool = false
+    @AppStorage("loginAutoSave") @ObservationIgnored private var loginInfoSave: Bool = false
     
     var id = ""
     var password = ""
-    private var loginAutoSaveOn = false
+    private var isLoginInfoSave = false
     private var isPasswordInvisible: Bool = true
     
     init() {
         id = userID
-        loginAutoSaveOn = loginAutoSave
+        isLoginInfoSave = loginInfoSave
     }
     
     func login() {
-        if loginAutoSave {
+        loginInfoSave = isLoginInfoSave
+        if loginInfoSave {
             userID = id
             userPW = password
         }
@@ -32,15 +33,14 @@ import Observation
             userID = ""
             userPW = ""
         }
-        loginAutoSave = loginAutoSaveOn
     }
     
     func toggleAutoSave() {
-        loginAutoSaveOn = !loginAutoSaveOn
+        isLoginInfoSave.toggle()
     }
     
-    func isAutoSaveOn() -> Bool {
-        return loginAutoSaveOn
+    func isInfoSaveOn() -> Bool {
+        return isLoginInfoSave
     }
     
     func clearIdTextField() {
