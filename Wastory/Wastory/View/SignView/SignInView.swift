@@ -113,10 +113,22 @@ struct SignInView: View {
                             .cornerRadius(6)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.bottom, 60)
                     .simultaneousGesture(TapGesture().onEnded {
                         viewModel.login()
                     })
+                    
+                    Spacer()
+                        .frame(height: 30)
+                    
+                    HStack {
+                        NavigationLink(destination: SignUpView()) {
+                            Text("회원가입")
+                                .font(.system(size: 14, weight: .light))
+                                .foregroundStyle(.black)
+                        }
+                        .padding(.leading, 20)
+                        Spacer()
+                    }
                     
                     Spacer()
                 }
