@@ -44,7 +44,7 @@ struct MainTabView: View {
                 
                 
                 NavigationStack {
-                    // notificationView
+                    NotificationView()
                 }
                 .tabItem {
                     Text("알림")
