@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @Environment(\.dismiss) var dismiss
+    
     @State private var viewModel = SignUpViewModel()
     @Bindable  var userInfoRepository = UserInfoRepository.shared
     
@@ -129,6 +131,16 @@ struct SignUpView: View {
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 20, weight: .light))
+                    .foregroundStyle(.black)
+            }
+        )
     }
 }
 
