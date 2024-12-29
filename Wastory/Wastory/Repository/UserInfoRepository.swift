@@ -25,4 +25,16 @@ final class UserInfoRepository {
         self.userPW = userPW
         // DB에서 유저 닉네임 정보 및 추후 추가될 다른 정보를 불러오는 코드 필요
     }
+    
+    func getUserID() -> String {
+        return userID
+    }
+    
+    func getUserPW() -> String {
+        return userPW
+    }
+    
+    func getUserName() -> String {
+        return username
+    }
 }
