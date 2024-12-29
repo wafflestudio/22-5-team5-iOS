@@ -14,6 +14,7 @@ import Observation
     
     var isTypeSheetPresent = false
     
+    var isNavTitleHidden = false
     
     func toggleIsTypeSheetPresent() {
         isTypeSheetPresent.toggle()
@@ -23,11 +24,17 @@ import Observation
         isTypeSheetPresent
     }
     
+    
     func getNotificationType() -> String {
         notificationType
     }
     
     func setNotificationType(to type: String) {
         notificationType = type
+    }
+    
+    
+    func setIsNavTitleHidden(to isHidden: Bool) {
+        isNavTitleHidden = isHidden
     }
 }
