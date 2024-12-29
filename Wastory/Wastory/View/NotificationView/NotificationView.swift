@@ -20,15 +20,7 @@ struct NotificationView: View {
                     Color.clear
                         .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
                             // 스크롤 오프셋이 네비게이션 바 아래로 들어가면 텍스트 숨김
-                            if newValue <= 50 {
-                                if (!viewModel.isNavTitleHidden) {
-                                    viewModel.setIsNavTitleHidden(to: true)
-                                }
-                            } else {
-                                if (viewModel.isNavTitleHidden) {
-                                    viewModel.setIsNavTitleHidden(to: false)
-                                }
-                            }
+                            viewModel.changeIsNavTitleHidden(by: newValue)
                         }
                 }
                 .frame(height: 0)
@@ -81,8 +73,10 @@ struct NotificationView: View {
         }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
-        .navigationTitle(Text(viewModel.isNavTitleHidden ? "알림" : ""))
+        .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "알림" : ""))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
+        .toolbarBackground(Color.white, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button{
@@ -98,45 +92,3 @@ struct NotificationView: View {
 extension Color {
     static let primaryLabelColor: Color = .black
 }
-
-//
-//import SwiftUI
-//
-//struct NotificationView: View {
-//    @State private var scrollOffset: CGFloat = 0
-//
-//    var body: some View {
-//        VStack {
-//            Text("Scroll Offset: \(Int(scrollOffset))")
-//                .font(.headline)
-//                .padding()
-//
-//            ScrollView {
-//                ScrollViewReader { scrollViewProxy in
-//                    VStack(spacing: 10) {
-//                        ForEach(0..<30, id: \.self) { index in
-//                            Text("Item \(index + 1)")
-//                                .frame(maxWidth: .infinity)
-//                                .padding()
-//                                .background(Color.blue.opacity(0.2))
-//                                .cornerRadius(8)
-//                                .padding(.horizontal)
-//                                .id(index) // 각 항목에 고유 ID 부여
-//                        }
-//                    }
-//                    .background(GeometryReader { geometry in
-//                        Color.clear
-//                            .onAppear {
-//                                // 초기 위치 추적
-//                                scrollOffset = geometry.frame(in: .global).minY
-//                            }
-//                            .onChange(of: geometry.frame(in: .global).minY) { newValue in
-//                                // 오프셋 값 변경 추적
-//                                scrollOffset = newValue
-//                            }
-//                    })
-//                }
-//            }
-//        }
-//    }
-//}

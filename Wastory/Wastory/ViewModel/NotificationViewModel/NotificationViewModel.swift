@@ -14,8 +14,9 @@ import Observation
     
     var isTypeSheetPresent = false
     
-    var isNavTitleHidden = false
+    private var isNavTitleHidden = false
     
+    //MARK: isTypeSheetPresent
     func toggleIsTypeSheetPresent() {
         isTypeSheetPresent.toggle()
     }
@@ -24,17 +25,30 @@ import Observation
         isTypeSheetPresent
     }
     
-    
+    //MARK: NotificationType
     func getNotificationType() -> String {
         notificationType
     }
+    
     
     func setNotificationType(to type: String) {
         notificationType = type
     }
     
+    //MARK: isNavTitleHidden
+    func changeIsNavTitleHidden(by newValue: CGFloat) {
+        if newValue <= 60 {
+            if (!isNavTitleHidden) {
+                isNavTitleHidden = true
+            }
+        } else {
+            if (isNavTitleHidden) {
+                isNavTitleHidden = false
+            }
+        }
+    }
     
-    func setIsNavTitleHidden(to isHidden: Bool) {
-        isNavTitleHidden = isHidden
+    func getIsNavTitleHidden() -> Bool {
+        isNavTitleHidden
     }
 }
