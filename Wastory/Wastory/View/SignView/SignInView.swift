@@ -103,7 +103,26 @@ struct SignInView: View {
                         viewModel.toggleAutoSave()
                     }
                     
-                    NavigationLink(destination: MainTabView()) {
+                    ZStack {
+                        Rectangle()
+                            .foregroundStyle(Color.loginFailureBoxColor)
+                            .frame(height: viewModel.isLoginFailed() ? 80 : 0)
+                            .padding(.horizontal, 20)
+                        Text(viewModel.isLoginFailed() ? "와스토리 계정 혹은 비밀번호가 일치하지 않습니다. 입력한 내용을 다시 확인해 주세요." : "")
+                            .font(.system(size: 14, weight: .regular))
+                            .lineSpacing(3)
+                            .foregroundStyle(Color.loginFailureTextColor)
+                            .frame(height: viewModel.isLoginFailed() ? 80 : 0)
+                            .padding(.horizontal, 40)
+                    }
+                    
+                    Spacer()
+                        .frame(height: viewModel.isLoginFailed() ? 30 : 0)
+                    
+                    Button {
+                        viewModel.login()
+                        //viewModel.toggleLoginFailed() // 로그인 실패 문구 테스트 코드 (추후 삭제 예정)
+                    } label: {
                         Text("로그인")
                             .font(.system(size: 16, weight: .regular))
                             .foregroundStyle(.black)
@@ -113,9 +132,6 @@ struct SignInView: View {
                             .cornerRadius(6)
                     }
                     .padding(.horizontal, 20)
-                    .simultaneousGesture(TapGesture().onEnded {
-                        viewModel.login()
-                    })
                     
                     Spacer()
                         .frame(height: 30)
@@ -141,4 +157,6 @@ extension Color {
     static let kakaoYellow: Color = .init(red: 253 / 255, green: 229 / 255, blue: 0 / 255)  // 로그인 버튼에 사용되는 카카오의 상징색
     static let promptLabelColor: Color = .init(red: 142 / 255, green: 142 / 255, blue: 142 / 255)   // 텍스트필드 프롬프트 색상
     static let autoSaveLabelColor: Color = .init(red: 102 / 255, green: 102 / 255, blue: 102 / 255)   // 간편정보 저장 문구 색상
+    static let loginFailureBoxColor: Color = .init(red: 250 / 255, green: 250 / 255, blue: 250 / 255)   // 로그인 실패 박스 색상
+    static let loginFailureTextColor: Color = .init(red: 208 / 255, green: 103 / 255, blue: 79 / 255)   // 로그인 실패 문구 색상
 }
