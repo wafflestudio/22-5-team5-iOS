@@ -47,16 +47,17 @@ struct NotificationView: View {
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(Color.primaryLabelColor)
                     }
-                    .sheet(isPresented: $viewModel.isTypeSheetPresent) {
-                        List(viewModel.notificationTypes, id: \.self) { type in
-                            Button(action: {
-                                viewModel.setNotificationType(to: type)
-                                viewModel.toggleIsTypeSheetPresent()
-                            }) {
-                                Text("\(type)")
-                            }
-                        }
-                    }
+//                    .sheet(isPresented: $viewModel.isTypeSheetPresent) {
+//                        List(viewModel.notificationTypes, id: \.self) { type in
+//                            Button(action: {
+//                                viewModel.setNotificationType(to: type)
+//                                viewModel.toggleIsTypeSheetPresent()
+//                            }) {
+//                                Text("\(type)")
+//                            }
+//                        }
+//                        .listStyle(PlainListStyle())
+//                    }
                     
                 }
                 .padding(.trailing, 22)
@@ -69,6 +70,12 @@ struct NotificationView: View {
                             .foregroundStyle(Color.gray)
                     }
                 }
+            }
+            
+            if viewModel.isTypeSheetPresent {
+                TypeSheet
+                    .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
+                    .animation(.easeInOut, value: viewModel.isTypeSheetPresent)
             }
         }
         // MARK: NavBar
@@ -87,8 +94,76 @@ struct NotificationView: View {
             } // navbar 사이즈 설정을 위한 임의 버튼입니다.
         }
     }
+    
+    private var TypeSheet: some View {
+        ZStack {
+            VStack(spacing: 0) {
+                LazyVStack(spacing: 0) {
+                    ForEach(viewModel.notificationTypes, id: \.self) { type in
+                        Button(action: {
+                            viewModel.setNotificationType(to: type)
+                            viewModel.toggleIsTypeSheetPresent()
+                        }) {
+                            Text("\(type)")
+                                .padding()
+                        }
+                    }
+                }
+                .background(
+                    GeometryReader { innerGeometry in
+                        Color.clear
+                            .onAppear {
+                                viewModel.setTypeSheetHeight(to: innerGeometry.size.height)
+                            }
+                    }
+                )
+            }
+            .frame(height: viewModel.typeSheetHeight)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(radius: 10)
+            .offset(y: viewModel.isTypeSheetPresent ? 0 : viewModel.typeSheetHeight)
+            
+        }
+    }
 }
 
 extension Color {
     static let primaryLabelColor: Color = .black
 }
+//import SwiftUI
+//
+//struct NotificationView: View {
+//
+//    
+//    // Custom Sheet View
+//    private var customSheet: some View {
+//        GeometryReader { geometry in
+//            VStack(spacing: 0) {
+//                
+//                List(viewModel.notificationTypes, id: \.self) { type in
+//                    Button(action: {
+//                        viewModel.setNotificationType(to: type)
+//                        withAnimation {
+//                            showCustomSheet.toggle()
+//                        }
+//                    }) {
+//                        Text("\(type)")
+//                            .padding()
+//                    }
+//                }
+//                .listStyle(PlainListStyle())
+//            }
+//            .frame(height: geometry.size.height * 0.5) // 시트 높이 제한
+//            .background(Color.white)
+//            .cornerRadius(20)
+//            .shadow(radius: 10)
+//            .offset(y: geometry.size.height) // 초기 위치를 화면 아래로 설정
+//        }
+//        .edgesIgnoringSafeArea(.all)
+//    }
+//}
+//
+//extension Color {
+//    static let primaryLabelColor: Color = .black
+//}

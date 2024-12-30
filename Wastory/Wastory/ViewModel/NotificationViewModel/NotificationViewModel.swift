@@ -13,16 +13,23 @@ import Observation
     var notificationType: String = "전체 알림"
     
     var isTypeSheetPresent = false
+    var typeSheetHeight: CGFloat = 0
     
     private var isNavTitleHidden = false
     
     //MARK: isTypeSheetPresent
     func toggleIsTypeSheetPresent() {
-        isTypeSheetPresent.toggle()
+        withAnimation(.easeInOut) {
+            isTypeSheetPresent.toggle()
+        }
     }
     
     func getIsTypeSheetPresent() -> Bool {
         isTypeSheetPresent
+    }
+    
+    func setTypeSheetHeight(to geo: CGFloat) {
+        typeSheetHeight = geo
     }
     
     //MARK: NotificationType
