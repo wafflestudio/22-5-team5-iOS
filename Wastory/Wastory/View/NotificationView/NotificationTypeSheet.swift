@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TypeSheet: View {
+struct NotificationTypeSheet: View {
     @Binding var viewModel: NotificationViewModel
     
     var body: some View {

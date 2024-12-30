@@ -73,7 +73,7 @@ struct NotificationView: View {
             }
             
             if viewModel.isTypeSheetPresent {
-                TypeSheet(viewModel: $viewModel)
+                NotificationTypeSheet(viewModel: $viewModel)
                     .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
                     .animation(.easeInOut, value: viewModel.isTypeSheetPresent)
             }
