@@ -27,7 +27,9 @@ import Observation
     }
     
     func login() {
-        // DB와 통신하여 로그인 성공 여부를 판단하는 기능 필요
+        userInfoRepository.loadUserInfo(userID: userID, userPW: userPW)
+        loginFailed = !userInfoRepository.isUserActive()
+        if loginFailed { return }
         
         loginInfoSave = isLoginInfoSave
         if loginInfoSave {
@@ -38,7 +40,6 @@ import Observation
             userID = ""
             userPW = ""
         }
-        userInfoRepository.loadUserInfo(userID: userID, userPW: userPW)
     }
     
     func isLoginFailed() -> Bool {

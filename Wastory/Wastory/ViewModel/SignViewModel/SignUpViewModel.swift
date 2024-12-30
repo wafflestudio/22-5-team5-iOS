@@ -23,6 +23,10 @@ import Observation
         blogAddress = username + ".waffle.com"
     }
     
+    func setUserInfo() {
+        userInfoRepository.setUserInfo()
+    }
+    
     func checkUsernameAvailability() {
         if username.isEmpty {
             usernameAvailability = "사용할 수 없어요."

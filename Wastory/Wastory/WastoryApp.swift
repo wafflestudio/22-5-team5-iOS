@@ -22,11 +22,12 @@ struct WastoryApp: App {
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.isLoading = false
+                            userInfoRepository.loadUserInfo(userID: userID, userPW: userPW)
                         }
                     }
             }
             else {
-                if userInfoRepository.getUserName().isEmpty {
+                if userInfoRepository.isUserActive() == false {
                     SignInView()
                 }
                 else {

@@ -116,6 +116,7 @@ struct SignUpView: View {
                 
                 Button {
                     viewModel.setUsername()
+                    viewModel.setUserInfo()
                 } label: {
                     Text("확인")
                         .font(.system(size: 16, weight: .regular))
