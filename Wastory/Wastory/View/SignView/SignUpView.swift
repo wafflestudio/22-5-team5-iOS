@@ -114,7 +114,9 @@ struct SignUpView: View {
                 Spacer()
                     .frame(height: 120)
                 
-                NavigationLink(destination: MainTabView()) {
+                Button {
+                    viewModel.setUsername()
+                } label: {
                     Text("확인")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(.white)
@@ -124,9 +126,6 @@ struct SignUpView: View {
                         .cornerRadius(6)
                 }
                 .padding(.horizontal, 20)
-                .simultaneousGesture(TapGesture().onEnded {
-                    viewModel.setUsername()
-                })
                 .disabled(viewModel.usernameAvailability.last == ".")
                 
                 Spacer()
