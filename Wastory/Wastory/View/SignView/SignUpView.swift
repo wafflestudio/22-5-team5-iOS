@@ -66,7 +66,7 @@ struct SignUpView: View {
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
-                        .onChange(of: viewModel.username) { newValue in
+                        .onChange(of: viewModel.username) { newValue, oldValue in
                             viewModel.setBlogAddress()
                             viewModel.checkUsernameAvailability()
                         }
