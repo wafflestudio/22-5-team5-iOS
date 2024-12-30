@@ -13,6 +13,8 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
+    private var userInfoRepository = UserInfoRepository.shared
+    
     var body: some Scene {
         WindowGroup {
             if isLoading {
@@ -24,7 +26,7 @@ struct WastoryApp: App {
                     }
             }
             else {
-                if userID.isEmpty {
+                if userInfoRepository.getUserName().isEmpty {
                     SignInView()
                 }
                 else {
