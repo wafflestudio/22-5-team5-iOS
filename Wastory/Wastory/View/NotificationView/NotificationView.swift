@@ -15,65 +15,65 @@ struct NotificationView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                GeometryReader { geometry in
-                    Color.clear
-                        .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                            // 스크롤 오프셋이 네비게이션 바 아래로 들어가면 텍스트 숨김
-                            viewModel.changeIsNavTitleHidden(by: newValue)
-                        }
-                }
-                .frame(height: 0)
-            
-               
+            ZStack {
+                ScrollView {
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
+                                // 스크롤 오프셋이 네비게이션 바 아래로 들어가면 텍스트 숨김
+                                viewModel.changeIsNavTitleHidden(by: newValue)
+                            }
+                    }
+                    .frame(height: 0)
+                    
+                    
                     // MARK: 화면 상단 구성 요소
-                HStack {
-                    //Navbar title
-                    Text("알림")
-                        .font(.system(size: 34, weight: .bold))
-                        .padding(.leading)
-                    
-                    Spacer()
-                    
-                    // 알림 종류 선택 button
-                    Button(action: {
-                        viewModel.toggleIsTypeSheetPresent()
-                    }) {
-                        HStack(spacing: 0) {
-                            Text("\(viewModel.getNotificationType())  ")
-                            
-                            Image(systemName: "chevron.down")
+                    HStack {
+                        //Navbar title
+                        Text("알림")
+                            .font(.system(size: 34, weight: .bold))
+                            .padding(.leading)
+                        
+                        Spacer()
+                        
+                        // 알림 종류 선택 button
+                        Button(action: {
+                            viewModel.toggleIsTypeSheetPresent()
+                        }) {
+                            HStack(spacing: 0) {
+                                Text("\(viewModel.getNotificationType())  ")
+                                
+                                Image(systemName: "chevron.down")
+                            }
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundStyle(Color.primaryLabelColor)
                         }
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundStyle(Color.primaryLabelColor)
+                        
                     }
-//                    .sheet(isPresented: $viewModel.isTypeSheetPresent) {
-//                        List(viewModel.notificationTypes, id: \.self) { type in
-//                            Button(action: {
-//                                viewModel.setNotificationType(to: type)
-//                                viewModel.toggleIsTypeSheetPresent()
-//                            }) {
-//                                Text("\(type)")
-//                            }
-//                        }
-//                        .listStyle(PlainListStyle())
-//                    }
+                    .padding(.trailing, 22)
                     
-                }
-                .padding(.trailing, 22)
-                
-                //MARK: NotificationList
-                LazyVStack(spacing: 0) {
-                    ForEach(items, id: \.self) { _ in
-                        FeedCell()
-                        Divider()
-                            .foregroundStyle(Color.gray)
+                    //MARK: NotificationList
+                    LazyVStack(spacing: 0) {
+                        ForEach(items, id: \.self) { _ in
+                            FeedCell()
+                            Divider()
+                                .foregroundStyle(Color.gray)
+                        }
                     }
                 }
+                
+                (viewModel.isTypeSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.toggleIsTypeSheetPresent()
+                    }
+                
             }
             
             if viewModel.isTypeSheetPresent {
-                TypeSheet
+                TypeSheet(viewModel: $viewModel)
                     .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
                     .animation(.easeInOut, value: viewModel.isTypeSheetPresent)
             }
@@ -95,75 +95,10 @@ struct NotificationView: View {
         }
     }
     
-    private var TypeSheet: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                LazyVStack(spacing: 0) {
-                    ForEach(viewModel.notificationTypes, id: \.self) { type in
-                        Button(action: {
-                            viewModel.setNotificationType(to: type)
-                            viewModel.toggleIsTypeSheetPresent()
-                        }) {
-                            Text("\(type)")
-                                .padding()
-                        }
-                    }
-                }
-                .background(
-                    GeometryReader { innerGeometry in
-                        Color.clear
-                            .onAppear {
-                                viewModel.setTypeSheetHeight(to: innerGeometry.size.height)
-                            }
-                    }
-                )
-            }
-            .frame(height: viewModel.typeSheetHeight)
-            .background(Color.white)
-            .cornerRadius(20)
-            .shadow(radius: 10)
-            .offset(y: viewModel.isTypeSheetPresent ? 0 : viewModel.typeSheetHeight)
-            
-        }
-    }
+    
 }
 
 extension Color {
     static let primaryLabelColor: Color = .black
+    static let sheetOuterBackgroundColor: Color = .black.opacity(0.3)
 }
-//import SwiftUI
-//
-//struct NotificationView: View {
-//
-//    
-//    // Custom Sheet View
-//    private var customSheet: some View {
-//        GeometryReader { geometry in
-//            VStack(spacing: 0) {
-//                
-//                List(viewModel.notificationTypes, id: \.self) { type in
-//                    Button(action: {
-//                        viewModel.setNotificationType(to: type)
-//                        withAnimation {
-//                            showCustomSheet.toggle()
-//                        }
-//                    }) {
-//                        Text("\(type)")
-//                            .padding()
-//                    }
-//                }
-//                .listStyle(PlainListStyle())
-//            }
-//            .frame(height: geometry.size.height * 0.5) // 시트 높이 제한
-//            .background(Color.white)
-//            .cornerRadius(20)
-//            .shadow(radius: 10)
-//            .offset(y: geometry.size.height) // 초기 위치를 화면 아래로 설정
-//        }
-//        .edgesIgnoringSafeArea(.all)
-//    }
-//}
-//
-//extension Color {
-//    static let primaryLabelColor: Color = .black
-//}

@@ -28,9 +28,6 @@ import Observation
         isTypeSheetPresent
     }
     
-    func setTypeSheetHeight(to geo: CGFloat) {
-        typeSheetHeight = geo
-    }
     
     //MARK: NotificationType
     func getNotificationType() -> String {
@@ -40,6 +37,10 @@ import Observation
     
     func setNotificationType(to type: String) {
         notificationType = type
+    }
+    
+    func isCurrentType(is type: String) -> Bool{
+        type == notificationType
     }
     
     //MARK: isNavTitleHidden
