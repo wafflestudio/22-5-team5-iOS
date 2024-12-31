@@ -40,7 +40,7 @@ struct NotificationTypeSheet: View {
                     .frame(height: 60)
                     .frame(maxWidth: .infinity)
                     
-                    if !viewModel.isLastType(index) {
+                    if !viewModel.isLastType(index: index) {
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }
