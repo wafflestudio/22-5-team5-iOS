@@ -42,12 +42,12 @@ struct FeedView: View {
                     // 구독중
                     VStack(alignment: .trailing, spacing: 0) {
                         Text("구독중")
-                            .font(.system(size: 13, weight: .regular))
+                            .font(.system(size: 13, weight: .light))
                             .foregroundStyle(Color.gray)
                             .padding(.bottom, 4)
                         
                         Text("\(subscribingCount)")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 16, weight: .regular))
                             .foregroundStyle(Color.black)
                     }
                     .padding(.trailing, 12)
@@ -55,12 +55,12 @@ struct FeedView: View {
                     // 구독자
                     VStack(alignment: .trailing, spacing: 0) {
                         Text("구독자")
-                            .font(.system(size: 13, weight: .regular))
+                            .font(.system(size: 13, weight: .light))
                             .foregroundStyle(Color.gray)
                             .padding(.bottom, 4)
                         
                         Text("\(subscriberCount)")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 16, weight: .regular))
                             .foregroundStyle(Color.black)
                     }
                 }
@@ -71,7 +71,7 @@ struct FeedView: View {
                     ForEach(items, id: \.self) { _ in
                         FeedCell()
                         Divider()
-                            .foregroundStyle(Color.gray)
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
             }
