@@ -55,7 +55,7 @@ struct NotificationView: View {
                     //MARK: NotificationList
                     LazyVStack(spacing: 0) {
                         ForEach(items, id: \.self) { _ in
-                            FeedCell()
+                            NotificationCell()
                             Divider()
                                 .foregroundStyle(Color.gray)
                         }
