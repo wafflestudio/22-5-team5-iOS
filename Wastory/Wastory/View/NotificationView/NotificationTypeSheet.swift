@@ -16,7 +16,9 @@ struct NotificationTypeSheet: View {
                 Spacer()
                     .frame(height: 15)
                 
-                ForEach(viewModel.notificationTypes, id: \.self) { type in
+                ForEach(viewModel.notificationTypes.indices, id: \.self) { index in
+                    let type = viewModel.notificationTypes[index]
+                    
                     Button(action: {
                         viewModel.setNotificationType(to: type)
                         viewModel.toggleIsTypeSheetPresent()
@@ -38,11 +40,16 @@ struct NotificationTypeSheet: View {
                     .frame(height: 60)
                     .frame(maxWidth: .infinity)
                     
-                    Divider()
-                        .foregroundStyle(Color.secondaryLabelColor)
+                    if !viewModel.isLastType(index) {
+                        Divider()
+                            .foregroundStyle(Color.secondaryLabelColor)
+                    }
                 }
+                
+                Spacer()
+                    .frame(height: 15)
             }
-            .frame(height: 60 * 6 + 15)
+            .frame(height: 60 * 6 + 15 * 2)
             .background(Color.white)
             .cornerRadius(20)
             

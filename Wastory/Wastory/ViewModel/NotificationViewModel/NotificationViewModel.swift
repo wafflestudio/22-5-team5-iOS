@@ -39,8 +39,12 @@ import Observation
         notificationType = type
     }
     
-    func isCurrentType(is type: String) -> Bool{
+    func isCurrentType(is type: String) -> Bool {
         type == notificationType
+    }
+    
+    func isLastType(_ index: Int) -> Bool {
+        index == notificationTypes.count - 1
     }
     
     //MARK: isNavTitleHidden
