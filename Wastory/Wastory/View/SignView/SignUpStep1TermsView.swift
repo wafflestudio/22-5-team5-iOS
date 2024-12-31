@@ -105,7 +105,7 @@ struct SignUpStep1TermsView: View {
                 Spacer()
                     .frame(height: 30)
                 
-                NavigationLink(destination: EmptyView()) {  // 임시로 EmptyView로 넘어감
+                NavigationLink(destination: SignUpStep2EmailView()) {
                     Text("동의")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(viewModel.areAllRequiredTermsAgreed() ? .black : Color.incompleteAgreementTextColor)
