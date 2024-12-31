@@ -137,7 +137,7 @@ struct SignInView: View {
                         .frame(height: 30)
                     
                     HStack {
-                        NavigationLink(destination: SignUpView()) {
+                        NavigationLink(destination: SignUpStep1TermsView()) {
                             Text("회원가입")
                                 .font(.system(size: 14, weight: .light))
                                 .foregroundStyle(.black)
