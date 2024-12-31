@@ -31,7 +31,7 @@ struct NotificationView: View {
                     HStack {
                         //Navbar title
                         Text("알림")
-                            .font(.system(size: 34, weight: .bold))
+                            .font(.system(size: 34, weight: .medium))
                             .padding(.leading)
                         
                         Spacer()
@@ -45,7 +45,7 @@ struct NotificationView: View {
                                 
                                 Image(systemName: "chevron.down")
                             }
-                            .font(.system(size: 16, weight: .regular))
+                            .font(.system(size: 16, weight: .light))
                             .foregroundStyle(Color.primaryLabelColor)
                         }
                         

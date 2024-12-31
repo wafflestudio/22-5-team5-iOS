@@ -1,5 +1,5 @@
 //
-//  FeedCell.swift
+//  NotificationCell.swift
 //  Wastory
 //
 //  Created by 중워니 on 12/31/24.
