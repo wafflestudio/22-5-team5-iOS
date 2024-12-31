@@ -16,15 +16,15 @@ struct FeedCell: View {
             VStack(alignment: .leading, spacing: 8) {
                 
                 //MARK: title Text
-                Text("TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle")
-                    .font(.system(size: 16, weight: .regular))
+                Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    .font(.system(size: 17, weight: .regular))
                     .lineLimit(1)
                 
                 //MARK: content Text
-                Text("Content Content Content Content Content Content Content Content Content Content Content")
-                    .font(.system(size: 14, weight: .regular))
+                Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
+                    .font(.system(size: 14, weight: .light))
                     .lineLimit(2)
-                    .foregroundStyle(Color.gray)
+                    .foregroundStyle(Color.secondaryLabelColor)
                 
                 //MARK: like & comment & timeAgo Text
                 HStack(alignment: .center, spacing: 9) {
@@ -35,11 +35,11 @@ struct FeedCell: View {
                         
                         Text("50")
                     }
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(Color.gray)
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundStyle(Color.secondaryLabelColor)
                     
                     Image(systemName: "circle.fill")
-                        .font(.system(size: 3, weight: .regular))
+                        .font(.system(size: 3, weight: .light))
                         .foregroundStyle(Color.gray.opacity(0.3))
                     
                     
@@ -49,8 +49,8 @@ struct FeedCell: View {
                         
                         Text("5")
                     }
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(Color.gray)
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundStyle(Color.secondaryLabelColor)
                     
                     Image(systemName: "circle.fill")
                         .font(.system(size: 3, weight: .regular))
@@ -58,8 +58,8 @@ struct FeedCell: View {
                     
                     //timeAgo Text
                     Text("5분 전") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundStyle(Color.gray)
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
                 }
                 
                 //MARK: posted blog info
@@ -68,18 +68,18 @@ struct FeedCell: View {
                     Image(systemName: "questionmark.app.dashed")
                         .resizable()
                         .frame(width: 20, height: 20)
-                        .background(Color.gray.opacity(0.3))
+                        .background(Color.secondaryLabelColor.opacity(0.3))
                         .clipped()
                         .cornerRadius(5)
                     
                     //blog name
                     Text("Blog name")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundStyle(Color.gray)
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
                 }
                 
             }
-            .padding(.trailing, 28)
+            .padding(.trailing, 20)
             
             //MARK: content Image
             //글 내용에 이미지가 없을 경우 표시하지 않음
