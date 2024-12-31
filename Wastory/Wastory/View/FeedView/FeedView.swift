@@ -34,7 +34,7 @@ struct FeedView: View {
                 HStack {
                     //Navbar title
                     Text("피드")
-                        .font(.system(size: 34, weight: .bold))
+                        .font(.system(size: 34, weight: .medium))
                         .padding(.leading)
                     
                     Spacer()
