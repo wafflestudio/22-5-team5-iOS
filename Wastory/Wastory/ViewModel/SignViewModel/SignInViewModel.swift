@@ -27,7 +27,7 @@ import Observation
     }
     
     func login() {
-        userInfoRepository.loadUserInfo(userID: userID, userPW: userPW)
+        userInfoRepository.loadUserInfo(userID: id, userPW: password)
         loginFailed = !userInfoRepository.isUserActive()
         if loginFailed { return }
         
