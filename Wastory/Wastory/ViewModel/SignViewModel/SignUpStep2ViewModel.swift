@@ -12,7 +12,9 @@ import Observation
     var email: String = ""
     var code: String = ""
     
-    private let codeLength: Int = 6
+    private var isCodeRequested: Bool = false
+    
+    private let codeLength: Int = 8
     
     func clearEmailTextField() {
         email = ""
@@ -20,6 +22,15 @@ import Observation
     
     func isClearEmailButtonInactive() -> Bool {
         return email.isEmpty
+    }
+    
+    func requestCode() {
+        isCodeRequested = true
+        // 이메일 인증번호 보내는 기능 필요
+    }
+    
+    func isCodeRequired() -> Bool {
+        return isCodeRequested
     }
     
     func clearCodeTextField() {

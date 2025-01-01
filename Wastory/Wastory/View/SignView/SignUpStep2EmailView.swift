@@ -34,7 +34,7 @@ struct SignUpStep2EmailView: View {
                 .padding(.top, 20)
                 
                 HStack {
-                    Text("와스토리 계정으로 사용할")
+                    Text(viewModel.isCodeRequired() ? "이메일로 발송된" : "와스토리 계정으로 사용할")
                         .font(.system(size: 18, weight: .regular))
                         .padding(.horizontal, 20)
                     Spacer()
@@ -43,7 +43,7 @@ struct SignUpStep2EmailView: View {
                 Spacer()
                     .frame(height: 5)
                 HStack {
-                    Text("이메일을 입력해 주세요.")
+                    Text(viewModel.isCodeRequired() ? "인증번호를 입력해 주세요." : "이메일을 입력해 주세요.")
                         .font(.system(size: 18, weight: .regular))
                         .padding(.horizontal, 20)
                     Spacer()
@@ -52,43 +52,82 @@ struct SignUpStep2EmailView: View {
                 Spacer()
                     .frame(height: 30)
                 
-                ZStack {
-                    TextField("", text: $viewModel.email, prompt: Text("이메일 입력")
-                        .font(.system(size: 14))
-                        .foregroundStyle(Color.promptLabelColor))
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 20)
-                    .autocapitalization(.none)
-                    
+                if viewModel.isCodeRequired() {
                     HStack {
+                        Text(viewModel.email)
+                            .foregroundStyle(Color.promptLabelColor)
+                            .padding(.vertical, 5)
                         Spacer()
-                        Button {
-                            viewModel.clearEmailTextField()
-                        } label: {
-                            Image(systemName: "multiply.circle.fill")
-                                .font(.system(size: 15))
-                                .foregroundStyle(Color.promptLabelColor)
-                        }
-                        .frame(width: 10, height: 10)
-                        .padding(.trailing, 10)
-                        .disabled(viewModel.isClearEmailButtonInactive())
-                        .opacity(viewModel.isClearEmailButtonInactive() ? 0 : 1)
+                    }
+                    .padding(.horizontal, 20)
+                    Spacer()
+                        .frame(height: 5)
+                    Rectangle()
+                        .foregroundStyle(Color.promptLabelColor)
+                        .frame(height: 1)
+                        .padding(.horizontal, 20)
+                }
+                
+                ZStack {
+                    if viewModel.isCodeRequired() {
+                        TextField("", text: $viewModel.code, prompt: Text("인증번호 8자 입력")
+                            .foregroundStyle(Color.promptLabelColor))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .autocapitalization(.none)
                         
-                        Button {
-                            // 메일로 인증번호 보내는 기능 필요
-                        } label: {
-                            Text("인증요청")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal, 14)
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.clearCodeTextField()
+                            } label: {
+                                Image(systemName: "multiply.circle.fill")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(Color.promptLabelColor)
+                            }
+                            .frame(width: 10, height: 10)
+                            .padding(.trailing, 24)
+                            .disabled(viewModel.isClearCodeButtonInactive())
+                            .opacity(viewModel.isClearCodeButtonInactive() ? 0 : 1)
                         }
-                        .background(.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.codeRequestButtonGray, lineWidth: 1)
-                        )
-                        .padding(.trailing, 20)
+                    }
+                    else {
+                        TextField("", text: $viewModel.email, prompt: Text("이메일 입력")
+                            .foregroundStyle(Color.promptLabelColor))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 20)
+                        .autocapitalization(.none)
+                        
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.clearEmailTextField()
+                            } label: {
+                                Image(systemName: "multiply.circle.fill")
+                                    .font(.system(size: 15))
+                                    .foregroundStyle(Color.promptLabelColor)
+                            }
+                            .frame(width: 10, height: 10)
+                            .padding(.trailing, 10)
+                            .disabled(viewModel.isClearEmailButtonInactive())
+                            .opacity(viewModel.isClearEmailButtonInactive() ? 0 : 1)
+                            
+                            Button {
+                                viewModel.requestCode()
+                            } label: {
+                                Text("인증요청")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundStyle(.black)
+                                    .padding(.vertical, 7)
+                                    .padding(.horizontal, 14)
+                            }
+                            .background(.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 40)
+                                    .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                            )
+                            .padding(.trailing, 20)
+                        }
                     }
                 }
                 
@@ -103,11 +142,12 @@ struct SignUpStep2EmailView: View {
                 Spacer()
                     .frame(height: 24)
                 
-                SignUpStep2CautionText(text: "입력한 이메일로 인증번호가 발송됩니다.")
-                SignUpStep2CautionText(text: "인증메일을 받을 수 있도록 자주 쓰는 이메일을 입력해 주세요.")
-                
-                Spacer()
-                    .frame(height: 24)
+                if viewModel.isCodeRequired() == false {
+                    SignUpStep2CautionText(text: "입력한 이메일로 인증번호가 발송됩니다.")
+                    SignUpStep2CautionText(text: "인증메일을 받을 수 있도록 자주 쓰는 이메일을 입력해 주세요.")
+                    Spacer()
+                        .frame(height: 24)
+                }
                 
                 NavigationLink(destination: EmptyView()) {
                     Text("다음")
