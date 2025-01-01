@@ -165,6 +165,22 @@ struct SignUpStep2EmailView: View {
                     Spacer()
                         .frame(height: 24)
                 }
+                else {
+                    Button {
+                    } label: {
+                        HStack {
+                            Text("인증메일을 받지 못하셨나요?")
+                                .font(.system(size: 11, weight: .regular))
+                                .foregroundStyle(.black)
+                                .underline()
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    Spacer()
+                        .frame(height: 24)
+                }
                 
                 NavigationLink(destination: EmptyView()) {
                     Text("다음")
