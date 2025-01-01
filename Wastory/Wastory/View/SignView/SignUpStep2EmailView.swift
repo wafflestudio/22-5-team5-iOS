@@ -86,7 +86,7 @@ struct SignUpStep2EmailView: View {
                         .background(.white)
                         .overlay(
                             RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.codeRequestButtonColor, lineWidth: 1)
+                                .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                         )
                         .padding(.trailing, 20)
                     }
@@ -115,7 +115,7 @@ struct SignUpStep2EmailView: View {
                         .foregroundStyle(.black)
                         .padding(.vertical, 16)
                         .frame(maxWidth: .infinity, idealHeight: 51)
-                        .background(viewModel.isCodeEntered() ? Color.kakaoYellow : Color.disabledNextButtonColor)
+                        .background(viewModel.isCodeEntered() ? Color.kakaoYellow : Color.disabledNextButtonGray)
                         .cornerRadius(6)
                 }
                 .padding(.horizontal, 20)
