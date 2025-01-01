@@ -18,9 +18,9 @@ import Observation
     
     
     //NotificationTypeSheet Layout
-    var typeSheetTopSpace: CGFloat = 15
-    var typeSheetRowHeight: CGFloat = 60
-    var typeSheetBottomSpace: CGFloat = 30
+    let typeSheetTopSpace: CGFloat = 15
+    let typeSheetRowHeight: CGFloat = 60
+    let typeSheetBottomSpace: CGFloat = 30
     
     
     //MARK: NotificationType
