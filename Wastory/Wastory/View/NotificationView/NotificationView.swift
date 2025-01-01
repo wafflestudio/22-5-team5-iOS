@@ -62,7 +62,7 @@ struct NotificationView: View {
                         }
                     }
                 }
-            
+            }
         }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
