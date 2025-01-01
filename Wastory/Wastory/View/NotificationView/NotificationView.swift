@@ -62,22 +62,7 @@ struct NotificationView: View {
                         }
                     }
                 }
-                
-//                (mainTabViewModel.isNotificationTypeSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
-//                    .frame(maxHeight: .infinity)
-//                    .frame(maxWidth: .infinity)
-//                    .ignoresSafeArea()
-//                    .onTapGesture {
-//                        mainTabViewModel.toggleIsNotificationTypeSheetPresent()
-//                    }
-                
-            }
             
-//            if mainTabViewModel.isNotificationTypeSheetPresent {
-//                NotificationTypeSheet(viewModel: viewModel)
-//                    .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
-//                    .animation(.easeInOut, value: mainTabViewModel.isNotificationTypeSheetPresent)
-//            }
         }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
