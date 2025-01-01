@@ -135,14 +135,26 @@ struct SignUpStep2EmailView: View {
                         }
                     }
                 }
-                
+
                 Spacer()
                     .frame(height: 5)
                 
                 Rectangle()
-                    .foregroundStyle(.black)
+                    .foregroundStyle(viewModel.isEmptyEmailRequested() ? Color.emptyEmailWarnRed : .black)
                     .frame(height: 1)
                     .padding(.horizontal, 20)
+                
+                if viewModel.isEmptyEmailRequested() {
+                    Spacer()
+                        .frame(height: 5)
+                    HStack {
+                        Text("와스토리 계정 이메일을 입력해 주세요.")
+                            .font(.system(size: 11, weight: .light))
+                            .foregroundStyle(Color.emptyEmailWarnRed)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                }
                 
                 Spacer()
                     .frame(height: 24)
@@ -191,6 +203,7 @@ extension Color {
     static let codeRequestButtonGray: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 인증 요청 버튼 테두리 색상
     static let disabledNextButtonGray: Color = .init(red: 240 / 255, green: 240 / 255, blue: 240 / 255)  // 다음 버튼 이용 불가능 색상
     static let emailCautionTextGray: Color = .init(red: 153 / 255, green: 153 / 255, blue: 153 / 255)  // 다음 버튼 이용 불가능 색상
+    static let emptyEmailWarnRed: Color = .init(red: 208 / 255, green: 104 / 255, blue: 79 / 255)  // 이메일 미입력 경고 색상
 }
 
 #Preview {

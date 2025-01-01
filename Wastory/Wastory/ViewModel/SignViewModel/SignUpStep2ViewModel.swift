@@ -13,6 +13,7 @@ import Observation
     var code: String = ""
     
     private var isCodeRequested: Bool = false
+    private var emptyEmailRequested: Bool = false
     
     private let codeLength: Int = 8
     
@@ -25,8 +26,18 @@ import Observation
     }
     
     func requestCode() {
-        isCodeRequested = true
-        // 이메일 인증번호 보내는 기능 필요
+        if email.isEmpty == false {
+            isCodeRequested = true
+            emptyEmailRequested = false
+            // 이메일 인증번호 보내는 기능 필요
+        }
+        else {
+            emptyEmailRequested = true
+        }
+    }
+    
+    func isEmptyEmailRequested() -> Bool {
+        return emptyEmailRequested
     }
     
     func isCodeRequired() -> Bool {
