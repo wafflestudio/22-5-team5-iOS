@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MainTabView: View {
     
-    @State private var selectedTab: TabType = .home
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
     
