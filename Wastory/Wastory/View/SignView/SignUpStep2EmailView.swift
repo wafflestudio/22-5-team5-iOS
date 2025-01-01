@@ -143,8 +143,8 @@ struct SignUpStep2CautionText: View {
 }
 
 extension Color {
-    static let codeRequestButtonColor: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 인증 요청 버튼 테두리 색상
-    static let disabledNextButtonColor: Color = .init(red: 240 / 255, green: 240 / 255, blue: 240 / 255)  // 다음 버튼 이용 불가능 색상
+    static let codeRequestButtonGray: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 인증 요청 버튼 테두리 색상
+    static let disabledNextButtonGray: Color = .init(red: 240 / 255, green: 240 / 255, blue: 240 / 255)  // 다음 버튼 이용 불가능 색상
     static let emailCautionTextGray: Color = .init(red: 153 / 255, green: 153 / 255, blue: 153 / 255)  // 다음 버튼 이용 불가능 색상
 }
 
