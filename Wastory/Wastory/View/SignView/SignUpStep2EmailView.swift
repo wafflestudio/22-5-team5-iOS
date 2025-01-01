@@ -182,7 +182,7 @@ struct SignUpStep2EmailView: View {
                         .frame(height: 24)
                 }
                 
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: SignUpStep3PasswordView()) {
                     Text("다음")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(.black)
@@ -193,6 +193,11 @@ struct SignUpStep2EmailView: View {
                 }
                 .padding(.horizontal, 20)
                 .disabled(viewModel.isCodeEntered() == false)
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        UserInfoRepository.shared.setUserID(userID: viewModel.email)
+                    }
+                )
                 
                 Spacer()
             }
