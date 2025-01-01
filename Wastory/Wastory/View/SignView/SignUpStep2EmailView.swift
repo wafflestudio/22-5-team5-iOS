@@ -75,6 +75,11 @@ struct SignUpStep2EmailView: View {
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
+                        .onChange(of: viewModel.code) { newValue, oldValue in
+                            if newValue.count >= 8 {
+                                viewModel.code = String(viewModel.code.prefix(8))
+                            }
+                        }
                         
                         HStack {
                             Spacer()
