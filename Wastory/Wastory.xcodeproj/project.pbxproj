@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		499513062D261DA1007CC117 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 499513052D261DA1007CC117 /* Alamofire */; };
-		499513082D261DA1007CC117 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 499513072D261DA1007CC117 /* AlamofireDynamic */; };
 		4995130B2D261DAA007CC117 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4995130A2D261DAA007CC117 /* Kingfisher */; };
+		499513482D262031007CC117 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 499513472D262031007CC117 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4995130B2D261DAA007CC117 /* Kingfisher in Frameworks */,
-				499513062D261DA1007CC117 /* Alamofire in Frameworks */,
-				499513082D261DA1007CC117 /* AlamofireDynamic in Frameworks */,
+				499513482D262031007CC117 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,9 +72,8 @@
 			);
 			name = Wastory;
 			packageProductDependencies = (
-				499513052D261DA1007CC117 /* Alamofire */,
-				499513072D261DA1007CC117 /* AlamofireDynamic */,
 				4995130A2D261DAA007CC117 /* Kingfisher */,
+				499513472D262031007CC117 /* Alamofire */,
 			);
 			productName = Wastory;
 			productReference = 498A7EB02D1A7C93006FDC4A /* Wastory.app */;
@@ -107,8 +104,8 @@
 			mainGroup = 498A7EA72D1A7C93006FDC4A;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				499513042D261DA1007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				499513092D261DAA007CC117 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				499513462D262031007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 498A7EB12D1A7C93006FDC4A /* Products */;
@@ -340,14 +337,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		499513042D261DA1007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
 		499513092D261DAA007CC117 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -356,23 +345,26 @@
 				minimumVersion = 8.1.3;
 			};
 		};
+		499513462D262031007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		499513052D261DA1007CC117 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 499513042D261DA1007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		499513072D261DA1007CC117 /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 499513042D261DA1007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
-		};
 		4995130A2D261DAA007CC117 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 499513092D261DAA007CC117 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		499513472D262031007CC117 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 499513462D262031007CC117 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
