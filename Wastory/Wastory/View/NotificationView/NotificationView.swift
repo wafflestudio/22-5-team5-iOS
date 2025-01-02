@@ -83,8 +83,3 @@ struct NotificationView: View {
     
     
 }
-
-extension Color {
-    static let primaryLabelColor: Color = .black
-    static let sheetOuterBackgroundColor: Color = .black.opacity(0.3)
-}

@@ -122,10 +122,3 @@ struct SignUpStep1TermsView: View {
         }
     }
 }
-
-extension Color {
-    static let progressBarBackgroundColor: Color = .init(red: 235 / 255, green: 235 / 255, blue: 235 / 255)  // 회원가입 진행도 배경 색상
-    static let progressBarProgressColor: Color = .init(red: 76 / 255, green: 76 / 255, blue: 76 / 255)  // 회원가입 진행도 진행률 색상
-    static let incompleteAgreementBoxColor: Color = .init(red: 250 / 255, green: 250 / 255, blue: 250 / 255)  // 동의 미완료 박스 색상
-    static let incompleteAgreementTextColor: Color = .init(red: 179 / 255, green: 179 / 255, blue: 179 / 255)  // 동의 미완료 박스 색상
-}
