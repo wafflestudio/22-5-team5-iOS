@@ -8,52 +8,85 @@
 import SwiftUI
 
 struct NotificationTypeSheet: View {
-    @Binding var viewModel: NotificationViewModel
+    @Bindable var viewModel: NotificationViewModel
+    @Bindable var mainTabViewModel: MainTabViewModel
     
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
+            //MARK: Background Dimming
+            (mainTabViewModel.isNotificationTypeSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
+                .frame(maxHeight: .infinity)
+                .frame(maxWidth: .infinity)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    mainTabViewModel.toggleIsNotificationTypeSheetPresent()
+                }
+            
+            //MARK: NotificationTypeSheet List
+            VStack {
                 Spacer()
-                    .frame(height: 15)
-                
-                ForEach(viewModel.notificationTypes.indices, id: \.self) { index in
-                    let type = viewModel.notificationTypes[index]
+                if mainTabViewModel.isNotificationTypeSheetPresent {
+                    let typeSheetTopSpace = viewModel.typeSheetTopSpace
+                    let typeSheetRowHeight = viewModel.typeSheetRowHeight
+                    let typeSheetBottomSpace = viewModel.typeSheetBottomSpace
+                    let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + CGFloat(viewModel.notificationTypes.count) * typeSheetRowHeight
                     
-                    Button(action: {
-                        viewModel.setNotificationType(to: type)
-                        viewModel.toggleIsTypeSheetPresent()
-                    }) {
-                        HStack(spacing: 0) {
-                            Text("\(type)")
-                                .font(.system(size: 17, weight: viewModel.isCurrentType(is: type) ? .semibold : .light))
-                                .padding()
+                    ZStack {
+                        VStack(spacing: 0) {
+                            Spacer()
+                                .frame(height: typeSheetTopSpace)
                             
+                            ForEach(viewModel.notificationTypes.indices, id: \.self) { index in
+                                let type = viewModel.notificationTypes[index]
+                                
+                                NotificationTypeButton(for: type, isLast: index == viewModel.notificationTypes.count - 1, rowHeight: typeSheetRowHeight)
+                            }
                             
                             Spacer()
-                            
-                            Image(systemName: "checkmark.circle.fill")
-                                .tint(viewModel.isCurrentType(is: type) ? Color.primaryLabelColor : Color.clear)
-                                .font(.system(size: 20, weight: .regular))
-                                .padding(.trailing, 15)
+                                .frame(height: typeSheetBottomSpace)
                         }
+                        .frame(height: typeSheetHeight)
+                        .background(Color.white)
+                        .cornerRadius(20)
+                        
                     }
-                    .frame(height: 60)
-                    .frame(maxWidth: .infinity)
+                    .background(Color.clear)
+                    .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
+                    .animation(.easeInOut, value: mainTabViewModel.isNotificationTypeSheetPresent)
                     
-                    if !viewModel.isLastType(index: index) {
-                        Divider()
-                            .foregroundStyle(Color.secondaryLabelColor)
-                    }
                 }
-                
-                Spacer()
-                    .frame(height: 15)
             }
-            .frame(height: 60 * 6 + 15 * 2)
-            .background(Color.white)
-            .cornerRadius(20)
             
         }
-        .background(Color.sheetOuterBackgroundColor)
+        .ignoresSafeArea()
+    }
+    
+    //MARK: NotificationTypeSheet Row(Button)
+    @ViewBuilder func NotificationTypeButton(for type: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+        Button(action: {
+            viewModel.setNotificationType(to: type)
+            mainTabViewModel.toggleIsNotificationTypeSheetPresent()
+        }) {
+            HStack(spacing: 0) {
+                Text("\(type)")
+                    .font(.system(size: 17, weight: viewModel.isCurrentType(is: type) ? .semibold : .light))
+                    .foregroundStyle(Color.primaryLabelColor)
+                    .padding()
+                
+                Spacer()
+                
+                Image(systemName: "checkmark.circle.fill")
+                    .tint(viewModel.isCurrentType(is: type) ? Color.primaryLabelColor : Color.clear)
+                    .font(.system(size: 20, weight: .regular))
+                    .padding(.trailing, 15)
+            }
+        }
+        .frame(height: rowHeight)
+        .frame(maxWidth: .infinity)
+        
+        if !isLast {
+            Divider()
+                .foregroundStyle(Color.secondaryLabelColor)
+        }
     }
 }

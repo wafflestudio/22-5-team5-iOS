@@ -12,21 +12,15 @@ import Observation
     let notificationTypes = ["전체 알림", "새글 알림", "구독 알림", "댓글 알림", "방명록 알림", "챌린지 알림"]
     var notificationType: String = "전체 알림"
     
-    var isTypeSheetPresent = false
     var typeSheetHeight: CGFloat = 0
     
     private var isNavTitleHidden = false
     
-    //MARK: isTypeSheetPresent
-    func toggleIsTypeSheetPresent() {
-        withAnimation(.easeInOut) {
-            isTypeSheetPresent.toggle()
-        }
-    }
     
-    func getIsTypeSheetPresent() -> Bool {
-        isTypeSheetPresent
-    }
+    //NotificationTypeSheet Layout
+    let typeSheetTopSpace: CGFloat = 15
+    let typeSheetRowHeight: CGFloat = 60
+    let typeSheetBottomSpace: CGFloat = 30
     
     
     //MARK: NotificationType

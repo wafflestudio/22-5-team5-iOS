@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct NotificationView: View {
-    @State private var viewModel = NotificationViewModel()
+    @Bindable var viewModel: NotificationViewModel
+    @Bindable var mainTabViewModel: MainTabViewModel
     
     //임시 데이터 배열
     var items: [String] = ["아이템 1", "아이템 2", "아이템 3", "아이템 4", "아이템 5"]
@@ -38,7 +39,7 @@ struct NotificationView: View {
                         
                         // 알림 종류 선택 button
                         Button(action: {
-                            viewModel.toggleIsTypeSheetPresent()
+                            mainTabViewModel.toggleIsNotificationTypeSheetPresent()
                         }) {
                             HStack(spacing: 0) {
                                 Text("\(viewModel.getNotificationType())  ")
@@ -61,21 +62,6 @@ struct NotificationView: View {
                         }
                     }
                 }
-                
-                (viewModel.isTypeSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
-                    .frame(maxHeight: .infinity)
-                    .frame(maxWidth: .infinity)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        viewModel.toggleIsTypeSheetPresent()
-                    }
-                
-            }
-            
-            if viewModel.isTypeSheetPresent {
-                NotificationTypeSheet(viewModel: $viewModel)
-                    .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
-                    .animation(.easeInOut, value: viewModel.isTypeSheetPresent)
             }
         }
         // MARK: NavBar
