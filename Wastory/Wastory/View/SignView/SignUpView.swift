@@ -145,9 +145,3 @@ struct SignUpView: View {
     }
 }
 
-extension Color {
-    static let lightClearButtonColor: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)   // 밝은 클리어 버튼 색상
-    static let disableUsernameRed: Color = .init(red: 237 / 255, green: 100 / 255, blue: 87 / 255)     // 유저 네임 사용 불가 적색
-    static let ableUsernameGray: Color = .init(red: 91 / 255, green: 91 / 255, blue: 91 / 255)     // 유저 네임 사용 가능 회색
-    static let disableButtonGray: Color = .init(red: 187 / 255, green: 187 / 255, blue: 187 / 255)      // 확인 버튼 불가능 회색
-}

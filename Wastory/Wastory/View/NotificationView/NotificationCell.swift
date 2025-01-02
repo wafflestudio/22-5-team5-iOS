@@ -68,12 +68,6 @@ struct NotificationCell: View {
     }
 }
 
-extension Color {
-    static let unreadNotification = Color(red: 255/255, green: 84/255, blue: 68/255)
-    static let middleDotColor = Color.gray.opacity(0.3)
-}
-
-
 #Preview {
     NotificationCell()
 }
