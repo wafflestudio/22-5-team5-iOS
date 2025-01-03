@@ -13,6 +13,6 @@ struct Blog: Codable {
          
     var blogName: String            // Blog 이름 (default : "User.username 님의 블로그")
     var postIds: [Int]              // 블로그에 있는 PostId List
-    var mainImageURL: String        // Blog 대표이미지 URL
+    var mainImageURL: String?       // Blog 대표이미지 URL
     var description: String         // Blog 소개글
 }
