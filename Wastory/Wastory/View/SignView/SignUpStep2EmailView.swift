@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
+    @State private var isNavigationActive = false
     
     var body: some View {
         NavigationStack {
@@ -77,9 +78,10 @@ struct SignUpStep2EmailView: View {
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
                         .onChange(of: viewModel.code) { newValue, oldValue in
-                            if newValue.count >= 8 {
+                            if oldValue.count >= 8 {
                                 viewModel.code = String(viewModel.code.prefix(8))
                             }
+                            viewModel.checkCodeValidty(oldValue)
                         }
                         
                         HStack {
@@ -141,15 +143,15 @@ struct SignUpStep2EmailView: View {
                     .frame(height: 5)
                 
                 Rectangle()
-                    .foregroundStyle(viewModel.isEmptyEmailRequested() ? Color.emptyEmailWarnRed : .black)
+                    .foregroundStyle(viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() || viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() ? Color.emptyEmailWarnRed : .black)
                     .frame(height: 1)
                     .padding(.horizontal, 20)
                 
-                if viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() {
+                if viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() || viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() {
                     Spacer()
                         .frame(height: 5)
                     HStack {
-                        Text(viewModel.isEmptyEmailRequested() ? "와스토리 계정 이메일을 입력해 주세요." : "와스토리 계정 이메일 형식이 올바르지 않습니다.")
+                        Text(viewModel.isEmptyEmailRequested() ? "와스토리 계정 이메일을 입력해 주세요." : viewModel.isInvalidEmailRequested() ?  "와스토리 계정 이메일 형식이 올바르지 않습니다." : viewModel.isEmptyCodeEntered() ? "이메일로 발송된 인증번호를 입력해 주세요." : "인증번호 형식이 올바르지 않습니다.")
                             .font(.system(size: 11, weight: .light))
                             .foregroundStyle(Color.emptyEmailWarnRed)
                         Spacer()
@@ -183,22 +185,24 @@ struct SignUpStep2EmailView: View {
                         .frame(height: 24)
                 }
                 
-                NavigationLink(destination: SignUpStep3PasswordView()) {
+                Button {
+                    if viewModel.isVerificationSuccessful() {
+                        isNavigationActive = true
+                        UserInfoRepository.shared.setUserID(userID: viewModel.email)
+                    }
+                } label: {
                     Text("다음")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundStyle(.black)
                         .padding(.vertical, 16)
                         .frame(maxWidth: .infinity, idealHeight: 51)
-                        .background(viewModel.isCodeEntered() ? Color.kakaoYellow : Color.disabledNextButtonGray)
+                        .background(viewModel.code.isEmpty || viewModel.isInvalidCodeEntered() ? Color.disabledNextButtonGray : Color.kakaoYellow)
                         .cornerRadius(6)
                 }
                 .padding(.horizontal, 20)
-                .disabled(viewModel.isCodeEntered() == false)
-                .simultaneousGesture(
-                    TapGesture().onEnded {
-                        UserInfoRepository.shared.setUserID(userID: viewModel.email)
-                    }
-                )
+                .navigationDestination(isPresented: $isNavigationActive) {
+                    SignUpStep3PasswordView()
+                }
                 
                 Spacer()
             }
@@ -226,8 +230,4 @@ extension Color {
     static let disabledNextButtonGray: Color = .init(red: 240 / 255, green: 240 / 255, blue: 240 / 255)  // 다음 버튼 이용 불가능 색상
     static let emailCautionTextGray: Color = .init(red: 153 / 255, green: 153 / 255, blue: 153 / 255)  // 이메일 입력 주의사항 색상
     static let emptyEmailWarnRed: Color = .init(red: 208 / 255, green: 104 / 255, blue: 79 / 255)  // 이메일 미입력 경고 색상
-}
-
-#Preview {
-    SignUpStep2EmailView()
 }

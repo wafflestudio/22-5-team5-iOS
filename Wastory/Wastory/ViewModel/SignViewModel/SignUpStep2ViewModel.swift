@@ -17,6 +17,8 @@ import Observation
     private var invalidEmailRequested: Bool = false
     
     private let codeLength: Int = 8
+    private var emptyCodeEntered: Bool = false
+    private var invalidCodeEntered: Bool = false
     
     // MARK: Email TextField
     func clearEmailTextField() {
@@ -26,8 +28,6 @@ import Observation
     func isClearEmailButtonInactive() -> Bool {
         return email.isEmpty
     }
-    
-    
     
     func requestCode() {
         if email.isEmpty {
@@ -53,6 +53,12 @@ import Observation
         return invalidEmailRequested
     }
     
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: email)
+    }
+    
     // MARK: Verification Code TextField
     func isCodeRequired() -> Bool {
         return isCodeRequested
@@ -66,13 +72,30 @@ import Observation
         return code.isEmpty
     }
     
-    func isCodeEntered() -> Bool {
-        return code.count == codeLength
+    func isEmptyCodeEntered() -> Bool {
+        return emptyCodeEntered
     }
-}
-
-func isValidEmail(_ email: String) -> Bool {
-    let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
-    let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-    return emailPredicate.evaluate(with: email)
+    
+    func isInvalidCodeEntered() -> Bool {
+        return invalidCodeEntered
+    }
+    
+    func checkCodeValidty(_ code: String) {
+        if code.isEmpty {
+            invalidCodeEntered = false
+        }
+        else {
+            emptyCodeEntered = false
+            invalidCodeEntered = !code.allSatisfy { $0.isNumber } || code.count < 8
+        }
+    }
+    
+    func isVerificationSuccessful() -> Bool {
+        // 인증코드 유효성 검사 코드 필요
+        if code.isEmpty {
+            emptyCodeEntered = true
+            return false
+        }
+        return !code.isEmpty && !invalidCodeEntered
+    }
 }
