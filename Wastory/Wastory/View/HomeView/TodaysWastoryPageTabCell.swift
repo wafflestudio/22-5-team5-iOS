@@ -1,5 +1,5 @@
 //
-//  TodaysWastoryCell.swift
+//  TodaysWastoryPageTabCell.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/5/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodaysWastoryCell: View {
+struct TodaysWastoryPageTabCell: View {
     var body: some View {
         ZStack {
             //Background Image
@@ -94,9 +94,6 @@ struct TodaysWastoryCell: View {
     }
 }
 
-#Preview {
-    TodaysWastoryCell()
-}
 
 extension Color {
     static let todaysWastoryTextOutterBoxColor = Color.white.opacity(0.5)

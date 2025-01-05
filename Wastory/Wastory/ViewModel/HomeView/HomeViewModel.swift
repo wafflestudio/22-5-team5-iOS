@@ -13,9 +13,9 @@ import Observation
     
     var todaysWastoryItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     var displayedTodaysWastoryItems: [String] = []
-    
     var todaysWastoryIndex: Int = 1
 
+    var todaysWastoryListItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     
     
     init() {

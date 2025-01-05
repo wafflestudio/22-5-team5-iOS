@@ -15,10 +15,11 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                // MARK: 오늘의 티스토리
-                TodaysWastoryView(viewModel: viewModel)
+                // MARK: 오늘의 티스토리 PageTabView
+                TodaysWastoryPageTabView(viewModel: viewModel)
                 
-                // MARK:
+                // MARK: 오늘의 티스토리 ListView
+                TodaysWastoryListView(viewModel: viewModel)
                 
             } //VStack
         } //ScrollView

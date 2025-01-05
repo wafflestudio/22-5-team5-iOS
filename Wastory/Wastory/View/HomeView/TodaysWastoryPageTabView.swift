@@ -1,5 +1,5 @@
 //
-//  TodaysWastoryView.swift
+//  TodaysWastoryPageTabView.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/5/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodaysWastoryView: View {
+struct TodaysWastoryPageTabView: View {
     @Bindable var viewModel: HomeViewModel
     
     var body: some View {
@@ -15,7 +15,7 @@ struct TodaysWastoryView: View {
             // MARK: 오늘의 티스토리
             TabView(selection: $viewModel.todaysWastoryIndex) {
                 ForEach(viewModel.displayedTodaysWastoryItems.indices, id: \.self) { index in
-                    TodaysWastoryCell()
+                    TodaysWastoryPageTabCell()
                         .tag(index)
                 }
             }
