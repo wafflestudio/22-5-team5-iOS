@@ -90,6 +90,7 @@ struct TodaysWastoryPageTabCell: View {
                 .padding(.horizontal, 25)
             }
         }
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

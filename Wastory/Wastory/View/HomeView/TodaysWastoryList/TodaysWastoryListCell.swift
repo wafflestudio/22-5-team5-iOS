@@ -87,6 +87,8 @@ struct TodaysWastoryListCell: View {
                     .foregroundStyle(Color.secondaryLabelColor)
             }
         }// VStack
+        .padding(.horizontal, 20)
+        .background(Color.white)
     }
 }
 

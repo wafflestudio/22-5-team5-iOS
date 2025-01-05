@@ -82,6 +82,8 @@ struct HomePostListCell: View {
                     .foregroundStyle(Color.secondaryLabelColor)
             }
         }
+        .padding(.horizontal, 20)
+        .background(Color.white)
     }
 }
 

@@ -16,6 +16,6 @@ struct TodaysWastoryListView: View {
                 TodaysWastoryListCell(index: index + 1)
             }
         }
-        .padding(.horizontal, 20)
+        .background(Color.white)
     }
 }

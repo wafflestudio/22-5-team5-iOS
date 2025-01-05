@@ -47,15 +47,14 @@ struct CategoryPopularPostView: View {
                     HomeBigPostListCell()
                 }
             }
-            .padding(.horizontal, 20)
             
             VStack(spacing: 0) {
                 ForEach(Array(viewModel.categoryPopularPostItems[2..<7].enumerated()), id: \.offset) { index, item in
                     HomePostListCell(index: index)
                 }
             }
-            .padding(.horizontal, 20)
         } //VStack
+        .background(Color.white)
     } //Body
     
     @ViewBuilder func categoryButton(category: String, isSelected: Bool) -> some View {

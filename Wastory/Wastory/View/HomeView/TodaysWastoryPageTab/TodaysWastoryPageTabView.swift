@@ -36,5 +36,6 @@ struct TodaysWastoryPageTabView: View {
             }
             .animation(.easeInOut, value: viewModel.todaysWastoryIndex)
         }
+        .background(Color.white)
     }
 }
