@@ -70,7 +70,7 @@ struct HomePostListCell: View {
             Spacer()
                 .frame(height: 17)
             
-            if index != 7 {
+            if index != 5 {
                 Divider()
                     .foregroundStyle(Color.secondaryLabelColor)
             }
