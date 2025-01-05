@@ -8,11 +8,11 @@
 import Foundation
 
 struct Comment: Codable {
-    let commentId: UUID                  // Comment Id(주소)
-    let blogId: UUID                     // Comment가 달린
-    let userId: String                  // Comment 작성자
+    let commentID: UUID                  // Comment Id(주소)
+    let blogID: UUID                     // Comment가 달린
+    let userID: String                  // Comment 작성자
     
-    var childIds: [UUID]?                // Comment의 답글 id List
+    var childIDs: [UUID]?                // Comment의 답글 id List
     
     var content: String                 // 내용
     var createdAt: Date                 // 발행일
