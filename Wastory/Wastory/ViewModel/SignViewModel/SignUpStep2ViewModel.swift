@@ -20,6 +20,17 @@ import Observation
     private var emptyCodeEntered: Bool = false
     private var invalidCodeEntered: Bool = false
     
+    func requestEmailReentry() {
+        // 이메일 입력화면으로 되돌아가는 버튼
+        email = ""
+        code = ""
+        isCodeRequested = false
+        emptyEmailRequested = false
+        invalidEmailRequested = false
+        emptyCodeEntered = false
+        invalidCodeEntered = false
+    }
+    
     // MARK: Email TextField
     func clearEmailTextField() {
         email = ""
