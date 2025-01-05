@@ -72,6 +72,7 @@ struct SignUpStep2EmailView: View {
                     if viewModel.isCodeRequired() {
                         TextField("", text: $viewModel.code, prompt: Text("인증번호 8자 입력")
                             .foregroundStyle(Color.promptLabelColor))
+                        .keyboardType(.numberPad)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
