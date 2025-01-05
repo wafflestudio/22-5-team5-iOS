@@ -12,7 +12,7 @@ struct Comment: Codable {
     let blogId: Int                     // Comment가 달린
     let userId: String                  // Comment 작성자
     
-    let parentId: Int?                  // Comment가 답글 형식일 경우 원댓글의 Id
+    var childIds: [Int]?                // Comment의 답글 id List
     
     var content: String                 // 내용
     var createdAt: Date                 // 발행일

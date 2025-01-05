@@ -9,8 +9,7 @@ import Foundation
 
 struct User: Codable {
     
-    let userId: String              // userID
-    let email: String               // 이메일 주소
+    let email: String               // 이메일 주소 (로그인 시 사용하는 userId)
     var password: String            // 비밀번호
     var username: String            // 유저네임
     
