@@ -145,11 +145,11 @@ struct SignUpStep2EmailView: View {
                     .frame(height: 1)
                     .padding(.horizontal, 20)
                 
-                if viewModel.isEmptyEmailRequested() {
+                if viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() {
                     Spacer()
                         .frame(height: 5)
                     HStack {
-                        Text("와스토리 계정 이메일을 입력해 주세요.")
+                        Text(viewModel.isEmptyEmailRequested() ? "와스토리 계정 이메일을 입력해 주세요." : "와스토리 계정 이메일 형식이 올바르지 않습니다.")
                             .font(.system(size: 11, weight: .light))
                             .foregroundStyle(Color.emptyEmailWarnRed)
                         Spacer()

@@ -14,9 +14,11 @@ import Observation
     
     private var isCodeRequested: Bool = false
     private var emptyEmailRequested: Bool = false
+    private var invalidEmailRequested: Bool = false
     
     private let codeLength: Int = 8
     
+    // MARK: Email TextField
     func clearEmailTextField() {
         email = ""
     }
@@ -25,14 +27,21 @@ import Observation
         return email.isEmpty
     }
     
+    
+    
     func requestCode() {
-        if email.isEmpty == false {
+        if email.isEmpty {
+            invalidEmailRequested = false
+            emptyEmailRequested = true
+        }
+        else if isValidEmail(email) {
             isCodeRequested = true
             emptyEmailRequested = false
-            // 이메일 인증번호 보내는 기능 필요
+            invalidEmailRequested = false
         }
         else {
-            emptyEmailRequested = true
+            emptyEmailRequested = false
+            invalidEmailRequested = true
         }
     }
     
@@ -40,6 +49,11 @@ import Observation
         return emptyEmailRequested
     }
     
+    func isInvalidEmailRequested() -> Bool {
+        return invalidEmailRequested
+    }
+    
+    // MARK: Verification Code TextField
     func isCodeRequired() -> Bool {
         return isCodeRequested
     }
@@ -55,4 +69,10 @@ import Observation
     func isCodeEntered() -> Bool {
         return code.count == codeLength
     }
+}
+
+func isValidEmail(_ email: String) -> Bool {
+    let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+    let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+    return emailPredicate.evaluate(with: email)
 }
