@@ -25,11 +25,38 @@ struct HomeView: View {
                 .frame(height: 300)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal, 20)
+                .padding(.vertical, 10)
                 
                 
+                // MARK:
                 
             } //VStack
         } //ScrollView
+        .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
+        .toolbarBackground(Color.white, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                VStack(spacing: 0) {
+                    Rectangle()
+                        .foregroundStyle(Color.primaryLabelColor)
+                        .frame(width: 48, height: 2)
+                        .offset(x: 13, y: 4)
+                    
+                    Text("wastory")
+                        .foregroundStyle(Color.primaryLabelColor)
+                        .font(.system(size: 20, weight: .semibold))
+                }
+                .padding(.horizontal, 5)
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button{
+                    
+                } label: {
+                    Text(Image(systemName: "magnifyingglass"))
+                }
+            }
+        } //toolbar
         
     }
     
