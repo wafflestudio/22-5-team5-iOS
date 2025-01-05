@@ -50,6 +50,8 @@ struct HomeView: View {
                             ForEach(viewModel.categoryList, id: \.self) { category in
                                 categoryButton(category: category, isSelected: viewModel.selectedCategory == category)
                             }
+                            Spacer()
+                                .frame(width: 20)
                         }
                     }
                     .scrollIndicators(.hidden)
