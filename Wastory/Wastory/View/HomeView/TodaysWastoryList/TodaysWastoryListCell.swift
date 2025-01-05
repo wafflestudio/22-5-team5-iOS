@@ -6,7 +6,6 @@
 //
 
 
-
 import SwiftUI
 
 struct TodaysWastoryListCell: View {
