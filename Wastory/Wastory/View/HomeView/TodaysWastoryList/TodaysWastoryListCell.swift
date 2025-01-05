@@ -77,8 +77,10 @@ struct TodaysWastoryListCell: View {
             Spacer()
                 .frame(height: 17)
             
-            Divider()
-                .foregroundStyle(Color.secondaryLabelColor)
+            if index != 5 {
+                Divider()
+                    .foregroundStyle(Color.secondaryLabelColor)
+            }
         }// VStack
     }
 }

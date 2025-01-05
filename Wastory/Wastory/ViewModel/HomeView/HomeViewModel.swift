@@ -11,17 +11,27 @@ import Observation
 
 @Observable final class HomeViewModel {
     
+    //TodaysWastoryPageTab
     var todaysWastoryItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     var displayedTodaysWastoryItems: [String] = []
     var todaysWastoryIndex: Int = 1
 
+    //TodaysWastoryList
     var todaysWastoryListItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     
+    //Category Popular Post
+    let categoryList = ["여행·맛집", "리빙·스타일", "가족·연애", "직장·자기계발", "시사·지식", "도서·창작", "엔터테인먼트", "취미·건강"]
+    
+    let categoryIcons : [String: String] =
+    ["여행·맛집": "airplane.departure", "리빙·스타일": "sofa", "가족·연애": "person.2", "직장·자기계발": "cpu", "시사·지식": "chart.bar.xaxis", "도서·창작": "book", "엔터테인먼트": "tv", "취미·건강": "figure.indoor.soccer"]
+    
+    var selectedCategory: String = "여행·맛집"
     
     init() {
         setDisplayedTodaysWastoryItems()
     }
     
+    //TodayWastoryPageTab
     func setDisplayedTodaysWastoryItems() {
         displayedTodaysWastoryItems = [todaysWastoryItems.last!] + todaysWastoryItems + [todaysWastoryItems.first!]
     }
@@ -52,4 +62,6 @@ import Observation
                 .frame(width: radius, height: radius)
         }
     }
+    
+    
 }
