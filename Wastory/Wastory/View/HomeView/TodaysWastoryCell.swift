@@ -25,6 +25,7 @@ struct TodaysWastoryCell: View {
             
             
             VStack(spacing: 0) {
+                // 오늘의 티스토리 Text
                 HStack {
                     Spacer()
                     
@@ -43,7 +44,9 @@ struct TodaysWastoryCell: View {
                 
                 Spacer()
                 
+                // 글 정보
                 VStack(alignment: .leading, spacing: 0) {
+                    // 글 제목
                     HStack(spacing: 0) {
                         Image(systemName: "quote.opening")
                             .font(.system(size: 26, weight: .semibold))
@@ -58,10 +61,12 @@ struct TodaysWastoryCell: View {
                         .lineLimit(3)
                         .padding(.bottom, 15)
                     
+                    // 블로그 정보
                     HStack {
                         Button(action: {
-                            
+                            // TODO: 해당 블로그 View로 이동
                         }) {
+                            // 블로그 mainImage
                             ZStack {
                                 Image(systemName: "questionmark.text.page.fill")
                                     .resizable()
@@ -73,6 +78,7 @@ struct TodaysWastoryCell: View {
                             }
                             .frame(width: 23, height: 23)
                             
+                            // 블로그 이름 Text
                             Text("블로그이름")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.todaysWastoryTextColor)
