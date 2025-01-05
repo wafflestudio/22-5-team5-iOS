@@ -32,12 +32,16 @@ struct HomeView: View {
                 Color.backgourndSpaceColor
                     .frame(height: 10)
                 
+                // MARK: Focus Post List - J의 주말 계획 & 오후에는 커피 한 잔
+                FocusPostListView(viewModel: viewModel)
+                
+                // MARK: end
                 ZStack {
                     Color.backgourndSpaceColor
                         .frame(height: 100)
                     
                     HStack {
-                        Text("와스토리는 team5에서 ")
+                        Text("와스토리는 team5에서")
                         Image(systemName: "clock")
                         Text("을 넣어 만듭니다.")
                             .padding(.leading, -5)
@@ -45,6 +49,7 @@ struct HomeView: View {
                     .font(.system(size: 14, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 }
+                
             } //VStack
         } //ScrollView
         .toolbarBackgroundVisibility(.automatic, for: .navigationBar)

@@ -19,7 +19,7 @@ import Observation
     //TodaysWastoryList
     var todaysWastoryListItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     
-    //Category Popular Post
+    //Category Popular Post List
     let categoryList = ["여행·맛집", "리빙·스타일", "가족·연애", "직장·자기계발", "시사·지식", "도서·창작", "엔터테인먼트", "취미·건강"]
     
     let categoryIcons : [String: String] =
@@ -29,6 +29,11 @@ import Observation
     
     var categoryPopularPostItems: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7"]
     
+    
+    //Focus Post List
+    var focusPostList1Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+    
+    var focusPostList2Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
     
     init() {
         setDisplayedTodaysWastoryItems()

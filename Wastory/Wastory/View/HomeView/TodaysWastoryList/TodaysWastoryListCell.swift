@@ -23,10 +23,15 @@ struct TodaysWastoryListCell: View {
                 Text("/")
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
-                Text("블로그 이름")
-                    .font(.system(size: 11, weight: .light))
-                    .foregroundStyle(Color.primaryLabelColor)
-                    .padding(.top, 4)
+                
+                Button(action: {
+                    // TODO: 해당 블로그 View로 이동
+                }) {
+                    Text("블로그 이름")
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundStyle(Color.primaryLabelColor)
+                        .padding(.top, 4)
+                }
                 
                 Spacer()
             }
