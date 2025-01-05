@@ -12,6 +12,9 @@ struct HomePostListCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            Spacer()
+                .frame(height: 20)
+            
             HStack(spacing: 8) {
                 Image(systemName: "questionmark.text.page.fill")
                     .resizable()
@@ -70,7 +73,7 @@ struct HomePostListCell: View {
             Spacer()
                 .frame(height: 17)
             
-            if index != 5 {
+            if index != 4 {
                 Divider()
                     .foregroundStyle(Color.secondaryLabelColor)
             }
