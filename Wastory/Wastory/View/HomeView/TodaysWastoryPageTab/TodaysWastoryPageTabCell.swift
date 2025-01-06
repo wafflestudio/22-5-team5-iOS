@@ -25,7 +25,7 @@ struct TodaysWastoryPageTabCell: View {
             
             
             VStack(spacing: 0) {
-                // 오늘의 티스토리 Text
+                // 오늘의 와스토리 Text
                 HStack {
                     Spacer()
                     
@@ -34,7 +34,7 @@ struct TodaysWastoryPageTabCell: View {
                             .stroke(Color.todaysWastoryTextOutterBoxColor, lineWidth: 1.5)
                             .frame(width: 90, height: 26)
                         
-                        Text("오늘의 티스토리")
+                        Text("오늘의 와스토리")
                             .font(.system(size: 11, weight: .light))
                             .foregroundStyle(Color.todaysWastoryTextColor)
                     }
