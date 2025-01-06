@@ -45,7 +45,6 @@ struct MainTabView: View {
                             //MARK: PostingView
                             PostingView(mainTabViewModel: mainTabViewModel)
                         }
-                        .onAppear() {print(mainTabViewModel.isPostingViewPresent)}
                     }
                 
                 
