@@ -11,8 +11,14 @@ import Observation
 @Observable final class MainTabViewModel {
     var selectedTab: TabType = .home
     
-    var isNotificationTypeSheetPresent: Bool = false
+    var isPostingViewPresent: Bool = false
     
+    var isNotificationTypeSheetPresent: Bool = false
+
+    //MARK: selectedTab
+    func setSelectedTab(to tab: TabType) {
+        selectedTab = tab
+    }
     
     //MARK: isNotificationTypeSheetPresent
     func toggleIsNotificationTypeSheetPresent() {
@@ -25,4 +31,10 @@ import Observation
         isNotificationTypeSheetPresent
     }
     
+    //MARK: isPostingViewPresent
+    func toggleIsPostingViewPresent() {
+        withAnimation(.easeInOut) {
+            isPostingViewPresent.toggle()
+        }
+    }
 }
