@@ -120,5 +120,11 @@ struct SignUpStep1TermsView: View {
                 Spacer()
             }
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
+            }
+        }
     }
 }

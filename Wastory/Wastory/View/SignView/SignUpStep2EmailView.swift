@@ -316,6 +316,12 @@ struct SignUpStep2EmailView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
+            }
+        }
     }
 }
 

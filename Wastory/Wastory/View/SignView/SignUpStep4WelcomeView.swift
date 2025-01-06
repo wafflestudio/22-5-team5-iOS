@@ -48,9 +48,11 @@ struct SignUpStep4WelcomeView: View {
                 .padding(.bottom, 150)
             }
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
+            }
+        }
     }
-}
-
-#Preview {
-    SignUpStep4WelcomeView()
 }

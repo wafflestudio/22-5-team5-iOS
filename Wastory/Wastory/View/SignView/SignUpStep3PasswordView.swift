@@ -202,5 +202,11 @@ struct SignUpStep3PasswordView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
+            }
+        }
     }
 }
