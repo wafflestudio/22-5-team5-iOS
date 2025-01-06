@@ -1,5 +1,5 @@
 //
-//  SignUpView.swift
+//  SignUpStep5UsernameView.swift
 //  Wastory
 //
 //  Created by mujigae on 12/27/24.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct SignUpView: View {
+struct SignUpStep5UsernameView: View {
     @Environment(\.dismiss) var dismiss
     
-    @State private var viewModel = SignUpViewModel()
+    @State private var viewModel = SignUpStep5ViewModel()
     @Bindable  var userInfoRepository = UserInfoRepository.shared
     
     var body: some View {

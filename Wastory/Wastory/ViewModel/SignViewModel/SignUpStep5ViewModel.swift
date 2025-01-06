@@ -1,5 +1,5 @@
 //
-//  SignUpViewModel.swift
+//  SignUpStep5ViewModel.swift
 //  Wastory
 //
 //  Created by mujigae on 12/27/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Observation
 
-@Observable final class SignUpViewModel {
+@Observable final class SignUpStep5ViewModel {
     private var userInfoRepository = UserInfoRepository.shared
     
     var username = "example"
