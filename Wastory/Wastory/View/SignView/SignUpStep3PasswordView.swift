@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SignUpStep3PasswordView: View {
     @State private var viewModel = SignUpStep3ViewModel()
+    @FocusState private var isPasswordFocused: Bool
+    @FocusState private var isPassword2Focused: Bool
     
     var body: some View {
         VStack {
@@ -69,11 +71,17 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 8)
             ZStack {
-                TextField("", text: $viewModel.password, prompt: Text("비밀번호 입력(8~32자리)")
+                SecureField("", text: $viewModel.password, prompt: Text("비밀번호 입력(8~32자리)")
                     .foregroundStyle(Color.promptLabelColor))
+                .focused($isPasswordFocused)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isPasswordFocused = true
+                    }
+                }
                 
                 HStack {
                     Spacer()
@@ -93,15 +101,27 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 5)
             Rectangle()
-                .foregroundStyle(false ? Color.emptyEmailWarnRed : .black)
+                .foregroundStyle(isPasswordFocused ? .black : viewModel.passwordValidator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
                 .frame(height: 1)
                 .padding(.horizontal, 20)
             Spacer()
                 .frame(height: 5)
+            if !isPasswordFocused && !viewModel.passwordValidator().isEmpty {
+                Spacer()
+                    .frame(height: 5)
+                HStack {
+                    Text(viewModel.passwordValidator())
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundStyle(Color.emptyEmailWarnRed)
+                        .padding(.horizontal, 20)
+                    Spacer()
+                }
+            }
             
             ZStack {
-                TextField("", text: $viewModel.password2, prompt: Text("비밀번호 재입력")
+                SecureField("", text: $viewModel.password2, prompt: Text("비밀번호 재입력")
                     .foregroundStyle(Color.promptLabelColor))
+                .focused($isPassword2Focused)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
@@ -124,9 +144,20 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 5)
             Rectangle()
-                .foregroundStyle(false ? Color.emptyEmailWarnRed : .black)
+                .foregroundStyle(isPassword2Focused ? .black : isPasswordFocused || viewModel.isEqualPassword() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
                 .frame(height: 1)
                 .padding(.horizontal, 20)
+            if !isPasswordFocused && !isPassword2Focused && !viewModel.isEqualPassword() {
+                Spacer()
+                    .frame(height: 5)
+                HStack {
+                    Text("입력한 비밀번호와 재입력한 비밀번호가 일치하지 않습니다.")
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundStyle(Color.emptyEmailWarnRed)
+                        .padding(.horizontal, 20)
+                    Spacer()
+                }
+            }
             Spacer()
                 .frame(height: 24)
             
@@ -149,6 +180,10 @@ struct SignUpStep3PasswordView: View {
             .padding(.horizontal, 20)
             
             Spacer()
+        }
+        .onTapGesture {
+            isPasswordFocused = false
+            isPassword2Focused = false
         }
     }
 }
