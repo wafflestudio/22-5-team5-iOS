@@ -11,7 +11,7 @@ struct SignUpStep3PasswordView: View {
     @State private var viewModel = SignUpStep3ViewModel()
     @FocusState private var isPasswordFocused: Bool
     @FocusState private var isPassword2Focused: Bool
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -167,17 +167,33 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 24)
             
-            Button {
-            } label: {
-                Text("다음")
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 16)
-                    .frame(maxWidth: .infinity, idealHeight: 51)
-                    .background(true ? Color.disabledNextButtonGray : Color.kakaoYellow)
-                    .cornerRadius(6)
+            ZStack {
+                NavigationLink(destination: SignUpStep4WelcomeView()) {
+                    Text("다음")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundStyle(.black)
+                        .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity, idealHeight: 51)
+                        .background(Color.kakaoYellow)
+                        .cornerRadius(6)
+                }
+                .padding(.horizontal, 20)
+                .disabled(!viewModel.isEqualPassword())
+                .opacity(viewModel.isEqualPassword() ? 1 : 0)
+                
+                Button {
+                } label: {
+                    Text("다음")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundStyle(.black)
+                        .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity, idealHeight: 51)
+                        .background( Color.disabledNextButtonGray)
+                        .cornerRadius(6)
+                }
+                .padding(.horizontal, 20)
+                .opacity(viewModel.isEqualPassword() ? 0 : 1)
             }
-            .padding(.horizontal, 20)
             
             Spacer()
         }
@@ -186,8 +202,4 @@ struct SignUpStep3PasswordView: View {
             isPassword2Focused = false
         }
     }
-}
-
-#Preview {
-    SignUpStep3PasswordView()
 }
