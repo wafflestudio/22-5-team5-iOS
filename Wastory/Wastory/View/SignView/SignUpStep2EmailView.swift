@@ -10,10 +10,17 @@ import SwiftUI
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
     @State private var showRerequestEmailBox = false
+    @FocusState private var isEmailFocused: Bool
     
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isEmailFocused = false
+                    }
+                
                 VStack {
                     ZStack {
                         HStack {
@@ -103,6 +110,7 @@ struct SignUpStep2EmailView: View {
                         else {
                             TextField("", text: $viewModel.email, prompt: Text("이메일 입력")
                                 .foregroundStyle(Color.promptLabelColor))
+                            .focused($isEmailFocused)
                             .padding(.vertical, 5)
                             .padding(.horizontal, 20)
                             .autocapitalization(.none)
