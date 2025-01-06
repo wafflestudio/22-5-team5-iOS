@@ -19,7 +19,7 @@ struct MainTabView: View {
             TabView(selection: $mainTabViewModel.selectedTab) {
                 Group {
                     NavigationStack {
-                        // homeView
+                        HomeView()
                     }
                     .tabItem {
                         Text("홈")
