@@ -301,7 +301,7 @@ struct SignUpStep2CautionText: View {
             Circle()
                 .frame(width: 2, height: 2)
             Text(text)
-                .font(.system(size: 11, weight: .light))
+                .font(.system(size: 10, weight: .light))
             Spacer()
         }
         .foregroundStyle(Color.emailCautionTextGray)
