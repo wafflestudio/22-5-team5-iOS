@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct SignUpStep5UsernameView: View {
-    @Environment(\.dismiss) var dismiss
-    
     @State private var viewModel = SignUpStep5ViewModel()
     @Bindable  var userInfoRepository = UserInfoRepository.shared
     
@@ -133,15 +131,11 @@ struct SignUpStep5UsernameView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 20, weight: .light))
-                    .foregroundStyle(.black)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
             }
-        )
+        }
     }
 }
 
