@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
-    @State private var isNavigationActive = false
     @State private var showRerequestEmailBox = false
     
     var body: some View {
@@ -188,23 +187,35 @@ struct SignUpStep2EmailView: View {
                             .frame(height: 24)
                     }
                     
-                    Button {
-                        if viewModel.isVerificationSuccessful() {
-                            isNavigationActive = true
-                            UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
+                    ZStack {
+                        NavigationLink(destination: SignUpStep3PasswordView()) {
+                            Text("다음")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 51)
+                                .background(Color.kakaoYellow)
+                                .cornerRadius(6)
                         }
-                    } label: {
-                        Text("다음")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundStyle(.black)
-                            .padding(.vertical, 16)
-                            .frame(maxWidth: .infinity, idealHeight: 51)
-                            .background(viewModel.code.isEmpty || viewModel.isInvalidCodeEntered() ? Color.disabledNextButtonGray : Color.kakaoYellow)
-                            .cornerRadius(6)
-                    }
-                    .padding(.horizontal, 20)
-                    .navigationDestination(isPresented: $isNavigationActive) {
-                        SignUpStep3PasswordView()
+                        .padding(.horizontal, 20)
+                        .disabled(!viewModel.isVerificationSuccessful())
+                        .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)
+                        
+                        Button {
+                            if viewModel.isVerificationSuccessful() {
+                                UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
+                            }
+                        } label: {
+                            Text("다음")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 51)
+                                .background(viewModel.code.isEmpty || viewModel.isInvalidCodeEntered() ? Color.disabledNextButtonGray : Color.kakaoYellow)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 20)
+                        .opacity(viewModel.isVerificationSuccessful() ? 0 : 1)
                     }
                     
                     Spacer()
