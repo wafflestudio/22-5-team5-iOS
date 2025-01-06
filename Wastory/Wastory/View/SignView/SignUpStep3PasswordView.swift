@@ -11,6 +11,7 @@ struct SignUpStep3PasswordView: View {
     @State private var viewModel = SignUpStep3ViewModel()
     @FocusState private var isPasswordFocused: Bool
     @FocusState private var isPassword2Focused: Bool
+    @State private var isPasswordSecureFieldRendered: Bool = false
 
     var body: some View {
         VStack {
@@ -78,8 +79,9 @@ struct SignUpStep3PasswordView: View {
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         isPasswordFocused = true
+                        isPasswordSecureFieldRendered = true
                     }
                 }
                 
@@ -101,12 +103,12 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 5)
             Rectangle()
-                .foregroundStyle(isPasswordFocused ? .black : viewModel.passwordValidator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
+                .foregroundStyle(!isPasswordSecureFieldRendered || isPasswordFocused ? .black : viewModel.passwordValidator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
                 .frame(height: 1)
                 .padding(.horizontal, 20)
             Spacer()
                 .frame(height: 5)
-            if !isPasswordFocused && !viewModel.passwordValidator().isEmpty {
+            if isPasswordSecureFieldRendered && !isPasswordFocused && !viewModel.passwordValidator().isEmpty {
                 Spacer()
                     .frame(height: 5)
                 HStack {
