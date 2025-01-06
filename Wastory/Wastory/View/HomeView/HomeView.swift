@@ -15,6 +15,7 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
+                
                 // MARK: 오늘의 와스토리 PageTabView
                 TodaysWastoryPageTabView(viewModel: viewModel)
                 
@@ -50,8 +51,8 @@ struct HomeView: View {
                 .padding(.vertical, 50)
                 
             } //VStack
+            .background(Color.backgourndSpaceColor)
         } //ScrollView
-        .background(Color.backgourndSpaceColor)
         .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
         .toolbar {
