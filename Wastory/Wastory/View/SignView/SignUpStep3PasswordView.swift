@@ -12,6 +12,7 @@ struct SignUpStep3PasswordView: View {
     @FocusState private var isPasswordFocused: Bool
     @FocusState private var isPassword2Focused: Bool
     @State private var isPasswordSecureFieldRendered: Bool = false
+    @State private var isNavigationActive = false
 
     var body: some View {
         NavigationStack {
@@ -178,37 +179,23 @@ struct SignUpStep3PasswordView: View {
                     Spacer()
                         .frame(height: 24)
                     
-                    ZStack {
-                        NavigationLink(destination: SignUpStep4WelcomeView()) {
-                            Text("다음")
-                                .font(.system(size: 16, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 16)
-                                .frame(maxWidth: .infinity, idealHeight: 51)
-                                .background(Color.kakaoYellow)
-                                .cornerRadius(6)
+                    Button {
+                        if viewModel.isPasswordValid() {
+                            isNavigationActive = true
+                            UserInfoRepository.shared.setUserPW(userPW: viewModel.password)
                         }
-                        .padding(.horizontal, 20)
-                        .disabled(!viewModel.isPasswordValid())
-                        .simultaneousGesture(
-                            TapGesture().onEnded {
-                                UserInfoRepository.shared.setUserPW(userPW: viewModel.password)    // UserPW 결정
-                            }
-                        )
-                        .opacity(viewModel.isPasswordValid() ? 1 : 0)
-                        
-                        Button {
-                        } label: {
-                            Text("다음")
-                                .font(.system(size: 16, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 16)
-                                .frame(maxWidth: .infinity, idealHeight: 51)
-                                .background(Color.disabledNextButtonGray)
-                                .cornerRadius(6)
-                        }
-                        .padding(.horizontal, 20)
-                        .opacity(viewModel.isPasswordValid() ? 0 : 1)
+                    } label: {
+                        Text("다음")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundStyle(.black)
+                            .padding(.vertical, 16)
+                            .frame(maxWidth: .infinity, idealHeight: 51)
+                            .background(viewModel.isPasswordValid() ? Color.kakaoYellow : Color.disabledNextButtonGray)
+                            .cornerRadius(6)
+                    }
+                    .padding(.horizontal, 20)
+                    .navigationDestination(isPresented: $isNavigationActive) {
+                        SignUpStep4WelcomeView()
                     }
                     
                     Spacer()
