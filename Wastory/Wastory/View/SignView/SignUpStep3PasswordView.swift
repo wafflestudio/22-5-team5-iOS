@@ -199,7 +199,7 @@ struct SignUpStep3PasswordView: View {
                                 .foregroundStyle(.black)
                                 .padding(.vertical, 16)
                                 .frame(maxWidth: .infinity, idealHeight: 51)
-                                .background( Color.disabledNextButtonGray)
+                                .background(Color.disabledNextButtonGray)
                                 .cornerRadius(6)
                         }
                         .padding(.horizontal, 20)
