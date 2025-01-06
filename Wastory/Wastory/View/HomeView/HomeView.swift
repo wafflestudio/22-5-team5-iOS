@@ -29,11 +29,14 @@ struct HomeView: View {
                 // MARK: 카테고리 인기글
                 CategoryPopularPostView(viewModel: viewModel)
                 
+                
                 Spacer()
                     .frame(height: 10)
                 
+                
                 // MARK: Focus Post List - J의 주말 계획 & 오후에는 커피 한 잔
                 FocusPostListView(viewModel: viewModel)
+                
                 
                 // MARK: end
                 HStack {

@@ -50,7 +50,7 @@ struct FocusPostListView: View {
             Spacer()
                 .frame(height: 15)
             
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.focusPostList1Items.enumerated()), id: \.offset) { index, item in
                     HomePostListCell(index: index)
                 }
@@ -100,7 +100,7 @@ struct FocusPostListView: View {
             Spacer()
                 .frame(height: 15)
             
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.focusPostList2Items.enumerated()), id: \.offset) { index, item in
                     HomePostListCell(index: index)
                 }

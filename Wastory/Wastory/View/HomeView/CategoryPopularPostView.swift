@@ -42,13 +42,13 @@ struct CategoryPopularPostView: View {
             .scrollIndicators(.hidden)
             .zIndex(1)
             
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.categoryPopularPostItems[0..<2].enumerated()), id: \.offset) { index, item in
                     HomeBigPostListCell()
                 }
             }
             
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.categoryPopularPostItems[2..<7].enumerated()), id: \.offset) { index, item in
                     HomePostListCell(index: index)
                 }

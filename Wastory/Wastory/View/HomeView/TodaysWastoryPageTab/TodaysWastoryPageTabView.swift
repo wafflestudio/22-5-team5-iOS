@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TodaysWastoryPageTabView: View {
     @Bindable var viewModel: HomeViewModel
+    @State private var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -24,9 +25,16 @@ struct TodaysWastoryPageTabView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onChange(of: viewModel.todaysWastoryIndex) { oldIndex, newIndex in
                 viewModel.setNextTodaysWastoryIndex(with: newIndex)
+                timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+            }
+            .onDisappear {
+                timer.upstream.connect().cancel()
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
+            .onReceive(timer) { _ in
+                viewModel.autoScrollToNextPage()
+            }
             
             // MARK: 오늘의 티스토리 index indicator
             HStack(spacing: 8) {
