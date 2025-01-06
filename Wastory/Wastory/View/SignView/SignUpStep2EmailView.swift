@@ -11,6 +11,7 @@ struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
     @State private var showRerequestEmailBox = false
     @FocusState private var isEmailFocused: Bool
+    @FocusState private var isCodeFocused: Bool
     
     var body: some View {
         NavigationStack {
@@ -19,6 +20,7 @@ struct SignUpStep2EmailView: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         isEmailFocused = false
+                        isCodeFocused = false
                     }
                 
                 VStack {
@@ -81,6 +83,7 @@ struct SignUpStep2EmailView: View {
                         if viewModel.isCodeRequired() {
                             TextField("", text: $viewModel.code, prompt: Text("인증번호 8자 입력")
                                 .foregroundStyle(Color.promptLabelColor))
+                            .focused($isCodeFocused)
                             .keyboardType(.numberPad)
                             .padding(.vertical, 5)
                             .padding(.horizontal, 20)
