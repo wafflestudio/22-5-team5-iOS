@@ -67,7 +67,7 @@ import Observation
         return password2.isEmpty
     }
     
-    func isEqualPassword() -> Bool {
-        return password == password2
+    func isPasswordValid() -> Bool {
+        return passwordValidator().isEmpty && password == password2
     }
 }

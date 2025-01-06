@@ -146,10 +146,10 @@ struct SignUpStep3PasswordView: View {
             Spacer()
                 .frame(height: 5)
             Rectangle()
-                .foregroundStyle(isPassword2Focused ? .black : isPasswordFocused || viewModel.isEqualPassword() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
+                .foregroundStyle(isPassword2Focused ? .black : !isPasswordSecureFieldRendered || isPasswordFocused || viewModel.isPasswordValid() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
                 .frame(height: 1)
                 .padding(.horizontal, 20)
-            if !isPasswordFocused && !isPassword2Focused && !viewModel.isEqualPassword() {
+            if isPasswordSecureFieldRendered && !isPasswordFocused && !isPassword2Focused && !viewModel.isPasswordValid() {
                 Spacer()
                     .frame(height: 5)
                 HStack {
@@ -180,8 +180,8 @@ struct SignUpStep3PasswordView: View {
                         .cornerRadius(6)
                 }
                 .padding(.horizontal, 20)
-                .disabled(!viewModel.isEqualPassword())
-                .opacity(viewModel.isEqualPassword() ? 1 : 0)
+                .disabled(!viewModel.isPasswordValid())
+                .opacity(viewModel.isPasswordValid() ? 1 : 0)
                 
                 Button {
                 } label: {
@@ -194,7 +194,7 @@ struct SignUpStep3PasswordView: View {
                         .cornerRadius(6)
                 }
                 .padding(.horizontal, 20)
-                .opacity(viewModel.isEqualPassword() ? 0 : 1)
+                .opacity(viewModel.isPasswordValid() ? 0 : 1)
             }
             
             Spacer()
