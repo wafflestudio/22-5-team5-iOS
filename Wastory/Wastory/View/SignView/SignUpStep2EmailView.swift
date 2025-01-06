@@ -210,12 +210,15 @@ struct SignUpStep2EmailView: View {
                         }
                         .padding(.horizontal, 20)
                         .disabled(!viewModel.isVerificationSuccessful())
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
+                            }
+                        )
                         .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)
                         
                         Button {
-                            if viewModel.isVerificationSuccessful() {
-                                UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
-                            }
+                            print(2)
                         } label: {
                             Text("다음")
                                 .font(.system(size: 16, weight: .regular))
