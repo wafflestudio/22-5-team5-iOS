@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SignUpStep5UsernameView: View {
     @State private var viewModel = SignUpStep5ViewModel()
-    @Bindable  var userInfoRepository = UserInfoRepository.shared
     
     var body: some View {
         NavigationStack {
@@ -35,7 +34,7 @@ struct SignUpStep5UsernameView: View {
                 
                 VStack(spacing: 5) {
                     HStack(spacing: 5) {
-                        Text("\(userInfoRepository.getUserID())")
+                        Text("\(UserInfoRepository.shared.getUserID())")
                             .font(.system(size: 14, weight: .bold))
                             .padding(.leading, 20)
                         Text("님,")

@@ -9,14 +9,12 @@ import SwiftUI
 import Observation
 
 @Observable final class SignUpStep5ViewModel {
-    private var userInfoRepository = UserInfoRepository.shared
-    
     var username = "example"
     var blogAddress = "example.waffle.com"
     var usernameAvailability = "사용할 수 없어요."
     
     func setUsername() {
-        userInfoRepository.setUsername(username: username)
+        UserInfoRepository.shared.setUsername(username: username)
     }
     
     func setBlogAddress() {
@@ -24,7 +22,7 @@ import Observation
     }
     
     func setUserInfo() {
-        userInfoRepository.setUserInfo()
+        UserInfoRepository.shared.setUserInfo()
     }
     
     func checkUsernameAvailability() {
