@@ -13,7 +13,7 @@ struct TodaysWastoryPageTabView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // MARK: 오늘의 티스토리
+            // MARK: 오늘의 와스토리
             TabView(selection: $viewModel.todaysWastoryIndex) {
                 ForEach(viewModel.displayedTodaysWastoryItems.indices, id: \.self) { index in
                     TodaysWastoryPageTabCell()
