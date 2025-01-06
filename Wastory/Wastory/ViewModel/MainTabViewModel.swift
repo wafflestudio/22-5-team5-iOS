@@ -35,8 +35,6 @@ import Observation
     func toggleIsPostingViewPresent() {
         withAnimation(.easeInOut) {
             isPostingViewPresent.toggle()
-            
-            print(isPostingViewPresent)
         }
     }
 }
