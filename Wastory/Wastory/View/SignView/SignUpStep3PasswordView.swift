@@ -190,6 +190,11 @@ struct SignUpStep3PasswordView: View {
                         }
                         .padding(.horizontal, 20)
                         .disabled(!viewModel.isPasswordValid())
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                UserInfoRepository.shared.setUserPW(userPW: viewModel.password)    // UserPW 결정
+                            }
+                        )
                         .opacity(viewModel.isPasswordValid() ? 1 : 0)
                         
                         Button {
