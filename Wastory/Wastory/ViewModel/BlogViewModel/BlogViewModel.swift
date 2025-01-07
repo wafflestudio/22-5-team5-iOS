@@ -13,12 +13,19 @@ import Observation
 @Observable final class BlogViewModel {
     private var isNavTitleHidden: Bool = true
     
+    private var initialScrollPosition: CGFloat = 0
+    
+    func setInitialScrollPosition(_ scrollPosition: CGFloat) {
+        initialScrollPosition = scrollPosition
+        print(scrollPosition)
+    }
+    
     func changeIsNavTitleHidden(by newValue: CGFloat, _ oldValue: CGFloat) {
-        if oldValue == 0 {
+        if oldValue == initialScrollPosition {
             if (!isNavTitleHidden) {
                 isNavTitleHidden = true
             }
-        } else if newValue <= -100 {
+        } else if newValue <= 100 {
             if (isNavTitleHidden) {
                 isNavTitleHidden = false
             }
