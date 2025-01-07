@@ -38,12 +38,12 @@ import Observation
     }
     
     func requestCode() {
-        if isValidEmail(email) {
+        if isEmailValid(email) {
             isCodeRequested = true
         }
     }
     
-    func isValidEmail(_ email: String) -> Bool {
+    func isEmailValid(_ email: String) -> Bool {
         let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
     }
@@ -55,7 +55,7 @@ import Observation
         if email.isEmpty {
             return "와스토리 계정 이메일을 입력해 주세요."
         }
-        if isValidEmail(email) == false {
+        if isEmailValid(email) == false {
             return "와스토리 계정 이메일 형식이 올바르지 않습니다."
         }
         return ""
@@ -83,7 +83,6 @@ import Observation
     func clearCodeTextField() {
         code = ""
     }
-    
     func isClearCodeButtonInactive() -> Bool {
         return code.isEmpty
     }
