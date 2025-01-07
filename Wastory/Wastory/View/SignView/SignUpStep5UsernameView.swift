@@ -1,5 +1,5 @@
 //
-//  SignUpView.swift
+//  SignUpStep5UsernameView.swift
 //  Wastory
 //
 //  Created by mujigae on 12/27/24.
@@ -7,11 +7,8 @@
 
 import SwiftUI
 
-struct SignUpView: View {
-    @Environment(\.dismiss) var dismiss
-    
-    @State private var viewModel = SignUpViewModel()
-    @Bindable  var userInfoRepository = UserInfoRepository.shared
+struct SignUpStep5UsernameView: View {
+    @State private var viewModel = SignUpStep5ViewModel()
     
     var body: some View {
         NavigationStack {
@@ -37,7 +34,7 @@ struct SignUpView: View {
                 
                 VStack(spacing: 5) {
                     HStack(spacing: 5) {
-                        Text("\(userInfoRepository.getUserID())")
+                        Text("\(UserInfoRepository.shared.getUserID())")
                             .font(.system(size: 14, weight: .bold))
                             .padding(.leading, 20)
                         Text("님,")
@@ -133,15 +130,11 @@ struct SignUpView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 20, weight: .light))
-                    .foregroundStyle(.black)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
             }
-        )
+        }
     }
 }
 
