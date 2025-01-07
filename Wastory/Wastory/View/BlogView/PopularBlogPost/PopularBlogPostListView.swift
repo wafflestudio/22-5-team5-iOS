@@ -43,5 +43,6 @@ struct PopularBlogPostListView: View {
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .shadow(color: Color.black.opacity(0.1), radius: 7)
         }
+        .padding(.horizontal, 20)
     }
 }
