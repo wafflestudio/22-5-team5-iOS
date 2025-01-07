@@ -13,8 +13,8 @@ import Observation
     var code: String = ""
     
     private var isCodeRequested: Bool = false
-    private var emptyEmailRequested: Bool = false
-    private var invalidEmailRequested: Bool = false
+    private var touchedEmailScreen: Bool = false
+    private var tappedNextButton: Bool = false
     
     private let codeLength: Int = 8
     private var emptyCodeEntered: Bool = false
@@ -25,8 +25,6 @@ import Observation
         email = ""
         code = ""
         isCodeRequested = false
-        emptyEmailRequested = false
-        invalidEmailRequested = false
         emptyCodeEntered = false
         invalidCodeEntered = false
     }
@@ -35,39 +33,46 @@ import Observation
     func clearEmailTextField() {
         email = ""
     }
-    
     func isClearEmailButtonInactive() -> Bool {
         return email.isEmpty
     }
     
     func requestCode() {
-        if email.isEmpty {
-            invalidEmailRequested = false
-            emptyEmailRequested = true
-        }
-        else if isValidEmail(email) {
+        if isValidEmail(email) {
             isCodeRequested = true
-            emptyEmailRequested = false
-            invalidEmailRequested = false
         }
-        else {
-            emptyEmailRequested = false
-            invalidEmailRequested = true
-        }
-    }
-    
-    func isEmptyEmailRequested() -> Bool {
-        return emptyEmailRequested
-    }
-    
-    func isInvalidEmailRequested() -> Bool {
-        return invalidEmailRequested
     }
     
     func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
+    }
+    
+    func emailValidator() -> String {
+        if tappedNextButton {
+            return "인증요청을 먼저 진행해 주세요."
+        }
+        if email.isEmpty {
+            return "와스토리 계정 이메일을 입력해 주세요."
+        }
+        if isValidEmail(email) == false {
+            return "와스토리 계정 이메일 형식이 올바르지 않습니다."
+        }
+        return ""
+    }
+    
+    func touchEmailScreen() {
+        touchedEmailScreen = true
+    }
+    func isEmailScreenTouched() -> Bool {
+        return touchedEmailScreen
+    }
+    
+    func tapNextButton() {
+        tappedNextButton = true
+    }
+    func untapNextButton() {
+        tappedNextButton = false
     }
     
     // MARK: Verification Code TextField

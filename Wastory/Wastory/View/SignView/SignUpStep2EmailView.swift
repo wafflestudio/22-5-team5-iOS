@@ -10,6 +10,7 @@ import SwiftUI
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
     @State private var showRerequestEmailBox = false
+    
     @FocusState private var isEmailFocused: Bool
     @FocusState private var isCodeFocused: Bool
     
@@ -21,6 +22,8 @@ struct SignUpStep2EmailView: View {
                     .onTapGesture {
                         isEmailFocused = false
                         isCodeFocused = false
+                        viewModel.touchEmailScreen()
+                        viewModel.untapNextButton()
                     }
                 
                 VStack {
@@ -133,6 +136,9 @@ struct SignUpStep2EmailView: View {
                                 .opacity(viewModel.isClearEmailButtonInactive() ? 0 : 1)
                                 
                                 Button {
+                                    isEmailFocused = false
+                                    viewModel.touchEmailScreen()
+                                    viewModel.untapNextButton()
                                     viewModel.requestCode()
                                 } label: {
                                     Text("인증요청")
@@ -154,21 +160,44 @@ struct SignUpStep2EmailView: View {
                     Spacer()
                         .frame(height: 5)
                     
-                    Rectangle()
-                        .foregroundStyle(viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() || viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() ? Color.emptyEmailWarnRed : .black)
-                        .frame(height: 1)
-                        .padding(.horizontal, 20)
+                    if viewModel.isCodeRequired() {
+                        Rectangle()
+                            .foregroundStyle( (viewModel.isCodeRequired() && (viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered())) ? Color.emptyEmailWarnRed : .black)
+                            .frame(height: 1)
+                            .padding(.horizontal, 20)
+                    }
+                    else {
+                        Rectangle()
+                            .foregroundStyle(isEmailFocused ? .black : viewModel.emailValidator().isEmpty || !viewModel.isEmailScreenTouched() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
+                            .frame(height: 1)
+                            .padding(.horizontal, 20)
+                    }
                     
-                    if viewModel.isEmptyEmailRequested() || viewModel.isInvalidEmailRequested() || viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() {
-                        Spacer()
-                            .frame(height: 5)
-                        HStack {
-                            Text(viewModel.isEmptyEmailRequested() ? "와스토리 계정 이메일을 입력해 주세요." : viewModel.isInvalidEmailRequested() ?  "와스토리 계정 이메일 형식이 올바르지 않습니다." : viewModel.isEmptyCodeEntered() ? "이메일로 발송된 인증번호를 입력해 주세요." : "인증번호 형식이 올바르지 않습니다.")
-                                .font(.system(size: 11, weight: .light))
-                                .foregroundStyle(Color.emptyEmailWarnRed)
+                    if viewModel.isCodeRequired() {
+                        if viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() {
                             Spacer()
+                                .frame(height: 5)
+                            HStack {
+                                Text(viewModel.isEmptyCodeEntered() ? "이메일로 발송된 인증번호를 입력해 주세요." : "인증번호 형식이 올바르지 않습니다.")
+                                    .font(.system(size: 11, weight: .light))
+                                    .foregroundStyle(Color.emptyEmailWarnRed)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.horizontal, 20)
+                    }
+                    else {
+                        if !isEmailFocused && viewModel.isEmailScreenTouched() && !viewModel.emailValidator().isEmpty {
+                            Spacer()
+                                .frame(height: 5)
+                            HStack {
+                                Text(viewModel.emailValidator())
+                                    .font(.system(size: 11, weight: .light))
+                                    .foregroundStyle(Color.emptyEmailWarnRed)
+                                    .padding(.horizontal, 20)
+                                Spacer()
+                            }
+                        }
                     }
                     
                     Spacer()
@@ -218,7 +247,9 @@ struct SignUpStep2EmailView: View {
                         .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)
                         
                         Button {
-                            print(2)
+                            isEmailFocused = false
+                            viewModel.touchEmailScreen()
+                            viewModel.tapNextButton()
                         } label: {
                             Text("다음")
                                 .font(.system(size: 16, weight: .regular))
