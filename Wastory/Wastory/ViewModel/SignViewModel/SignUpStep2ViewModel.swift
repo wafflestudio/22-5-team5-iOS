@@ -17,16 +17,17 @@ import Observation
     private var tappedNextButton: Bool = false
     
     private let codeLength: Int = 8
-    private var emptyCodeEntered: Bool = false
-    private var invalidCodeEntered: Bool = false
+    private var touchedCodeScreen: Bool = false
+    
+    func getCodeLength() -> Int {
+        return codeLength
+    }
     
     func requestEmailReentry() {
         // 이메일 입력화면으로 되돌아가는 버튼
         email = ""
         code = ""
         isCodeRequested = false
-        emptyCodeEntered = false
-        invalidCodeEntered = false
     }
     
     // MARK: Email TextField
@@ -87,30 +88,29 @@ import Observation
         return code.isEmpty
     }
     
-    func isEmptyCodeEntered() -> Bool {
-        return emptyCodeEntered
-    }
-    
-    func isInvalidCodeEntered() -> Bool {
-        return invalidCodeEntered
-    }
-    
-    func checkCodeValidty(_ code: String) {
+    func codeValidator() -> String {
         if code.isEmpty {
-            invalidCodeEntered = false
+            return "이메일로 발송된 인증번호를 입력해 주세요."
         }
-        else {
-            emptyCodeEntered = false
-            invalidCodeEntered = !code.allSatisfy { $0.isNumber } || code.count < 8
+        if !code.allSatisfy({ $0.isNumber }) || code.count < codeLength {
+            return "인증번호 형식이 올바르지 않습니다."
         }
+        return ""
+    }
+    
+    func isCodeValid() -> Bool {
+        // 인증코드 유효성 검사 코드 필요
+        return true
     }
     
     func isVerificationSuccessful() -> Bool {
-        // 인증코드 유효성 검사 코드 필요
-        if code.isEmpty {
-            emptyCodeEntered = true
-            return false
-        }
-        return !code.isEmpty && !invalidCodeEntered
+        return !code.isEmpty && codeValidator().isEmpty && isCodeValid()
+    }
+    
+    func touchCodeScreen() {
+        touchedCodeScreen = true
+    }
+    func isCodeScreenTouched() -> Bool {
+        return touchedCodeScreen
     }
 }

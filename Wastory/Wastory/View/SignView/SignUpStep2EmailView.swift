@@ -22,7 +22,12 @@ struct SignUpStep2EmailView: View {
                     .onTapGesture {
                         isEmailFocused = false
                         isCodeFocused = false
-                        viewModel.touchEmailScreen()
+                        if viewModel.isCodeRequired() {
+                            viewModel.touchCodeScreen()
+                        }
+                        else {
+                            viewModel.touchEmailScreen()
+                        }
                         viewModel.untapNextButton()
                     }
                 
@@ -92,10 +97,9 @@ struct SignUpStep2EmailView: View {
                             .padding(.horizontal, 20)
                             .autocapitalization(.none)
                             .onChange(of: viewModel.code) { newValue, oldValue in
-                                if oldValue.count >= 8 {
-                                    viewModel.code = String(viewModel.code.prefix(8))
+                                if oldValue.count >= viewModel.getCodeLength() {
+                                    viewModel.code = String(viewModel.code.prefix(viewModel.getCodeLength()))
                                 }
-                                viewModel.checkCodeValidty(oldValue)
                             }
                             
                             HStack {
@@ -162,7 +166,7 @@ struct SignUpStep2EmailView: View {
                     
                     if viewModel.isCodeRequired() {
                         Rectangle()
-                            .foregroundStyle( (viewModel.isCodeRequired() && (viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered())) ? Color.emptyEmailWarnRed : .black)
+                            .foregroundStyle(isCodeFocused ? .black : viewModel.codeValidator().isEmpty || !viewModel.isCodeScreenTouched() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
                             .frame(height: 1)
                             .padding(.horizontal, 20)
                     }
@@ -174,11 +178,11 @@ struct SignUpStep2EmailView: View {
                     }
                     
                     if viewModel.isCodeRequired() {
-                        if viewModel.isEmptyCodeEntered() || viewModel.isInvalidCodeEntered() {
+                        if !isCodeFocused && viewModel.isCodeScreenTouched() &&  !viewModel.codeValidator().isEmpty {
                             Spacer()
                                 .frame(height: 5)
                             HStack {
-                                Text(viewModel.isEmptyCodeEntered() ? "이메일로 발송된 인증번호를 입력해 주세요." : "인증번호 형식이 올바르지 않습니다.")
+                                Text(viewModel.codeValidator())
                                     .font(.system(size: 11, weight: .light))
                                     .foregroundStyle(Color.emptyEmailWarnRed)
                                 Spacer()
@@ -248,7 +252,12 @@ struct SignUpStep2EmailView: View {
                         
                         Button {
                             isEmailFocused = false
-                            viewModel.touchEmailScreen()
+                            if viewModel.isCodeRequired() {
+                                viewModel.touchCodeScreen()
+                            }
+                            else {
+                                viewModel.touchEmailScreen()
+                            }
                             viewModel.tapNextButton()
                         } label: {
                             Text("다음")
@@ -256,7 +265,7 @@ struct SignUpStep2EmailView: View {
                                 .foregroundStyle(.black)
                                 .padding(.vertical, 16)
                                 .frame(maxWidth: .infinity, idealHeight: 51)
-                                .background(viewModel.code.isEmpty || viewModel.isInvalidCodeEntered() ? Color.disabledNextButtonGray : Color.kakaoYellow)
+                                .background(viewModel.codeValidator().isEmpty ? Color.kakaoYellow : Color.disabledNextButtonGray)
                                 .cornerRadius(6)
                         }
                         .padding(.horizontal, 20)
