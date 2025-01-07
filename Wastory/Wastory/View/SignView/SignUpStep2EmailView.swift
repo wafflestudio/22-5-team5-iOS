@@ -252,6 +252,7 @@ struct SignUpStep2EmailView: View {
                         
                         Button {
                             isEmailFocused = false
+                            isCodeFocused = false
                             if viewModel.isCodeRequired() {
                                 viewModel.touchCodeScreen()
                             }
