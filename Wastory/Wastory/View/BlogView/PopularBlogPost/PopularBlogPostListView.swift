@@ -44,3 +44,4 @@ struct PopularBlogPostListView: View {
             .shadow(color: Color.black.opacity(0.1), radius: 7)
         }
     }
+}
