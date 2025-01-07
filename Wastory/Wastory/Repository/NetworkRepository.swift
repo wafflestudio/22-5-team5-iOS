@@ -12,7 +12,7 @@ final class NetworkRepository {
     static let shared = NetworkRepository()    // 싱글톤 인스턴스
 
     func postSignUp(userID: String, userPW: String) async throws -> String {
-        let requestBody = PostSignUp(username: "abcde", email: userID, password: userPW)
+        let requestBody = PostSignUp(username: String(userID.split(separator: "@").first ?? ""), email: userID, password: userPW)
         var urlRequest = try URLRequest(
             url: NetworkRouter.postSignUp.url,
             method: NetworkRouter.postSignUp.method,
@@ -27,9 +27,20 @@ final class NetworkRepository {
         return response
     }
     
-    func getSignIn(userID: String, userPW: String) async throws -> String {
+    func postSignIn(userID: String, userPW: String) async throws -> PostSignInResponse {
+        let requestBody = PostSignIn(username: userID, password: userPW)
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postSignIn.url,
+            method: NetworkRouter.postSignIn.method,
+            headers: NetworkRouter.postSignIn.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        return ""
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingDecodable(PostSignInResponse.self).value
+        
+        return response
     }
 }
 
@@ -38,4 +49,14 @@ struct PostSignUp: Codable {
     let username: String
     let email: String
     let password: String
+}
+
+struct PostSignIn: Codable {
+    let username: String
+    let password: String
+}
+
+struct PostSignInResponse: Codable {
+    let access_token: String
+    let refresh_token: String
 }

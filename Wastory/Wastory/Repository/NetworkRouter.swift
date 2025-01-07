@@ -37,7 +37,7 @@ enum NetworkRouter {
         case .postSignUp:
             return ["Content-Type": "application/json"]
         case .postSignIn:
-            return nil
+            return ["Content-Type": "application/json"]
         }
     }
     
