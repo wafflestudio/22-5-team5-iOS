@@ -183,6 +183,16 @@ struct SignUpStep3PasswordView: View {
                         if viewModel.isPasswordValid() {
                             isNavigationActive = true
                             UserInfoRepository.shared.setUserPW(userPW: viewModel.password)
+                            Task {
+                                do {
+                                    _ = try await NetworkRepository.shared.postSignUp(
+                                        userID: UserInfoRepository.shared.getUserID(),
+                                        userPW: UserInfoRepository.shared.getUserPW()
+                                    )
+                                } catch {
+                                    print("Error: \(error.localizedDescription)")
+                                }
+                            }
                         }
                     } label: {
                         Text("다음")

@@ -9,11 +9,15 @@ import Foundation
 import Alamofire
 
 final class NetworkRepository {
-    static let shared = UserInfoRepository()    // 싱글톤 인스턴스
+    static let shared = NetworkRepository()    // 싱글톤 인스턴스
 
     func postSignUp(userID: String, userPW: String) async throws -> String {
-        let requestBody = PostSignUp(username: "", email: userID, password: userPW)
-        var urlRequest = try URLRequest(url: NetworkRouter.postSignUp.url, method: NetworkRouter.postSignUp.method, headers: NetworkRouter.postSignUp.headers)
+        let requestBody = PostSignUp(username: "abcde", email: userID, password: userPW)
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postSignUp.url,
+            method: NetworkRouter.postSignUp.method,
+            headers: NetworkRouter.postSignUp.headers
+        )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
         let response = try await AF.request(urlRequest)

@@ -10,6 +10,7 @@ import Alamofire
 
 enum NetworkRouter {
     case postSignUp
+    case postSignIn
     
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
@@ -18,12 +19,15 @@ enum NetworkRouter {
     var path: String {
         switch self {
         case .postSignUp: "/users/signup"
+        case .postSignIn: "/users/signin"
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .postSignUp:
+            return .post
+        case .postSignIn:
             return .post
         }
     }
@@ -32,6 +36,8 @@ enum NetworkRouter {
         switch self {
         case .postSignUp:
             return ["Content-Type": "application/json"]
+        case .postSignIn:
+            return nil
         }
     }
     
