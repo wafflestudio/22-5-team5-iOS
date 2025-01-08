@@ -20,7 +20,6 @@ import Observation
     
     func setInitialScrollPosition(_ scrollPosition: CGFloat) {
         initialScrollPosition = scrollPosition
-        print(scrollPosition)
     }
     
     func changeIsNavTitleHidden(by newValue: CGFloat, _ oldValue: CGFloat) {
