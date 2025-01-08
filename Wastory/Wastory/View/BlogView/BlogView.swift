@@ -32,8 +32,11 @@ struct BlogView: View {
                     // 인기글
                     PopularBlogPostListView(viewModel: viewModel)
                     
-                    Color.clear
-                        .frame(height: 3000)
+                    // 카테고리 별 글
+                    BlogPostListView(viewModel: viewModel)
+                    
+                    Spacer()
+                        .frame(height: 100)
                 } //VStack
             } //ScrollView
         } //VStack
