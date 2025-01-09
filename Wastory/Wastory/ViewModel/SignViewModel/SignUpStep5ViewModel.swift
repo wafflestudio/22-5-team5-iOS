@@ -13,8 +13,8 @@ import Observation
     var blogAddress = "wastory.store/api/blogs/"
     var addressNameAvailability = "사용할 수 없어요."
     
-    func setUsername() {
-        UserInfoRepository.shared.setUsername(username: addressName)
+    func setAddressName() {
+        UserInfoRepository.shared.setAddressName(addressName: addressName)
     }
     
     func setBlogAddress() {

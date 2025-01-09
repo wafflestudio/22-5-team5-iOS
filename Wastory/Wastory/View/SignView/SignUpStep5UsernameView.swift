@@ -120,8 +120,18 @@ struct SignUpStep5UsernameView: View {
                         .frame(height: 120)
                     
                     Button {
-                        viewModel.setUsername()
-                        viewModel.setUserInfo()
+                        viewModel.setAddressName()
+                        Task {
+                            do {
+                                try await NetworkRepository.shared.postBlog(
+                                    addressName: UserInfoRepository.shared.getAddressName()
+                                )
+                                print("블로그 주소 설정 성공")     // 테스트용 콘솔 임시 메세지
+                                viewModel.setUserInfo()
+                            } catch {
+                                print("Error: \(error.localizedDescription)")
+                            }
+                        }
                     } label: {
                         Text("확인")
                             .font(.system(size: 16, weight: .regular))
@@ -147,8 +157,54 @@ struct SignUpStep5UsernameView: View {
     }
 }
 
-#Preview {
-    SignUpStep5UsernameView()
+
+import Alamofire
+
+extension NetworkRepository {
+    func getMyBlog() async throws -> BlogDto {
+        
+        let urlRequest = try URLRequest(
+            url: NetworkConfiguration.baseURL + "/blogs/my_blog",
+            method: .get,
+            headers: ["Content-Type": "application/json"]
+            /*
+            url: NetworkRouter.getMyBlog.url,
+            method: NetworkRouter.getMyBlog.method,
+            headers: NetworkRouter.getMyBlog.headers
+            */
+        )
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+        
+        return response
+    }
+    
+    func postBlog(addressName: String) async throws {
+        let requestBody = [
+            "address_name": addressName
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkConfiguration.baseURL + "/blogs",
+            method: .post,
+            headers: ["Content-Type": "application/json"]
+            /*
+            url: NetworkRouter.getMyBlog.url,
+            method: NetworkRouter.getMyBlog.method,
+            headers: NetworkRouter.getMyBlog.headers
+            */
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        _ = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+    }
 }
 
-// wastory.store/api/blogs/
+struct BlogDto: Codable {
+    let address_name: String
+}

@@ -189,7 +189,7 @@ struct SignUpStep3PasswordView: View {
                                         userID: UserInfoRepository.shared.getUserID(),
                                         userPW: UserInfoRepository.shared.getUserPW()
                                     )
-                                    print("로그인 성공")     // 테스트용 콘솔 임시 메세지
+                                    print("회원가입 성공")     // 테스트용 콘솔 임시 메세지
                                 } catch {
                                     print("Error: \(error.localizedDescription)")
                                 }
