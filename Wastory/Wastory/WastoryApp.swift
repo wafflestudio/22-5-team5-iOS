@@ -13,6 +13,8 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
+    @State var userInfoRepository = UserInfoRepository.shared
+    
     @State private var contentViewModel = ContentViewModel()
     
     var body: some Scene {
@@ -30,10 +32,14 @@ struct WastoryApp: App {
             }
             else {
                 if UserInfoRepository.shared.isUserActive() == false {
-                    SignInView()
+                    NavigationStack {
+                        SignInView()
+                            .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
+                                SignUpStep5AddressView()
+                            }
+                    }
                 }
                 else {
-                    // 현재는 ID, PW가 있을 경우 자동 로그인이지만 나중에는 PW를 DB에 있는 PW와 확인하는 절차가 필요
                     MainTabView()
                         .environment(\.contentViewModel, contentViewModel)
                 }
