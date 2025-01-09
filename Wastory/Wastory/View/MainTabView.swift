@@ -8,93 +8,82 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @Environment(\.contentViewModel) var contentViewModel
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
-    @State var contentNavigationPath = NavigationPath()
     
     var body: some View {
-        if contentViewModel.isMainTabViewPresented {
-            ZStack {
-                TabView(selection: $mainTabViewModel.selectedTab) {
-                    NavigationStack {
-                        HomeView()
-                    }
-                    .tabItem {
-                        Text("홈")
-                    }
-                    .tag(TabType.home)
-                    .mainTabToolbarConfigurations()
-                    
-                    
-                    NavigationStack {
-                        FeedView()
-                    }
-                    .tabItem {
-                        Text("피드")
-                    }
-                    .tag(TabType.feed)
-                    .mainTabToolbarConfigurations()
-                    
-                    
-                    Color.clear
-                        .tabItem {
-                            Text("글쓰기")
-                        }
-                        .tag(TabType.write)
-                        .mainTabToolbarConfigurations()
-                        .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
-                            NavigationStack {
-                                //MARK: PostingView
-                                PostingView(mainTabViewModel: mainTabViewModel)
-                            }
-                        }
-                    
-                    
-                    NavigationStack {
-                        NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-                    }
-                    .tabItem {
-                        Text("알림")
-                    }
-                    .tag(TabType.notification)
-                    .mainTabToolbarConfigurations()
-                    
-                    
-                    NavigationStack {
-                        // statView
-                    }
-                    .tabItem {
-                        Text("stat")
-                    }
-                    .tag(TabType.stat)
-                    .mainTabToolbarConfigurations()
+        ZStack {
+            TabView(selection: $mainTabViewModel.selectedTab) {
+                NavigationStack {
+                    HomeView()
                 }
-                .tint(.black)
-                .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
-                    if newValue == .write {
-                        mainTabViewModel.toggleIsPostingViewPresent()
-                        mainTabViewModel.setSelectedTab(to: oldValue)
-                    }
+                .tabItem {
+                    Text("홈")
                 }
+                .tag(TabType.home)
+                .mainTabToolbarConfigurations()
                 
-                // MARK: NotificationTypeSheet
-                NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
                 
-            } //ZStack
-        } else {
-            NavigationStack(path: $contentNavigationPath) {
-                if contentViewModel.isBlogViewPresented {
-                    BlogView()
-                } else if contentViewModel.isPostViewPresented {
-                    //                NavigationStack {
-                    //                    PostView()
-                    //                }
+                NavigationStack {
+                    FeedView()
+                }
+                .tabItem {
+                    Text("피드")
+                }
+                .tag(TabType.feed)
+                .mainTabToolbarConfigurations()
+                
+                
+                Color.clear
+                    .tabItem {
+                        Text("글쓰기")
+                    }
+                    .tag(TabType.write)
+                    .mainTabToolbarConfigurations()
+                    .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
+                        NavigationStack {
+                            //MARK: PostingView
+                            PostingView(mainTabViewModel: mainTabViewModel)
+                        }
+                    }
+                
+                
+                NavigationStack {
+                    NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
+                }
+                .tabItem {
+                    Text("알림")
+                }
+                .tag(TabType.notification)
+                .mainTabToolbarConfigurations()
+                
+                
+                NavigationStack {
+                    // statView
+                }
+                .tabItem {
+                    Text("stat")
+                }
+                .tag(TabType.stat)
+                .mainTabToolbarConfigurations()
+            }
+            .tint(.black)
+            .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
+                if newValue == .write {
+                    mainTabViewModel.toggleIsPostingViewPresent()
+                    mainTabViewModel.setSelectedTab(to: oldValue)
                 }
             }
-            .transition(.move(edge: .trailing))
-        }
-        
+            
+            // MARK: NotificationTypeSheet
+            NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
+            
+            
+            
+            // MARK: ContentNavigationStack()
+            ContentNavigationStack()
+        } //ZStack
+    
         
     } //body
 }
