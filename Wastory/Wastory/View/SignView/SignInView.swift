@@ -9,10 +9,21 @@ import SwiftUI
 
 struct SignInView: View {
     @State private var viewModel = SignInViewModel()
+    @FocusState private var isIDFocused: Bool
+    @FocusState private var isVisiblePasswordFocused: Bool
+    @FocusState private var isInvisiblePasswordFocused: Bool
     
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isIDFocused = false
+                        isVisiblePasswordFocused = false
+                        isInvisiblePasswordFocused = false
+                    }
+                
                 VStack {
                     Text("waffle")
                         .font(.system(size: 32, weight: .regular))
@@ -25,6 +36,7 @@ struct SignInView: View {
                         TextField("", text: $viewModel.id, prompt: Text("와스토리 아이디")
                             .font(.system(size: 17))
                             .foregroundStyle(Color.promptLabelColor))
+                        .focused($isIDFocused)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
@@ -53,6 +65,7 @@ struct SignInView: View {
                         SecureField("", text: $viewModel.password, prompt: Text("비밀번호")
                             .font(.system(size: 17))
                             .foregroundStyle(Color.promptLabelColor))
+                        .focused($isInvisiblePasswordFocused)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
@@ -60,6 +73,7 @@ struct SignInView: View {
                         TextField("", text: $viewModel.password, prompt: Text("비밀번호")
                             .font(.system(size: 17))
                             .foregroundStyle(Color.promptLabelColor))
+                        .focused($isVisiblePasswordFocused)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 20)
                         .autocapitalization(.none)
@@ -100,6 +114,9 @@ struct SignInView: View {
                     .padding(.vertical, 20)
                     .padding(.horizontal, 20)
                     .onTapGesture {
+                        isIDFocused = false
+                        isVisiblePasswordFocused = false
+                        isInvisiblePasswordFocused = false
                         viewModel.toggleAutoSave()
                     }
                     
@@ -120,6 +137,9 @@ struct SignInView: View {
                         .frame(height: viewModel.isLoginFailed() ? 30 : 0)
                     
                     Button {
+                        isIDFocused = false
+                        isVisiblePasswordFocused = false
+                        isInvisiblePasswordFocused = false
                         Task {
                             await viewModel.login()
                         }
