@@ -50,3 +50,17 @@ import Observation
     }
     
 }
+
+
+// Environment Key 정의
+private struct BlogViewModelKey: EnvironmentKey {
+    static let defaultValue = BlogViewModel()
+}
+
+// Environment Values 확장
+extension EnvironmentValues {
+    var blogViewModel: BlogViewModel {
+        get { self[BlogViewModelKey.self] }
+        set { self[BlogViewModelKey.self] = newValue }
+    }
+}

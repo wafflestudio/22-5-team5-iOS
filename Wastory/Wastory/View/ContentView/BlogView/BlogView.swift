@@ -20,7 +20,7 @@ struct BlogView: View {
                 VStack(spacing: 0) {
                     
                     BlogHeaderView()
-                    //
+                    /*
                     Button(action: {
                         // TODO: 해당 블로그 View로 이동
                         contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextPost)
@@ -45,7 +45,7 @@ struct BlogView: View {
                     .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
                         PostView()
                     }
-                    //
+                    */
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
@@ -68,20 +68,37 @@ struct BlogView: View {
                 } //VStack
             } //ScrollView
         } //VStack
+        .environment(\.contentViewModel, contentViewModel)
+        .environment(\.blogViewModel, viewModel)
+        
+        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
+            PostView()
+        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
-        // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "블로그 이름")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
+                HStack(spacing: 20) {
+                    Button{
+                        
+                    } label: {
+                        Text(Image(systemName: "magnifyingglass"))
+                            .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
+                    }
                     
-                } label: {
-                    Text(Image(systemName: "magnifyingglass"))
-                        .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
+                    Button(action: {
+                        //차단하기 신고하기 sheet present
+                    }) {
+                        Image(systemName: "questionmark.text.page.fill")
+                            .resizable()
+                            .scaledToFill()
+                            .clipShape(Circle())
+                            .frame(width: 30, height: 30)
+                    }
                 }
             } // navbar 사이즈 설정을 위한 임의 버튼입니다.
             

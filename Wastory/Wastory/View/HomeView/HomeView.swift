@@ -90,5 +90,5 @@ struct HomeView: View {
 }
 
 extension Color {
-    static let backgourndSpaceColor = Color.init(red: 241/255, green: 241/255, blue: 241/255)
+    static let backgourndSpaceColor = Color.init(red: 247/255, green: 247/255, blue: 247/255)
 }
