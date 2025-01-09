@@ -120,7 +120,9 @@ struct SignInView: View {
                         .frame(height: viewModel.isLoginFailed() ? 30 : 0)
                     
                     Button {
-                        viewModel.login()
+                        Task {
+                            await viewModel.login()
+                        }
                     } label: {
                         Text("로그인")
                             .font(.system(size: 16, weight: .regular))

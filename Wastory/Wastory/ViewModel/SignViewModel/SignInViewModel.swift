@@ -13,8 +13,6 @@ import Observation
     @AppStorage("userPW") @ObservationIgnored private var userPW: String = ""
     @AppStorage("loginAutoSave") @ObservationIgnored private var loginInfoSave: Bool = false
     
-    private var userInfoRepository = UserInfoRepository.shared
-    
     var id = ""
     var password = ""
     private var isLoginInfoSave = false
@@ -26,9 +24,11 @@ import Observation
         isLoginInfoSave = loginInfoSave
     }
     
-    func login() {
-        userInfoRepository.loadUserInfo(userID: id, userPW: password)
-        loginFailed = !userInfoRepository.isUserActive()
+    func login() async {
+        await UserInfoRepository.shared.loadUserInfo(userID: self.id, userPW: self.password)
+        
+        loginFailed = !UserInfoRepository.shared.isUserActive()
+        print(loginFailed)
         if loginFailed { return }
         
         loginInfoSave = isLoginInfoSave
