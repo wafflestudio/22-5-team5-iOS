@@ -121,7 +121,6 @@ struct SignInView: View {
                     
                     Button {
                         viewModel.login()
-                        //viewModel.toggleLoginFailed() // 로그인 실패 문구 테스트 코드 (추후 삭제 예정)
                     } label: {
                         Text("로그인")
                             .font(.system(size: 16, weight: .regular))

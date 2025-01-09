@@ -46,10 +46,6 @@ import Observation
         return loginFailed
     }
     
-    func toggleLoginFailed() {  // 로그인 실패 문구를 확인하기 위한 임시 함수 (추후 삭제 예정)
-        loginFailed.toggle()
-    }
-    
     func toggleAutoSave() {
         isLoginInfoSave.toggle()
     }

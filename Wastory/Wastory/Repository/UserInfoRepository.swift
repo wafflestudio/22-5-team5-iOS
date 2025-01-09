@@ -39,8 +39,19 @@ final class UserInfoRepository {
         self.userID = userID
         self.userPW = userPW
         // 로그인 성공 여부를 판단하고 DB에서 유저 닉네임 정보 및 추후 추가될 다른 정보를 불러오는 코드 필요
-        if self.userID.isEmpty == false {    // 테스트를 위한 임시 코드 (추후 DB와 연결 필요)
-            self.userActive = true
+        Task {
+            do {
+                let response = try await NetworkRepository.shared.postSignIn(
+                    userID: self.userID,
+                    userPW: self.userPW
+                )
+                if !response.access_token.isEmpty {
+                    userActive = true
+                    print("로그인 성공")  // 테스트용 임시 콘솔 메세지
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
         }
     }
     
