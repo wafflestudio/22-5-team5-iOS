@@ -13,21 +13,21 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
-    private var userInfoRepository = UserInfoRepository.shared
-    
     var body: some Scene {
         WindowGroup {
             if isLoading {
                 LoadingView()
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.isLoading = false
-                            userInfoRepository.loadUserInfo(userID: userID, userPW: userPW)
+                            Task {
+                                await UserInfoRepository.shared.loadUserInfo(userID: userID, userPW: userPW)
+                                self.isLoading = false
+                            }
                         }
                     }
             }
             else {
-                if userInfoRepository.isUserActive() == false {
+                if UserInfoRepository.shared.isUserActive() == false {
                     SignInView()
                 }
                 else {

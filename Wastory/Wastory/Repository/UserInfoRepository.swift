@@ -35,23 +35,21 @@ final class UserInfoRepository {
         self.userActive = true
     }
     
-    func loadUserInfo(userID: String, userPW: String) { // 로그인 시 이용
+    func loadUserInfo(userID: String, userPW: String) async { // 로그인 시 이용
         self.userID = userID
         self.userPW = userPW
         // 로그인 성공 여부를 판단하고 DB에서 유저 닉네임 정보 및 추후 추가될 다른 정보를 불러오는 코드 필요
-        Task {
-            do {
-                let response = try await NetworkRepository.shared.postSignIn(
-                    userID: self.userID,
-                    userPW: self.userPW
-                )
-                if !response.access_token.isEmpty {
-                    userActive = true
-                    print("로그인 성공")  // 테스트용 임시 콘솔 메세지
-                }
-            } catch {
-                print("Error: \(error.localizedDescription)")
+        do {
+            let response = try await NetworkRepository.shared.postSignIn(
+                userID: self.userID,
+                userPW: self.userPW
+            )
+            if !response.access_token.isEmpty {
+                userActive = true
+                print("로그인 성공")  // 테스트용 임시 콘솔 메세지
             }
+        } catch {
+            print("Error: \(error.localizedDescription)")
         }
     }
     
