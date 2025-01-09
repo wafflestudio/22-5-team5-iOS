@@ -89,10 +89,7 @@ struct BlogView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    contentViewModel.removeNavigationStackCount()
-                    if contentViewModel.navigationStackCount == 0 {
-                        contentViewModel.toggleIsBlogViewPresented()
-                    } else {
+                    contentViewModel.backButtonAction {
                         dismiss()
                     }
                 } label: {

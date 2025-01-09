@@ -51,6 +51,21 @@ import Observation
     }
     
     // Button 동작
+    // Back Button
+    func backButtonAction(dismiss: @escaping () -> Void) {
+        removeNavigationStackCount()
+        if navigationStackCount == 0 {
+            withAnimation {
+                isBlogViewPresented = false
+                isPostViewPresented = false
+                updateIsAnyViewPresented()
+                updateisMainTabViewPresented()
+            }
+        } else {
+            dismiss()
+        }
+    }
+    
     // Blog Button
     func openNavigationStackWithBlog() {
         toggleIsBlogViewPresented()
