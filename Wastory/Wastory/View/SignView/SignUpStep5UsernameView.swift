@@ -143,6 +143,9 @@ struct SignUpStep5UsernameView: View {
                     }
                     .padding(.horizontal, 20)
                     .disabled(viewModel.addressNameAvailability.last == ".")
+                    .onTapGesture {
+                        isAddressFocused = false
+                    }
                     
                     Spacer()
                 }
