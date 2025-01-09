@@ -28,7 +28,6 @@ import Observation
         await UserInfoRepository.shared.loadUserInfo(userID: self.id, userPW: self.password)
         
         loginFailed = !UserInfoRepository.shared.isUserActive()
-        print(loginFailed)
         if loginFailed { return }
         
         loginInfoSave = isLoginInfoSave
