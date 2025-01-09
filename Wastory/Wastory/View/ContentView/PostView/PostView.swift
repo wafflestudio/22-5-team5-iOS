@@ -19,7 +19,6 @@ struct PostView: View {
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                                print("newValeue: \(newValue), oldValue: \(oldValue)")
                                 if abs(newValue - oldValue) > 200 {
                                     viewModel.setInitialScrollPosition(oldValue)
                                 }
@@ -46,7 +45,7 @@ struct PostView: View {
                     Text(Image(systemName: "magnifyingglass"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
                 }
-                .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
+                .navigationDestination(isPresented: $viewModel.isNavigationToNextBlog) {
                     BlogView()
                 }
             } // navbar 사이즈 설정을 위한 임의 버튼입니다.
