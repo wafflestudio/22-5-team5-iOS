@@ -1,5 +1,5 @@
 //
-//  SignUpStep5UsernameView.swift
+//  SignUpStep5AddressView.swift
 //  Wastory
 //
 //  Created by mujigae on 12/27/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignUpStep5UsernameView: View {
+struct SignUpStep5AddressView: View {
     @State private var viewModel = SignUpStep5ViewModel()
     @FocusState private var isAddressFocused: Bool
     

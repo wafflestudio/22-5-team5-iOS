@@ -33,7 +33,7 @@ struct WastoryApp: App {
                     NavigationStack {
                         SignInView()
                             .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
-                                SignUpStep5UsernameView()
+                                SignUpStep5AddressView()
                             }
                     }
                 }
