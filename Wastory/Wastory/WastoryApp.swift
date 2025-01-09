@@ -13,7 +13,7 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
-    @State var singleton = UserInfoRepository.shared
+    @State var userInfoRepository = UserInfoRepository.shared
     
     var body: some Scene {
         WindowGroup {
@@ -32,13 +32,12 @@ struct WastoryApp: App {
                 if UserInfoRepository.shared.isUserActive() == false {
                     NavigationStack {
                         SignInView()
-                            .navigationDestination(isPresented: $singleton.needAddressName) {
+                            .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
                                 SignUpStep5UsernameView()
                             }
                     }
                 }
                 else {
-                    // 현재는 ID, PW가 있을 경우 자동 로그인이지만 나중에는 PW를 DB에 있는 PW와 확인하는 절차가 필요
                     MainTabView()
                 }
             }
