@@ -66,26 +66,21 @@ import Observation
         }
     }
     
+    func pushNavigationStack(isNavigationToNext: inout Bool) {
+        addNavigationStackCount()
+        isNavigationToNext.toggle()
+    }
+    
     // Blog Button
     func openNavigationStackWithBlog() {
         toggleIsBlogViewPresented()
         addNavigationStackCount()
     }
     
-    func pushNavigationStackWithBlog(isNavigationToNextBlog: inout Bool) {
-        addNavigationStackCount()
-        isNavigationToNextBlog.toggle()
-    }
-    
     // Post Button
     func openNavigationStackWithPost() {
         toggleIsPostViewPresented()
         addNavigationStackCount()
-    }
-    
-    func pushNavigationStackWithPost(isNavigationToNextPost: inout Bool) {
-        addNavigationStackCount()
-        isNavigationToNextPost.toggle()
     }
 }
 

@@ -20,11 +20,10 @@ struct BlogView: View {
                 VStack(spacing: 0) {
                     
                     BlogHeaderView()
-                    
-                    /* blog 이동 버튼
+                    //
                     Button(action: {
                         // TODO: 해당 블로그 View로 이동
-                        contentViewModel.pushNavigationStackWithBlog(isNavigationToNextBlog: &viewModel.isNavigationToNextPost)
+                        contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextPost)
                     }) {
                         // 블로그 mainImage
                         ZStack {
@@ -44,10 +43,9 @@ struct BlogView: View {
                             .foregroundStyle(Color.todaysWastoryTextColor)
                     }
                     .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
-                        BlogView()
+                        PostView()
                     }
-                     */
-                    
+                    //
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
