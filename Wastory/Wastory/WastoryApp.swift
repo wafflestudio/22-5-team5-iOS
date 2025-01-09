@@ -13,28 +13,33 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
+    @State private var contentViewModel = ContentViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            if isLoading {
-                LoadingView()
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            Task {
-                                await UserInfoRepository.shared.loadUserInfo(userID: userID, userPW: userPW)
-                                self.isLoading = false
-                            }
-                        }
-                    }
-            }
-            else {
-                if UserInfoRepository.shared.isUserActive() == false {
-                    SignInView()
-                }
-                else {
-                    // 현재는 ID, PW가 있을 경우 자동 로그인이지만 나중에는 PW를 DB에 있는 PW와 확인하는 절차가 필요
-                    MainTabView()
-                }
-            }
+            MainTabView()
+                .environment(\.contentViewModel, contentViewModel)
+//            if isLoading {
+//                LoadingView()
+//                    .onAppear {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                            Task {
+//                                await UserInfoRepository.shared.loadUserInfo(userID: userID, userPW: userPW)
+//                                self.isLoading = false
+//                            }
+//                        }
+//                    }
+//            }
+//            else {
+//                if UserInfoRepository.shared.isUserActive() == false {
+//                    SignInView()
+//                }
+//                else {
+//                    // 현재는 ID, PW가 있을 경우 자동 로그인이지만 나중에는 PW를 DB에 있는 PW와 확인하는 절차가 필요
+//                    MainTabView()
+//                        .environment(\.contentViewModel, contentViewModel)
+//                }
+//            }
         }
     }
 }
