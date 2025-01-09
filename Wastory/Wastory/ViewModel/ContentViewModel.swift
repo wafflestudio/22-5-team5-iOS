@@ -61,6 +61,17 @@ import Observation
         addNavigationStackCount()
         isNavigationToNextBlog.toggle()
     }
+    
+    // Post Button
+    func openNavigationStackWithPost() {
+        toggleIsPostViewPresented()
+        addNavigationStackCount()
+    }
+    
+    func pushNavigationStackWithPost(isNavigationToNextPost: inout Bool) {
+        addNavigationStackCount()
+        isNavigationToNextPost.toggle()
+    }
 }
 
 // Environment Key 정의
