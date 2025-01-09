@@ -15,6 +15,10 @@ import Observation
     
     private var initialScrollPosition: CGFloat = 0
     
+    var isNavigationToNextPost: Bool = false
+    
+    
+    
     
     var popularBlogPostItems: [String] = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8", "item 9", "item 10"]
     

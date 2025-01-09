@@ -10,13 +10,43 @@ import SwiftUI
 struct BlogView: View {
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {
+            
+            
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
                     BlogHeaderView()
+                    
+                    /* blog 이동 버튼
+                    Button(action: {
+                        // TODO: 해당 블로그 View로 이동
+                        contentViewModel.pushNavigationStackWithBlog(isNavigationToNextBlog: &viewModel.isNavigationToNextPost)
+                    }) {
+                        // 블로그 mainImage
+                        ZStack {
+                            Image(systemName: "questionmark.text.page.fill")
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                            
+                            Circle()
+                                .stroke(Color.todaysWastoryTextColor, lineWidth: 1.7)
+                        }
+                        .frame(width: 23, height: 23)
+                        
+                        // 블로그 이름 Text
+                        Text("블로그이름")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Color.todaysWastoryTextColor)
+                    }
+                    .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
+                        BlogView()
+                    }
+                     */
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -59,7 +89,9 @@ struct BlogView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    dismiss()
+                    contentViewModel.backButtonAction {
+                        dismiss()
+                    }
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)

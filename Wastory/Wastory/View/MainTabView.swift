@@ -78,8 +78,14 @@ struct MainTabView: View {
             // MARK: NotificationTypeSheet
             NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
             
-        }
-    }
+            
+            
+            // MARK: ContentNavigationStack()
+            ContentNavigationStack()
+        } //ZStack
+    
+        
+    } //body
 }
 
 

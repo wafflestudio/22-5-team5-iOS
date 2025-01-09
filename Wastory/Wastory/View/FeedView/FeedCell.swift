@@ -10,6 +10,9 @@ import SwiftUI
 // "피드"의 List에 표시 될 Cell
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct FeedCell: View {
+    
+    @Environment(\.contentViewModel) var contentViewModel
+    
     var body: some View {
         
         HStack(alignment: .top, spacing: 0) {
@@ -63,22 +66,25 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                Button(action: {
-                    // Blog View로 이동
-                }) {
-                    HStack(alignment: .center, spacing: 9) {
-                        //blog image
-                        Image(systemName: "questionmark.app.dashed")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .background(Color.secondaryLabelColor.opacity(0.3))
-                            .clipped()
-                            .cornerRadius(5)
-                        
-                        //blog name
-                        Text("Blog name")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(Color.secondaryLabelColor)
+                NavigationLink(destination: BlogView()) {
+                    Button(action: {
+                        // TODO: 해당 블로그 View로 이동
+                        contentViewModel.openNavigationStackWithBlog()
+                    }) {
+                        HStack(alignment: .center, spacing: 9) {
+                            //blog image
+                            Image(systemName: "questionmark.app.dashed")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .background(Color.secondaryLabelColor.opacity(0.3))
+                                .clipped()
+                                .cornerRadius(5)
+                            
+                            //blog name
+                            Text("Blog name")
+                                .font(.system(size: 14, weight: .light))
+                                .foregroundStyle(Color.secondaryLabelColor)
+                        }
                     }
                 }
             }
