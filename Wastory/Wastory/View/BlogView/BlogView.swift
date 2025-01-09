@@ -21,6 +21,7 @@ struct BlogView: View {
                     
                     BlogHeaderView()
                     
+                    /* blog 이동 버튼
                     Button(action: {
                         // TODO: 해당 블로그 View로 이동
                         contentViewModel.pushNavigationStackWithBlog(isNavigationToNextBlog: &viewModel.isNavigationToNextPost)
@@ -45,6 +46,7 @@ struct BlogView: View {
                     .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
                         BlogView()
                     }
+                     */
                     
                     GeometryReader { geometry in
                         Color.clear
