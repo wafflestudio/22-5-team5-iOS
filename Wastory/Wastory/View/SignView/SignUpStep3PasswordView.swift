@@ -192,7 +192,7 @@ struct SignUpStep3PasswordView: View {
                                     print("로그인 성공")     // 테스트용 콘솔 임시 메세지
                                 } catch {
                                     print("Error: \(error.localizedDescription)")
-                        ㄴ        }
+                                }
                             }
                         }
                     } label: {
