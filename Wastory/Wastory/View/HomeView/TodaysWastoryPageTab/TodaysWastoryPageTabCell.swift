@@ -70,12 +70,7 @@ struct TodaysWastoryPageTabCell: View {
                         NavigationLink(destination: BlogView()) {
                             Button(action: {
                                 // TODO: 해당 블로그 View로 이동
-                                print("눌림")
-                                if !contentViewModel.isAnyViewPresented {
-                                    contentViewModel.toggleIsBlogViewPresented()
-                                    print("토글됨 : \(contentViewModel.isBlogViewPresented)")
-                                    
-                                }
+                                contentViewModel.openNavigationStackWithBlog()
                             }) {
                                 // 블로그 mainImage
                                 ZStack {

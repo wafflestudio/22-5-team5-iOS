@@ -11,6 +11,8 @@ import SwiftUI
 struct TodaysWastoryListCell: View {
     let index: Int
     
+    @Environment(\.contentViewModel) var contentViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -24,13 +26,16 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                Button(action: {
-                    // TODO: 해당 블로그 View로 이동
-                }) {
-                    Text("블로그 이름")
-                        .font(.system(size: 11, weight: .light))
-                        .foregroundStyle(Color.primaryLabelColor)
-                        .padding(.top, 4)
+                NavigationLink(destination: BlogView()) {
+                    Button(action: {
+                        // TODO: 해당 블로그 View로 이동
+                        contentViewModel.openNavigationStackWithBlog()
+                    }) {
+                        Text("블로그 이름")
+                            .font(.system(size: 11, weight: .light))
+                            .foregroundStyle(Color.primaryLabelColor)
+                            .padding(.top, 4)
+                    }
                 }
                 
                 Spacer()

@@ -20,16 +20,10 @@ struct BlogView: View {
                 VStack(spacing: 0) {
                     
                     BlogHeaderView()
+                    
                     Button(action: {
                         // TODO: 해당 블로그 View로 이동
-                        print("눌림")
-                        if !contentViewModel.isAnyViewPresented {
-                            contentViewModel.toggleIsBlogViewPresented()
-                            print("토글됨 : \(contentViewModel.isBlogViewPresented)")
-                            
-                        } else {
-                            viewModel.isNavigationToNextPost.toggle()
-                        }
+                        contentViewModel.pushNavigationStackWithBlog(isNavigationToNextBlog: &viewModel.isNavigationToNextPost)
                     }) {
                         // 블로그 mainImage
                         ZStack {
@@ -93,7 +87,12 @@ struct BlogView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    dismiss()
+                    contentViewModel.removeNavigationStackCount()
+                    if contentViewModel.navigationStackCount == 0 {
+                        contentViewModel.toggleIsBlogViewPresented()
+                    } else {
+                        dismiss()
+                    }
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)

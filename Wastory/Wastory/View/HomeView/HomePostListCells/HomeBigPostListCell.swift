@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeBigPostListCell: View {
+    
+    @Environment(\.contentViewModel) var contentViewModel
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
@@ -31,25 +34,28 @@ struct HomeBigPostListCell: View {
                 
                 
                 //블로그 정보 button
-                Button(action: {
-                    // TODO: 해당 블로그 View로 이동
-                }) {
-                    // 블로그 mainImage
-                    ZStack {
-                        Image(systemName: "questionmark.text.page.fill")
-                            .resizable()
-                            .scaledToFill()
-                            .clipShape(Circle())
+                NavigationLink(destination: BlogView()) {
+                    Button(action: {
+                        // TODO: 해당 블로그 View로 이동
+                        contentViewModel.openNavigationStackWithBlog()
+                    }) {
+                        // 블로그 mainImage
+                        ZStack {
+                            Image(systemName: "questionmark.text.page.fill")
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                            
+                            Circle()
+                                .stroke(Color.todaysWastoryTextColor, lineWidth: 1.7)
+                        }
+                        .frame(width: 23, height: 23)
                         
-                        Circle()
-                            .stroke(Color.todaysWastoryTextColor, lineWidth: 1.7)
+                        // 블로그 이름 Text
+                        Text("블로그이름")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Color.todaysWastoryTextColor)
                     }
-                    .frame(width: 23, height: 23)
-                    
-                    // 블로그 이름 Text
-                    Text("블로그이름")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(Color.todaysWastoryTextColor)
                 }
                 .padding(.leading, 15)
                 .padding(.top, 15)

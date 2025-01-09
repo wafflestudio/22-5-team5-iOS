@@ -84,15 +84,15 @@ struct MainTabView: View {
             } //ZStack
         } else {
             NavigationStack(path: $contentNavigationPath) {
-            if contentViewModel.isBlogViewPresented {
-                BlogView()
-            } else if contentViewModel.isPostViewPresented {
-//                NavigationStack {
-//                    PostView()
-//                }
+                if contentViewModel.isBlogViewPresented {
+                    BlogView()
+                } else if contentViewModel.isPostViewPresented {
+                    //                NavigationStack {
+                    //                    PostView()
+                    //                }
+                }
             }
-                
-            }
+            .transition(.move(edge: .trailing))
         }
         
         

@@ -25,7 +25,9 @@ import Observation
     }
     
     func updateisMainTabViewPresented() {
-        isMainTabViewPresented = !isAnyViewPresented
+        withAnimation {
+            isMainTabViewPresented = !isAnyViewPresented
+        }
     }
     
     func toggleIsBlogViewPresented() {
@@ -50,8 +52,14 @@ import Observation
     
     // Button 동작
     // Blog Button
-    func navigationToBlog() {
-        
+    func openNavigationStackWithBlog() {
+        toggleIsBlogViewPresented()
+        addNavigationStackCount()
+    }
+    
+    func pushNavigationStackWithBlog(isNavigationToNextBlog: inout Bool) {
+        addNavigationStackCount()
+        isNavigationToNextBlog.toggle()
     }
 }
 
