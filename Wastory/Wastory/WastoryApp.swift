@@ -15,6 +15,8 @@ struct WastoryApp: App {
     
     @State var userInfoRepository = UserInfoRepository.shared
     
+    @State private var contentViewModel = ContentViewModel()
+    
     var body: some Scene {
         WindowGroup {
             if isLoading {
@@ -39,6 +41,7 @@ struct WastoryApp: App {
                 }
                 else {
                     MainTabView()
+                        .environment(\.contentViewModel, contentViewModel)
                 }
             }
         }
