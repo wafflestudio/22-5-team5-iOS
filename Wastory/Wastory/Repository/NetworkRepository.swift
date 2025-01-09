@@ -13,7 +13,6 @@ final class NetworkRepository {
 
     func postSignUp(userID: String, userPW: String) async throws {
         let requestBody = [
-            "username": String(userID.split(separator: "@").first ?? ""),
             "email": userID,
             "password": userPW
         ]
@@ -24,14 +23,14 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        let response = try await AF.request(urlRequest)
+        _ = try await AF.request(urlRequest)
             .validate()
             .serializingString().value
     }
     
     func postSignIn(userID: String, userPW: String) async throws -> TokenDto {
         let requestBody = [
-            "username": userID,
+            "email": userID,
             "password": userPW
         ]
         var urlRequest = try URLRequest(
