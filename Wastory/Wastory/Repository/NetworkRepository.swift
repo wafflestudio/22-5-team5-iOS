@@ -46,4 +46,36 @@ final class NetworkRepository {
         
         return response
     }
+    
+    func getMyBlog() async throws -> BlogDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getMyBlog.url,
+            method: NetworkRouter.getMyBlog.method,
+            headers: NetworkRouter.getMyBlog.headers
+        )
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+        
+        return response
+    }
+    
+    func postBlog(addressName: String) async throws {
+        let requestBody = [
+            "address_name": addressName
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postBlog.url,
+            method: NetworkRouter.postBlog.method,
+            headers: NetworkRouter.postBlog.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        _ = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+    }
 }

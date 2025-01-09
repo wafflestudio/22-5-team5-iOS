@@ -157,54 +157,6 @@ struct SignUpStep5UsernameView: View {
     }
 }
 
-
-import Alamofire
-
-extension NetworkRepository {
-    func getMyBlog() async throws -> BlogDto {
-        
-        let urlRequest = try URLRequest(
-            url: NetworkConfiguration.baseURL + "/blogs/my_blog",
-            method: .get,
-            headers: ["Content-Type": "application/json"]
-            /*
-            url: NetworkRouter.getMyBlog.url,
-            method: NetworkRouter.getMyBlog.method,
-            headers: NetworkRouter.getMyBlog.headers
-            */
-        )
-        
-        let response = try await AF.request(
-            urlRequest,
-            interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
-        
-        return response
-    }
-    
-    func postBlog(addressName: String) async throws {
-        let requestBody = [
-            "address_name": addressName
-        ]
-        var urlRequest = try URLRequest(
-            url: NetworkConfiguration.baseURL + "/blogs",
-            method: .post,
-            headers: ["Content-Type": "application/json"]
-            /*
-            url: NetworkRouter.getMyBlog.url,
-            method: NetworkRouter.getMyBlog.method,
-            headers: NetworkRouter.getMyBlog.headers
-            */
-        )
-        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
-        
-        _ = try await AF.request(
-            urlRequest,
-            interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
-    }
-}
-
 struct BlogDto: Codable {
     let address_name: String
 }
