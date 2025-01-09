@@ -13,43 +13,72 @@ final class UserInfoRepository {
     
     private var userActive: Bool = false        // 유저의 상태: 로그인 (true) | 로그아웃 (false)
     
-    private var userID = ""     // 아이디
-    private var userPW = ""     // 비밀번호
-    private var username = ""   // 닉네임 (블로그 주소 대체)
+    private var userID = ""         // 아이디
+    private var userPW = ""         // 비밀번호
+    private var addressName = ""    // 블로그 주소 식별자
+    private var blogName = ""       // 블로그 이름
+    private var username = ""       // 닉네임
     
-    func setUserID(userID: String) {        // 회원가입 시 이용
+    // 최초로 블로그를 개설했는지 App이 판단하기 위한 변수
+    var needAddressName: Bool = false
+    func isAddressNameNeeded() -> Bool {
+        return needAddressName
+    }
+    
+    func setUserID(userID: String) {    // 회원가입에서만 이용
         self.userID = userID
     }
-    
-    func setUserPW(userPW: String) {        // 회원가입 시 이용
+    func setUserPW(userPW: String) {
         self.userPW = userPW
     }
-    
-    func setUsername(username: String) {    // 회원가입 시 이용
+    func setAddressName(addressName: String) {
+        self.addressName = addressName
+    }
+    func setBlogName(blogName: String) {
+        self.blogName = blogName
+    }
+    func setUsername(username: String) {
         self.username = username
     }
     
-    func setUserInfo() {                    // 회원가입 시 이용
-        // DB에 ID, PW, username을 연동하여 저장하는 기능 구현 필요
-        // 해당 함수가 실행될 때는 이미 userID, userPW, username이 모두 empty string이 아니어야 함 (회원가입을 진행했기 때문에)
+    func setUserInfo() {    // 블로그 주소를 설정했을 때 이용
+        // 해당 함수가 실행될 때는 이미 userID, userPW, addressName이 모두 empty string이 아니어야 함 (회원가입을 진행했기 때문에)
+        self.blogName = addressName + "님의 블로그"
+        self.username = addressName
         self.userActive = true
     }
     
-    func loadUserInfo(userID: String, userPW: String) async { // 로그인 시 이용
+    func loadUserInfo(userID: String, userPW: String) async {   // 로그인 시 이용
         self.userID = userID
         self.userPW = userPW
-        // 로그인 성공 여부를 판단하고 DB에서 유저 닉네임 정보 및 추후 추가될 다른 정보를 불러오는 코드 필요
+        
         do {
             let response = try await NetworkRepository.shared.postSignIn(
                 userID: self.userID,
                 userPW: self.userPW
             )
             if !response.access_token.isEmpty {
-                userActive = true
                 print("로그인 성공")  // 테스트용 임시 콘솔 메세지
+                NetworkConfiguration.accessToken = response.access_token
+                NetworkConfiguration.refreshToken = response.refresh_token
             }
         } catch {
             print("Error: \(error.localizedDescription)")
+            return
+        }
+        
+        do {
+            let response = try await NetworkRepository.shared.getMyBlog()
+            addressName = response.address_name
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        if addressName.isEmpty {
+            needAddressName = true
+        }
+        else {
+            userActive = true
         }
     }
     
@@ -60,11 +89,15 @@ final class UserInfoRepository {
     func getUserID() -> String {
         return userID
     }
-    
     func getUserPW() -> String {
         return userPW
     }
-    
+    func getAddressName() -> String {
+        return addressName
+    }
+    func getBlogName() -> String {
+        return blogName
+    }
     func getUserName() -> String {
         return username
     }

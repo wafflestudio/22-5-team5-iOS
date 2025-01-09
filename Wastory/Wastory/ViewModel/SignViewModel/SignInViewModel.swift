@@ -27,8 +27,7 @@ import Observation
     func login() async {
         await UserInfoRepository.shared.loadUserInfo(userID: self.id, userPW: self.password)
         
-        loginFailed = !UserInfoRepository.shared.isUserActive()
-        print(loginFailed)
+        loginFailed = !UserInfoRepository.shared.isUserActive() && !UserInfoRepository.shared.isAddressNameNeeded()
         if loginFailed { return }
         
         loginInfoSave = isLoginInfoSave
