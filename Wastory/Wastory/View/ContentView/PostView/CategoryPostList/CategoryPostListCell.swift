@@ -74,16 +74,12 @@ struct CategoryPostListCell: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 70, height: 70)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 10)
-                    )
             }//HStack
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
             
             Divider()
                 .foregroundStyle(Color.secondaryLabelColor)
-                .padding(.horizontal, 20)
             
         } //VStack
         

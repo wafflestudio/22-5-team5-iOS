@@ -77,7 +77,7 @@ import Observation
         addNavigationStackCount()
     }
     
-    func openNavigationLinkWithPostButton(_ buttonContent: @escaping () -> some View) -> some View {
+    func openNavigationLinkWithPostButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기
         NavigationLink(destination: BlogView()) {
             Button(action: {
                 // TODO: 해당 블로그 View로 이동

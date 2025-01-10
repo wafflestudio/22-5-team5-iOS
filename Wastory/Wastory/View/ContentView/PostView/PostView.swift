@@ -165,6 +165,22 @@ struct PostView: View {
                     
                     
                     CategoryPostListView()
+                    VStack(spacing: 10) {
+                        HStack {
+                            Spacer()
+                            Text("와스토리는 team5에서")
+                            Image(systemName: "clock")
+                            Text("을 넣어 만듭니다.")
+                                .padding(.leading, -5)
+                            Spacer()
+                        }
+                        
+                        Text("Waffle Studio")
+                    }
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundStyle(Color.secondaryLabelColor)
+                    .padding(.top, 50)
+                    .padding(.bottom, 150)
                     
                 }// VStack
             }// ScrollView

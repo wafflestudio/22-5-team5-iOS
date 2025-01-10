@@ -8,30 +8,39 @@
 import SwiftUI
 
 struct CategoryPostListView: View {
+    
+    @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.postViewModel) var viewModel
+    
     
     var body: some View {
         
         VStack(spacing: 0) {
             Spacer()
-                .frame(height: 30)
+                .frame(height: 20)
             
-            Button(action: {
+            
+            HStack(alignment: .center, spacing: 6) {
+                Text("카테고리 (미선택 시 : 이 블로그)")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.loadingCoralRed)
                 
-            }) {
-                HStack(alignment: .center, spacing: 6) {
-                    Image(systemName: "list.bullet")
-                        .font(.system(size: 23, weight: .light))
-                        .foregroundStyle(Color.primaryLabelColor)
-                        .padding(.leading, 20)
-                    
-                    Text("분류 전체보기") // selected category로 설정
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(Color.primaryLabelColor)
-                    
-                    Spacer()
+                Text("의 다른 글") // selected category로 설정
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.primaryLabelColor)
+                
+                Spacer()
+                
+                Button(action:{
+                    contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                }) {
+                    Text("더보기")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
                 }
             }
+            .padding(.horizontal, 20)
+        
             
             Spacer()
                 .frame(height: 5)
