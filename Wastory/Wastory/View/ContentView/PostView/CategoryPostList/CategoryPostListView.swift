@@ -2,7 +2,7 @@
 //  CategoryPostListView.swift
 //  Wastory
 //
-//  Created by 중워니 on 1/8/25.
+//  Created by 중워니 on 1/10/25.
 //
 
 import SwiftUI
@@ -22,11 +22,11 @@ struct CategoryPostListView: View {
             
             HStack(alignment: .center, spacing: 6) {
                 Text("카테고리 (미선택 시 : 이 블로그)")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.loadingCoralRed)
                 
                 Text("의 다른 글") // selected category로 설정
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.primaryLabelColor)
                 
                 Spacer()

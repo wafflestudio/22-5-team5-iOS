@@ -21,6 +21,21 @@ import Observation
     
     var categoryPostListItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
     
+    var blogPopularPostGridItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
+    
+    
+    //blogPopularPostGrid
+    private var blogPopularPostGridCellWidth: CGFloat = 0
+    
+    func setBlogPopularPostGridCellWidth(_ size: CGFloat) {
+        blogPopularPostGridCellWidth = size
+    }
+    
+    func getBlogPopularPostGridCellWidth() -> CGFloat {
+        blogPopularPostGridCellWidth
+    }
+    //
+    
     func setInitialScrollPosition(_ scrollPosition: CGFloat) {
         initialScrollPosition = scrollPosition
     }

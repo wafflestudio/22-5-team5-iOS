@@ -165,6 +165,9 @@ struct PostView: View {
                     
                     
                     CategoryPostListView()
+                    
+                    BlogPopularPostGridView()
+                    
                     VStack(spacing: 10) {
                         HStack {
                             Spacer()

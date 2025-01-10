@@ -17,32 +17,33 @@ struct CategoryPostListCell: View {
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
-                        .font(.system(size: 18, weight: .light))
+                        .font(.system(size: 20, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
                         .lineLimit(2)
                     
                     Spacer()
-                        .frame(height: 5)
+                        .frame(height: 8)
                     
                     Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
-                        .font(.system(size: 16, weight: .light))
+                        .font(.system(size: 18, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                         .lineLimit(2)
                     
                     Spacer()
                         .frame(height: 7)
                     
-                    HStack(spacing: 0) {
+                    HStack(spacing: 6) {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "heart")
                             
                             Text("50")
                         }
-                        .font(.system(size: 14, weight: .light))
+                        .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                         
-                        Spacer()
-                            .frame(width: 15)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 3, weight: .light))
+                            .foregroundStyle(Color.gray.opacity(0.3))
                         
                         //commentCount Text
                         HStack(alignment: .center, spacing: 3) {
@@ -50,11 +51,12 @@ struct CategoryPostListCell: View {
                             
                             Text("5")
                         }
-                        .font(.system(size: 14, weight: .light))
+                        .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                         
-                        Spacer()
-                            .frame(width: 15)
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 3, weight: .light))
+                            .foregroundStyle(Color.gray.opacity(0.3))
                         
                         //조회수 Text
                         HStack(alignment: .center, spacing: 1) {
@@ -62,7 +64,7 @@ struct CategoryPostListCell: View {
                             
                             Text("시간 전")
                         }
-                        .font(.system(size: 14, weight: .light))
+                        .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
@@ -73,7 +75,8 @@ struct CategoryPostListCell: View {
                 Image(systemName: "questionmark.text.page.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
-                    .frame(width: 70, height: 70)
+                    .frame(width: 100, height: 100)
+                    .clipped()
             }//HStack
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
