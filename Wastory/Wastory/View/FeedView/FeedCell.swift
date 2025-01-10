@@ -66,25 +66,20 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                NavigationLink(destination: BlogView()) {
-                    Button(action: {
-                        // TODO: 해당 블로그 View로 이동
-                        contentViewModel.openNavigationStackWithBlog()
-                    }) {
-                        HStack(alignment: .center, spacing: 9) {
-                            //blog image
-                            Image(systemName: "questionmark.app.dashed")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .background(Color.secondaryLabelColor.opacity(0.3))
-                                .clipped()
-                                .cornerRadius(5)
-                            
-                            //blog name
-                            Text("Blog name")
-                                .font(.system(size: 14, weight: .light))
-                                .foregroundStyle(Color.secondaryLabelColor)
-                        }
+                contentViewModel.openNavigationLinkWithPostButton {
+                    HStack(alignment: .center, spacing: 9) {
+                        //blog image
+                        Image(systemName: "questionmark.app.dashed")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .background(Color.secondaryLabelColor.opacity(0.3))
+                            .clipped()
+                            .cornerRadius(5)
+                        
+                        //blog name
+                        Text("Blog name")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
             }

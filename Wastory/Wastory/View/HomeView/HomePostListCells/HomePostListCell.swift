@@ -18,22 +18,17 @@ struct HomePostListCell: View {
             Spacer()
                 .frame(height: 20)
             
-            NavigationLink(destination: BlogView()) {
-                Button(action: {
-                    // TODO: 해당 블로그 View로 이동
-                    contentViewModel.openNavigationStackWithBlog()
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "questionmark.text.page.fill")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 20, height: 20)
-                            .clipShape(Circle())
-                        
-                        Text("블로그 이름")
-                            .font(.system(size: 13, weight: .regular))
-                            .foregroundStyle(Color.primaryLabelColor)
-                    }
+            contentViewModel.openNavigationLinkWithPostButton {
+                HStack(spacing: 8) {
+                    Image(systemName: "questionmark.text.page.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 20, height: 20)
+                        .clipShape(Circle())
+                    
+                    Text("블로그 이름")
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(Color.primaryLabelColor)
                 }
             }
             

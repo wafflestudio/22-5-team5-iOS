@@ -77,6 +77,17 @@ import Observation
         addNavigationStackCount()
     }
     
+    func openNavigationLinkWithPostButton(_ buttonContent: @escaping () -> some View) -> some View {
+        NavigationLink(destination: BlogView()) {
+            Button(action: {
+                // TODO: 해당 블로그 View로 이동
+                self.openNavigationStackWithBlog()
+            }) {
+                buttonContent()
+            }
+        }
+    }
+    
     // Post Button
     func openNavigationStackWithPost() {
         toggleIsPostViewPresented()

@@ -38,11 +38,8 @@ struct HomeBigPostListCell: View {
                     
                     
                     //블로그 정보 button
-                    NavigationLink(destination: BlogView()) {
-                        Button(action: {
-                            // TODO: 해당 블로그 View로 이동
-                            contentViewModel.openNavigationStackWithBlog()
-                        }) {
+                    contentViewModel.openNavigationLinkWithPostButton {
+                        HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {
                                 Image(systemName: "questionmark.text.page.fill")
