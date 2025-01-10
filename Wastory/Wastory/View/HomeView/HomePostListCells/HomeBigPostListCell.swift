@@ -33,12 +33,12 @@ struct HomeBigPostListCell: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.horizontal, 20)
                     .overlay(
-                        contentViewModel.openNavigationLinkWithPostButton()
+                        contentViewModel.openNavigationStackWithPostButton()
                         )
                     
                     
                     //블로그 정보 button
-                    contentViewModel.openNavigationLinkWithBlogButton {
+                    contentViewModel.openNavigationStackWithBlogButton {
                         HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {
@@ -111,7 +111,7 @@ struct HomeBigPostListCell: View {
                 }
                 .padding(.horizontal, 20)
                 .overlay(
-                    contentViewModel.openNavigationLinkWithPostButton()
+                    contentViewModel.openNavigationStackWithPostButton()
                     )
             } // VStack
         

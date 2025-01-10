@@ -18,7 +18,7 @@ struct HomePostListCell: View {
             Spacer()
                 .frame(height: 20)
             
-            contentViewModel.openNavigationLinkWithBlogButton {
+            contentViewModel.openNavigationStackWithBlogButton {
                 HStack(spacing: 8) {
                     Image(systemName: "questionmark.text.page.fill")
                         .resizable()
@@ -85,7 +85,7 @@ struct HomePostListCell: View {
         }
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.openNavigationLinkWithPostButton()
+            contentViewModel.openNavigationStackWithPostButton()
         }
     }
 }

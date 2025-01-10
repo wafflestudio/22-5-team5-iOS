@@ -66,7 +66,7 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.openNavigationLinkWithBlogButton {
+                contentViewModel.openNavigationStackWithBlogButton {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -97,7 +97,7 @@ struct FeedCell: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
         .background {
-            contentViewModel.openNavigationLinkWithPostButton()
+            contentViewModel.openNavigationStackWithPostButton()
         }
     }
 }
