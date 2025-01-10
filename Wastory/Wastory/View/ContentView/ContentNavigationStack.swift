@@ -17,9 +17,7 @@ struct ContentNavigationStack: View {
                 if contentViewModel.isBlogViewPresented {
                     BlogView()
                 } else if contentViewModel.isPostViewPresented {
-                    //                NavigationStack {
-                    //                    PostView()
-                    //                }
+                    PostView()
                 }
             }
             .transition(.move(edge: .trailing))

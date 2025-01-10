@@ -30,3 +30,17 @@ import Observation
     }
     
 }
+
+
+// Environment Key 정의
+private struct FeedViewModelKey: EnvironmentKey {
+    static let defaultValue = FeedViewModel()
+}
+
+// Environment Values 확장
+extension EnvironmentValues {
+    var feedViewModel: FeedViewModel {
+        get { self[FeedViewModelKey.self] }
+        set { self[FeedViewModelKey.self] = newValue }
+    }
+}

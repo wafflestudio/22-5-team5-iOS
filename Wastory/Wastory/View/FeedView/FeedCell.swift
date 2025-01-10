@@ -101,8 +101,16 @@ struct FeedCell: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
-        .onTapGesture {
-            //TODO: 해당 글 View로 이동
+        .background {
+            NavigationLink(destination: PostView()) {
+                Button(action: {
+                    // TODO: 해당 Post View로 이동
+                    contentViewModel.openNavigationStackWithPost()
+                }) {
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
         }
     }
 }
