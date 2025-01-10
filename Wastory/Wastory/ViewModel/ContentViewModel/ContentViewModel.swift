@@ -82,7 +82,21 @@ import Observation
         toggleIsPostViewPresented()
         addNavigationStackCount()
     }
+    
+    func openNavigationLinkWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
+        NavigationLink(destination: PostView()) {
+            Button(action: {
+                self.openNavigationStackWithPost()
+            }) {
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundStyle(Color.clear)
+            }
+        }
+    }
+
 }
+
 
 // Environment Key 정의
 private struct ContentViewModelKey: EnvironmentKey {

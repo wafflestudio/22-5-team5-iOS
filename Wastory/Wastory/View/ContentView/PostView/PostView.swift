@@ -164,6 +164,8 @@ struct PostView: View {
                     .background(Color.blogDetailBackgroundColor)
                     
                     
+                    CategoryPostListView()
+                    
                 }// VStack
             }// ScrollView
             .background(Color.backgourndSpaceColor)

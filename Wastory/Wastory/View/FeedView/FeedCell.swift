@@ -102,15 +102,7 @@ struct FeedCell: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
         .background {
-            NavigationLink(destination: PostView()) {
-                Button(action: {
-                    // TODO: 해당 Post View로 이동
-                    contentViewModel.openNavigationStackWithPost()
-                }) {
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
+            contentViewModel.openNavigationLinkWithPostButton()
         }
     }
 }

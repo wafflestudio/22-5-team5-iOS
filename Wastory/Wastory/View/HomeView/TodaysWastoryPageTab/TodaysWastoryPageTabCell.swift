@@ -94,11 +94,13 @@ struct TodaysWastoryPageTabCell: View {
                         Spacer()
                     }
                     .padding(.bottom, 22)
-                }
+                }//Vstack
                 .padding(.horizontal, 25)
+            }//Vstack
+            .background {
+                contentViewModel.openNavigationLinkWithPostButton()
             }
-        }
-        .background(Color.white)
+        }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

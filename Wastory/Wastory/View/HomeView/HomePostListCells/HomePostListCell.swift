@@ -89,7 +89,9 @@ struct HomePostListCell: View {
             }
         }
         .padding(.horizontal, 20)
-        .background(Color.white)
+        .background {
+            contentViewModel.openNavigationLinkWithPostButton()
+        }
     }
 }
 

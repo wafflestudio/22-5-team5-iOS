@@ -1,5 +1,5 @@
 //
-//  BlogPostListView.swift
+//  CategoryPostListView.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/8/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct BlogPostListView: View {
-    @Environment(\.blogViewModel) var viewModel
+struct CategoryPostListView: View {
+    @Environment(\.postViewModel) var viewModel
     
     var body: some View {
         
@@ -37,10 +37,13 @@ struct BlogPostListView: View {
                 .frame(height: 5)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.blogPostListItems.enumerated()), id: \.offset) { index, item in
-                    BlogPostListCell()
+                ForEach(Array(viewModel.categoryPostListItems.enumerated()), id: \.offset) { index, item in
+                    if index < 4 {
+                        CategoryPostListCell()
+                    }
                 }
             }
         } //VStack
+        .background(Color.white)
     }
 }

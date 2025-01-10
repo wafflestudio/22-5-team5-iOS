@@ -19,7 +19,7 @@ import Observation
     
     var isNavigationToNextBlog: Bool = false
     
-    
+    var categoryPostListItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
     
     func setInitialScrollPosition(_ scrollPosition: CGFloat) {
         initialScrollPosition = scrollPosition
