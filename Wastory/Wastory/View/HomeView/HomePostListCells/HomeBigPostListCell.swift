@@ -38,7 +38,7 @@ struct HomeBigPostListCell: View {
                     
                     
                     //블로그 정보 button
-                    contentViewModel.openNavigationLinkWithPostButton {
+                    contentViewModel.openNavigationLinkWithBlogButton {
                         HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {

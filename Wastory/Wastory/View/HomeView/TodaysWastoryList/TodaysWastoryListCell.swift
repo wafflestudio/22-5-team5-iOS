@@ -26,7 +26,7 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                contentViewModel.openNavigationLinkWithPostButton {
+                contentViewModel.openNavigationLinkWithBlogButton {
                     Text("블로그 이름")
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)

@@ -67,7 +67,7 @@ struct TodaysWastoryPageTabCell: View {
                     
                     // 블로그 정보
                     HStack {
-                        contentViewModel.openNavigationLinkWithPostButton {
+                        contentViewModel.openNavigationLinkWithBlogButton {
                             HStack(spacing: 8) {
                                 ZStack {
                                     Image(systemName: "questionmark.text.page.fill")
