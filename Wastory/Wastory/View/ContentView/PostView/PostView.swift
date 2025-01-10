@@ -16,6 +16,10 @@ struct PostView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    Color.white
+                        .frame(height: 500)
+                        .padding(.top, -500)
+                    
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
