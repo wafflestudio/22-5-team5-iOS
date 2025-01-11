@@ -35,7 +35,9 @@ struct SignUpStep4WelcomeView: View {
                 Spacer()
                 
                 Button {
-                    UserInfoRepository.shared.needAddressName = true
+                    Task {
+                        await UserInfoRepository.shared.loadUserInfo(userID: UserInfoRepository.shared.getUserID(), userPW: UserInfoRepository.shared.getUserPW())
+                    }
                 } label: {
                     Text("시작하기")
                         .font(.system(size: 16, weight: .regular))
