@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PopularBlogPostCell: View {
     let index: Int
+    @Environment(\.contentViewModel) var contentViewModel
+    @Environment(\.blogViewModel) var viewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -75,5 +77,8 @@ struct PopularBlogPostCell: View {
             
         } //VStack
         .background(Color.white)
+        .onTapGesture {
+            contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextPost)
+        }
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PopularBlogPostListView: View {
-    @Bindable var viewModel: BlogViewModel
+    @Environment(\.blogViewModel) var viewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

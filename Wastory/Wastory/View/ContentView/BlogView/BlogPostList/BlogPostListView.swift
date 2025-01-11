@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BlogPostListView: View {
-    @Bindable var viewModel: BlogViewModel
+    @Environment(\.blogViewModel) var viewModel
     
     var body: some View {
         

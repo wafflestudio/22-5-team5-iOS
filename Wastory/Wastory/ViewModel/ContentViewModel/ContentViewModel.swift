@@ -66,15 +66,26 @@ import Observation
         }
     }
     
+    func pushNavigationStack(isNavigationToNext: inout Bool) {
+        addNavigationStackCount()
+        isNavigationToNext.toggle()
+    }
+    
     // Blog Button
     func openNavigationStackWithBlog() {
         toggleIsBlogViewPresented()
         addNavigationStackCount()
     }
     
-    func pushNavigationStackWithBlog(isNavigationToNextBlog: inout Bool) {
-        addNavigationStackCount()
-        isNavigationToNextBlog.toggle()
+    func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기
+        NavigationLink(destination: BlogView()) {
+            Button(action: {
+                // TODO: 해당 블로그 View로 이동
+                self.openNavigationStackWithBlog()
+            }) {
+                buttonContent()
+            }
+        }
     }
     
     // Post Button
@@ -83,11 +94,20 @@ import Observation
         addNavigationStackCount()
     }
     
-    func pushNavigationStackWithPost(isNavigationToNextPost: inout Bool) {
-        addNavigationStackCount()
-        isNavigationToNextPost.toggle()
+    func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
+        NavigationLink(destination: PostView()) {
+            Button(action: {
+                self.openNavigationStackWithPost()
+            }) {
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundStyle(Color.clear)
+            }
+        }
     }
+
 }
+
 
 // Environment Key 정의
 private struct ContentViewModelKey: EnvironmentKey {

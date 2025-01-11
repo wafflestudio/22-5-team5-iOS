@@ -26,16 +26,11 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                NavigationLink(destination: BlogView()) {
-                    Button(action: {
-                        // TODO: 해당 블로그 View로 이동
-                        contentViewModel.openNavigationStackWithBlog()
-                    }) {
-                        Text("블로그 이름")
-                            .font(.system(size: 11, weight: .light))
-                            .foregroundStyle(Color.primaryLabelColor)
-                            .padding(.top, 4)
-                    }
+                contentViewModel.openNavigationStackWithBlogButton {
+                    Text("블로그 이름")
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundStyle(Color.primaryLabelColor)
+                        .padding(.top, 4)
                 }
                 
                 Spacer()
@@ -93,7 +88,9 @@ struct TodaysWastoryListCell: View {
             }
         }// VStack
         .padding(.horizontal, 20)
-        .background(Color.white)
+        .background {
+            contentViewModel.openNavigationStackWithPostButton()
+        }
     }
 }
 

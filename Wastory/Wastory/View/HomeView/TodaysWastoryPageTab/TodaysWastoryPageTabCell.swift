@@ -67,12 +67,8 @@ struct TodaysWastoryPageTabCell: View {
                     
                     // 블로그 정보
                     HStack {
-                        NavigationLink(destination: BlogView()) {
-                            Button(action: {
-                                // TODO: 해당 블로그 View로 이동
-                                contentViewModel.openNavigationStackWithBlog()
-                            }) {
-                                // 블로그 mainImage
+                        contentViewModel.openNavigationStackWithBlogButton {
+                            HStack(spacing: 8) {
                                 ZStack {
                                     Image(systemName: "questionmark.text.page.fill")
                                         .resizable()
@@ -94,11 +90,13 @@ struct TodaysWastoryPageTabCell: View {
                         Spacer()
                     }
                     .padding(.bottom, 22)
-                }
+                }//Vstack
                 .padding(.horizontal, 25)
+            }//Vstack
+            .background {
+                contentViewModel.openNavigationStackWithPostButton()
             }
-        }
-        .background(Color.white)
+        }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
