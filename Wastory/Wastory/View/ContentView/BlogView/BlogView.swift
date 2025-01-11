@@ -63,8 +63,6 @@ struct BlogView: View {
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
                     BlogPostListView()
                     
-                    Spacer()
-                        .frame(height: 100)
                 } //VStack
             } //ScrollView
         } //VStack
