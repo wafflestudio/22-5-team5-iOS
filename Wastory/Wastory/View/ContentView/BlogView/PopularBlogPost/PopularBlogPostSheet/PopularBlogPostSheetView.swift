@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct PopularBlogPostSheetView: View {
-    @Environment(\.dismiss) private var dismiss
     @State var viewModel = PopularBlogPostSheetViewModel()
+    
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    Spacer()
+                        .frame(height: 30)
+                    
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
@@ -28,7 +33,7 @@ struct PopularBlogPostSheetView: View {
                     .frame(height: 0)
                     
                     // MARK: 화면 상단 구성 요소
-                    HStack {
+                    HStack(alignment: .bottom) {
                         //Navbar title
                         Text("인기글")
                             .font(.system(size: 34, weight: .medium))
@@ -50,10 +55,14 @@ struct PopularBlogPostSheetView: View {
                     }
                     .padding(.trailing, 22)
                     
+                    Spacer()
+                        .frame(height: 20)
+                    
                     //MARK: PostList
                     LazyVStack(spacing: 0) {
                         ForEach(Array(viewModel.popularBlogPostItems.enumerated()), id: \.offset) { index, item in
-                            FeedCell()
+                            PopularBlogPostSheetCell(index: index + 1, viewModel: viewModel)
+                            
                             Divider()
                                 .foregroundStyle(Color.secondaryLabelColor)
                         }
@@ -61,6 +70,9 @@ struct PopularBlogPostSheetView: View {
                 } //VStack
             } //ScrollView
         } //VStack
+        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
+            PostView()
+        }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
         .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "" : "인기글"))
@@ -72,11 +84,12 @@ struct PopularBlogPostSheetView: View {
                 Button{
                     dismiss()
                 } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 20, weight: .light))
+                    Text(Image(systemName: "chevron.backward"))
+                        .foregroundStyle(Color.primaryLabelColor)
                 }
             } // navbar 사이즈 설정을 위한 임의 버튼입니다.
         }
+        .navigationBarBackButtonHidden()
         
     }
 }

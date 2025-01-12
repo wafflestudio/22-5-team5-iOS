@@ -1,5 +1,5 @@
 //
-//  PopularBlogPostCell.swift
+//  PopularBlogPostSheetCell.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/7/25.
@@ -7,13 +7,22 @@
 
 import SwiftUI
 
-struct PopularBlogPostCell: View {
+struct PopularBlogPostSheetCell: View {
+    let index: Int
+    @Bindable var viewModel: PopularBlogPostSheetViewModel
     @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.blogViewModel) var viewModel
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 0) {
+                Text("\(index)")
+                    .foregroundStyle(Color.loadingCoralRed)
+                    .font(.system(size: 18, weight: .light))
+                    .frame(width: 25)
+                
+                Spacer()
+                    .frame(width: 10)
+                
                 VStack(alignment: .leading, spacing: 0) {
                     Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
                         .font(.system(size: 18, weight: .light))
@@ -68,8 +77,9 @@ struct PopularBlogPostCell: View {
                         RoundedRectangle(cornerRadius: 10)
                     )
             }//HStack
-            .padding(.horizontal, 20)
             .padding(.vertical, 15)
+            .padding(.trailing, 20)
+            .padding(.leading, 10)
             
             
         } //VStack

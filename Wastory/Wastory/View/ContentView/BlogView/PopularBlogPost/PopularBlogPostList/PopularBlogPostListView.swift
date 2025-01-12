@@ -37,7 +37,9 @@ struct PopularBlogPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.popularBlogPostItems[0..<3].enumerated()), id: \.offset) { index, item in
-                    PopularBlogPostCell(index: index)
+                    PopularBlogPostCell()
+                    Divider()
+                        .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 20))
