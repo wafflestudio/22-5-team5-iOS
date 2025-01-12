@@ -16,6 +16,7 @@ import Observation
     private var initialScrollPosition: CGFloat = 0
     
     var isNavigationToNextPost: Bool = false
+    var isNavigationToPopularBlogPostSheet: Bool = false
     
     
     
@@ -47,6 +48,10 @@ import Observation
     
     func getIsNavTitleHidden() -> Bool {
         isNavTitleHidden
+    }
+    
+    func toggleIsNavigationToPopularBlogPostSheet() {
+        isNavigationToPopularBlogPostSheet.toggle()
     }
     
 }

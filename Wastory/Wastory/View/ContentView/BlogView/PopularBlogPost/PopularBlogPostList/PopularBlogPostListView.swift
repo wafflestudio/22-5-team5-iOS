@@ -23,7 +23,7 @@ struct PopularBlogPostListView: View {
                 Spacer()
                 
                 Button(action: {
-                    // PopularBlogPostsDetailView를 fullscreencover로 표시
+                    viewModel.toggleIsNavigationToPopularBlogPostSheet()
                 }) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))
