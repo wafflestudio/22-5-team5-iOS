@@ -71,6 +71,8 @@ import Observation
     }
     
     func toggleIsCriterionSelectionSheetPresent() {
-        isCriterionSelectionSheetPresent.toggle()
+        withAnimation(.easeInOut) {
+            isCriterionSelectionSheetPresent.toggle()
+        }
     }
 }

@@ -14,7 +14,8 @@ struct PopularBlogPostSheetView: View {
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        ZStack {
+            // MARK: mainView
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Spacer()
@@ -52,55 +53,6 @@ struct PopularBlogPostSheetView: View {
                             .font(.system(size: 16, weight: .light))
                             .foregroundStyle(Color.primaryLabelColor)
                         }
-                        .sheet(isPresented: $viewModel.isCriterionSelectionSheetPresent) {
-                            ZStack {
-                                //MARK: Background Dimming
-                                (viewModel.isCriterionSelectionSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
-                                    .frame(maxHeight: .infinity)
-                                    .frame(maxWidth: .infinity)
-                                    .ignoresSafeArea()
-                                    .onTapGesture {
-                                        viewModel.toggleIsCriterionSelectionSheetPresent()
-                                    }
-                                
-                                //MARK: NotificationTypeSheet List
-                                VStack {
-                                    Spacer()
-                                    if viewModel.isCriterionSelectionSheetPresent {
-                                        let typeSheetTopSpace = viewModel.sheetTopSpace
-                                        let typeSheetRowHeight = viewModel.sheetRowHeight
-                                        let typeSheetBottomSpace = viewModel.sheetBottomSpace
-                                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + 3 * typeSheetRowHeight
-                                        
-                                        ZStack {
-                                            VStack(spacing: 0) {
-                                                Spacer()
-                                                    .frame(height: typeSheetTopSpace)
-                                                
-                                                ForEach(viewModel.sortCriterions.indices, id: \.self) { index in
-                                                    let type = viewModel.sortCriterions[index]
-                                                    
-                                                    CriterionSelectionButton(for: type, isLast: index == 2, rowHeight: typeSheetRowHeight)
-                                                }
-                                                
-                                                Spacer()
-                                                    .frame(height: typeSheetBottomSpace)
-                                            }
-                                            .frame(height: typeSheetHeight)
-                                            .background(Color.white)
-                                            .cornerRadius(20)
-                                            
-                                        }
-                                        .background(Color.clear)
-                                        .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
-                                        .animation(.easeInOut, value: viewModel.isCriterionSelectionSheetPresent)
-                                        
-                                    }
-                                }
-                                
-                            }
-                            .ignoresSafeArea()
-                        }
                     }
                     .padding(.trailing, 22)
                     
@@ -118,6 +70,56 @@ struct PopularBlogPostSheetView: View {
                     }
                 } //VStack
             } //ScrollView
+            
+            // MARK: CriterionSelectionSheet
+            ZStack {
+                //MARK: Background Dimming
+                (viewModel.isCriterionSelectionSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.toggleIsCriterionSelectionSheetPresent()
+                    }
+                
+                //MARK: NotificationTypeSheet List
+                VStack {
+                    Spacer()
+                    if viewModel.isCriterionSelectionSheetPresent {
+                        let typeSheetTopSpace = viewModel.sheetTopSpace
+                        let typeSheetRowHeight = viewModel.sheetRowHeight
+                        let typeSheetBottomSpace = viewModel.sheetBottomSpace
+                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + 3 * typeSheetRowHeight
+                        
+                        ZStack {
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: typeSheetTopSpace)
+                                
+                                ForEach(viewModel.sortCriterions.indices, id: \.self) { index in
+                                    let type = viewModel.sortCriterions[index]
+                                    
+                                    CriterionSelectionButton(for: type, isLast: index == 2, rowHeight: typeSheetRowHeight)
+                                }
+                                
+                                Spacer()
+                                    .frame(height: typeSheetBottomSpace)
+                            }
+                            .frame(height: typeSheetHeight)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            
+                        }
+                        .background(Color.clear)
+                        .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
+                        .animation(.easeInOut, value: viewModel.isCriterionSelectionSheetPresent)
+                        
+                    }
+                }
+                
+            }// ZStack
+            .ignoresSafeArea()
+        
         } //VStack
         .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
             PostView()
