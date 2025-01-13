@@ -23,7 +23,7 @@ struct PopularBlogPostListView: View {
                 Spacer()
                 
                 Button(action: {
-                    // PopularBlogPostsDetailView를 fullscreencover로 표시
+                    viewModel.toggleIsNavigationToPopularBlogPostSheet()
                 }) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))
@@ -37,7 +37,9 @@ struct PopularBlogPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.popularBlogPostItems[0..<3].enumerated()), id: \.offset) { index, item in
-                    PopularBlogPostCell(index: index)
+                    PopularBlogPostCell()
+                    Divider()
+                        .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 20))

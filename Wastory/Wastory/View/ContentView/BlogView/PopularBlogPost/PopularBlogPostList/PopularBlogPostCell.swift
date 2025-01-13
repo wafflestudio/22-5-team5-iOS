@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PopularBlogPostCell: View {
-    let index: Int
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.blogViewModel) var viewModel
     
@@ -72,8 +71,6 @@ struct PopularBlogPostCell: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
             
-            Divider()
-                .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
             
         } //VStack
         .background(Color.white)
