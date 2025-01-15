@@ -14,10 +14,11 @@ struct ContentNavigationStack: View {
     var body: some View {
         Group {
             if contentViewModel.isBlogViewPresented {
-                BlogView(blog: contentViewModel.navigationOpenBlog)
+                BlogView(blog: contentViewModel.navigationBlog)
                     .environment(\.contentViewModel, contentViewModel)
             } else if contentViewModel.isPostViewPresented {
-                // 초기 PostView는 별도 처리 필요
+                PostView(post: contentViewModel.navigationPost)
+                    .environment(\.contentViewModel, contentViewModel)
             }
         }
         .navigationDestination(for: NavigationDestination.self) { destination in

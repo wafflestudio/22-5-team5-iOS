@@ -28,8 +28,8 @@ enum NavigationDestination: Hashable {
     
     var navigationPath: [NavigationDestination] = []
     
-    var navigationOpenBlog = Blog(id: UUID(), userID: UUID(), blogName: "", mainImageURL: "", description: "")
-    var navigationOpenPost = Post(id: UUID(), blogID: UUID(), title: "Post Title", content: ["Post Content"], createdAt: Date(), mainImageUrl: "")
+    var navigationBlog = Blog(id: UUID(), userID: UUID(), blogName: "", mainImageURL: "", description: "")
+    var navigationPost = Post(id: UUID(), blogID: UUID(), title: "Post Title", content: ["Post Content"], createdAt: Date(), mainImageUrl: "")
         
     func navigateToBlog(_ blog: Blog) {
         navigationPath.append(.blog(blog))
@@ -98,16 +98,14 @@ enum NavigationDestination: Hashable {
 //        addNavigationStackCount()
 //    }
 //    
-//    func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기
-//        NavigationLink(destination: BlogView()) {
-//            Button(action: {
-//                // TODO: 해당 블로그 View로 이동
-//                self.openNavigationStackWithBlog()
-//            }) {
-//                buttonContent()
-//            }
-//        }
-//    }
+    func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
+        Button(action: {
+            // TODO: 해당 블로그 View로 이동
+            self.toggleIsBlogViewPresented()
+        }) {
+            buttonContent()
+        }
+    }
 //    
 //    // Post Button
 //    func openNavigationStackWithPost() {
@@ -115,17 +113,15 @@ enum NavigationDestination: Hashable {
 //        addNavigationStackCount()
 //    }
 //    
-//    func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
-//        NavigationLink(destination: PostView()) {
-//            Button(action: {
-//                self.openNavigationStackWithPost()
-//            }) {
-//                Rectangle()
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .foregroundStyle(Color.clear)
-//            }
-//        }
-//    }
+    func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
+        Button(action: {
+            self.toggleIsPostViewPresented()
+        }) {
+            Rectangle()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundStyle(Color.clear)
+        }
+    }
 
 }
 
