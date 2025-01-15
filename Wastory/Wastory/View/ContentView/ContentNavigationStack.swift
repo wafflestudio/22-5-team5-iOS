@@ -38,6 +38,8 @@ struct ContentNavigationStack: View {
                 case .post(let post):
                     PostView(post: post)
                         .environment(\.contentViewModel, contentViewModel)
+                case .popularBlogPostSheet:
+                    PopularBlogPostSheetView()
                 }
             }
         }

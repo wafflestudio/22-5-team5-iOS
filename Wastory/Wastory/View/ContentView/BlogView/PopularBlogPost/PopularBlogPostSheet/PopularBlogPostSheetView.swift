@@ -18,6 +18,7 @@ struct PopularBlogPostSheetView: View {
             // MARK: mainView
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    
                     Spacer()
                         .frame(height: 30)
                     
@@ -70,6 +71,7 @@ struct PopularBlogPostSheetView: View {
                     }
                 } //VStack
             } //ScrollView
+            
             
             // MARK: CriterionSelectionSheet
             ZStack {

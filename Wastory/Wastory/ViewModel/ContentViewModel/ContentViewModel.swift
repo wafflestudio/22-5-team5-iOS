@@ -11,6 +11,7 @@ import Observation
 enum NavigationDestination: Hashable {
     case blog(Blog)
     case post(Post)
+    case popularBlogPostSheet
 }
 
 @Observable final class ContentViewModel {
@@ -35,6 +36,10 @@ enum NavigationDestination: Hashable {
     
     func navigateToPost(_ post: Post) {
         navigationPath.append(.post(post))
+    }
+    
+    func navigateToPopularBlogPostSheet() {
+        navigationPath.append(.popularBlogPostSheet)
     }
     
     
