@@ -9,10 +9,16 @@ import Foundation
 import Alamofire
 
 enum NetworkRouter {
+    // MARK: User
     case postSignUp
     case postSignIn
+    
+    // MARK: Blog
     case getMyBlog
     case postBlog
+    
+    // MARK: Blog
+    case postArticle
     
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
@@ -20,22 +26,35 @@ enum NetworkRouter {
     
     var path: String {
         switch self {
+        // MARK: User
         case .postSignUp: "/users/signup"
         case .postSignIn: "/users/signin"
+            
+        // MARK: Blog
         case .getMyBlog: "/blogs/my_blog"
         case .postBlog: "/blogs"
+        
+        // MARK: Article
+        case .postArticle: "/articles"
         }
     }
     
     var method: HTTPMethod {
         switch self {
+        // MARK: User
         case .postSignUp:
             return .post
         case .postSignIn:
             return .post
+            
+        // MARK: Blog
         case .getMyBlog:
             return .get
         case .postBlog:
+            return .post
+        
+        // MARK: Article
+        case .postArticle:
             return .post
         }
     }
