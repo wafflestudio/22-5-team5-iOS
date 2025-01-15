@@ -69,6 +69,8 @@ struct PopularBlogPostSheetCell: View {
                 Spacer()
                     .frame(width: 20)
                 
+                Spacer()
+                
                 Image(systemName: "questionmark.text.page.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
