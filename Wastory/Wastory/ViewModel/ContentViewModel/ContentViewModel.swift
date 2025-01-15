@@ -23,8 +23,6 @@ enum NavigationDestination: Hashable {
     
     var isAnyViewPresented: Bool = false
     
-    var navigationStackCount: Int = 0
-    
     
     var navigationPath: [NavigationDestination] = []
     
@@ -42,7 +40,9 @@ enum NavigationDestination: Hashable {
     
     
     func updateIsAnyViewPresented() {
-        isAnyViewPresented = isBlogViewPresented || isPostViewPresented
+        withAnimation {
+            isAnyViewPresented = isBlogViewPresented || isPostViewPresented
+        }
     }
     
     func updateisMainTabViewPresented() {
@@ -63,41 +63,21 @@ enum NavigationDestination: Hashable {
         updateisMainTabViewPresented()
     }
     
-//    func addNavigationStackCount() {
-//        navigationStackCount += 1
-//    }
-//    
-//    func removeNavigationStackCount() {
-//        navigationStackCount -= 1
-//    }
-//    
-//    // Button 동작
-//    // Back Button
-//    func backButtonAction(dismiss: @escaping () -> Void) {
-//        removeNavigationStackCount()
-//        if navigationStackCount == 0 {
-//            withAnimation {
-//                isBlogViewPresented = false
-//                isPostViewPresented = false
-//                updateIsAnyViewPresented()
-//                updateisMainTabViewPresented()
-//            }
-//        } else {
-//            dismiss()
-//        }
-//    }
-//    
-//    func pushNavigationStack(isNavigationToNext: inout Bool) {
-//        addNavigationStackCount()
-//        isNavigationToNext.toggle()
-//    }
-//    
-//    // Blog Button
-//    func openNavigationStackWithBlog() {
-//        toggleIsBlogViewPresented()
-//        addNavigationStackCount()
-//    }
-//    
+    // Button 동작
+    // Back Button
+    func backButtonAction(dismiss: @escaping () -> Void) {
+        if navigationPath.count == 0 {
+            withAnimation {
+                isBlogViewPresented = false
+                isPostViewPresented = false
+                isAnyViewPresented = false
+                isMainTabViewPresented = false
+            }
+        } else {
+            dismiss()
+        }
+    }
+    
     func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
         Button(action: {
             // TODO: 해당 블로그 View로 이동
@@ -106,13 +86,7 @@ enum NavigationDestination: Hashable {
             buttonContent()
         }
     }
-//    
-//    // Post Button
-//    func openNavigationStackWithPost() {
-//        toggleIsPostViewPresented()
-//        addNavigationStackCount()
-//    }
-//    
+    
     func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
         Button(action: {
             self.toggleIsPostViewPresented()

@@ -88,7 +88,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .onTapGesture {
-            contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextPost)
+            contentViewModel.navigateToPost(contentViewModel.navigationPost) // 추후 해당 Post 전달
         }
     }
 }

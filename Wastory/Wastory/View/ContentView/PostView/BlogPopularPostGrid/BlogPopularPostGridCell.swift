@@ -22,11 +22,16 @@ struct BlogPopularPostGridCell: View {
             }
             .frame(height: 0)
             
-            Image(systemName: "questionmark.text.page.fill")
-                .resizable()
-                .scaledToFill()
-                .frame(width: viewModel.getBlogPopularPostGridCellWidth() ,height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
-                .clipped()
+            Rectangle()
+                .fill(.clear)
+                .frame(width: viewModel.getBlogPopularPostGridCellWidth(), height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
+                .overlay {
+                    Image(systemName: "questionmark.text.page.fill")
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipShape(Rectangle())
+                .contentShape(Rectangle())
                 .foregroundStyle(Color.unreadNotification)
             
             Spacer()
@@ -41,7 +46,7 @@ struct BlogPopularPostGridCell: View {
         
         .background(Color.white)
         .onTapGesture {
-            contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextPost)
+            contentViewModel.navigateToPost(contentViewModel.navigationPost) // 추후 해당 Post 전달
         }
     }
 }

@@ -37,7 +37,7 @@ struct PostView: View {
                         
                         // MARK: 카테고리 버튼
                         Button(action: {
-                            contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                         }) {
                             Text("카테고리 없음")
                                 .font(.system(size: 16, weight: .regular))
@@ -110,7 +110,7 @@ struct PostView: View {
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
                             Button(action: {
-                                contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                                contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                             }) {
                                 Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
                                     .font(.system(size: 18, weight: .light))
@@ -123,7 +123,7 @@ struct PostView: View {
                                 .frame(height: 5)
                             
                             Button(action: {
-                                contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                                contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                             }) {
                                 Text("설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명")
                                     .font(.system(size: 14, weight: .light))
@@ -152,7 +152,7 @@ struct PostView: View {
                         .padding(.leading, 20)
                         
                         Button(action: {
-                            contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                         }) {
                             Image(systemName: "questionmark.text.page.fill")
                                 .resizable()
@@ -196,13 +196,6 @@ struct PostView: View {
         }// VStack
         .environment(\.contentViewModel, contentViewModel)
         .environment(\.postViewModel, viewModel)
-        
-        .navigationDestination(isPresented: $viewModel.isNavigationToNextBlog) {
-            BlogView()
-        }
-        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
-            PostView()
-        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle("")
@@ -211,7 +204,7 @@ struct PostView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    contentViewModel.pushNavigationStack(isNavigationToNext: &viewModel.isNavigationToNextBlog)
+                    contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                 }) {
                     Image(systemName: "questionmark.text.page.fill")
                         .resizable()
@@ -236,11 +229,6 @@ struct PostView: View {
     }
 }
 
-#Preview {
-    @Previewable @State var contentViewModel = ContentViewModel()
-    PostView()
-        .environment(\.contentViewModel, contentViewModel)
-}
 
 
 extension Color {

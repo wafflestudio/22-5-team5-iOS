@@ -47,10 +47,6 @@ struct BlogView: View {
         } //VStack
         .environment(\.contentViewModel, contentViewModel)
         .environment(\.blogViewModel, viewModel)
-        
-        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
-            PostView()
-        }
         .navigationDestination(isPresented: $viewModel.isNavigationToPopularBlogPostSheet) {
             PopularBlogPostSheetView()
         }
@@ -97,9 +93,6 @@ struct BlogView: View {
     }
 }
 
-#Preview {
-    BlogView()
-}
 
 extension Color {
     static let primaryDarkModeLabelColor = Color.white
