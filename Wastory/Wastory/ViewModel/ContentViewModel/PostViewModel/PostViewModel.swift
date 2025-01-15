@@ -15,10 +15,6 @@ import Observation
     
     private var initialScrollPosition: CGFloat = 0
     
-    var isNavigationToNextPost: Bool = false
-    
-    var isNavigationToNextBlog: Bool = false
-    
     var categoryPostListItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
     
     var blogPopularPostGridItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PopularBlogPostListView: View {
     @Environment(\.blogViewModel) var viewModel
+    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -23,7 +24,7 @@ struct PopularBlogPostListView: View {
                 Spacer()
                 
                 Button(action: {
-                    viewModel.toggleIsNavigationToPopularBlogPostSheet()
+                    contentViewModel.navigateToPopularBlogPostSheet()
                 }) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))

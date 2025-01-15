@@ -63,6 +63,7 @@ struct NotificationCell: View {
             }
             .padding(.trailing, 40)
             
+            Spacer()
         }
         .padding(.vertical, 22)
     }

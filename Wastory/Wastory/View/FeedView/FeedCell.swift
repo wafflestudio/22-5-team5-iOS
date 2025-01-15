@@ -85,6 +85,8 @@ struct FeedCell: View {
             }
             .padding(.trailing, 20)
             
+            Spacer()
+            
             //MARK: content Image
             //글 내용에 이미지가 없을 경우 표시하지 않음
             Image(systemName: "questionmark.text.page.fill")

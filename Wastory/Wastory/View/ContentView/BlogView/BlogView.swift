@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BlogView: View {
+    let blog: Blog
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -46,13 +47,6 @@ struct BlogView: View {
         } //VStack
         .environment(\.contentViewModel, contentViewModel)
         .environment(\.blogViewModel, viewModel)
-        
-        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
-            PostView()
-        }
-        .navigationDestination(isPresented: $viewModel.isNavigationToPopularBlogPostSheet) {
-            PopularBlogPostSheetView()
-        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "블로그 이름")
@@ -96,9 +90,6 @@ struct BlogView: View {
     }
 }
 
-#Preview {
-    BlogView()
-}
 
 extension Color {
     static let primaryDarkModeLabelColor = Color.white

@@ -18,6 +18,7 @@ struct PopularBlogPostSheetView: View {
             // MARK: mainView
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    
                     Spacer()
                         .frame(height: 30)
                     
@@ -71,6 +72,7 @@ struct PopularBlogPostSheetView: View {
                 } //VStack
             } //ScrollView
             
+            
             // MARK: CriterionSelectionSheet
             ZStack {
                 //MARK: Background Dimming
@@ -121,9 +123,6 @@ struct PopularBlogPostSheetView: View {
             .ignoresSafeArea()
         
         } //VStack
-        .navigationDestination(isPresented: $viewModel.isNavigationToNextPost) {
-            PostView()
-        }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
         .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "" : "인기글"))
