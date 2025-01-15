@@ -22,16 +22,11 @@ struct BlogPopularPostGridCell: View {
             }
             .frame(height: 0)
             
-            Rectangle()
-                .fill(.clear)
-                .frame(width: viewModel.getBlogPopularPostGridCellWidth(), height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
-                .overlay {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
-                        .scaledToFill()
-                }
-                .clipShape(Rectangle())
-                .contentShape(Rectangle())
+            Image(systemName: "questionmark.text.page.fill")
+                .resizable()
+                .scaledToFill()
+                .frame(width: viewModel.getBlogPopularPostGridCellWidth() ,height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
+                .clipped()
                 .foregroundStyle(Color.unreadNotification)
             
             Spacer()

@@ -16,26 +16,31 @@ struct HomeBigPostListCell: View {
                 Spacer()
                     .frame(height: 20)
                 
+                
+                
+                
                 ZStack(alignment: .topLeading){
-                    ZStack {
-                        //Background Image
-                        Image(systemName: "questionmark.text.page.fill")
-                            .resizable()
-                            .scaledToFill()
-                            .clipped()
-                            .foregroundStyle(Color.unreadNotification)
-                            .frame(height: 200)
-                        
-                        //Background Dimming
-                        Color.sheetOuterBackgroundColor
-                            .frame(height: 200)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.horizontal, 20)
-                    .overlay(
-                        contentViewModel.openNavigationStackWithPostButton()
-                        )
                     
+                    Rectangle()
+                        .fill(.clear)
+                        .frame(height: 200)
+                        .overlay {
+                            ZStack {
+                                Image(systemName: "questionmark.text.page.fill")
+                                    .resizable()
+                                    .scaledToFill()
+                                
+                                Color.sheetOuterBackgroundColor
+                                    .frame(height: 200)
+                            }
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .contentShape(RoundedRectangle(cornerRadius: 10))
+                        .foregroundStyle(Color.unreadNotification)
+                        .padding(.horizontal, 20)
+                        .overlay(
+                            contentViewModel.openNavigationStackWithPostButton()
+                            )
                     
                     //블로그 정보 button
                     contentViewModel.openNavigationStackWithBlogButton {
