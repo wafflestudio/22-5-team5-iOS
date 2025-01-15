@@ -24,7 +24,7 @@ struct BlogDto: Codable {
     let description: String
     let createdAt: String
     let updatedAt: String
-    let mainImageURL: String
+    let mainImageURL: String?
     let userID: Int
     
     private enum CodingKeys: String, CodingKey {

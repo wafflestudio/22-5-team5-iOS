@@ -61,13 +61,20 @@ enum NetworkRouter {
     
     var headers: HTTPHeaders? {
         switch self {
+        // MARK: User
         case .postSignUp:
             return ["Content-Type": "application/json"]
         case .postSignIn:
             return ["Content-Type": "application/json"]
+            
+        // MARK: Blog
         case .getMyBlog:
             return ["Content-Type": "application/json"]
         case .postBlog:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: Article
+        case .postArticle:
             return ["Content-Type": "application/json"]
         }
     }

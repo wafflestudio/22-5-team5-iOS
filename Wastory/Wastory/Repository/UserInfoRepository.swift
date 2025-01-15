@@ -19,6 +19,14 @@ final class UserInfoRepository {
     private var blogName = ""       // 블로그 이름
     private var username = ""       // 닉네임
     
+    private var blogID = 0          // 임시로 만든 API를 위한 블로그 아이디
+    func setBlogID(blogID: Int) {
+        self.blogID = blogID
+    }
+    func getBlogID() -> Int {
+        return blogID
+    }
+    
     // 최초로 블로그를 개설했는지 App이 판단하기 위한 변수
     var needAddressName: Bool = false
     func isAddressNameNeeded() -> Bool {
@@ -70,6 +78,7 @@ final class UserInfoRepository {
         do {
             let response = try await NetworkRepository.shared.getMyBlog()
             addressName = response.addressName
+            blogID = response.blogID
         } catch {
             print("Error: \(error.localizedDescription)")
         }

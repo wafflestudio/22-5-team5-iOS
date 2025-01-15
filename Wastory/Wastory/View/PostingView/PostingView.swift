@@ -122,6 +122,9 @@ struct PostingView: View {
                     .padding(.trailing, 5)
                     Button {
                         // 저장과 함께 토글
+                        Task {
+                            await viewModel.postArticle()
+                        }
                     } label: {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
