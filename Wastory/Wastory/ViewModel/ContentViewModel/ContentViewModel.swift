@@ -8,6 +8,11 @@
 import SwiftUI
 import Observation
 
+enum NavigationDestination: Hashable {
+    case blog(Blog)
+    case post(Post)
+}
+
 @Observable final class ContentViewModel {
     
     var isMainTabViewPresented: Bool = true
@@ -19,6 +24,22 @@ import Observation
     var isAnyViewPresented: Bool = false
     
     var navigationStackCount: Int = 0
+    
+    
+    var navigationPath: [NavigationDestination] = []
+    
+    var navigationOpenBlog = Blog(id: UUID(), userID: UUID(), blogName: "", mainImageURL: "", description: "")
+    var navigationOpenPost = Post(id: UUID(), blogID: UUID(), title: "Post Title", content: ["Post Content"], createdAt: Date(), mainImageUrl: "")
+        
+    func navigateToBlog(_ blog: Blog) {
+        navigationPath.append(.blog(blog))
+    }
+    
+    func navigateToPost(_ post: Post) {
+        navigationPath.append(.post(post))
+    }
+    
+    
     
     func updateIsAnyViewPresented() {
         isAnyViewPresented = isBlogViewPresented || isPostViewPresented
@@ -42,69 +63,69 @@ import Observation
         updateisMainTabViewPresented()
     }
     
-    func addNavigationStackCount() {
-        navigationStackCount += 1
-    }
-    
-    func removeNavigationStackCount() {
-        navigationStackCount -= 1
-    }
-    
-    // Button 동작
-    // Back Button
-    func backButtonAction(dismiss: @escaping () -> Void) {
-        removeNavigationStackCount()
-        if navigationStackCount == 0 {
-            withAnimation {
-                isBlogViewPresented = false
-                isPostViewPresented = false
-                updateIsAnyViewPresented()
-                updateisMainTabViewPresented()
-            }
-        } else {
-            dismiss()
-        }
-    }
-    
-    func pushNavigationStack(isNavigationToNext: inout Bool) {
-        addNavigationStackCount()
-        isNavigationToNext.toggle()
-    }
-    
-    // Blog Button
-    func openNavigationStackWithBlog() {
-        toggleIsBlogViewPresented()
-        addNavigationStackCount()
-    }
-    
-    func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기
-        NavigationLink(destination: BlogView()) {
-            Button(action: {
-                // TODO: 해당 블로그 View로 이동
-                self.openNavigationStackWithBlog()
-            }) {
-                buttonContent()
-            }
-        }
-    }
-    
-    // Post Button
-    func openNavigationStackWithPost() {
-        toggleIsPostViewPresented()
-        addNavigationStackCount()
-    }
-    
-    func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
-        NavigationLink(destination: PostView()) {
-            Button(action: {
-                self.openNavigationStackWithPost()
-            }) {
-                Rectangle()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .foregroundStyle(Color.clear)
-            }
-        }
-    }
+//    func addNavigationStackCount() {
+//        navigationStackCount += 1
+//    }
+//    
+//    func removeNavigationStackCount() {
+//        navigationStackCount -= 1
+//    }
+//    
+//    // Button 동작
+//    // Back Button
+//    func backButtonAction(dismiss: @escaping () -> Void) {
+//        removeNavigationStackCount()
+//        if navigationStackCount == 0 {
+//            withAnimation {
+//                isBlogViewPresented = false
+//                isPostViewPresented = false
+//                updateIsAnyViewPresented()
+//                updateisMainTabViewPresented()
+//            }
+//        } else {
+//            dismiss()
+//        }
+//    }
+//    
+//    func pushNavigationStack(isNavigationToNext: inout Bool) {
+//        addNavigationStackCount()
+//        isNavigationToNext.toggle()
+//    }
+//    
+//    // Blog Button
+//    func openNavigationStackWithBlog() {
+//        toggleIsBlogViewPresented()
+//        addNavigationStackCount()
+//    }
+//    
+//    func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기
+//        NavigationLink(destination: BlogView()) {
+//            Button(action: {
+//                // TODO: 해당 블로그 View로 이동
+//                self.openNavigationStackWithBlog()
+//            }) {
+//                buttonContent()
+//            }
+//        }
+//    }
+//    
+//    // Post Button
+//    func openNavigationStackWithPost() {
+//        toggleIsPostViewPresented()
+//        addNavigationStackCount()
+//    }
+//    
+//    func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
+//        NavigationLink(destination: PostView()) {
+//            Button(action: {
+//                self.openNavigationStackWithPost()
+//            }) {
+//                Rectangle()
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .foregroundStyle(Color.clear)
+//            }
+//        }
+//    }
 
 }
 

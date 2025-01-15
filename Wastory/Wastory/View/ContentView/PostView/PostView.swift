@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PostView: View {
+    let post: Post
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BlogView: View {
+    let blog: Blog
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
