@@ -159,7 +159,3 @@ struct SignUpStep5AddressView: View {
         }
     }
 }
-
-struct BlogDto: Codable {
-    let address_name: String
-}
