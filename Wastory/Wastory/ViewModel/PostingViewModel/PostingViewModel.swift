@@ -14,4 +14,9 @@ import RichTextKit
     var title: String = ""
     var text = NSAttributedString()
     var context = RichTextContext()
+    private var tempPostCount: Int = 0
+    
+    func getTempPostCount() -> String {
+        return String(tempPostCount)
+    }
 }

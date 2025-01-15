@@ -66,6 +66,56 @@ struct PostingView: View {
                 }
             }
             // TODO: 임시저장버튼 & 완료 버튼
+            ToolbarItem {
+                HStack {
+                    HStack(spacing: 0) {
+                        Button {
+                            // 임시 저장 기능
+                        } label: {
+                            Text("저장")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 3)
+                                .padding(.horizontal, 10)
+                        }
+                        Rectangle()
+                            .frame(width: 1, height: 10)
+                            .foregroundStyle(Color.codeRequestButtonGray)
+                        Button {
+                            // 임시 저장한 글들을 불러 오는 기능
+                        } label: {
+                            Text(viewModel.getTempPostCount())
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 3)
+                                .padding(.leading, 4)
+                                .padding(.trailing, 18)
+                        }
+                    }
+                    .background(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                    )
+                    .padding(.trailing, 5)
+                    Button {
+                        // 저장과 함께 토글
+                    } label: {
+                        Text("완료")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(.black)
+                            .padding(.vertical, 3)
+                            .padding(.horizontal, 7)
+                            .padding(.trailing, 7)
+                    }
+                    .background(.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                    )
+                    .padding(.trailing, 20)
+                }
+            }
         }
     }
 }
