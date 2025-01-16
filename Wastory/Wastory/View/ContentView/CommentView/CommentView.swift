@@ -52,6 +52,10 @@ struct CommentView: View {
                     
                     Spacer()
                         .frame(height: 20)
+                    
+                    ForEach(viewModel.comments) { comment in
+                        CommentCell(comment: comment, isChild: false)
+                    }
                 }
             }
         }
