@@ -27,9 +27,6 @@ import Observation
     
     var isCriterionSelectionSheetPresent: Bool = false
     
-    let sheetTopSpace: CGFloat = 15
-    let sheetRowHeight: CGFloat = 60
-    let sheetBottomSpace: CGFloat = 30
     
     
     

@@ -16,6 +16,11 @@ import Observation
     private var initialScrollPosition: CGFloat = 0
     
     
+    var isCategorySheetPresent: Bool = false
+    
+    var categoryItems: [String] = ["분류 전체보기", "Travel", "Food", "Fashion", "Beauty", "Tech", "Life", "Entertainment"] //기본으로 카테고리 없음은 가지고 있어야함
+    
+    var selectedCategory: String = "분류 전체보기"
     
     
     var popularBlogPostItems: [String] = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8", "item 9", "item 10"]
@@ -48,6 +53,23 @@ import Observation
     }
     
     
+    func toggleIsCategorySheetPresent() {
+        withAnimation(.easeInOut) {
+            isCategorySheetPresent.toggle()
+        }
+    }
+    
+    func getCategoryItemsCount() -> Int {
+        categoryItems.count
+    }
+    
+    func isCurrentCategory(is category: String) -> Bool {
+        selectedCategory == category
+    }
+    
+    func setCategory(to category: String) {
+        selectedCategory = category
+    }
 }
 
 

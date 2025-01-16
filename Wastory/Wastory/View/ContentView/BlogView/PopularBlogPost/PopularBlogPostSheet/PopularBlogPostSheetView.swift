@@ -84,30 +84,30 @@ struct PopularBlogPostSheetView: View {
                         viewModel.toggleIsCriterionSelectionSheetPresent()
                     }
                 
-                //MARK: NotificationTypeSheet List
+                //MARK: CriterionSelectionSheet List
                 VStack {
                     Spacer()
                     if viewModel.isCriterionSelectionSheetPresent {
-                        let typeSheetTopSpace = viewModel.sheetTopSpace
-                        let typeSheetRowHeight = viewModel.sheetRowHeight
-                        let typeSheetBottomSpace = viewModel.sheetBottomSpace
-                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + 3 * typeSheetRowHeight
+                        let sheetTopSpace: CGFloat = 15
+                        let sheetRowHeight: CGFloat = 60
+                        let sheetBottomSpace: CGFloat = 30
+                        let sheetHeight = sheetTopSpace + sheetBottomSpace + 3 * sheetRowHeight
                         
                         ZStack {
                             VStack(spacing: 0) {
                                 Spacer()
-                                    .frame(height: typeSheetTopSpace)
+                                    .frame(height: sheetTopSpace)
                                 
                                 ForEach(viewModel.sortCriterions.indices, id: \.self) { index in
                                     let type = viewModel.sortCriterions[index]
                                     
-                                    CriterionSelectionButton(for: type, isLast: index == 2, rowHeight: typeSheetRowHeight)
+                                    CriterionSelectionButton(for: type, isLast: index == 2, rowHeight: sheetRowHeight)
                                 }
                                 
                                 Spacer()
-                                    .frame(height: typeSheetBottomSpace)
+                                    .frame(height: sheetBottomSpace)
                             }
-                            .frame(height: typeSheetHeight)
+                            .frame(height: sheetHeight)
                             .background(Color.white)
                             .cornerRadius(20)
                             

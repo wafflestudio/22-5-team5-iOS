@@ -16,9 +16,7 @@ struct BlogView: View {
     @State var isPopularPresent: Bool = false
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            
+        ZStack() {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
@@ -44,7 +42,69 @@ struct BlogView: View {
                     
                 } //VStack
             } //ScrollView
-        } //VStack
+            
+            
+            //MARK: CategorySheet
+            ZStack {
+                //MARK: Background Dimming
+                (viewModel.isCategorySheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.toggleIsCategorySheetPresent()
+                    }
+                
+                //MARK: categorySheet List
+                VStack {
+                    Spacer()
+                    if viewModel.isCategorySheetPresent {
+                        let sheetTopSpace: CGFloat = 30
+                        let sheetRowHeight: CGFloat = 60
+                        let sheetBottomSpace: CGFloat = 30
+                        let sheetTitleHeight: CGFloat = 50
+                        let sheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
+                        
+                        
+                        ZStack {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Spacer()
+                                    .frame(height: sheetTopSpace)
+                                
+                                Text("카테고리")
+                                    .font(.system(size: 30, weight: .medium))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                                    .frame(height: sheetTitleHeight)
+                                    .padding(.leading, 20)
+                                ScrollView {
+                                    VStack(spacing: 0) {
+                                        ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
+                                            
+                                            CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: sheetRowHeight)
+                                        }
+                                    }
+                                    
+                                    Spacer()
+                                        .frame(height: sheetBottomSpace)
+                                }
+                                
+                            }
+                            .frame(height: sheetHeight)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            
+                        }
+                        .background(Color.clear)
+                        .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
+                        .animation(.easeInOut, value: viewModel.isCategorySheetPresent)
+                        
+                    }
+                }
+                
+            }// ZStack
+            .ignoresSafeArea()
+            
+        } //ZStack
         .environment(\.contentViewModel, contentViewModel)
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
@@ -88,6 +148,61 @@ struct BlogView: View {
         } //toolbar
         .navigationBarBackButtonHidden()
     }
+    
+    //MARK: CategorySheet Row(Button)
+    @ViewBuilder func CategoryButton(for category: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+        Button(action: {
+            viewModel.setCategory(to: category)
+            viewModel.toggleIsCategorySheetPresent()
+        }) {
+            HStack(spacing: 0) {
+                Text("\(category)")
+                    .font(.system(size: 17, weight: .light))
+                    .padding()
+                
+                Spacer()
+                
+                Text("555") // 카테고리 글 갯수
+                    .font(.system(size: 17, weight: .light))
+                    .padding()
+            }
+            .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
+        }
+        .frame(height: rowHeight)
+        .frame(maxWidth: .infinity)
+        
+        
+        //TODO: Children 추가기능 구현
+//        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
+//            
+//            Button(action: {
+//                viewModel.setCategory(to: child)
+//                viewModel.toggleIsCategorySheetPresent()
+//            }) {
+//                HStack(spacing: 0) {
+//                    Text("ㄴ \(child)")
+//                        .font(.system(size: 15, weight: .light))
+//                        .padding()
+//                    
+//                    Spacer()
+//                    
+//                    Text("555") // 카테고리 글 갯수
+//                        .font(.system(size: 15, weight: .light))
+//                        .padding()
+//                }
+//                .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
+//            }
+//            .frame(height: rowHeight)
+//            .frame(maxWidth: .infinity)
+//        }
+        
+        
+        if !isLast {
+            Divider()
+                .foregroundStyle(Color.secondaryLabelColor)
+        }
+    }
+    
 }
 
 
