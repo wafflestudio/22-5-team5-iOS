@@ -90,8 +90,3 @@ struct BlogView: View {
     }
 }
 
-
-extension Color {
-    static let primaryDarkModeLabelColor = Color.white
-    static let secondaryDarkModeLabelColor = Color.init(red: 0.9, green: 0.9, blue: 0.9).opacity(0.8)
-}

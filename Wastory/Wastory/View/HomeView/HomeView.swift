@@ -88,7 +88,3 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
-
-extension Color {
-    static let backgourndSpaceColor = Color.init(red: 247/255, green: 247/255, blue: 247/255)
-}

@@ -45,4 +45,24 @@ extension Color {
     static let disableButtonGray: Color = .init(red: 187 / 255, green: 187 / 255, blue: 187 / 255)      // 확인 버튼 불가능 회색
     
     static let loadingCoralRed: Color = .init(red: 255 / 255, green: 85 / 255, blue: 68 / 255)  // 앱 실행 시 나타나는 로딩 화면 색상
+    
+    static let primaryDarkModeLabelColor = Color.white
+    
+    static let secondaryDarkModeLabelColor = Color.init(red: 0.9, green: 0.9, blue: 0.9).opacity(0.8)
+    
+    static let blogDetailBackgroundColor: Color = .init(red: 247/255, green: 247/255, blue: 247/255)
+    
+    static let todaysWastoryTextOutterBoxColor = Color.white.opacity(0.5)
+    
+    static let todaysWastoryTextColor = Color.white
+    
+    static let backgourndSpaceColor = Color.init(red: 247/255, green: 247/255, blue: 247/255)
+    
+    static let codeRequestButtonGray: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 인증 요청 버튼 테두리 색상
+    
+    static let disabledNextButtonGray: Color = .init(red: 240 / 255, green: 240 / 255, blue: 240 / 255)  // 다음 버튼 이용 불가능 색상
+    
+    static let emailCautionTextGray: Color = .init(red: 153 / 255, green: 153 / 255, blue: 153 / 255)  // 이메일 입력 주의사항 색상
+    
+    static let emptyEmailWarnRed: Color = .init(red: 208 / 255, green: 104 / 255, blue: 79 / 255)  // 이메일 미입력 경고 색상
 }

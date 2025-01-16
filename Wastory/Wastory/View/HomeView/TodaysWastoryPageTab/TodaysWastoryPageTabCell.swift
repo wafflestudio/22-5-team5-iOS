@@ -101,8 +101,3 @@ struct TodaysWastoryPageTabCell: View {
     }
 }
 
-
-extension Color {
-    static let todaysWastoryTextOutterBoxColor = Color.white.opacity(0.5)
-    static let todaysWastoryTextColor = Color.white
-}
