@@ -59,37 +59,37 @@ struct BlogView: View {
                 VStack {
                     Spacer()
                     if viewModel.isCategorySheetPresent {
-                        let typeSheetTopSpace = viewModel.sheetTopSpace
-                        let typeSheetRowHeight = viewModel.sheetRowHeight
-                        let typeSheetBottomSpace = viewModel.sheetBottomSpace
-                        let typeSheetTitleHeight: CGFloat = 50
-                        let typeSheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
+                        let sheetTopSpace: CGFloat = 30
+                        let sheetRowHeight: CGFloat = 60
+                        let sheetBottomSpace: CGFloat = 30
+                        let sheetTitleHeight: CGFloat = 50
+                        let sheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
                         
                         
                         ZStack {
                             VStack(alignment: .leading, spacing: 0) {
                                 Spacer()
-                                    .frame(height: typeSheetTopSpace)
+                                    .frame(height: sheetTopSpace)
                                 
                                 Text("카테고리")
                                     .font(.system(size: 30, weight: .medium))
                                     .foregroundStyle(Color.primaryLabelColor)
-                                    .frame(height: typeSheetTitleHeight)
+                                    .frame(height: sheetTitleHeight)
                                     .padding(.leading, 20)
                                 ScrollView {
                                     VStack(spacing: 0) {
                                         ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
                                             
-                                            CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: typeSheetRowHeight)
+                                            CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: sheetRowHeight)
                                         }
                                     }
                                     
                                     Spacer()
-                                        .frame(height: typeSheetBottomSpace)
+                                        .frame(height: sheetBottomSpace)
                                 }
                                 
                             }
-                            .frame(height: typeSheetHeight)
+                            .frame(height: sheetHeight)
                             .background(Color.white)
                             .cornerRadius(20)
                             
