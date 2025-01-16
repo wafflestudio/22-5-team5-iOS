@@ -11,7 +11,9 @@ import Observation
 enum NavigationDestination: Hashable {
     case blog(Blog)
     case post(Post)
+    case comment(Int)
     case popularBlogPostSheet
+    
 }
 
 @Observable final class ContentViewModel {
