@@ -230,7 +230,3 @@ struct PostView: View {
 }
 
 
-
-extension Color {
-    static let blogDetailBackgroundColor: Color = .init(red: 247/255, green: 247/255, blue: 247/255)
-}

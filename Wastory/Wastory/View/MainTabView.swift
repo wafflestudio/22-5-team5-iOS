@@ -88,6 +88,15 @@ struct MainTabView: View {
     } //body
 }
 
+extension View {
+    func mainTabToolbarConfigurations() -> some View {
+        self
+            .toolbarBackground(.white, for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
+            .toolbarBackground(Color.white, for: .navigationBar)
+    }
+}
+
 
 //TabType case 이름은 추후 수정 및 확정
 enum TabType: String {
@@ -98,11 +107,3 @@ enum TabType: String {
     case stat
 }
 
-extension View {
-    func mainTabToolbarConfigurations() -> some View {
-        self
-            .toolbarBackground(.white, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
-            .toolbarBackground(Color.white, for: .navigationBar)
-    }
-}
