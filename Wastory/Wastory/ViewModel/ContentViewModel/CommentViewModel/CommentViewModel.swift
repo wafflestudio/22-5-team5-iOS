@@ -49,6 +49,7 @@ import Observation
     var isWritingCommentSecret: Bool = false
     var isTextFieldFocused: Bool = false
     var targetCommentID: Int?
+    var isTargetToComment: Bool = false
     
     func isWritingCommentEmpty() -> Bool {
         writingCommentText.isEmpty
@@ -56,6 +57,17 @@ import Observation
     
     func setTargetCommentID(to id: Int) {
         targetCommentID = id
+        isTargetToComment = true
+    }
+    
+    func resetTargetCommentID() {
+        targetCommentID = nil
+        isTargetToComment = false
+    }
+    
+    func updateIsTextFieldFocused() {
+        isTextFieldFocused = false
+        isTextFieldFocused = true
     }
 }
 

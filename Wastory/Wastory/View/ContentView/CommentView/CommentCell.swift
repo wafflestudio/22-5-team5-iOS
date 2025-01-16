@@ -78,7 +78,7 @@ struct CommentCell: View {
                             .foregroundStyle(Color.gray.opacity(0.3))
                         
                         Button(action: {
-                            viewModel.isTextFieldFocused.toggle()
+                            viewModel.updateIsTextFieldFocused()
                             viewModel.setTargetCommentID(to: comment.id)
                         }) {
                             Text("답글")

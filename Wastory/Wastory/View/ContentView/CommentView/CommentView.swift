@@ -82,6 +82,31 @@ struct CommentView: View {
                     .foregroundStyle(Color.secondaryLabelColor)
                     .frame(maxWidth: .infinity)
                 
+                if viewModel.isTargetToComment {
+                    HStack(spacing: 0) {
+                        Text("유저이름")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Color.primaryLabelColor)
+                        
+                        Text("님에게 답글을 씁니다.")
+                            .font(.system(size: 13, weight: .thin))
+                            .foregroundStyle(Color.primaryLabelColor)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            viewModel.resetTargetCommentID()
+                        }) {
+                            Image(systemName:"xmark")
+                                .font(.system(size: 15, weight: .light))
+                                .foregroundStyle(Color.primaryLabelColor)
+                        }
+                    }
+                    .frame(height: 37)
+                    .padding(.horizontal, 20)
+                    .background(Color.backgourndSpaceColor)
+                }
+                
                 ZStack {
                     HStack(spacing: 0) {
                         if viewModel.isWritingCommentEmpty() {
