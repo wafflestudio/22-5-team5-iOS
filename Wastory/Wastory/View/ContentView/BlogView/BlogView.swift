@@ -16,9 +16,7 @@ struct BlogView: View {
     @State var isPopularPresent: Bool = false
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            
+        ZStack() {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
@@ -44,7 +42,58 @@ struct BlogView: View {
                     
                 } //VStack
             } //ScrollView
-        } //VStack
+            
+            
+            //MARK: CategorySheet
+            ZStack {
+                //MARK: Background Dimming
+                (viewModel.isCategorySheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.toggleIsCategorySheetPresent()
+                    }
+                
+                //MARK: categorySheet List
+                VStack {
+                    Spacer()
+                    if viewModel.isCategorySheetPresent {
+                        let typeSheetTopSpace = viewModel.sheetTopSpace
+                        let typeSheetRowHeight = viewModel.sheetRowHeight
+                        let typeSheetBottomSpace = viewModel.sheetBottomSpace
+                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + viewModel.getCategoryItemsCount() * typeSheetRowHeight
+                        
+                        ZStack {
+                            VStack(spacing: 0) {
+                                Spacer()
+                                    .frame(height: typeSheetTopSpace)
+                                
+                                ForEach(viewModel.categoryItems.indices, id: \.self) { index in
+                                    let category = viewModel.categoryItems[index]
+                                    
+                                    CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: typeSheetRowHeight)
+                                }
+                                
+                                Spacer()
+                                    .frame(height: typeSheetBottomSpace)
+                            }
+                            .frame(height: typeSheetHeight)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            
+                        }
+                        .background(Color.clear)
+                        .transition(.move(edge: .bottom)) // 아래에서 올라오는 애니메이션
+                        .animation(.easeInOut, value: viewModel.isCategorySheetPresent)
+                        
+                    }
+                }
+                
+            }// ZStack
+            .ignoresSafeArea()
+            
+        } //ZStack
         .environment(\.contentViewModel, contentViewModel)
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
@@ -88,6 +137,63 @@ struct BlogView: View {
         } //toolbar
         .navigationBarBackButtonHidden()
     }
+    
+    //MARK: CategorySheet Row(Button)
+    @ViewBuilder func CategoryButton(for category: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+        Button(action: {
+            viewModel.setCategory(to: category)
+            viewModel.toggleIsCategorySheetPresent()
+        }) {
+            HStack(spacing: 0) {
+                Text("\(category)")
+                    .font(.system(size: 17, weight: viewModel.isCurrentCategory(is: category) ? .semibold : .light))
+                    .foregroundStyle(Color.primaryLabelColor)
+                    .padding()
+                
+                Spacer()
+                
+                Image(systemName: "checkmark.circle.fill")
+                    .tint(viewModel.isCurrentCategory(is: category) ? Color.primaryLabelColor : Color.clear)
+                    .font(.system(size: 20, weight: .regular))
+                    .padding(.trailing, 15)
+            }
+        }
+        .frame(height: rowHeight)
+        .frame(maxWidth: .infinity)
+        
+        
+        //TODO: Children 추가기능 구현
+//        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
+//            
+//            Button(action: {
+//                viewModel.setCategory(to: child)
+//                viewModel.toggleIsCategorySheetPresent()
+//            }) {
+//                HStack(spacing: 0) {
+//                    Text("ㄴ \(child)")
+//                        .font(.system(size: 15, weight: viewModel.isCurrentCategory(is: child) ? .semibold : .light))
+//                        .foregroundStyle(Color.primaryLabelColor)
+//                        .padding()
+//                    
+//                    Spacer()
+//                    
+//                    Image(systemName: "checkmark.circle.fill")
+//                        .tint(viewModel.isCurrentCategory(is: child) ? Color.primaryLabelColor : Color.clear)
+//                        .font(.system(size: 20, weight: .regular))
+//                        .padding(.trailing, 15)
+//                }
+//            }
+//            .frame(height: rowHeight)
+//            .frame(maxWidth: .infinity)
+//        }
+        
+        
+        if !isLast {
+            Divider()
+                .foregroundStyle(Color.secondaryLabelColor)
+        }
+    }
+    
 }
 
 

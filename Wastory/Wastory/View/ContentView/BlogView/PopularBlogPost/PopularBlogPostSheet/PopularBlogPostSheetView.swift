@@ -84,7 +84,7 @@ struct PopularBlogPostSheetView: View {
                         viewModel.toggleIsCriterionSelectionSheetPresent()
                     }
                 
-                //MARK: NotificationTypeSheet List
+                //MARK: CriterionSelectionSheet List
                 VStack {
                     Spacer()
                     if viewModel.isCriterionSelectionSheetPresent {
