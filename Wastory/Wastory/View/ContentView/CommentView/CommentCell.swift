@@ -43,14 +43,19 @@ struct CommentCell: View {
                     .frame(width: 10)
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Button(action: {
-                        contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                    }) {
-                        Text("블로그 이름")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(Color.primaryLabelColor)
+                    HStack(spacing: 5) {
+                        Button(action: {
+                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
+                        }) {
+                            Text("블로그 이름")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(Color.primaryLabelColor)
+                        }
+                        
+                        Image(systemName: "lock")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(comment.isSecret ? Color.secondaryLabelColor : Color.clear)
                     }
-                    
                     Spacer()
                         .frame(height: 3)
                     

@@ -228,6 +228,7 @@ struct PostView: View {
             }
         } //toolbar
         .navigationBarBackButtonHidden()
+        //MARK: bottomBar
         .safeAreaInset(edge: .bottom) {
             VStack(spacing: 0) {
                 Divider()
@@ -272,7 +273,7 @@ struct PostView: View {
                     Spacer()
                     
                 }
-                .padding(.vertical)
+                .frame(height: 50)
                 .padding(.horizontal, 20)
                 .background(Color.white)
             }

@@ -42,6 +42,14 @@ import Observation
     
     //Network
     
-    var comments: [Comment] = [Comment.init(id: 1, blogID: 1, children: [Comment.init(id: 2, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false), Comment.init(id: 3, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false)], content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false), Comment.init(id: 4, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 5, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 6, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 7, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false)]
+    var comments: [Comment] = [Comment.init(id: 1, blogID: 1, children: [Comment.init(id: 2, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false), Comment.init(id: 3, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false)], content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: true), Comment.init(id: 4, blogID: 1, content: "second comment", createdAt: Date(), isSecret: true), Comment.init(id: 5, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 6, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 7, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false)]
+    
+    
+    var writingCommentText: String = ""
+    var isWritingCommentSecret: Bool = false
+    var isTextFieldFocused: Bool = false
+    func isWritingCommentEmpty() -> Bool {
+        writingCommentText.isEmpty
+    }
 }
 
