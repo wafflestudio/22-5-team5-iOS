@@ -41,7 +41,7 @@ import Observation
             if (!isNavTitleHidden) {
                 isNavTitleHidden = false
             }
-        } else if newValue > 0 {
+        } else if newValue > initialScrollPosition {
             if (isNavTitleHidden) {
                 isNavTitleHidden = false
             }

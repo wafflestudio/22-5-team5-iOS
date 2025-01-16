@@ -34,10 +34,10 @@ struct ContentNavigationStack: View {
                 switch destination {
                 case .blog(let blog):
                     BlogView(blog: blog)
-                        .environment(\.contentViewModel, contentViewModel)
                 case .post(let post):
                     PostView(post: post)
-                        .environment(\.contentViewModel, contentViewModel)
+                case .comment(let postID):
+                    CommentView(postID: postID)
                 case .popularBlogPostSheet:
                     PopularBlogPostSheetView()
                 }
