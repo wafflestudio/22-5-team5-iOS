@@ -63,7 +63,8 @@ struct BlogView: View {
                         let typeSheetRowHeight = viewModel.sheetRowHeight
                         let typeSheetBottomSpace = viewModel.sheetBottomSpace
                         let typeSheetTitleHeight: CGFloat = 50
-                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + CGFloat(viewModel.getCategoryItemsCount()) * typeSheetRowHeight + typeSheetTitleHeight
+                        let typeSheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
+                        
                         
                         ZStack {
                             VStack(alignment: .leading, spacing: 0) {
@@ -75,14 +76,18 @@ struct BlogView: View {
                                     .foregroundStyle(Color.primaryLabelColor)
                                     .frame(height: typeSheetTitleHeight)
                                     .padding(.leading, 20)
-                                
-                                ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
+                                ScrollView {
+                                    VStack(spacing: 0) {
+                                        ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
+                                            
+                                            CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: typeSheetRowHeight)
+                                        }
+                                    }
                                     
-                                    CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: typeSheetRowHeight)
+                                    Spacer()
+                                        .frame(height: typeSheetBottomSpace)
                                 }
                                 
-                                Spacer()
-                                    .frame(height: typeSheetBottomSpace)
                             }
                             .frame(height: typeSheetHeight)
                             .background(Color.white)
