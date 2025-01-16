@@ -49,7 +49,7 @@ struct CommentCell: View {
                         Button(action: {
                             contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
                         }) {
-                            Text("블로그 이름")
+                            Text("유저 이름")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)
                         }
