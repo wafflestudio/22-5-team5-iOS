@@ -88,6 +88,12 @@ struct FeedView: View {
                 }
             }
         }
+        .onAppear {
+            Task {
+                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+                viewModel.posts = response
+            }
+        }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
         .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "피드" : ""))

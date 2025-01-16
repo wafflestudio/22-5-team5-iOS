@@ -110,15 +110,16 @@ final class NetworkRepository {
             encoding: JSONEncoding.default,
             headers: headers,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(articlesDto.self).value
+        ).validate().serializingDecodable([articleDto].self).value
         
-        return response.articles.map { article in
+        print(response)
+        return response.map { article in
             Post(
                 id: article.articleID,
                 blogID: 0,
                 title: article.title,
                 description: article.content,
-                createdAt: ISO8601DateFormatter().date(from: article.createdAt)!,
+                createdAt: ISO8601DateFormatter().date(from: article.createdAt) ?? Date(),
                 commentCount: 0,
                 likeCount: 0
             )
