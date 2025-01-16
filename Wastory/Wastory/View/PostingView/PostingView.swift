@@ -120,7 +120,7 @@ struct PostingView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                     .padding(.trailing, 5)
-                    NavigationLink(destination: PostSettingView()) {
+                    NavigationLink(destination: PostSettingView(viewModel: PostSettingViewModel(title: viewModel.title, text: viewModel.text))) {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundStyle(.black)

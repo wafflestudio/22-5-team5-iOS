@@ -10,5 +10,15 @@ import Observation
 import RichTextKit
 
 @Observable final class PostSettingViewModel {
-    //
+    private let title: String
+    private let text: NSAttributedString
+
+    init(title: String, text: NSAttributedString) {
+        self.title = title
+        self.text = text
+    }
+    
+    func getTitle() -> String {
+        return title
+    }
 }

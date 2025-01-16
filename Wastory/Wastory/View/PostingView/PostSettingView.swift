@@ -9,13 +9,25 @@ import SwiftUI
 import RichTextKit
 
 struct PostSettingView: View {
-    @State private var viewModel = PostSettingViewModel()
+    @State private var viewModel: PostSettingViewModel
     @Environment(\.contentViewModel) var contentViewModel
     
+    init(viewModel: PostSettingViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
-        VStack {
-            
+        VStack(spacing: 0) {
+            Spacer()
+                .frame(height: 30)
+            HStack {
+                Text(viewModel.getTitle())
+                    .font(.system(size: 16))
+                Spacer()
+            }
+            Spacer()
         }
+        .padding(.horizontal, 20)
         .navigationBarBackButtonHidden()
         .toolbarBackgroundVisibility(.visible)
         .toolbarBackground(Color.white)
