@@ -15,8 +15,6 @@ struct PostSettingView: View {
     @State private var viewModel: PostSettingViewModel
     @Environment(\.contentViewModel) var contentViewModel
     
-    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    
     init(viewModel: PostSettingViewModel) {
         self.viewModel = viewModel
     }
@@ -88,14 +86,9 @@ struct PostSettingView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
-            GalleryPicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
+            ImagePicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
         }
     }
-}
-
-enum ImageSourceType {
-    case camera
-    case photoLibrary
 }
 
 #Preview {

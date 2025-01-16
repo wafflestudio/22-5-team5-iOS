@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 import PhotosUI
 
-struct GalleryPicker: UIViewControllerRepresentable {
+struct ImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
     @Environment(\.presentationMode) var presentationMode
     var sourceType: UIImagePickerController.SourceType
@@ -28,9 +28,9 @@ struct GalleryPicker: UIViewControllerRepresentable {
     }
 
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: GalleryPicker
+        let parent: ImagePicker
 
-        init(_ parent: GalleryPicker) {
+        init(_ parent: ImagePicker) {
             self.parent = parent
         }
 
