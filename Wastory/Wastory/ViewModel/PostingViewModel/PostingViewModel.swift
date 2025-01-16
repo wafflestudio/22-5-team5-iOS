@@ -43,7 +43,6 @@ import RichTextKit
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: htmlText!,
-                    blogID: UserInfoRepository.shared.getBlogID(),
                     categoryID: 0
                 )
                 print("게시글 작성 성공")

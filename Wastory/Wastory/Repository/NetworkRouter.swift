@@ -35,7 +35,7 @@ enum NetworkRouter {
         case .postBlog: "/blogs"
         
         // MARK: Article
-        case .postArticle: "/articles"
+        case .postArticle: "/articles/create"
         }
     }
     

@@ -79,8 +79,8 @@ final class NetworkRepository {
         ).validate().serializingDecodable(BlogDto.self).value
     }
     
-    func postArticle(title: String, content: String, blogID: Int, categoryID: Int) async throws {
-        let requestBody = articleOtd(title: title, content: content, blogID: blogID, categoryID: categoryID)
+    func postArticle(title: String, content: String, categoryID: Int) async throws {
+        let requestBody = articleOtd(title: title, content: content, categoryID: categoryID)
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
             method: NetworkRouter.postArticle.method,
@@ -98,13 +98,11 @@ final class NetworkRepository {
 struct articleOtd: Codable {
     let title: String
     let content: String
-    let blogID: Int
     let categoryID: Int
     
     private enum CodingKeys: String, CodingKey {
         case title
         case content
-        case blogID = "blog_id"
         case categoryID = "category_id"
     }
 }
@@ -113,11 +111,11 @@ struct articleDto: Codable {
     let articleID: Int
     let title: String
     let content: String
-    let createdAt: Int
-    let updatedAt: Int
+    let createdAt: String
+    let updatedAt: String
     
     private enum CodingKeys: String, CodingKey {
-        case articleID
+        case articleID = "id"
         case title
         case content
         case createdAt = "created_at"
