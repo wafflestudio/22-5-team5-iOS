@@ -11,6 +11,8 @@ struct CommentCell: View {
     var comment: Comment
     let isChild: Bool
     
+    @Bindable var viewModel: CommentViewModel
+    
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
@@ -76,7 +78,8 @@ struct CommentCell: View {
                             .foregroundStyle(Color.gray.opacity(0.3))
                         
                         Button(action: {
-                            //답글
+                            viewModel.isTextFieldFocused.toggle()
+                            viewModel.setTargetCommentID(to: comment.id)
                         }) {
                             Text("답글")
                                 .font(.system(size: 15, weight: .bold))
@@ -108,7 +111,7 @@ struct CommentCell: View {
             
             if !isChild {
                 ForEach(comment.children ?? []) { child in
-                    CommentCell(comment: child, isChild: true)
+                    CommentCell(comment: child, isChild: true, viewModel: viewModel)
                 }
             }
         }//VStack1

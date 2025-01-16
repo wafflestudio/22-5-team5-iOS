@@ -48,8 +48,14 @@ import Observation
     var writingCommentText: String = ""
     var isWritingCommentSecret: Bool = false
     var isTextFieldFocused: Bool = false
+    var targetCommentID: Int?
+    
     func isWritingCommentEmpty() -> Bool {
         writingCommentText.isEmpty
+    }
+    
+    func setTargetCommentID(to id: Int) {
+        targetCommentID = id
     }
 }
 
