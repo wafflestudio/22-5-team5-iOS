@@ -7,16 +7,50 @@
 
 import SwiftUI
 import RichTextKit
+import PhotosUI
+
+import Foundation
 
 struct PostSettingView: View {
     @State private var viewModel: PostSettingViewModel
     @Environment(\.contentViewModel) var contentViewModel
+    
+    @State private var isConfirmationDialogPresented: Bool = false
+    @State private var isShowingImagePicker: Bool = false
+    @State private var imageSourceType: ImageSourceType = .photoLibrary
+    @State private var inputImage: UIImage?
+    
+    @State var text: NSAttributedString = NSMutableAttributedString(string: "")
+    @StateObject private var context = RichTextContext()
+    @FocusState private var isFocused: Bool
     
     init(viewModel: PostSettingViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
+        VStack {
+                    RichTextEditor(text: $text, context: context)
+                        .focusedValue(\.richTextContext, context)
+                        .focused($isFocused)
+                        .onAppear(){
+                            isFocused = true
+                        }
+                    RichTextKeyboardToolbar(
+                        context: context,
+                        leadingButtons: {_ in },
+                        trailingButtons: {_ in
+                            Button(action: {
+                                isConfirmationDialogPresented = true
+                            }, label: {
+                                Image(systemName: "photo")
+                            })
+                        },
+                        formatSheet: {$0}
+                    )
+                    
+                }
+        /*
         VStack(spacing: 0) {
             Spacer()
                 .frame(height: 30)
@@ -24,9 +58,36 @@ struct PostSettingView: View {
                 Text(viewModel.getTitle())
                     .font(.system(size: 16))
                 Spacer()
+                Button {
+                    //
+                } label: {
+                    Text("버버버버버튼튼튼튼튼")
+                        .confirmationDialog("Select source", isPresented: $isConfirmationDialogPresented, actions: {
+                                Button("Camera") {
+                                    self.imageSourceType = .camera
+                                    self.isShowingImagePicker = true
+                                }
+                                Button("Photo Library") {
+                                    self.imageSourceType = .photoLibrary
+                                    self.isShowingImagePicker = true
+                                }
+                            })
+                            .sheet(isPresented: $isShowingImagePicker, onDismiss: {
+                                if let inputImage = inputImage {
+                                    self.inputImage = nil
+                                }
+                            }, content: {
+                                switch imageSourceType {
+                                case .camera:
+                                    CameraImagePicker(image: $inputImage, sourceType: .camera)
+                                case .photoLibrary:
+                                    PhotoLibraryPicker(selectedImage: $inputImage)
+                                }
+                            })
+                }
             }
             Spacer()
-        }
+        }*/
         .padding(.horizontal, 20)
         .navigationBarBackButtonHidden()
         .toolbarBackgroundVisibility(.visible)
@@ -55,4 +116,9 @@ struct PostSettingView: View {
             }
         }
     }
+}
+
+enum ImageSourceType {
+    case camera
+    case photoLibrary
 }
