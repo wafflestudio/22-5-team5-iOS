@@ -19,3 +19,16 @@ struct CustomBackButton: View {
         }
     }
 }
+
+struct CustomBackButtonLight: View {
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 17, weight: .regular))
+                .foregroundStyle(.black)
+        }
+    }
+}

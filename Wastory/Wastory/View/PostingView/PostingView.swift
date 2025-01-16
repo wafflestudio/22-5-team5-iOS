@@ -120,12 +120,7 @@ struct PostingView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                     .padding(.trailing, 5)
-                    Button {
-                        // 저장과 함께 토글
-                        Task {
-                            await viewModel.postArticle()
-                        }
-                    } label: {
+                    NavigationLink(destination: PostSettingView()) {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundStyle(.black)
