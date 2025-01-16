@@ -178,12 +178,16 @@ struct FocusableTextView: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            parent.isFirstResponder = true
+            DispatchQueue.main.async {
+                self.parent.isFirstResponder = true
+            }
             centerTextIfNeeded(textView)
         }
-        
+
         func textViewDidEndEditing(_ textView: UITextView) {
-            parent.isFirstResponder = false
+            DispatchQueue.main.async {
+                self.parent.isFirstResponder = false
+            }
         }
         
         func textViewDidChange(_ textView: UITextView) {
