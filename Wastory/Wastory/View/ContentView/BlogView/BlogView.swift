@@ -62,15 +62,21 @@ struct BlogView: View {
                         let typeSheetTopSpace = viewModel.sheetTopSpace
                         let typeSheetRowHeight = viewModel.sheetRowHeight
                         let typeSheetBottomSpace = viewModel.sheetBottomSpace
-                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + viewModel.getCategoryItemsCount() * typeSheetRowHeight
+                        let typeSheetTitleHeight: CGFloat = 50
+                        let typeSheetHeight = typeSheetTopSpace + typeSheetBottomSpace + CGFloat(viewModel.getCategoryItemsCount()) * typeSheetRowHeight + typeSheetTitleHeight
                         
                         ZStack {
-                            VStack(spacing: 0) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 Spacer()
                                     .frame(height: typeSheetTopSpace)
                                 
-                                ForEach(viewModel.categoryItems.indices, id: \.self) { index in
-                                    let category = viewModel.categoryItems[index]
+                                Text("카테고리")
+                                    .font(.system(size: 30, weight: .medium))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                                    .frame(height: typeSheetTitleHeight)
+                                    .padding(.leading, 20)
+                                
+                                ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
                                     
                                     CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: typeSheetRowHeight)
                                 }
@@ -146,17 +152,16 @@ struct BlogView: View {
         }) {
             HStack(spacing: 0) {
                 Text("\(category)")
-                    .font(.system(size: 17, weight: viewModel.isCurrentCategory(is: category) ? .semibold : .light))
-                    .foregroundStyle(Color.primaryLabelColor)
+                    .font(.system(size: 17, weight: .light))
                     .padding()
                 
                 Spacer()
                 
-                Image(systemName: "checkmark.circle.fill")
-                    .tint(viewModel.isCurrentCategory(is: category) ? Color.primaryLabelColor : Color.clear)
-                    .font(.system(size: 20, weight: .regular))
-                    .padding(.trailing, 15)
+                Text("555") // 카테고리 글 갯수
+                    .font(.system(size: 17, weight: .light))
+                    .padding()
             }
+            .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
         }
         .frame(height: rowHeight)
         .frame(maxWidth: .infinity)
@@ -171,17 +176,16 @@ struct BlogView: View {
 //            }) {
 //                HStack(spacing: 0) {
 //                    Text("ㄴ \(child)")
-//                        .font(.system(size: 15, weight: viewModel.isCurrentCategory(is: child) ? .semibold : .light))
-//                        .foregroundStyle(Color.primaryLabelColor)
+//                        .font(.system(size: 15, weight: .light))
 //                        .padding()
 //                    
 //                    Spacer()
 //                    
-//                    Image(systemName: "checkmark.circle.fill")
-//                        .tint(viewModel.isCurrentCategory(is: child) ? Color.primaryLabelColor : Color.clear)
-//                        .font(.system(size: 20, weight: .regular))
-//                        .padding(.trailing, 15)
+//                    Text("555") // 카테고리 글 갯수
+//                        .font(.system(size: 15, weight: .light))
+//                        .padding()
 //                }
+//                .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
 //            }
 //            .frame(height: rowHeight)
 //            .frame(maxWidth: .infinity)

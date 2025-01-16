@@ -18,13 +18,13 @@ import Observation
     
     var isCategorySheetPresent: Bool = false
     
-    let sheetTopSpace: CGFloat = 15
+    let sheetTopSpace: CGFloat = 30
     let sheetRowHeight: CGFloat = 60
     let sheetBottomSpace: CGFloat = 30
     
-    var categoryItems: [String] = ["카테고리 없음", "Travel", "Food", "Fashion", "Beauty", "Tech", "Life", "Entertainment"] //기본으로 카테고리 없음은 가지고 있어야함
+    var categoryItems: [String] = ["분류 전체보기", "Travel", "Food", "Fashion", "Beauty", "Tech", "Life", "Entertainment"] //기본으로 카테고리 없음은 가지고 있어야함
     
-    var selectedCategory: String = "카테고리 없음"
+    var selectedCategory: String = "분류 전체보기"
     
     
     var popularBlogPostItems: [String] = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8", "item 9", "item 10"]
@@ -58,7 +58,9 @@ import Observation
     
     
     func toggleIsCategorySheetPresent() {
-        isCategorySheetPresent.toggle()
+        withAnimation(.easeInOut) {
+            isCategorySheetPresent.toggle()
+        }
     }
     
     func getCategoryItemsCount() -> Int {
