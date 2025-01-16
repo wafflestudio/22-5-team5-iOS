@@ -14,10 +14,6 @@ struct FeedView: View {
     @State var subscribingCount: Int = 0 // 구독중 count
     @State var subscriberCount:  Int = 0 // 구독자 count
     
-    //임시 데이터 배열
-    var items: [String] = ["아이템 1", "아이템 2", "아이템 3", "아이템 4", "아이템 5"]
-    
-    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -66,14 +62,36 @@ struct FeedView: View {
                 }
                 .padding(.trailing, 22)
                 
+                Button {
+                    Task {
+                        do {
+                            let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+                            viewModel.posts = response
+                            print("성공")
+                        }
+                        catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                } label: {
+                    Text("버버버튼튼튼")
+                        .frame(width: 100, height: 100)
+                }
+                
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
-                    ForEach(items, id: \.self) { _ in
-                        FeedCell()
+                    ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
+                        FeedCell(post: post)
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
+            }
+        }
+        .onAppear {
+            Task {
+                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+                viewModel.posts = response
             }
         }
         // MARK: NavBar

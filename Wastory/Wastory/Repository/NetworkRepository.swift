@@ -93,6 +93,38 @@ final class NetworkRepository {
             interceptor: NetworkInterceptor()
         ).validate().serializingDecodable(articleDto.self).value
     }
+    
+    func getArticlesInBlog(blogID: Int) async throws -> [Post] {
+        /*
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.postArticle.url,
+            method: NetworkRouter.postArticle.method,
+            headers: NetworkRouter.postArticle.headers
+        )
+        */
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        let response = try await AF.request(
+            NetworkRouter.getArticlesInBlog(blogID: blogID).url,
+            encoding: JSONEncoding.default,
+            headers: headers,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable([articleDto].self).value
+        
+        print(response)
+        return response.map { article in
+            Post(
+                id: article.articleID,
+                blogID: 0,
+                title: article.title,
+                description: article.content,
+                createdAt: ISO8601DateFormatter().date(from: article.createdAt) ?? Date(),
+                commentCount: 0,
+                likeCount: 0
+            )
+        }
+    }
 }
 
 struct articleOtd: Codable {
@@ -121,4 +153,8 @@ struct articleDto: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
+}
+
+struct articlesDto: Codable {
+    let articles: [articleDto]
 }
