@@ -88,7 +88,7 @@ struct PostSettingView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
-            ImagePicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
+            GalleryPicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
         }
     }
 }
