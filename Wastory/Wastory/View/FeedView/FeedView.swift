@@ -62,6 +62,22 @@ struct FeedView: View {
                 }
                 .padding(.trailing, 22)
                 
+                Button {
+                    Task {
+                        do {
+                            let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+                            viewModel.posts = response
+                            print("성공")
+                        }
+                        catch {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                    }
+                } label: {
+                    Text("버버버튼튼튼")
+                        .frame(width: 100, height: 100)
+                }
+                
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
