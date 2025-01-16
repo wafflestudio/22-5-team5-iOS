@@ -19,6 +19,7 @@ enum NetworkRouter {
     
     // MARK: Blog
     case postArticle
+    case getArticlesInBlog(blogID: Int)
     
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
@@ -36,6 +37,7 @@ enum NetworkRouter {
         
         // MARK: Article
         case .postArticle: "/articles/create"
+        case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
         }
     }
     
@@ -56,6 +58,8 @@ enum NetworkRouter {
         // MARK: Article
         case .postArticle:
             return .post
+        case .getArticlesInBlog:
+            return .get
         }
     }
     
@@ -76,13 +80,8 @@ enum NetworkRouter {
         // MARK: Article
         case .postArticle:
             return ["Content-Type": "application/json"]
+        case .getArticlesInBlog:
+            return ["Content-Type": "application/json"]
         }
     }
-    
-    /* 파라미터가 필요한 API가 있을 경우 구현
-    var parameters: Parameters? {
-        switch self {
-        }
-    }
-    */
 }
