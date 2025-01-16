@@ -12,6 +12,9 @@ import RichTextKit
 @Observable final class PostSettingViewModel {
     private let title: String
     private let text: NSAttributedString
+    
+    var mainImage: UIImage? = nil
+    var isImagePickerPresented: Bool = false
 
     init(title: String, text: NSAttributedString) {
         self.title = title
@@ -20,5 +23,9 @@ import RichTextKit
     
     func getTitle() -> String {
         return title
+    }
+    
+    func toggleImagePickerPresented() {
+        isImagePickerPresented.toggle()
     }
 }

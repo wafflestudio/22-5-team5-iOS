@@ -15,79 +15,51 @@ struct PostSettingView: View {
     @State private var viewModel: PostSettingViewModel
     @Environment(\.contentViewModel) var contentViewModel
     
-    @State private var isConfirmationDialogPresented: Bool = false
-    @State private var isShowingImagePicker: Bool = false
-    @State private var imageSourceType: ImageSourceType = .photoLibrary
-    @State private var inputImage: UIImage?
-    
-    @State var text: NSAttributedString = NSMutableAttributedString(string: "")
-    @StateObject private var context = RichTextContext()
-    @FocusState private var isFocused: Bool
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     init(viewModel: PostSettingViewModel) {
         self.viewModel = viewModel
     }
     
     var body: some View {
-        VStack {
-                    RichTextEditor(text: $text, context: context)
-                        .focusedValue(\.richTextContext, context)
-                        .focused($isFocused)
-                        .onAppear(){
-                            isFocused = true
-                        }
-                    RichTextKeyboardToolbar(
-                        context: context,
-                        leadingButtons: {_ in },
-                        trailingButtons: {_ in
-                            Button(action: {
-                                isConfirmationDialogPresented = true
-                            }, label: {
-                                Image(systemName: "photo")
-                            })
-                        },
-                        formatSheet: {$0}
-                    )
-                    
-                }
-        /*
         VStack(spacing: 0) {
             Spacer()
                 .frame(height: 30)
-            HStack {
+            HStack(alignment: .top) {
                 Text(viewModel.getTitle())
                     .font(.system(size: 16))
+                    .padding(.top, 10)
                 Spacer()
                 Button {
-                    //
+                    viewModel.toggleImagePickerPresented()
                 } label: {
-                    Text("버버버버버튼튼튼튼튼")
-                        .confirmationDialog("Select source", isPresented: $isConfirmationDialogPresented, actions: {
-                                Button("Camera") {
-                                    self.imageSourceType = .camera
-                                    self.isShowingImagePicker = true
-                                }
-                                Button("Photo Library") {
-                                    self.imageSourceType = .photoLibrary
-                                    self.isShowingImagePicker = true
-                                }
-                            })
-                            .sheet(isPresented: $isShowingImagePicker, onDismiss: {
-                                if let inputImage = inputImage {
-                                    self.inputImage = nil
-                                }
-                            }, content: {
-                                switch imageSourceType {
-                                case .camera:
-                                    CameraImagePicker(image: $inputImage, sourceType: .camera)
-                                case .photoLibrary:
-                                    PhotoLibraryPicker(selectedImage: $inputImage)
-                                }
-                            })
+                    if let mainImage = viewModel.mainImage {
+                        Image(uiImage: mainImage)
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .scaledToFill()
+                            .clipped()
+                    }
+                    else {
+                        ZStack {
+                            Rectangle()
+                                .frame(width: 100, height: 100)
+                                .background(.black)
+                            VStack(spacing: 0) {
+                                Image(systemName: "camera")
+                                Spacer()
+                                    .frame(height: 3)
+                                Text("대표이미지")
+                                    .font(.system(size: 12))
+                            }
+                            .foregroundStyle(.gray)
+                            .padding(30)
+                        }
+                    }
                 }
             }
             Spacer()
-        }*/
+        }
         .padding(.horizontal, 20)
         .navigationBarBackButtonHidden()
         .toolbarBackgroundVisibility(.visible)
@@ -100,7 +72,7 @@ struct PostSettingView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    // TODO: 발행하고 발행한 아티클로 넘어가능 기능
+                    // TODO: 발행하고 발행한 아티클로 넘어가는 기능
                 } label: {
                     Text("발행")
                         .font(.system(size: 14, weight: .regular))
@@ -115,10 +87,17 @@ struct PostSettingView: View {
                 .padding(.trailing, 20)
             }
         }
+        .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
+            ImagePicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
+        }
     }
 }
 
 enum ImageSourceType {
     case camera
     case photoLibrary
+}
+
+#Preview {
+    PostSettingView(viewModel: PostSettingViewModel(title: "???", text: NSAttributedString()))
 }
