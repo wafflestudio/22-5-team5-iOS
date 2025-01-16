@@ -13,6 +13,8 @@ struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
     
+    @State var isLiked: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -226,7 +228,60 @@ struct PostView: View {
             }
         } //toolbar
         .navigationBarBackButtonHidden()
+        .safeAreaInset(edge: .bottom) {
+            VStack(spacing: 0) {
+                Divider()
+                    .foregroundStyle(Color.secondaryLabelColor)
+                    .frame(maxWidth: .infinity)
+                
+                HStack(spacing: 0) {
+                    
+                    //좋아요 버튼
+                    Button(action: {
+                        isLiked.toggle()
+                    }) {
+                        HStack(spacing: 3) {
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundStyle(isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
+                            
+                            Text("5")
+                                .font(.system(size: 16, weight: .light))
+                                .foregroundStyle(Color.bottomBarLabelColor)
+                        }
+                    }
+                    
+                    Spacer()
+                        .frame(width: 25)
+                    
+                    //댓글 버튼
+                    Button(action: {
+                        contentViewModel.navigateToComment(postID: 0)
+                    }) {
+                        HStack(spacing: 3) {
+                            Image(systemName: "text.bubble")
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundStyle(Color.primaryLabelColor)
+                            
+                            Text("5")
+                                .font(.system(size: 16, weight: .light))
+                                .foregroundStyle(Color.bottomBarLabelColor)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                }
+                .padding(.vertical)
+                .padding(.horizontal, 20)
+                .background(Color.white)
+            }
+        }
+
     }
 }
 
 
+extension Color {
+    static let bottomBarLabelColor = Color(.init(red: 85/255, green: 85/255, blue: 85/255))
+}

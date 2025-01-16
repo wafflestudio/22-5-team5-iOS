@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CommentView: View {
+    let postID: Int
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -16,6 +17,9 @@ struct CommentView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: 20)
+                    
                     GeometryReader { geometry in
                         Color.clear
                             .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
@@ -32,25 +36,29 @@ struct CommentView: View {
                         //Navbar title
                         Text("댓글")
                             .font(.system(size: 34, weight: .medium))
-                            .padding(.leading)
                         
                         Spacer()
+                            .frame(width: 4)
                         
                         //comment count
                         Text("55")
-                            .font(.system(size: 17, weight: .medium))
+                            .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
-                            .padding(.leading)
+                        
+                    
+                        Spacer()
                     }
+                    .padding(.horizontal, 20)
                     
-                    
+                    Spacer()
+                        .frame(height: 20)
                 }
             }
         }
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "댓글")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
+        .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading) {
@@ -58,14 +66,10 @@ struct CommentView: View {
                     dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
-                        .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
+                        .foregroundStyle(Color.black)
                 }
             }
         } //toolbar
         .navigationBarBackButtonHidden()
     } //Body
-}
-
-#Preview {
-    CommentView()
 }

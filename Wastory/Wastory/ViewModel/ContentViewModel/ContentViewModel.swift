@@ -40,6 +40,10 @@ enum NavigationDestination: Hashable {
         navigationPath.append(.post(post))
     }
     
+    func navigateToComment(postID: Int) {
+        navigationPath.append(.comment(postID))
+    }
+    
     func navigateToPopularBlogPostSheet() {
         navigationPath.append(.popularBlogPostSheet)
     }
