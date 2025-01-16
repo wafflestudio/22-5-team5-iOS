@@ -45,6 +45,7 @@ struct PostingView: View {
                 .font(.system(size: 26, weight: .regular))
                 .foregroundStyle(Color.primaryLabelColor)
                 .focused($isTitleFocused)
+                .autocapitalization(.none)
                 .padding(.top, 20)
                 .padding(.horizontal, 20)
             
