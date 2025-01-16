@@ -14,10 +14,6 @@ struct FeedView: View {
     @State var subscribingCount: Int = 0 // 구독중 count
     @State var subscriberCount:  Int = 0 // 구독자 count
     
-    //임시 데이터 배열
-    var items: [String] = ["아이템 1", "아이템 2", "아이템 3", "아이템 4", "아이템 5"]
-    
-    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -68,8 +64,8 @@ struct FeedView: View {
                 
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
-                    ForEach(items, id: \.self) { _ in
-                        FeedCell()
+                    ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
+                        FeedCell(post: post)
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }

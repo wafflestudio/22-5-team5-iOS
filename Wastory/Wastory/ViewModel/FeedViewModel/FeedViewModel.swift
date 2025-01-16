@@ -29,6 +29,10 @@ import Observation
         isNavTitleHidden
     }
     
+    
+    //Network
+    var posts: [Post] = []
+    
 }
 
 

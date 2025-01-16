@@ -28,7 +28,7 @@ enum NavigationDestination: Hashable {
     var navigationPath: [NavigationDestination] = []
     
     var navigationBlog = Blog(id: UUID(), userID: UUID(), blogName: "", mainImageURL: "", description: "")
-    var navigationPost = Post(id: UUID(), blogID: UUID(), title: "Post Title", content: ["Post Content"], createdAt: Date(), mainImageUrl: "")
+    var navigationPost = Post(id: 0, blogID: 1, title: "", createdAt: Date(), commentCount: 5, likeCount: 5)
         
     func navigateToBlog(_ blog: Blog) {
         navigationPath.append(.blog(blog))

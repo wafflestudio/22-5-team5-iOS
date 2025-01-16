@@ -10,7 +10,9 @@ import SwiftUI
 // "피드"의 List에 표시 될 Cell
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct FeedCell: View {
-    
+    let post: Post
+    //let blogName
+    //let blogMainImageUrl     <- post id로 fetch
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
@@ -19,12 +21,12 @@ struct FeedCell: View {
             VStack(alignment: .leading, spacing: 8) {
                 
                 //MARK: title Text
-                Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                Text(post.title)
                     .font(.system(size: 17, weight: .regular))
                     .lineLimit(1)
                 
                 //MARK: content Text
-                Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
+                Text(post.description ?? "")
                     .font(.system(size: 14, weight: .light))
                     .lineLimit(2)
                     .foregroundStyle(Color.secondaryLabelColor)
@@ -36,7 +38,7 @@ struct FeedCell: View {
                     HStack(alignment: .center, spacing: 3) {
                         Image(systemName: "heart")
                         
-                        Text("50")
+                        Text("\(post.likeCount)")
                     }
                     .font(.system(size: 14, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
@@ -50,7 +52,7 @@ struct FeedCell: View {
                     HStack(alignment: .center, spacing: 3) {
                         Image(systemName: "ellipsis.bubble")
                         
-                        Text("5")
+                        Text("\(post.commentCount)")
                     }
                     .font(.system(size: 14, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
@@ -60,7 +62,7 @@ struct FeedCell: View {
                         .foregroundStyle(Color.gray.opacity(0.3))
                     
                     //timeAgo Text
-                    Text("5분 전") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
+                    Text("\(post.createdAt.timeIntervalSinceNow)") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                 }
@@ -102,8 +104,4 @@ struct FeedCell: View {
             contentViewModel.openNavigationStackWithPostButton()
         }
     }
-}
-
-#Preview {
-    FeedCell()
 }
