@@ -78,4 +78,47 @@ final class NetworkRepository {
             interceptor: NetworkInterceptor()
         ).validate().serializingDecodable(BlogDto.self).value
     }
+    
+    func postArticle(title: String, content: String, categoryID: Int) async throws {
+        let requestBody = articleOtd(title: title, content: content, categoryID: categoryID)
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postArticle.url,
+            method: NetworkRouter.postArticle.method,
+            headers: NetworkRouter.postArticle.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        _ = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(articleDto.self).value
+    }
+}
+
+struct articleOtd: Codable {
+    let title: String
+    let content: String
+    let categoryID: Int
+    
+    private enum CodingKeys: String, CodingKey {
+        case title
+        case content
+        case categoryID = "category_id"
+    }
+}
+
+struct articleDto: Codable {
+    let articleID: Int
+    let title: String
+    let content: String
+    let createdAt: String
+    let updatedAt: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case articleID = "id"
+        case title
+        case content
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
 }
