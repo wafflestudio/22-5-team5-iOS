@@ -11,6 +11,7 @@ import Foundation
 struct Category: Codable, Identifiable, Hashable {
     let id: Int
     var categoryName: String
+    var level: Int
     var children: [Category] = []
     
 }
