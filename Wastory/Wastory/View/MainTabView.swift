@@ -15,7 +15,7 @@ struct MainTabView: View {
         ZStack {
             TabView(selection: $mainTabViewModel.selectedTab) {
                 NavigationStack {
-                    HomeView()
+                    HomeView(mainTabViewModel: mainTabViewModel)
                 }
                 .tabItem {
                     Text("홈")
@@ -74,6 +74,9 @@ struct MainTabView: View {
                     mainTabViewModel.setSelectedTab(to: oldValue)
                 }
             }
+            
+            // MARK: BlogSheet
+            BlogSheet(mainTabViewModel: mainTabViewModel)
             
             // MARK: NotificationTypeSheet
             NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)

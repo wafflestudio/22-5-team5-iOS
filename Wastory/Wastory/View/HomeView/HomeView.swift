@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    
+    @Bindable var mainTabViewModel: MainTabViewModel
     @State var viewModel = HomeViewModel()
-    
     
     var body: some View {
         ScrollView {
@@ -80,7 +79,7 @@ struct HomeView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    //
+                    mainTabViewModel.toggleIsBlogSheetPresent()
                 } label: {
                     ZStack {
                         Circle()
@@ -113,10 +112,11 @@ struct HomeView: View {
     
 }
 
-
+/*
 #Preview {
     HomeView()
 }
+*/
 
 struct MainWCircleUnit: View {
     var body: some View {
