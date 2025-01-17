@@ -77,6 +77,35 @@ struct HomeView: View {
                     Text(Image(systemName: "magnifyingglass"))
                 }
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    //
+                } label: {
+                    ZStack {
+                        Circle()
+                            .fill(Color.mainWBackgroundGray)
+                            .frame(width: 36, height: 36)
+                        VStack(spacing: 2) {
+                            HStack(spacing: 4) {
+                                MainWCircleUnit()
+                                MainWCircleUnit()
+                                MainWCircleUnit()
+                            }
+                            HStack(spacing: 4) {
+                                MainWCircleUnit()
+                                MainWCircleUnit()
+                                MainWCircleUnit()
+                            }
+                            HStack(spacing: 4) {
+                                MainWCircleUnit()
+                                MainWCircleUnit()
+                            }
+                        }
+                    }
+                }
+                .padding(.trailing, 10)
+            }
         } //toolbar
         
     }
@@ -87,4 +116,17 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+}
+
+struct MainWCircleUnit: View {
+    var body: some View {
+        Circle()
+            .fill(Color.mainWCircleGray)
+            .frame(width: 4.2, height: 4.2)
+    }
+}
+
+extension Color {
+    static let mainWBackgroundGray: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 메인 네비게이션 바 W 버튼 배경색
+    static let mainWCircleGray: Color = .init(red: 245 / 255, green: 245 / 255, blue: 245 / 255)  // 메인 네비게이션 바 W 버튼 유닛 색
 }
