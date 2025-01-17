@@ -63,6 +63,7 @@ struct MainTabView: View {
                 }
                 .tabItem {
                     Text("내블로그")
+                    MyBlogView()
                 }
                 .tag(TabType.myBlog)
             }
