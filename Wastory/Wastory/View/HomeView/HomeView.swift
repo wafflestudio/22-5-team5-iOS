@@ -68,43 +68,6 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 5)
             }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
-                    
-                } label: {
-                    Text(Image(systemName: "magnifyingglass"))
-                }
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    mainTabViewModel.toggleIsBlogSheetPresent()
-                } label: {
-                    ZStack {
-                        Circle()
-                            .fill(Color.mainWBackgroundGray)
-                            .frame(width: 36, height: 36)
-                        VStack(spacing: 2) {
-                            HStack(spacing: 4) {
-                                MainWCircleUnit()
-                                MainWCircleUnit()
-                                MainWCircleUnit()
-                            }
-                            HStack(spacing: 4) {
-                                MainWCircleUnit()
-                                MainWCircleUnit()
-                                MainWCircleUnit()
-                            }
-                            HStack(spacing: 4) {
-                                MainWCircleUnit()
-                                MainWCircleUnit()
-                            }
-                        }
-                    }
-                }
-                .padding(.trailing, 10)
-            }
         } //toolbar
         
     }
