@@ -53,6 +53,8 @@ struct CommentView: View {
                     Spacer()
                         .frame(height: 20)
                     
+                    
+                    // MARK: 댓글List
                     ForEach(viewModel.comments) { comment in
                         CommentCell(comment: comment, isChild: false, viewModel: viewModel)
                     }
