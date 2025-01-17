@@ -57,8 +57,8 @@ struct MyCategoryCell: View {
                                 .frame(width: 25)
                             
                             TextField(text: $viewModel.writingCategoryName) {
-                                Text("카테고리 이름을 입력하세요")
-                                    .font(.system(size: 14, weight: .semibold))
+                                Text((viewModel.isCategoryAdding ? "추가할" : "수정할") + " 카테고리 이름을 입력하세요")
+                                    .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
                             .textFieldStyle(.roundedBorder)
@@ -71,7 +71,7 @@ struct MyCategoryCell: View {
                                 } else if viewModel.isCategoryEditing{
                                     // writingCategoryName으로 현재 카테고리 이름을 수정
                                 }
-                                viewModel.toggleSelectedCategoryId(to: category.id)
+                                viewModel.toggleSelectedCategoryId(with: category.id)
                             }) {
                                 Text("완료")
                                     .font(.system(size: 14, weight: .semibold))
@@ -151,13 +151,21 @@ struct MyCategoryCell: View {
                                         }
                                     )
                             }
+                            .alert("카테고리 삭제", isPresented: $viewModel.isCategoryDelete) {
+                                Button("취소", role: .cancel) {}
+                                Button("삭제", role: .destructive) {
+                                    viewModel.deleteCategory(category.id)
+                                }
+                            } message: {
+                                Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
+                            }
                         }//H
                     }
                 } //H
             }//Z
             .padding(.horizontal, 20)
             .padding(.vertical, 15)
-            .frame(height: 50)
+            .frame(height: 60)
             
             Divider()
                 .foregroundStyle(Color.secondaryLabelColor)
@@ -167,7 +175,7 @@ struct MyCategoryCell: View {
             }
         }//V
         .onTapGesture {
-            viewModel.toggleSelectedCategoryId(to: category.id)
+            viewModel.toggleSelectedCategoryId(with: category.id)
         }
     }
 }

@@ -56,7 +56,7 @@ import Observation
         isCategoryAddButtonActivated = false
     }
     
-    func toggleSelectedCategoryId(to id: Int) {
+    func toggleSelectedCategoryId(with id: Int) {
         if selectedCategoryId == id {
             selectedCategoryId = -1
         } else {
@@ -84,6 +84,11 @@ import Observation
         isCategoryAdding || isCategoryEditing
     }
     
+    
+    func deleteCategory(_ id: Int) {
+        //TODO: 삭제하는 networking 추가
+        toggleSelectedCategoryId(with: id)
+    }
     
     
     //Network
