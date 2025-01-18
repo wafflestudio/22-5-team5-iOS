@@ -61,12 +61,12 @@ struct MainTabView: View {
                 NavigationStack {
                     //MyBlogView로 추후 연결
                     MyBlogView()
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
                 }
                 .tabItem {
                     Text("내블로그")
                 }
                 .tag(TabType.myBlog)
-                .mainTabToolbarConfigurations(with: $mainTabViewModel)
             }
             .tint(.black)
             .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
