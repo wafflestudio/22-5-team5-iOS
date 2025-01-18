@@ -114,7 +114,7 @@ extension View {
                         ZStack {
                             Circle()
                                 .fill(Color.mainWBackgroundGray)
-                                .frame(width: 36, height: 36)
+                                .frame(width: 32, height: 32)
                             VStack(spacing: 2) {
                                 HStack(spacing: 4) {
                                     MainWCircleUnit()
