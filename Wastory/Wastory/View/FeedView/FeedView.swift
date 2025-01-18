@@ -5,8 +5,6 @@
 //  Created by 중워니 on 12/25/24.
 //
 
-//SearchView에서 글 검색 결과를 표시하는 데에도 사용함.
-
 import SwiftUI
 
 //"피드" View에 구독 중인 블로그의 최신 글을 표시
