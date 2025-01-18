@@ -38,7 +38,7 @@ struct SettingView: View {
                 SettingItem(title: "개인정보처리방침", description: "", detailView: EmptyView())
                 SettingDivider(thickness: 1)
                 
-                SettingItem(title: "오픈소스 라이선스", description: "", detailView: EmptyView())
+                SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
                 SettingDivider(thickness: 10)
                 
                 SettingItem(title: "도움말", description: "", detailView: EmptyView())
@@ -69,6 +69,7 @@ struct SettingView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 CustomBackButtonLight()
