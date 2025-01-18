@@ -100,15 +100,6 @@ struct FeedView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
-        .toolbar{
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
-                    
-                } label: {
-                    Text(Image(systemName: "magnifyingglass"))
-                }
-            } // navbar 사이즈 설정을 위한 임의 버튼입니다.
-        }
                 
         
     }

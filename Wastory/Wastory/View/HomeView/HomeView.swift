@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    
+    @Bindable var mainTabViewModel: MainTabViewModel
     @State var viewModel = HomeViewModel()
-    
     
     var body: some View {
         ScrollView {
@@ -69,14 +68,6 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 5)
             }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
-                    
-                } label: {
-                    Text(Image(systemName: "magnifyingglass"))
-                }
-            }
         } //toolbar
         
     }
@@ -84,7 +75,21 @@ struct HomeView: View {
     
 }
 
-
+/*
 #Preview {
     HomeView()
+}
+*/
+
+struct MainWCircleUnit: View {
+    var body: some View {
+        Circle()
+            .fill(Color.mainWCircleGray)
+            .frame(width: 4.2, height: 4.2)
+    }
+}
+
+extension Color {
+    static let mainWBackgroundGray: Color = .init(red: 208 / 255, green: 208 / 255, blue: 208 / 255)  // 메인 네비게이션 바 W 버튼 배경색
+    static let mainWCircleGray: Color = .init(red: 245 / 255, green: 245 / 255, blue: 245 / 255)  // 메인 네비게이션 바 W 버튼 유닛 색
 }

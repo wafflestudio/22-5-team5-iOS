@@ -80,6 +80,7 @@ final class UserInfoRepository {
         do {
             let response = try await NetworkRepository.shared.getMyBlog()
             addressName = response.addressName
+            blogName = response.blogName
             blogID = response.blogID
         } catch {
             print("Error: \(error.localizedDescription)")

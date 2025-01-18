@@ -15,23 +15,23 @@ struct MainTabView: View {
         ZStack {
             TabView(selection: $mainTabViewModel.selectedTab) {
                 NavigationStack {
-                    HomeView()
+                    HomeView(mainTabViewModel: mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
                 }
                 .tabItem {
                     Text("홈")
                 }
                 .tag(TabType.home)
-                .mainTabToolbarConfigurations()
                 
                 
                 NavigationStack {
                     FeedView()
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
                 }
                 .tabItem {
                     Text("피드")
                 }
                 .tag(TabType.feed)
-                .mainTabToolbarConfigurations()
                 
                 
                 Color.clear
@@ -39,7 +39,7 @@ struct MainTabView: View {
                         Text("글쓰기")
                     }
                     .tag(TabType.write)
-                    .mainTabToolbarConfigurations()
+                    .mainTabToolbarConfigurations(with: $mainTabViewModel)
                     .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
                         NavigationStack {
                             //MARK: PostingView
@@ -50,12 +50,12 @@ struct MainTabView: View {
                 
                 NavigationStack {
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
                 }
                 .tabItem {
                     Text("알림")
                 }
                 .tag(TabType.notification)
-                .mainTabToolbarConfigurations()
                 
                 
                 NavigationStack {
@@ -76,6 +76,9 @@ struct MainTabView: View {
                 }
             }
             
+            // MARK: BlogSheet
+            BlogSheet(mainTabViewModel: mainTabViewModel)
+            
             // MARK: NotificationTypeSheet
             NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
             
@@ -90,11 +93,48 @@ struct MainTabView: View {
 }
 
 extension View {
-    func mainTabToolbarConfigurations() -> some View {
+    func mainTabToolbarConfigurations(with mainTabViewModel: Binding<MainTabViewModel>) -> some View {
         self
             .toolbarBackground(.white, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarBackground(Color.white, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        // TODO: Search API
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        mainTabViewModel.wrappedValue.toggleIsBlogSheetPresent()
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(Color.mainWBackgroundGray)
+                                .frame(width: 36, height: 36)
+                            VStack(spacing: 2) {
+                                HStack(spacing: 4) {
+                                    MainWCircleUnit()
+                                    MainWCircleUnit()
+                                    MainWCircleUnit()
+                                }
+                                HStack(spacing: 4) {
+                                    MainWCircleUnit()
+                                    MainWCircleUnit()
+                                    MainWCircleUnit()
+                                }
+                                HStack(spacing: 4) {
+                                    MainWCircleUnit()
+                                    MainWCircleUnit()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
 
