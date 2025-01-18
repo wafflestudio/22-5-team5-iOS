@@ -137,6 +137,7 @@ struct SearchView: View {
                                     .textFieldStyle(.plain)
                                     .padding(.horizontal, 15)
                                     .onSubmit {
+                                        viewModel.setSearchType(to: .post)
                                         viewModel.doSearch()
                                     }
                                     .onChange(of: viewModel.searchKeyword) { newValue, oldValue in
@@ -156,6 +157,7 @@ struct SearchView: View {
                                 }
                                 
                                 Button (action: {
+                                    viewModel.setSearchType(to: .post)
                                     viewModel.doSearch()
                                 }) {
                                     Image(systemName: "magnifyingglass")

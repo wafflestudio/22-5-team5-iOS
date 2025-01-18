@@ -85,7 +85,6 @@ import Observation
     
     func doSearch() {
         if !isSearchKeywordEmpty() {
-            setSearchType(to: .post)
             setIsSearched(to: true)
         }
     }
