@@ -70,7 +70,15 @@ import Observation
         Post.init(id: 7, blogID: 1, title: "as6dfasdf", description: "asdfasdf1asdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
     ]
     
-    var searchBlogResult: [Blog] = []
+    var searchBlogResult: [Blog] = [
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"),
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"),
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
+        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
+    ]
     
     var resultCount: Int = 0
     

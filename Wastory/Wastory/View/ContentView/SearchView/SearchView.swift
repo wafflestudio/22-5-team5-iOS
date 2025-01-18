@@ -23,6 +23,7 @@ struct SearchView: View {
                 HStack(spacing: 0) {
                     Button(action: {
                         viewModel.setSearchType(to: .post)
+                        viewModel.doSearch()
                     }) {
                         VStack(alignment: .center, spacing: 0) {
                             Text("글")
@@ -42,6 +43,7 @@ struct SearchView: View {
                     } else {
                         Button(action: {
                             viewModel.setSearchType(to: .blog)
+                            viewModel.doSearch()
                         }) {
                             VStack(alignment: .center, spacing: 0) {
                                 Text("블로그")
@@ -77,10 +79,15 @@ struct SearchView: View {
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
                         } else if viewModel.isSearchType(is: .blog) {
-                            
+                            ForEach(Array(viewModel.searchBlogResult.enumerated()), id: \.offset) { index, blog in
+                                SearchedBlogCell(blog: blog)
+                                Divider()
+                                    .foregroundStyle(Color.secondaryLabelColor)
+                            }
                         }
+                        
                     }
-                }
+                } //ScrollView
             } else {
                 //MARK: 최근검색 기록
                 
