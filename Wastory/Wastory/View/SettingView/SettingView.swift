@@ -55,7 +55,7 @@ struct SettingView: View {
                 ZStack(alignment: .top) {
                     Color(Color.settingDivderGray)
                         .ignoresSafeArea()
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: DropView()) {
                         HStack {
                             Text("탈퇴하기")
                                 .font(.system(size: 13))
@@ -71,7 +71,7 @@ struct SettingView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                CustomBackButton()
+                CustomBackButtonLight()
             }
         }
     }
