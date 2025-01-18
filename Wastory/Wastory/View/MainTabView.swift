@@ -59,12 +59,13 @@ struct MainTabView: View {
                 
                 
                 NavigationStack {
-                    // statView
+                    //MyBlogView로 추후 연결
+                    MyBlogView()
                 }
                 .tabItem {
-                    Text("stat")
+                    Text("내블로그")
                 }
-                .tag(TabType.stat)
+                .tag(TabType.myBlog)
                 .mainTabToolbarConfigurations()
             }
             .tint(.black)
@@ -104,6 +105,6 @@ enum TabType: String {
     case feed
     case write
     case notification
-    case stat
+    case myBlog
 }
 
