@@ -13,7 +13,7 @@ enum NavigationDestination: Hashable {
     case post(Post)
     case comment(Int)
     case popularBlogPostSheet
-    case search(Int?)
+    case search(Int?, String?)
 }
 
 @Observable final class ContentViewModel {
@@ -51,8 +51,8 @@ enum NavigationDestination: Hashable {
         navigationPath.append(.popularBlogPostSheet)
     }
     
-    func navigateToSearch(_ blogID: Int?) {
-        navigationPath.append(.search(blogID))
+    func navigateToSearch(in blogID: Int? = nil, with prevSearchKeyword: String? = nil) {
+        navigationPath.append(.search(blogID, prevSearchKeyword))
     }
     
     

@@ -29,6 +29,14 @@ import Observation
     func isSearchKeywordEmpty() -> Bool {
         searchKeyword == ""
     }
+    
+    func clearSearchKeyword() {
+        searchKeyword = ""
+    }
+    
+    func setPrevSearchKeyword(_ keyword: String?) {
+        searchKeyword = keyword ?? ""
+    }
 }
 
 enum SearchType: String {

@@ -22,15 +22,13 @@ struct ContentNavigationStack: View {
                     Group {
                         if contentViewModel.isBlogViewPresented {
                             BlogView(blog: contentViewModel.navigationBlog)
-                                .environment(\.contentViewModel, contentViewModel)
                         } else if contentViewModel.isPostViewPresented {
                             PostView(post: contentViewModel.navigationPost)
-                                .environment(\.contentViewModel, contentViewModel)
                         } else if contentViewModel.isSearchViewPresented  {
-                            SearchView(blogID: contentViewModel.navigationSearchBlogID)
-                                .environment(\.contentViewModel, contentViewModel)
+                            SearchView(blogID: nil, prevSearchKeyword: nil)
                         }
                     }
+                    .environment(\.contentViewModel, contentViewModel)
                 }
             }
             .navigationDestination(for: NavigationDestination.self) { destination in
@@ -43,8 +41,8 @@ struct ContentNavigationStack: View {
                     CommentView(postID: postID)
                 case .popularBlogPostSheet:
                     PopularBlogPostSheetView()
-                case .search(let blogID):
-                    SearchView(blogID: blogID)
+                case .search(let blogID, let prevSearchKeyword):
+                    SearchView(blogID: blogID, prevSearchKeyword: prevSearchKeyword)
                 }
             }
         }
