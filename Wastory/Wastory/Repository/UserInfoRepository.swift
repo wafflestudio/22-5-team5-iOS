@@ -110,7 +110,7 @@ final class UserInfoRepository {
     func getBlogName() -> String {
         return blogName
     }
-    func getUserName() -> String {
+    func getUsername() -> String {
         return username
     }
 }
