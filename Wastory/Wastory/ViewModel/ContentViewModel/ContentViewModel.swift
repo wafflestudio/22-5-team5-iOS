@@ -13,7 +13,7 @@ enum NavigationDestination: Hashable {
     case post(Post)
     case comment(Int)
     case popularBlogPostSheet
-    
+    case search(Int?)
 }
 
 @Observable final class ContentViewModel {
@@ -24,6 +24,8 @@ enum NavigationDestination: Hashable {
     
     var isPostViewPresented: Bool = false
     
+    var isSearchViewPresented: Bool = false
+    
     var isAnyViewPresented: Bool = false
     
     
@@ -31,6 +33,7 @@ enum NavigationDestination: Hashable {
     
     var navigationBlog = Blog(id: UUID(), userID: UUID(), blogName: "", mainImageURL: "", description: "")
     var navigationPost = Post(id: 0, blogID: 1, title: "", createdAt: Date(), commentCount: 5, likeCount: 5)
+    var navigationSearchBlogID: Int?
         
     func navigateToBlog(_ blog: Blog) {
         navigationPath.append(.blog(blog))
@@ -48,11 +51,15 @@ enum NavigationDestination: Hashable {
         navigationPath.append(.popularBlogPostSheet)
     }
     
+    func navigateToSearch(_ blogID: Int?) {
+        navigationPath.append(.search(blogID))
+    }
+    
     
     
     func updateIsAnyViewPresented() {
         withAnimation {
-            isAnyViewPresented = isBlogViewPresented || isPostViewPresented
+            isAnyViewPresented = isBlogViewPresented || isPostViewPresented || isSearchViewPresented
         }
     }
     
@@ -74,6 +81,12 @@ enum NavigationDestination: Hashable {
         updateisMainTabViewPresented()
     }
     
+    func toggleIsSearchViewPresented() {
+        isSearchViewPresented.toggle()
+        updateIsAnyViewPresented()
+        updateisMainTabViewPresented()
+    }
+    
     // Button 동작
     // Back Button
     func backButtonAction(dismiss: @escaping () -> Void) {
@@ -81,6 +94,7 @@ enum NavigationDestination: Hashable {
             withAnimation {
                 isBlogViewPresented = false
                 isPostViewPresented = false
+                isSearchViewPresented = false
                 isAnyViewPresented = false
                 isMainTabViewPresented = false
             }

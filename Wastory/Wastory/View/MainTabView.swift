@@ -10,13 +10,14 @@ import SwiftUI
 struct MainTabView: View {
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
+    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         ZStack {
             TabView(selection: $mainTabViewModel.selectedTab) {
                 NavigationStack {
                     HomeView(mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
                 }
                 .tabItem {
                     Text("홈")
@@ -26,7 +27,7 @@ struct MainTabView: View {
                 
                 NavigationStack {
                     FeedView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
                 }
                 .tabItem {
                     Text("피드")
@@ -39,7 +40,6 @@ struct MainTabView: View {
                         Text("글쓰기")
                     }
                     .tag(TabType.write)
-                    .mainTabToolbarConfigurations(with: $mainTabViewModel)
                     .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
                         NavigationStack {
                             //MARK: PostingView
@@ -50,7 +50,7 @@ struct MainTabView: View {
                 
                 NavigationStack {
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
                 }
                 .tabItem {
                     Text("알림")
@@ -61,7 +61,7 @@ struct MainTabView: View {
                 NavigationStack {
                     //MyBlogView로 추후 연결
                     MyBlogView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel)
+                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
                 }
                 .tabItem {
                     Text("내블로그")
@@ -93,7 +93,7 @@ struct MainTabView: View {
 }
 
 extension View {
-    func mainTabToolbarConfigurations(with mainTabViewModel: Binding<MainTabViewModel>) -> some View {
+    func mainTabToolbarConfigurations(with mainTabViewModel: Binding<MainTabViewModel>, contentViewModel: ContentViewModel) -> some View {
         self
             .toolbarBackground(.white, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
@@ -101,7 +101,7 @@ extension View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        // TODO: Search API
+                        contentViewModel.toggleIsSearchViewPresented()
                     } label: {
                         Image(systemName: "magnifyingglass")
                     }

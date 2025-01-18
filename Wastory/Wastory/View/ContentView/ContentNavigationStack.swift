@@ -26,6 +26,9 @@ struct ContentNavigationStack: View {
                         } else if contentViewModel.isPostViewPresented {
                             PostView(post: contentViewModel.navigationPost)
                                 .environment(\.contentViewModel, contentViewModel)
+                        } else if contentViewModel.isSearchViewPresented  {
+                            SearchView(blogID: contentViewModel.navigationSearchBlogID)
+                                .environment(\.contentViewModel, contentViewModel)
                         }
                     }
                 }
@@ -40,6 +43,8 @@ struct ContentNavigationStack: View {
                     CommentView(postID: postID)
                 case .popularBlogPostSheet:
                     PopularBlogPostSheetView()
+                case .search(let blogID):
+                    SearchView(blogID: blogID)
                 }
             }
         }
