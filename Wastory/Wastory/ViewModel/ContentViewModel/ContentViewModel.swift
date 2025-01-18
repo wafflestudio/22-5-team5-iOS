@@ -106,7 +106,11 @@ enum NavigationDestination: Hashable {
     func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
         Button(action: {
             // TODO: 해당 블로그 View로 이동
-            self.toggleIsBlogViewPresented()
+            if self.isAnyViewPresented {
+                self.navigateToBlog(self.navigationBlog) //Post 받아와야함
+            } else {
+                self.toggleIsBlogViewPresented()
+            }
         }) {
             buttonContent()
         }
@@ -114,7 +118,11 @@ enum NavigationDestination: Hashable {
     
     func openNavigationStackWithPostButton() -> some View { //TODO: 보여줄 Post 정하기
         Button(action: {
-            self.toggleIsPostViewPresented()
+            if self.isAnyViewPresented {
+                self.navigateToPost(self.navigationPost) //Post 받아와야함
+            } else {
+                self.toggleIsPostViewPresented()
+            }
         }) {
             Rectangle()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
