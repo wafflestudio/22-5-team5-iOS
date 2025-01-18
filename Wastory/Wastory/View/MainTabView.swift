@@ -133,7 +133,6 @@ extension View {
                             }
                         }
                     }
-                    .padding(.trailing, 10)
                 }
             }
     }
