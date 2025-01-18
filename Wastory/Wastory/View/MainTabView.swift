@@ -66,6 +66,7 @@ struct MainTabView: View {
                     Text("내블로그")
                 }
                 .tag(TabType.myBlog)
+                .mainTabToolbarConfigurations()
             }
             .tint(.black)
             .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
