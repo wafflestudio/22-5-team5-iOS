@@ -60,10 +60,10 @@ struct MainTabView: View {
                 
                 NavigationStack {
                     //MyBlogView로 추후 연결
+                    MyBlogView()
                 }
                 .tabItem {
                     Text("내블로그")
-                    MyBlogView()
                 }
                 .tag(TabType.myBlog)
             }
