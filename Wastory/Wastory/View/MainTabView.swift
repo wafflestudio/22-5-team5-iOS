@@ -97,6 +97,8 @@ struct mainTabToolBarTrailingButtons: View {
     
     var body: some View {
         HStack(spacing: 20) {
+            Spacer()
+            
             contentViewModel.navigateToSearchViewButton() {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 25, weight: .thin))

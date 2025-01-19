@@ -24,3 +24,10 @@ struct Post: Codable, Identifiable, Hashable {
 }
 
 
+
+import SwiftUI
+extension View {
+    func tempPost() -> Post {
+        Post.init(id: 1, blogID: 1, title: "글 제목", createdAt: Date(), commentCount: 5, likeCount: 55)//
+    }
+}
