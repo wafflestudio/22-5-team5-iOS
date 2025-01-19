@@ -5,8 +5,6 @@
 //  Created by 중워니 on 12/25/24.
 //
 
-//SearchView에서 글 검색 결과를 표시하는 데에도 사용함.
-
 import SwiftUI
 
 // "피드"의 List에 표시 될 Cell
@@ -15,8 +13,7 @@ struct FeedCell: View {
     let post: Post
     //let blogName
     //let blogMainImageUrl     <- post id로 fetch
-    
-    @State private var isNavigateToPost: Bool = false
+    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         
@@ -71,7 +68,7 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                NavigationLink(destination: BlogView(blog: .init(id: UUID(), userID: UUID(), blogName: "블로그 이름", description: "블로그 설명\n긴 블로그섦영ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹ"))) {
+                contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -99,15 +96,15 @@ struct FeedCell: View {
                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                 .frame(width: 100, height: 100)
                 .clipped()
+                .overlay {
+                    contentViewModel.openNavigationStackWithPostButton(tempPost())
+                }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
-        .onTapGesture {
-            isNavigateToPost = true
-        }
-        .navigationDestination(isPresented: $isNavigateToPost) {
-            PostView(post: post)
+        .background {
+            contentViewModel.openNavigationStackWithPostButton(tempPost())
         }
     }
 }

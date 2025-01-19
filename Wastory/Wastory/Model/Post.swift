@@ -22,3 +22,5 @@ struct Post: Codable, Identifiable, Hashable {
     var commentCount: Int           // Comment 개수
     var likeCount: Int              // Like 개수
 }
+
+
