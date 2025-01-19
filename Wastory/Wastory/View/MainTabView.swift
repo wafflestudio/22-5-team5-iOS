@@ -12,6 +12,15 @@ struct MainTabView: View {
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
     @Environment(\.contentViewModel) var contentViewModel
     
+    init() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor.white
+        
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -91,7 +100,7 @@ extension View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        contentViewModel.toggleIsSearchViewPresented()
+                        
                     } label: {
                         Image(systemName: "magnifyingglass")
                     }

@@ -73,6 +73,9 @@ struct HomePostListCell: View {
                     .scaledToFill()
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay {
+                        contentViewModel.openNavigationStackWithPostButton(tempPost())
+                    }
             }
             
             Spacer()

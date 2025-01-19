@@ -38,9 +38,7 @@ struct PostView: View {
                             .frame(height: 100)
                         
                         // MARK: 카테고리 버튼
-                        Button(action: {
-                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                        }) {
+                        contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                             Text("카테고리 없음")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
@@ -111,9 +109,7 @@ struct PostView: View {
                     //Blog 세부설명 및 구독버튼
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
-                            Button(action: {
-                                contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                            }) {
+                            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                                 Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
                                     .font(.system(size: 18, weight: .light))
                                     .foregroundStyle(Color.primaryLabelColor)
@@ -124,9 +120,7 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 5)
                             
-                            Button(action: {
-                                contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                            }) {
+                            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                                 Text("설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명")
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
@@ -153,9 +147,7 @@ struct PostView: View {
                         }
                         .padding(.leading, 20)
                         
-                        Button(action: {
-                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                        }) {
+                        contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                             Image(systemName: "questionmark.text.page.fill")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
@@ -196,7 +188,6 @@ struct PostView: View {
             }// ScrollView
             .background(Color.backgourndSpaceColor)
         }// VStack
-        .environment(\.contentViewModel, contentViewModel)
         .environment(\.postViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
@@ -205,9 +196,7 @@ struct PostView: View {
         .toolbarVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                }) {
+                contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
                     Image(systemName: "questionmark.text.page.fill")
                         .resizable()
                         .scaledToFill()
@@ -256,9 +245,7 @@ struct PostView: View {
                         .frame(width: 25)
                     
                     //댓글 버튼
-                    Button(action: {
-                        contentViewModel.navigateToComment(postID: 0)
-                    }) {
+                    NavigationLink(destination: CommentView(postID: tempPost().id)) {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.system(size: 20, weight: .light))

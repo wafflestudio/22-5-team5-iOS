@@ -108,6 +108,11 @@ enum NavigationDestination: Hashable {
         }
     }
 
+    func navigateToSearchViewButton(blogID: Int? = nil, prevSearchKeyword: String? = nil, _ buttonContent: @escaping () -> some View) -> some View {
+        NavigationLink(destination: SearchView(blogID: blogID, prevSearchKeyword: prevSearchKeyword)) {
+            buttonContent()
+        }
+    }
 }
 
 

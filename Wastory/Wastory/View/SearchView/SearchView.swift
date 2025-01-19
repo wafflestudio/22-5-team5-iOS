@@ -179,10 +179,7 @@ struct SearchView: View {
                     
             ToolbarItem(placement: .topBarTrailing) {
                 if viewModel.isSearchingInBlog {
-                    Button (action: {
-                        print(viewModel.searchKeyword)
-                        contentViewModel.navigateToSearch(with: viewModel.searchKeyword)
-                    }) {
+                    contentViewModel.navigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
                         Text("전체검색")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(Color.primaryLabelColor)

@@ -56,8 +56,12 @@ struct SearchedBlogCell: View {
         }
         .padding(20)
         .background(Color.white)
-        .onTapGesture {
-            contentViewModel.navigateToBlog(blog)
+        .overlay {
+            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundStyle(Color.clear)
+            }
         }
         
     }
