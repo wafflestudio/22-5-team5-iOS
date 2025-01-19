@@ -90,17 +90,7 @@ enum NavigationDestination: Hashable {
     // Button 동작
     // Back Button
     func backButtonAction(dismiss: @escaping () -> Void) {
-        if navigationPath.count == 0 {
-            withAnimation {
-                isBlogViewPresented = false
-                isPostViewPresented = false
-                isSearchViewPresented = false
-                isAnyViewPresented = false
-                isMainTabViewPresented = false
-            }
-        } else {
-            dismiss()
-        }
+        dismiss()
     }
     
     func openNavigationStackWithBlogButton(_ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{

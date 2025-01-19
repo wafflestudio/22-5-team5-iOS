@@ -15,7 +15,8 @@ struct FeedCell: View {
     let post: Post
     //let blogName
     //let blogMainImageUrl     <- post id로 fetch
-    @Environment(\.contentViewModel) var contentViewModel
+    
+    @State private var isNavigateToPost: Bool = false
     
     var body: some View {
         
@@ -70,7 +71,7 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.openNavigationStackWithBlogButton {
+                NavigationLink(destination: BlogView(blog: .init(id: UUID(), userID: UUID(), blogName: "블로그 이름", description: "블로그 설명\n긴 블로그섦영ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹ"))) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -102,8 +103,11 @@ struct FeedCell: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
-        .background {
-            contentViewModel.openNavigationStackWithPostButton()
+        .onTapGesture {
+            isNavigateToPost = true
+        }
+        .navigationDestination(isPresented: $isNavigateToPost) {
+            PostView(post: post)
         }
     }
 }

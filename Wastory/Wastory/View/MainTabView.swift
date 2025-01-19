@@ -60,6 +60,7 @@ struct MainTabView: View {
                     
                 }
                 .tint(.black)
+                .background(Color.white)
                 .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
                     if newValue == .write {
                         mainTabViewModel.toggleIsPostingViewPresent()
