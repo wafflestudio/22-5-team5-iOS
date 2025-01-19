@@ -11,7 +11,6 @@ struct MyCategoryCell: View {
     var category: Category
     @Bindable var viewModel : MyCategoryViewModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {

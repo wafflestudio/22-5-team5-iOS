@@ -86,8 +86,8 @@ struct PopularBlogPostSheetCell: View {
             
         } //VStack
         .background(Color.white)
-        .onTapGesture {
-            contentViewModel.navigateToPost(contentViewModel.navigationPost) // 추후 해당 Post 전달
+        .overlay {
+            contentViewModel.openNavigationStackWithPostButton(tempPost())
         }
     }
 }

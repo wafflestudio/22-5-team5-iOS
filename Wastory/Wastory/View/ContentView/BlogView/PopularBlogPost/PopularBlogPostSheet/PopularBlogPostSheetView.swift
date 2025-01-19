@@ -11,7 +11,6 @@ struct PopularBlogPostSheetView: View {
     @State var viewModel = PopularBlogPostSheetViewModel()
     
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         ZStack {
