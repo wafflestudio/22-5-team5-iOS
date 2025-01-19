@@ -13,81 +13,70 @@ struct MainTabView: View {
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
-        ZStack {
-            TabView(selection: $mainTabViewModel.selectedTab) {
-                NavigationStack {
+        NavigationStack {
+            ZStack {
+                TabView(selection: $mainTabViewModel.selectedTab) {
+                    
                     HomeView(mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("홈")
-                }
-                .tag(TabType.home)
-                
-                
-                NavigationStack {
-                    FeedView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("피드")
-                }
-                .tag(TabType.feed)
-                
-                
-                Color.clear
-                    .tabItem {
-                        Text("글쓰기")
-                    }
-                    .tag(TabType.write)
-                    .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
-                        NavigationStack {
-                            //MARK: PostingView
-                            PostingView(mainTabViewModel: mainTabViewModel)
+                        .tabItem {
+                            Text("홈")
                         }
-                    }
-                
-                
-                NavigationStack {
+                        .tag(TabType.home)
+                    
+                    
+                    FeedView()
+                        .tabItem {
+                            Text("피드")
+                        }
+                        .tag(TabType.feed)
+                    
+                    
+                    Color.clear
+                        .tabItem {
+                            Text("글쓰기")
+                        }
+                        .tag(TabType.write)
+                        .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
+                            NavigationStack {
+                                //MARK: PostingView
+                                PostingView(mainTabViewModel: mainTabViewModel)
+                            }
+                        }
+                    
+                    
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("알림")
-                }
-                .tag(TabType.notification)
-                
-                
-                NavigationStack {
+                        .tabItem {
+                            Text("알림")
+                        }
+                        .tag(TabType.notification)
+                    
+                    
                     //MyBlogView로 추후 연결
                     MyBlogView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
+                        .tabItem {
+                            Text("내블로그")
+                        }
+                        .tag(TabType.myBlog)
+                    
                 }
-                .tabItem {
-                    Text("내블로그")
+                .tint(.black)
+                .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
+                    if newValue == .write {
+                        mainTabViewModel.toggleIsPostingViewPresent()
+                        mainTabViewModel.setSelectedTab(to: oldValue)
+                    }
                 }
-                .tag(TabType.myBlog)
-            }
-            .tint(.black)
-            .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
-                if newValue == .write {
-                    mainTabViewModel.toggleIsPostingViewPresent()
-                    mainTabViewModel.setSelectedTab(to: oldValue)
-                }
-            }
-            
-            // MARK: BlogSheet
-            BlogSheet(mainTabViewModel: mainTabViewModel)
-            
-            // MARK: NotificationTypeSheet
-            NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-            
-            
-            
-            // MARK: ContentNavigationStack()
-            ContentNavigationStack()
-        } //ZStack
-    
+                
+                // MARK: BlogSheet
+                BlogSheet(mainTabViewModel: mainTabViewModel)
+                
+                // MARK: NotificationTypeSheet
+                NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
+                
+                
+                
+            } //ZStack
+        }// NavStack
         
     } //body
 }
