@@ -68,7 +68,7 @@ struct FeedCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                contentViewModel.navigateToBlogViewButton(tempBlog()) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -97,14 +97,14 @@ struct FeedCell: View {
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.openNavigationStackWithPostButton(tempPost())
+                    contentViewModel.navigateToPostViewButton(tempPost())
                 }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
         .background {
-            contentViewModel.openNavigationStackWithPostButton(tempPost())
+            contentViewModel.navigateToPostViewButton(tempPost())
         }
     }
 }

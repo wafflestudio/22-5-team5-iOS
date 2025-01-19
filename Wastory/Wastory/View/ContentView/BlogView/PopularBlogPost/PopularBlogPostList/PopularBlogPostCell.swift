@@ -77,7 +77,7 @@ struct PopularBlogPostCell: View {
         } //VStack
         .background(Color.white)
         .overlay {
-            contentViewModel.openNavigationStackWithPostButton(tempPost())
+            contentViewModel.navigateToPostViewButton(tempPost())
         }
     }
 }

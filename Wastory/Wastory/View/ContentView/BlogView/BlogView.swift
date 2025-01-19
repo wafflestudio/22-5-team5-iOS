@@ -134,9 +134,7 @@ struct BlogView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    contentViewModel.backButtonAction {
-                        dismiss()
-                    }
+                    dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)

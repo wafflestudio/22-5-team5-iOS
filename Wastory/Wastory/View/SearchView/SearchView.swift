@@ -107,9 +107,7 @@ struct SearchView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button{
-                    contentViewModel.backButtonAction {
-                        dismiss()
-                    }
+                    dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(Color.black)

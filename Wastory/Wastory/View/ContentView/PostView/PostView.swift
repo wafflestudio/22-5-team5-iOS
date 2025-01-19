@@ -38,7 +38,7 @@ struct PostView: View {
                             .frame(height: 100)
                         
                         // MARK: 카테고리 버튼
-                        contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                        contentViewModel.navigateToBlogViewButton(tempBlog()) {
                             Text("카테고리 없음")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
@@ -109,7 +109,7 @@ struct PostView: View {
                     //Blog 세부설명 및 구독버튼
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
-                            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                            contentViewModel.navigateToBlogViewButton(tempBlog()) {
                                 Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
                                     .font(.system(size: 18, weight: .light))
                                     .foregroundStyle(Color.primaryLabelColor)
@@ -120,7 +120,7 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 5)
                             
-                            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                            contentViewModel.navigateToBlogViewButton(tempBlog()) {
                                 Text("설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명")
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
@@ -147,7 +147,7 @@ struct PostView: View {
                         }
                         .padding(.leading, 20)
                         
-                        contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                        contentViewModel.navigateToBlogViewButton(tempBlog()) {
                             Image(systemName: "questionmark.text.page.fill")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
@@ -196,7 +196,7 @@ struct PostView: View {
         .toolbarVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+                contentViewModel.navigateToBlogViewButton(tempBlog()) {
                     Image(systemName: "questionmark.text.page.fill")
                         .resizable()
                         .scaledToFill()
@@ -207,9 +207,7 @@ struct PostView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    contentViewModel.backButtonAction {
-                        dismiss()
-                    }
+                    dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)

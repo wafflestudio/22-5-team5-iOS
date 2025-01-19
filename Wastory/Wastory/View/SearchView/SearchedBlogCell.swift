@@ -57,7 +57,7 @@ struct SearchedBlogCell: View {
         .padding(20)
         .background(Color.white)
         .overlay {
-            contentViewModel.openNavigationStackWithBlogButton(tempBlog()) {
+            contentViewModel.navigateToBlogViewButton(tempBlog()) {
                 Rectangle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .foregroundStyle(Color.clear)

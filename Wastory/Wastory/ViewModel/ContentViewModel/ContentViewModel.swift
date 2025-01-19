@@ -9,19 +9,15 @@ import SwiftUI
 import Observation
 
 @Observable final class ContentViewModel {
-    // Button 동작
-    // Back Button
-    func backButtonAction(dismiss: @escaping () -> Void) {
-        dismiss()
-    }
     
-    func openNavigationStackWithBlogButton(_ blog: Blog, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
+    // Button 동작
+    func navigateToBlogViewButton(_ blog: Blog, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
         NavigationLink(destination: BlogView(blog: blog)) {
             buttonContent()
         }
     }
     
-    func openNavigationStackWithPostButton(_ post: Post) -> some View { //TODO: 보여줄 Post 정하기
+    func navigateToPostViewButton(_ post: Post) -> some View { //TODO: 보여줄 Post 정하기
         NavigationLink(destination: PostView(post: post)) {
             Rectangle()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

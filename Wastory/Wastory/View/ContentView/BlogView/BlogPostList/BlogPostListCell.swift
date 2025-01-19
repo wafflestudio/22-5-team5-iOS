@@ -91,7 +91,7 @@ struct BlogPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.openNavigationStackWithPostButton(tempPost())
+            contentViewModel.navigateToPostViewButton(tempPost())
         }
     }
 }
