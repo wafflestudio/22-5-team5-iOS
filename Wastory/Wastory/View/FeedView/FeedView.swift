@@ -16,12 +16,40 @@ struct FeedView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            //MARK: NavBar
+            VStack(spacing: 0) {
+                ZStack {
+                    if !viewModel.getIsNavTitleHidden() {
+                        HStack(spacing: 0) {
+                            Spacer()
+                            
+                            Text("피드")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(Color.primaryLabelColor)
+                            
+                            Spacer()
+                        }
+                    }
+                    
+                    
+                    // 공통버튼들
+                }
+                .padding(.horizontal, 20)
+                .frame(height: 44)
+                
+                if viewModel.getIsScrolled() {
+                    Divider()
+                        .foregroundStyle(Color.secondaryLabelColor)
+                        .frame(height: 1)
+                        .offset(y: -1)
+                }
+            }
+            
             ScrollView {
                 GeometryReader { geometry in
                     Color.clear
                         .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                            // 스크롤 오프셋이 네비게이션 바 아래로 들어가면 텍스트 숨김
-                            viewModel.changeIsNavTitleHidden(by: newValue)
+                            viewModel.changeIsNavTitleHidden(by: newValue, oldValue)
                         }
                 }
                 .frame(height: 0)
@@ -94,13 +122,7 @@ struct FeedView: View {
                 viewModel.posts = response
             }
         }
-        // MARK: NavBar
-        // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
-        .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "피드" : ""))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
-        .toolbarBackground(Color.white, for: .navigationBar)
-                
+        
         
     }
 }

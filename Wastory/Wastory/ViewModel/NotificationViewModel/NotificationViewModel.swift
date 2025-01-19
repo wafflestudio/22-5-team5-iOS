@@ -9,12 +9,65 @@ import SwiftUI
 import Observation
 
 @Observable final class NotificationViewModel {
+    //NavBar Controller
+    private var isNavTitleHidden: Bool = true
+    
+    private var isScrolled: Bool = false
+    
+    private var initialScrollPosition: CGFloat = 0
+    
+    private var isInitialScrollPositionSet: Bool = false
+    
+    func setInitialScrollPosition(_ scrollPosition: CGFloat) {
+        initialScrollPosition = scrollPosition
+        print(initialScrollPosition)
+    }
+    
+    func changeIsNavTitleHidden(by newValue: CGFloat, _ oldValue: CGFloat) {
+        if !isInitialScrollPositionSet {
+            setInitialScrollPosition(oldValue)
+            isInitialScrollPositionSet = true
+        }
+        
+        if oldValue == initialScrollPosition {
+            if (!isNavTitleHidden) {
+                isNavTitleHidden = true
+            }
+        } else if newValue <= initialScrollPosition - 44 {
+            if (isNavTitleHidden) {
+                isNavTitleHidden = false
+            }
+        } else {
+            if (!isNavTitleHidden) {
+                isNavTitleHidden = true
+            }
+        }
+        
+        if newValue < initialScrollPosition {
+            if (!isScrolled) {
+                isScrolled = true
+            }
+        } else {
+            if (isScrolled) {
+                isScrolled = false
+            }
+        }
+    }
+    
+    func getIsNavTitleHidden() -> Bool {
+        isNavTitleHidden
+    }
+    
+    func getIsScrolled() -> Bool {
+        isScrolled
+    }
+    
+    //notification
     let notificationTypes = ["전체 알림", "새글 알림", "구독 알림", "댓글 알림", "방명록 알림", "챌린지 알림"]
     var notificationType: String = "전체 알림"
     
     var typeSheetHeight: CGFloat = 0
     
-    private var isNavTitleHidden = false
     
     
     //NotificationTypeSheet Layout
@@ -41,20 +94,5 @@ import Observation
         i == notificationTypes.count - 1
     }
     
-    //MARK: isNavTitleHidden
-    func changeIsNavTitleHidden(by newValue: CGFloat) {
-        if newValue <= 60 {
-            if (!isNavTitleHidden) {
-                isNavTitleHidden = true
-            }
-        } else {
-            if (isNavTitleHidden) {
-                isNavTitleHidden = false
-            }
-        }
-    }
     
-    func getIsNavTitleHidden() -> Bool {
-        isNavTitleHidden
-    }
 }
