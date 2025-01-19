@@ -117,7 +117,7 @@ struct BlogView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
                     Button{
-                        
+                        contentViewModel.navigateToSearch(in: 0) // 임시 블로그 아이디
                     } label: {
                         Text(Image(systemName: "magnifyingglass"))
                             .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
