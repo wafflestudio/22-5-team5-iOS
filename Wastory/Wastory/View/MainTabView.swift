@@ -10,7 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
-    @Environment(\.contentViewModel) var contentViewModel
+    
     
     init() {
         let tabBarAppearance = UITabBarAppearance()
@@ -33,7 +33,7 @@ struct MainTabView: View {
                         .tag(TabType.home)
                     
                     
-                    FeedView()
+                    FeedView(mainTabViewModel: mainTabViewModel)
                         .tabItem {
                             Text("피드")
                         }
@@ -91,49 +91,44 @@ struct MainTabView: View {
     } //body
 }
 
-extension View {
-    func mainTabToolbarConfigurations(with mainTabViewModel: Binding<MainTabViewModel>, contentViewModel: ContentViewModel) -> some View {
-        self
-            .toolbarBackground(.white, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
-            .toolbarBackground(Color.white, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                    }
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        mainTabViewModel.wrappedValue.toggleIsBlogSheetPresent()
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Color.mainWBackgroundGray)
-                                .frame(width: 32, height: 32)
-                            VStack(spacing: 2) {
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                            }
+struct mainTabToolBarTrailingButtons: View {
+    @Bindable var mainTabViewModel: MainTabViewModel
+    @Environment(\.contentViewModel) var contentViewModel
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            contentViewModel.navigateToSearchViewButton() {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 25, weight: .thin))
+            }
+            
+            Button {
+                mainTabViewModel.toggleIsBlogSheetPresent()
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.mainWBackgroundGray)
+                        .frame(width: 32, height: 32)
+                    VStack(spacing: 2) {
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                        }
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                        }
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
                         }
                     }
                 }
             }
+        }
+        .frame(height: 44)
     }
 }
 

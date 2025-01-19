@@ -33,6 +33,7 @@ struct NotificationView: View {
                     
                     
                     // 공통버튼들
+                    mainTabToolBarTrailingButtons(mainTabViewModel: mainTabViewModel)
                 }
                 .padding(.horizontal, 20)
                 .frame(height: 44)

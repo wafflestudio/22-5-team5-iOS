@@ -9,6 +9,7 @@ import SwiftUI
 
 //"피드" View에 구독 중인 블로그의 최신 글을 표시
 struct FeedView: View {
+    @Bindable var mainTabViewModel: MainTabViewModel
     @State var viewModel = FeedViewModel()
     
     @State var subscribingCount: Int = 0 // 구독중 count
@@ -33,6 +34,7 @@ struct FeedView: View {
                     
                     
                     // 공통버튼들
+                    mainTabToolBarTrailingButtons(mainTabViewModel: mainTabViewModel)
                 }
                 .padding(.horizontal, 20)
                 .frame(height: 44)

@@ -31,6 +31,7 @@ struct HomeView: View {
                     Spacer()
                     
                     //공통 버튼들
+                    mainTabToolBarTrailingButtons(mainTabViewModel: mainTabViewModel)
                 }
                 .padding(.horizontal, 20)
                 .frame(height: 44)
