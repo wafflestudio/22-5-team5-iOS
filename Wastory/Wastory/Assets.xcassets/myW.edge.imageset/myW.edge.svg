@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="11.905115mm"
+   height="11.907241mm"
+   viewBox="0 0 11.905115 11.907241"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch75">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.08333327;"
+         offset="0"
+         id="stop75" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-44.501136,-87.99901)">
+    <g
+       id="g1"
+       transform="matrix(0.06501246,0,0,0.0646671,41.606947,82.309296)">
+      <g
+         id="g2">
+        <g
+           id="g3"
+           transform="translate(-297.33317,-489.02632)">
+          <path
+             style="fill:#d0d0d0;fill-opacity:1;stroke:#c0c0c0;stroke-width:1;stroke-dasharray:none;stroke-opacity:1"
+             id="rect74"
+             width="120"
+             height="120"
+             x="45"
+             y="88.5"
+             d="M 75.763332,88.5 H 134.23667 C 151.27955,88.5 165,102.29372 165,119.42763 v 58.14474 C 165,194.70628 151.27955,208.5 134.23667,208.5 H 75.763332 C 58.720446,208.5 45,194.70628 45,177.57237 V 119.42763 C 45,102.29372 58.720446,88.5 75.763332,88.5 Z"
+             ry="30.927628"
+             rx="30.763332"
+             transform="matrix(1.3453741,0,0,1.3525446,292.13238,468.31848)" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5"
+             cx="388.99039"
+             cy="638.12207"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-2"
+             cx="433.37643"
+             cy="638.12207"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-1"
+             cx="478.43503"
+             cy="638.12207"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-7"
+             cx="478.43503"
+             cy="669.26727"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-9"
+             cx="433.37643"
+             cy="669.26727"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-5"
+             cx="388.31784"
+             cy="669.26727"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-23"
+             cx="410.84714"
+             cy="699.05835"
+             rx="10.760257"
+             ry="10.833106" />
+          <ellipse
+             style="fill:#ffffff;fill-opacity:1;stroke:#f5f5f5;stroke-width:1.34957;stroke-dasharray:none;stroke-opacity:1"
+             id="path81-5-13"
+             cx="455.90573"
+             cy="699.05835"
+             rx="10.760257"
+             ry="10.833106" />
+        </g>
+      </g>
+      <path
+         style="fill:#d0d0d0;fill-opacity:0;stroke:#000000;stroke-width:3.28129;stroke-dasharray:none;stroke-opacity:1"
+         id="rect74-2"
+         width="120"
+         height="120"
+         x="45"
+         y="88.5"
+         d="M 75.763332,88.5 H 134.23667 C 151.27955,88.5 165,102.29372 165,119.42763 v 58.14474 C 165,194.70628 151.27955,208.5 134.23667,208.5 H 75.763332 C 58.720446,208.5 45,194.70628 45,177.57237 V 119.42763 C 45,102.29372 58.720446,88.5 75.763332,88.5 Z"
+         ry="30.927628"
+         rx="30.763332"
+         transform="matrix(1.4854404,0,0,1.4948746,-19.907745,-41.84384)" />
+    </g>
+  </g>
+</svg>

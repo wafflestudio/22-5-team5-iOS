@@ -11,7 +11,6 @@ struct MainTabView: View {
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
     
-    
     init() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
@@ -63,14 +62,9 @@ struct MainTabView: View {
                     //MyBlogView로 추후 연결
                     MyBlogView()
                         .tabItem {
-                            //Text("내블로그")
-                            Image("myW")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 10, height: 10)
+                            Image(mainTabViewModel.selectedTab == TabType.myBlog ? "myW.edge" : "myW")
                         }
                         .tag(TabType.myBlog)
-                    
                 }
                 .tint(.black)
                 .background(Color.white)
@@ -137,7 +131,6 @@ struct mainTabToolBarTrailingButtons: View {
         .frame(height: 44)
     }
 }
-
 
 //TabType case 이름은 추후 수정 및 확정
 enum TabType: String {
