@@ -12,12 +12,15 @@ import Observation
     var addressName = "example"
     var blogAddress = "wastory.store/api/blogs/"
     var addressNameAvailability = "사용할 수 없어요."
+    var isAddressNameUnavailable: Bool = true
     
     func setAddressName() {
         UserInfoRepository.shared.setAddressName(addressName: addressName)
     }
     
     func setBlogAddress() {
+        addressNameAvailability = ""
+        isAddressNameUnavailable = true
         blogAddress = "wastory.store/api/blogs/" + addressName
     }
     
@@ -25,12 +28,22 @@ import Observation
         UserInfoRepository.shared.setUserInfo()
     }
     
-    func checkAddressNameAvailability() {
+    func checkAddressNameAvailability() async {
         if addressName.isEmpty || addressName.count > 20 {
             addressNameAvailability = "사용할 수 없어요."
         }
         else {
-            addressNameAvailability = "👏 세상에 하나뿐인 주소에요!"
+            do {
+                _ = try await NetworkRepository.shared.getBlog(
+                    blogAddress: self.addressName
+                )
+                addressNameAvailability = "사용할 수 없어요."
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+                addressNameAvailability = "👏 세상에 하나뿐인 주소에요!"
+                isAddressNameUnavailable = false
+            }
         }
     }
     

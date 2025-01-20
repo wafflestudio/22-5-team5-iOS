@@ -94,6 +94,17 @@ final class UserInfoRepository {
         }
     }
     
+    func resetUserInfo() {
+        userID = ""
+        userPW = ""
+        addressName = ""
+        blogName = ""
+        blogID = 0
+        username = ""
+        needAddressName = false
+        userActive = false
+    }
+    
     func isUserActive() -> Bool {
         return userActive
     }

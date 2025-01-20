@@ -38,19 +38,16 @@ struct OSSView: View {
                 Rectangle()
                     .fill(Color.dropCautionBoxEdgeGray)
                     .frame(height: 1)
+                Spacer()
+                    .frame(height: 24)
                 
-                /*
                 VStack(spacing: 12) {
-                    ForEach(viewModel.getTerms()) { cell in
-                         TermCell(item: cell, term: viewModel.getTerm(item: cell))
-                             .onTapGesture {
-                                 viewModel.toggleItemAgreement(item: cell)
-                             }
+                    ForEach(viewModel.OSSs) { cell in
+                         OSSCell(OSS: cell)
                      }
                  }
-                 */
                 Spacer()
-                    .frame(height: 30)
+                    .frame(height: 24)
                 Rectangle()
                     .fill(Color.dropCautionBoxEdgeGray)
                     .frame(height: 1)
@@ -91,6 +88,65 @@ struct OSSDescriptionText: View {
     }
 }
 
+struct OSSCell: View {
+    let OSS: OSS
+    @State var isOpenLicense: Bool = false
+    var body: some View {
+        VStack(spacing: 5) {
+            HStack {
+                Text(OSS.ossName)
+                    .font(.system(size: 14, weight: .semibold))
+                Spacer()
+            }
+            HStack {
+                Link(destination: OSS.ossURL, label: {
+                    Text(OSS.ossURL.absoluteString)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.ossLinkBlue)
+                        .underline()
+                })
+                Spacer()
+            }
+            .padding(.leading, 20)
+            HStack {
+                Text(OSS.ossDescription)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.settingDropGray)
+                Spacer()
+            }
+            .padding(.leading, 20)
+            HStack {
+                Button {
+                    isOpenLicense.toggle()
+                } label: {
+                    Image(systemName: isOpenLicense ? "arrowtriangle.down.fill" : "arrowtriangle.right.fill")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.black)
+                }
+                Text(OSS.ossLicense.licenseName)
+                    .font(.system(size: 13))
+                Spacer()
+            }
+            .padding(.leading, 20)
+            
+            if isOpenLicense {
+                ScrollView {
+                    Text(OSS.ossLicense.licenseDescription)
+                        .font(.system(size: 14, design: .monospaced))
+                }
+                .frame(height: 180)
+                .padding(.leading, 22)
+                .overlay {
+                    Rectangle()
+                        .stroke(Color.settingItemDescGray, lineWidth: 1)
+                        .padding(.leading, 20)
+                }
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+}
+
 struct LicenseCell: View {
     let license: License
     var body: some View {
@@ -104,7 +160,7 @@ struct LicenseCell: View {
                 .frame(height: 18)
             HStack {
                 Text(license.licenseDescription)
-                    .font(.system(size: 16))
+                    .font(.system(size: 12, design: .monospaced))
                     .foregroundStyle(Color.settingDropGray)
                 Spacer()
             }
@@ -113,6 +169,6 @@ struct LicenseCell: View {
     }
 }
 
-#Preview {
-    OSSView()
+extension Color {
+    static let ossLinkBlue: Color = .init(red: 30 / 255, green: 29 / 255, blue: 176 / 255)   // OSS 하이퍼링크 색상
 }

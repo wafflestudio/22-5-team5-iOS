@@ -183,7 +183,3 @@ extension Color {
     static let dropCautionBoxEdgeGray: Color = .init(red: 221 / 255, green: 221 / 255, blue: 221 / 255)   // 탈퇴 경고 박스 모서리 색상
     static let dropCautionBoxTextGray: Color = .init(red: 100 / 255, green: 100 / 255, blue: 100 / 255)   // 탈퇴 경고 박스 문구 색상
 }
-
-#Preview {
-    DropView()
-}
