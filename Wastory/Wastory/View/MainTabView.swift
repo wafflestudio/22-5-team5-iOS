@@ -34,7 +34,7 @@ struct MainTabView: View {
                     
                     FeedView(mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Text("피드")
+                            Image(mainTabViewModel.selectedTab == TabType.feed ? "feed.fill" : "feed")
                         }
                         .tag(TabType.feed)
                     
