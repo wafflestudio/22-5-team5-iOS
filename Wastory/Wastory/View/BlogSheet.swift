@@ -43,9 +43,8 @@ struct BlogSheet: View {
                                 Text(UserInfoRepository.shared.getBlogName())   // 아직 username API가 없어 임시로 대체
                                     .font(.system(size: 17, weight: .semibold))
                                 Spacer()
-                                Button {
-                                    // TODO: 설정 화면 진입 버튼
-                                } label: {
+                                
+                                NavigationLink(destination: SettingView()) {
                                     Image(systemName: "gearshape")
                                         .font(.system(size: 26))
                                         .foregroundStyle(Color.settingGearGray)

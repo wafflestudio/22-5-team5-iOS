@@ -105,7 +105,6 @@ struct BlogView: View {
             .ignoresSafeArea()
             
         } //ZStack
-        .environment(\.contentViewModel, contentViewModel)
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
@@ -116,9 +115,7 @@ struct BlogView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
-                    Button{
-                        contentViewModel.navigateToSearch(in: 0) // 임시 블로그 아이디
-                    } label: {
+                    contentViewModel.navigateToSearchViewButton(blogID: 0) {
                         Text(Image(systemName: "magnifyingglass"))
                             .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
                     }
@@ -137,9 +134,7 @@ struct BlogView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
-                    contentViewModel.backButtonAction {
-                        dismiss()
-                    }
+                    dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)

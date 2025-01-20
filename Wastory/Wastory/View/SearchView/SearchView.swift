@@ -107,9 +107,7 @@ struct SearchView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button{
-                    contentViewModel.backButtonAction {
-                        dismiss()
-                    }
+                    dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(Color.black)
@@ -179,10 +177,7 @@ struct SearchView: View {
                     
             ToolbarItem(placement: .topBarTrailing) {
                 if viewModel.isSearchingInBlog {
-                    Button (action: {
-                        print(viewModel.searchKeyword)
-                        contentViewModel.navigateToSearch(with: viewModel.searchKeyword)
-                    }) {
+                    contentViewModel.navigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
                         Text("전체검색")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(Color.primaryLabelColor)

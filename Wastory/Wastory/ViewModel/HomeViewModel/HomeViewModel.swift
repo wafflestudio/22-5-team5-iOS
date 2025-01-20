@@ -10,6 +10,39 @@ import SwiftUI
 import Observation
 
 @Observable final class HomeViewModel {
+    //NavBar Controller
+    private var isScrolled: Bool = false
+    
+    private var initialScrollPosition: CGFloat = 0
+    
+    private var isInitialScrollPositionSet: Bool = false
+    
+    func setInitialScrollPosition(_ scrollPosition: CGFloat) {
+        initialScrollPosition = scrollPosition
+    }
+    
+    func changeIsNavTitleHidden(by newValue: CGFloat, _ oldValue: CGFloat) {
+        if !isInitialScrollPositionSet {
+            setInitialScrollPosition(oldValue)
+            isInitialScrollPositionSet = true
+        }
+        
+        
+        if newValue < initialScrollPosition {
+            if (!isScrolled) {
+                isScrolled = true
+            }
+        } else {
+            if (isScrolled) {
+                isScrolled = false
+            }
+        }
+    }
+    
+    func getIsScrolled() -> Bool {
+        isScrolled
+    }
+    
     
     //TodaysWastoryPageTab
     var todaysWastoryItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]

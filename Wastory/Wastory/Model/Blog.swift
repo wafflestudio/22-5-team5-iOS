@@ -37,3 +37,11 @@ struct BlogDto: Codable {
         case userID = "user_id"
     }
 }
+
+import SwiftUI
+extension View {
+    func tempBlog() -> Blog {
+        Blog.init(id: UUID(), userID: UUID(), blogName: "블로그 이름", description: "블로그 설명\n설민석 아니고 설명 주절주절 길게 여러줄이 되나? 싶은 정도로\n\n설명")
+    }
+}
+

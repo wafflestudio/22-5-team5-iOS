@@ -22,3 +22,12 @@ struct Post: Codable, Identifiable, Hashable {
     var commentCount: Int           // Comment 개수
     var likeCount: Int              // Like 개수
 }
+
+
+
+import SwiftUI
+extension View {
+    func tempPost() -> Post {
+        Post.init(id: 1, blogID: 1, title: "글 제목", createdAt: Date(), commentCount: 5, likeCount: 55)//
+    }
+}

@@ -31,9 +31,8 @@ struct CommentCell: View {
                 }
                 
                 
-                Button(action: {
-                    contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                }) {
+                
+                contentViewModel.navigateToBlogViewButton(tempBlog()) {
                     Image(systemName: "questionmark.text.page.fill")
                         .resizable()
                         .scaledToFill()
@@ -46,9 +45,7 @@ struct CommentCell: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 5) {
-                        Button(action: {
-                            contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                        }) {
+                        contentViewModel.navigateToBlogViewButton(tempBlog()) {
                             Text("유저 이름")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)

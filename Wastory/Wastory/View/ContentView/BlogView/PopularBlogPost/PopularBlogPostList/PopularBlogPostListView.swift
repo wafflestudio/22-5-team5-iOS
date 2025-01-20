@@ -23,9 +23,7 @@ struct PopularBlogPostListView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    contentViewModel.navigateToPopularBlogPostSheet()
-                }) {
+                NavigationLink(destination: PopularBlogPostSheetView()) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)

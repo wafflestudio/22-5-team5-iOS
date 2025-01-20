@@ -31,9 +31,7 @@ struct CategoryPostListView: View {
                 
                 Spacer()
                 
-                Button(action:{
-                    contentViewModel.navigateToBlog(contentViewModel.navigationBlog) // 추후 해당 Blog 전달
-                }) {
+                contentViewModel.navigateToBlogViewButton(tempBlog()) {
                     Text("더보기")
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)

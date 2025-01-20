@@ -10,131 +10,127 @@ import SwiftUI
 struct MainTabView: View {
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
-    @Environment(\.contentViewModel) var contentViewModel
     
+    
+    init() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor.white
+        
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+
     var body: some View {
-        ZStack {
-            TabView(selection: $mainTabViewModel.selectedTab) {
-                NavigationStack {
+        NavigationStack {
+            ZStack {
+                TabView(selection: $mainTabViewModel.selectedTab) {
+                    
                     HomeView(mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("홈")
-                }
-                .tag(TabType.home)
-                
-                
-                NavigationStack {
-                    FeedView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("피드")
-                }
-                .tag(TabType.feed)
-                
-                
-                Color.clear
-                    .tabItem {
-                        Text("글쓰기")
-                    }
-                    .tag(TabType.write)
-                    .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
-                        NavigationStack {
-                            //MARK: PostingView
-                            PostingView(mainTabViewModel: mainTabViewModel)
+                        .tabItem {
+                            Text("홈")
                         }
-                    }
-                
-                
-                NavigationStack {
+                        .tag(TabType.home)
+                    
+                    
+                    FeedView(mainTabViewModel: mainTabViewModel)
+                        .tabItem {
+                            Text("피드")
+                        }
+                        .tag(TabType.feed)
+                    
+                    
+                    Color.clear
+                        .tabItem {
+                            Text("글쓰기")
+                        }
+                        .tag(TabType.write)
+                        .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
+                            NavigationStack {
+                                //MARK: PostingView
+                                PostingView(mainTabViewModel: mainTabViewModel)
+                            }
+                        }
+                    
+                    
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
-                }
-                .tabItem {
-                    Text("알림")
-                }
-                .tag(TabType.notification)
-                
-                
-                NavigationStack {
+                        .tabItem {
+                            Text("알림")
+                        }
+                        .tag(TabType.notification)
+                    
+                    
                     //MyBlogView로 추후 연결
                     MyBlogView()
-                        .mainTabToolbarConfigurations(with: $mainTabViewModel, contentViewModel: contentViewModel)
+                        .tabItem {
+                            Text("내블로그")
+                        }
+                        .tag(TabType.myBlog)
+                    
                 }
-                .tabItem {
-                    Text("내블로그")
+                .tint(.black)
+                .background(Color.white)
+                .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
+                    if newValue == .write {
+                        mainTabViewModel.toggleIsPostingViewPresent()
+                        mainTabViewModel.setSelectedTab(to: oldValue)
+                    }
                 }
-                .tag(TabType.myBlog)
-            }
-            .tint(.black)
-            .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
-                if newValue == .write {
-                    mainTabViewModel.toggleIsPostingViewPresent()
-                    mainTabViewModel.setSelectedTab(to: oldValue)
-                }
-            }
-            
-            // MARK: BlogSheet
-            BlogSheet(mainTabViewModel: mainTabViewModel)
-            
-            // MARK: NotificationTypeSheet
-            NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
-            
-            
-            
-            // MARK: ContentNavigationStack()
-            ContentNavigationStack()
-        } //ZStack
-    
+                
+                // MARK: BlogSheet
+                BlogSheet(mainTabViewModel: mainTabViewModel)
+                
+                // MARK: NotificationTypeSheet
+                NotificationTypeSheet(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
+                
+                
+                
+            } //ZStack
+        }// NavStack
         
     } //body
 }
 
-extension View {
-    func mainTabToolbarConfigurations(with mainTabViewModel: Binding<MainTabViewModel>, contentViewModel: ContentViewModel) -> some View {
-        self
-            .toolbarBackground(.white, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
-            .toolbarBackground(Color.white, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        contentViewModel.toggleIsSearchViewPresented()
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                    }
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        mainTabViewModel.wrappedValue.toggleIsBlogSheetPresent()
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Color.mainWBackgroundGray)
-                                .frame(width: 32, height: 32)
-                            VStack(spacing: 2) {
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                                HStack(spacing: 4) {
-                                    MainWCircleUnit()
-                                    MainWCircleUnit()
-                                }
-                            }
+struct mainTabToolBarTrailingButtons: View {
+    @Bindable var mainTabViewModel: MainTabViewModel
+    @Environment(\.contentViewModel) var contentViewModel
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            Spacer()
+            
+            contentViewModel.navigateToSearchViewButton() {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 25, weight: .thin))
+            }
+            
+            Button {
+                mainTabViewModel.toggleIsBlogSheetPresent()
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.mainWBackgroundGray)
+                        .frame(width: 32, height: 32)
+                    VStack(spacing: 2) {
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                        }
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                            MainWCircleUnit()
+                        }
+                        HStack(spacing: 4) {
+                            MainWCircleUnit()
+                            MainWCircleUnit()
                         }
                     }
                 }
             }
+        }
+        .frame(height: 44)
     }
 }
 
