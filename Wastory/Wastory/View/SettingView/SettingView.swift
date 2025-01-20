@@ -133,7 +133,7 @@ struct SettingView: View {
                         Spacer()
                             .frame(width: 95)
                         Button {
-                            //
+                            viewModel.logout()
                         } label: {
                             Text("로그아웃")
                                 .font(.system(size: 16, weight: .light))
@@ -199,6 +199,7 @@ extension Color {
     static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
 }
 
+/*
 #Preview {
     SettingView()
-}
+}*/
