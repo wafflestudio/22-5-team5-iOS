@@ -138,7 +138,7 @@ struct OSSCell: View {
                 .padding(.leading, 22)
                 .overlay {
                     Rectangle()
-                        .stroke(.black, lineWidth: 1)
+                        .stroke(Color.settingItemDescGray, lineWidth: 1)
                         .padding(.leading, 20)
                 }
             }
