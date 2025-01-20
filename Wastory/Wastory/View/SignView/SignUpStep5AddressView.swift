@@ -168,7 +168,3 @@ struct SignUpStep5AddressView: View {
         }
     }
 }
-
-#Preview {
-    SignUpStep5AddressView()
-}
