@@ -92,10 +92,15 @@ struct SettingItem<DetailView: View>: View {
                 .foregroundStyle(Color.settingItemDescGray)
             Spacer()
                 .frame(width: 20)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 15, weight: .regular))
+                .foregroundStyle(Color.settingItemDescGray)
+        }
+        .background {
             NavigationLink(destination: detailView) {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundStyle(Color.settingItemDescGray)
+                Rectangle()
+                    .fill(.clear)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .padding(.horizontal, 20)
