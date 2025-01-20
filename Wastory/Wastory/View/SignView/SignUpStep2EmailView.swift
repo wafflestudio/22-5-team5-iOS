@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
+    @State private var showUnavailableEmailBox = false
     @State private var showRerequestEmailBox = false
     
     @FocusState private var isEmailFocused: Bool
@@ -272,8 +273,62 @@ struct SignUpStep2EmailView: View {
                         .padding(.horizontal, 20)
                         .opacity(viewModel.isVerificationSuccessful() ? 0 : 1)
                     }
-                    
                     Spacer()
+                }
+                
+                if showUnavailableEmailBox {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            showUnavailableEmailBox = false
+                        }
+                    
+                    Rectangle()
+                        .foregroundStyle(.white)
+                        .frame(height: 300)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 20)
+                    
+                    VStack(spacing: 12) {
+                        HStack {
+                            Text("이미 와스토리 계정에 사용 중인 이메일입니다.")
+                                .font(.system(size: 15, weight: .semibold))
+                                .padding(.horizontal, 40)
+                            Spacer()
+                        }
+                        HStack {
+                            Text("등록된 와스토리 계정으로 로그인하거나, 다른 이메일을 입력해 주세요.")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.emailCautionTextGray)
+                                .padding(.horizontal, 40)
+                            Spacer()
+                        }
+                        
+                        Button {
+                            showUnavailableEmailBox = false
+                        } label: {
+                            Text("로그인")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 45)
+                                .background(Color.kakaoYellow)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 40)
+                        Button {
+                            showUnavailableEmailBox = false
+                        } label: {
+                            Text("다시 입력")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 45)
+                                .background(Color.disabledNextButtonGray)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 40)
+                    }
                 }
                 
                 if showRerequestEmailBox {
