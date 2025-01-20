@@ -27,7 +27,7 @@ struct MainTabView: View {
                     
                     HomeView(mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Text("홈")
+                            Image(mainTabViewModel.selectedTab == TabType.home ? "homeW.fill" : "homeW")
                         }
                         .tag(TabType.home)
                     
@@ -41,7 +41,7 @@ struct MainTabView: View {
                     
                     Color.clear
                         .tabItem {
-                            Text("글쓰기")
+                            Image("article")
                         }
                         .tag(TabType.write)
                         .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
