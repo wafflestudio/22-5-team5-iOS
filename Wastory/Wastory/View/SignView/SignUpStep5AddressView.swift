@@ -10,6 +10,7 @@ import SwiftUI
 struct SignUpStep5AddressView: View {
     @State private var viewModel = SignUpStep5ViewModel()
     @FocusState private var isAddressFocused: Bool
+    @State private var debounceWorkItem: DispatchWorkItem?  // 블로그 주소 중복 검사
     
     var body: some View {
         NavigationStack {
@@ -67,13 +68,21 @@ struct SignUpStep5AddressView: View {
                                 .padding(.leading, 20)
                             TextField("", text: $viewModel.addressName)
                                 .focused($isAddressFocused)
-                                .padding(.vertical, 5)
-                                .padding(.trailing, 50)
                                 .autocapitalization(.none)
                                 .onChange(of: viewModel.addressName) { newValue, oldValue in
                                     viewModel.setBlogAddress()
-                                    viewModel.checkAddressNameAvailability()
+                                    
+                                    debounceWorkItem?.cancel()
+                                    let workItem = DispatchWorkItem {
+                                        Task {
+                                            await viewModel.checkAddressNameAvailability()
+                                        }
+                                    }
+                                    debounceWorkItem = workItem
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: workItem)
                                 }
+                                .padding(.vertical, 5)
+                                .padding(.trailing, 50)
                         }
                         
                         HStack {
@@ -107,7 +116,7 @@ struct SignUpStep5AddressView: View {
                         Text(viewModel.addressNameAvailability)
                             .padding(.leading, 20)
                             .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(viewModel.addressNameAvailability.last == "." ? Color.disableUsernameRed : Color.ableUsernameGray)
+                            .foregroundStyle(viewModel.isAddressNameUnavailable ? Color.disableUsernameRed : Color.ableUsernameGray)
                         Spacer()
                         Text(String(viewModel.addressName.count) + " / 20")
                             .padding(.trailing, 20)
@@ -138,11 +147,11 @@ struct SignUpStep5AddressView: View {
                             .foregroundStyle(.white)
                             .padding(.vertical, 16)
                             .frame(maxWidth: .infinity, idealHeight: 51)
-                            .background(viewModel.addressNameAvailability.last == "." ? Color.disableButtonGray : .black)
+                            .background(viewModel.isAddressNameUnavailable ? Color.disableButtonGray : .black)
                             .cornerRadius(6)
                     }
                     .padding(.horizontal, 20)
-                    .disabled(viewModel.addressNameAvailability.last == ".")
+                    .disabled(viewModel.isAddressNameUnavailable)
                     .onTapGesture {
                         isAddressFocused = false
                     }
@@ -158,4 +167,8 @@ struct SignUpStep5AddressView: View {
             }
         }
     }
+}
+
+#Preview {
+    SignUpStep5AddressView()
 }
