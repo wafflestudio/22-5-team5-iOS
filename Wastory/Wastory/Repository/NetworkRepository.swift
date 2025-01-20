@@ -10,7 +10,8 @@ import Alamofire
 
 final class NetworkRepository {
     static let shared = NetworkRepository()    // 싱글톤 인스턴스
-
+    
+    // MARK: User
     func postSignUp(userID: String, userPW: String) async throws {
         let requestBody = [
             "email": userID,
@@ -47,21 +48,7 @@ final class NetworkRepository {
         return response
     }
     
-    func getMyBlog() async throws -> BlogDto {
-        let urlRequest = try URLRequest(
-            url: NetworkRouter.getMyBlog.url,
-            method: NetworkRouter.getMyBlog.method,
-            headers: NetworkRouter.getMyBlog.headers
-        )
-        
-        let response = try await AF.request(
-            urlRequest,
-            interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
-        
-        return response
-    }
-    
+    // MARK: Blog
     func postBlog(addressName: String) async throws {
         let requestBody = [
             "address_name": addressName
@@ -79,6 +66,37 @@ final class NetworkRepository {
         ).validate().serializingDecodable(BlogDto.self).value
     }
     
+    func getMyBlog() async throws -> BlogDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getMyBlog.url,
+            method: NetworkRouter.getMyBlog.method,
+            headers: NetworkRouter.getMyBlog.headers
+        )
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+        
+        return response
+    }
+    
+    func getBlog(blogAddress: String) async throws -> BlogDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getBlog(blogAddress: blogAddress).url,
+            method: NetworkRouter.getBlog(blogAddress: blogAddress).method,
+            headers: NetworkRouter.getBlog(blogAddress: blogAddress).headers
+        )
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate().serializingDecodable(BlogDto.self).value
+        
+        return response
+    }
+    
+    // MARK: Article
     func postArticle(title: String, content: String, categoryID: Int) async throws {
         let requestBody = articleOtd(title: title, content: content, categoryID: categoryID)
         var urlRequest = try URLRequest(
@@ -95,24 +113,17 @@ final class NetworkRepository {
     }
     
     func getArticlesInBlog(blogID: Int) async throws -> [Post] {
-        /*
         let urlRequest = try URLRequest(
-            url: NetworkRouter.postArticle.url,
-            method: NetworkRouter.postArticle.method,
-            headers: NetworkRouter.postArticle.headers
+            url: NetworkRouter.getArticlesInBlog(blogID: blogID).url,
+            method: NetworkRouter.getArticlesInBlog(blogID: blogID).method,
+            headers: NetworkRouter.getArticlesInBlog(blogID: blogID).headers
         )
-        */
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json"
-        ]
+        
         let response = try await AF.request(
-            NetworkRouter.getArticlesInBlog(blogID: blogID).url,
-            encoding: JSONEncoding.default,
-            headers: headers,
+            urlRequest,
             interceptor: NetworkInterceptor()
         ).validate().serializingDecodable([articleDto].self).value
         
-        print(response)
         return response.map { article in
             Post(
                 id: article.articleID,
