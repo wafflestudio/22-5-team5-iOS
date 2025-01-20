@@ -56,6 +56,12 @@ import Observation
         isNavTitleHidden
     }
     
+    //Network
+    var blog: Blog?
+    
+    func fetchBlog(id: Int) async throws {
+//        blog = try await NetworkRepository.shared.getBlog(blogID: id)
+    }
 }
 
 // Environment Key 정의

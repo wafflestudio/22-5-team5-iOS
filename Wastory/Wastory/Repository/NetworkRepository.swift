@@ -63,10 +63,10 @@ final class NetworkRepository {
         _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate().serializingDecodable(Blog.self).value
     }
     
-    func getMyBlog() async throws -> BlogDto {
+    func getMyBlog() async throws -> Blog {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getMyBlog.url,
             method: NetworkRouter.getMyBlog.method,
@@ -76,12 +76,12 @@ final class NetworkRepository {
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate().serializingDecodable(Blog.self).value
         
         return response
     }
     
-    func getBlog(blogAddress: String) async throws -> BlogDto {
+    func getBlog(blogAddress: String) async throws -> Blog {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getBlog(blogAddress: blogAddress).url,
             method: NetworkRouter.getBlog(blogAddress: blogAddress).method,
@@ -91,7 +91,7 @@ final class NetworkRepository {
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate().serializingDecodable(Blog.self).value
         
         return response
     }

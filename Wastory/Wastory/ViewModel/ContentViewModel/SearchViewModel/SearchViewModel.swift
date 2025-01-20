@@ -71,13 +71,6 @@ import Observation
     ]
     
     var searchBlogResult: [Blog] = [
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"),
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"),
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
-        Blog.init(id: UUID(), userID: UUID(), blogName: "werq", description: "asdfadsfasdasdf"), 
     ]
     
     var resultCount: Int = 0
