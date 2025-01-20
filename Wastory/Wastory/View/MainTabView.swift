@@ -63,7 +63,11 @@ struct MainTabView: View {
                     //MyBlogView로 추후 연결
                     MyBlogView()
                         .tabItem {
-                            Text("내블로그")
+                            //Text("내블로그")
+                            Image("myW")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 10, height: 10)
                         }
                         .tag(TabType.myBlog)
                     
@@ -144,3 +148,6 @@ enum TabType: String {
     case myBlog
 }
 
+#Preview {
+    MainTabView()
+}
