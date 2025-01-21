@@ -9,6 +9,8 @@ import SwiftUI
 import Observation
 
 @Observable final class PasswordSettingViewModel {
+    @AppStorage("userPW") @ObservationIgnored private var userPW: String = ""
+    
     var password0: String = ""
     var password: String = ""
     var password2: String = ""
@@ -106,17 +108,29 @@ import Observation
     
     func updatePassword() async -> Int {
         do {
-            _ = try await NetworkRepository.shared.postSignIn(
+            let response = try await NetworkRepository.shared.postSignIn(
                 userID: UserInfoRepository.shared.getUserID(),
                 userPW: self.password0
             )
+            NetworkConfiguration.accessToken = response.access_token
+            NetworkConfiguration.refreshToken = response.refresh_token
         }
         catch {
             print("Error: \(error.localizedDescription)")
             return 0
         }
         if password0 == password { return 1 }
+        do {
+            try await NetworkRepository.shared.patchPassword(
+                oldPW: password0,
+                newPW: password)
+        }
+        catch {
+            print("Error: \(error.localizedDescription)")
+            return 3    // Network Error
+        }
         UserInfoRepository.shared.setUserPW(userPW: self.password)
+        userPW = ""
         return 2
     }
 }

@@ -120,6 +120,30 @@ final class NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    func patchPassword(oldPW: String, newPW: String) async throws {
+        let requestBody = [
+            "old_password": oldPW,
+            "new_password": newPW
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchPassword(oldPW: oldPW, newPW: newPW).url,
+            method: NetworkRouter.patchPassword(oldPW: oldPW, newPW: newPW).method,
+            headers: NetworkRouter.patchPassword(oldPW: oldPW, newPW: newPW).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingString()
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Blog
     func postBlog(addressName: String) async throws {
         let requestBody = [
