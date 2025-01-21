@@ -41,7 +41,7 @@ struct CommentView: View {
                             .frame(width: 4)
                         
                         //comment count
-                        Text("55")
+                        Text("\(viewModel.totalCommentsCount)")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                         
