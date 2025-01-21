@@ -112,7 +112,7 @@ import Observation
                 totalCommentsCount = response.totalCount
                 
                 //pagination
-                if response.comments != [] {
+                if !response.comments.isEmpty {
                     page += 1
                 } else {
                     isPageEnded = true

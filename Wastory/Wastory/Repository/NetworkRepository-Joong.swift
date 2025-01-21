@@ -9,6 +9,24 @@ import Foundation
 import Alamofire
 
 extension NetworkRepository {
+    // MARK: - Debugging Helpers
+    private func logRequest(_ urlRequest: URLRequest, body: Any? = nil) {
+        print("\n🌐 ━━━ Network Request ━━━")
+        print("📍 URL: \(urlRequest.url?.absoluteString ?? "nil")")
+        print("📝 Method: \(urlRequest.method?.rawValue ?? "nil")")
+        print("📋 Headers: \(urlRequest.headers)")
+        if let body = body {
+            print("📦 Body: \(body)")
+        }
+        print("━━━━━━━━━━━━━━━━━━━━━")
+    }
+    
+    private func logResponse<T>(_ response: T, url: String) {
+        print("\n✨ ━━━ Network Response ━━━")
+        print("📍 URL: \(url)")
+        print("📦 Response: \(response)")
+        print("━━━━━━━━━━━━━━━━━━━━━\n")
+    }
     
 //    func createCategroy(categoryName: String, categoryLevel: Int, parentId: Int?) {
 //        let requestBody = [
