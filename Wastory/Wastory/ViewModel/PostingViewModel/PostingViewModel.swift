@@ -42,7 +42,8 @@ import RichTextKit
             do {
                 try await NetworkRepository.shared.postArticle(
                     title: title,
-                    content: htmlText!,
+                    content: htmlText ?? "",
+                    description: "임시 내용",
                     categoryID: 0
                 )
                 print("게시글 작성 성공")

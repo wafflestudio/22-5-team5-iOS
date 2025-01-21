@@ -60,7 +60,7 @@ struct PostView: View {
                             .frame(height: 10)
                         
                         // MARK: Title
-                        Text("제목을 그냥 대충 길게 무한히 길게 아무렇게나 길게 몇 줄이든 상관없이!")
+                        Text(post.title)
                             .font(.system(size: 34, weight: .medium))
                             .foregroundStyle(Color.primaryLabelColor)
                             .padding(.horizontal, 20)
@@ -189,6 +189,10 @@ struct PostView: View {
             .background(Color.backgourndSpaceColor)
         }// VStack
         .environment(\.postViewModel, viewModel)
+        //MARK: Networking
+        .onAppear {
+            
+        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle("")

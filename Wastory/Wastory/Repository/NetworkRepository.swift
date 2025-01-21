@@ -11,7 +11,26 @@ import Alamofire
 final class NetworkRepository {
     static let shared = NetworkRepository()    // 싱글톤 인스턴스
     
-    // MARK: User
+    // MARK: - Debugging Helpers
+    private func logRequest(_ urlRequest: URLRequest, body: Any? = nil) {
+        print("\n🌐 ━━━ Network Request ━━━")
+        print("📍 URL: \(urlRequest.url?.absoluteString ?? "nil")")
+        print("📝 Method: \(urlRequest.method?.rawValue ?? "nil")")
+        print("📋 Headers: \(urlRequest.headers)")
+        if let body = body {
+            print("📦 Body: \(body)")
+        }
+        print("━━━━━━━━━━━━━━━━━━━━━")
+    }
+    
+    private func logResponse<T>(_ response: T, url: String) {
+        print("\n✨ ━━━ Network Response ━━━")
+        print("📍 URL: \(url)")
+        print("📦 Response: \(response)")
+        print("━━━━━━━━━━━━━━━━━━━━━\n")
+    }
+    
+    // MARK: - User
     func postSignUp(userID: String, userPW: String) async throws {
         let requestBody = [
             "email": userID,
@@ -24,9 +43,14 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        _ = try await AF.request(urlRequest)
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(urlRequest)
             .validate()
-            .serializingString().value
+            .serializingString()
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
     func postSignIn(userID: String, userPW: String) async throws -> TokenDto {
@@ -41,14 +65,19 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
+        logRequest(urlRequest, body: requestBody)
+        
         let response = try await AF.request(urlRequest)
             .validate()
-            .serializingDecodable(TokenDto.self).value
+            .serializingDecodable(TokenDto.self)
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
     
-    // MARK: Blog
+    // MARK: - Blog
     func postBlog(addressName: String) async throws {
         let requestBody = [
             "address_name": addressName
@@ -60,45 +89,68 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        _ = try await AF.request(
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate()
+        .serializingDecodable(Blog.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
-    func getMyBlog() async throws -> BlogDto {
+    func getMyBlog() async throws -> Blog {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getMyBlog.url,
             method: NetworkRouter.getMyBlog.method,
             headers: NetworkRouter.getMyBlog.headers
         )
         
+        logRequest(urlRequest)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate()
+        .serializingDecodable(Blog.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
     
-    func getBlog(blogAddress: String) async throws -> BlogDto {
+    func getBlog(blogAddress: String) async throws -> Blog {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getBlog(blogAddress: blogAddress).url,
             method: NetworkRouter.getBlog(blogAddress: blogAddress).method,
             headers: NetworkRouter.getBlog(blogAddress: blogAddress).headers
         )
         
+        logRequest(urlRequest)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(BlogDto.self).value
+        ).validate()
+        .serializingDecodable(Blog.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
     
-    // MARK: Article
-    func postArticle(title: String, content: String, categoryID: Int) async throws {
-        let requestBody = articleOtd(title: title, content: content, categoryID: categoryID)
+    // MARK: - Article
+    func postArticle(title: String, content: String, description: String, categoryID: Int) async throws {
+        let requestBody = [
+            "title": title,
+            "content": content,
+            "description": description,
+            "category_id": "\(categoryID)"
+        ]
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
             method: NetworkRouter.postArticle.method,
@@ -106,66 +158,51 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        _ = try await AF.request(
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(articleDto.self).value
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
-    func getArticlesInBlog(blogID: Int) async throws -> [Post] {
-        let urlRequest = try URLRequest(
+    func getArticlesInBlog(blogID: Int, page: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
             url: NetworkRouter.getArticlesInBlog(blogID: blogID).url,
             method: NetworkRouter.getArticlesInBlog(blogID: blogID).method,
             headers: NetworkRouter.getArticlesInBlog(blogID: blogID).headers
         )
         
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable([articleDto].self).value
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
         
-        return response.map { article in
-            Post(
-                id: article.articleID,
-                blogID: 0,
-                title: article.title,
-                description: article.content,
-                createdAt: ISO8601DateFormatter().date(from: article.createdAt) ?? Date(),
-                commentCount: 0,
-                likeCount: 0
-            )
-        }
+        return response.articles
     }
-}
-
-struct articleOtd: Codable {
-    let title: String
-    let content: String
-    let categoryID: Int
-    
-    private enum CodingKeys: String, CodingKey {
-        case title
-        case content
-        case categoryID = "category_id"
-    }
-}
-
-struct articleDto: Codable {
-    let articleID: Int
-    let title: String
-    let content: String
-    let createdAt: String
-    let updatedAt: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case articleID = "id"
-        case title
-        case content
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-    }
-}
-
-struct articlesDto: Codable {
-    let articles: [articleDto]
 }

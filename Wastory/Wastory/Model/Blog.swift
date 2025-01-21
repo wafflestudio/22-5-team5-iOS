@@ -8,31 +8,20 @@
 import Foundation
 
 struct Blog: Codable, Identifiable, Hashable {
-    let id: UUID                    // Blog Id(주소)
-    let userID: UUID                // Blog를 소유한 User Id
-         
+    let id: Int                    // Blog Id(주소)
     var blogName: String            // Blog 이름 (default : "User.username 님의 블로그")
-    var mainImageURL: String?       // Blog 대표이미지 URL
+    let addressName: String         // Blog 주소
     var description: String         // Blog 소개글
-}
-
-struct BlogDto: Codable {
-    let blogID: Int
-    let blogName: String
-    let addressName: String
-    let description: String
-    let createdAt: String
-    let updatedAt: String
-    let mainImageURL: String?
-    let userID: Int
+         
+    var mainImageURL: String?       // Blog 대표이미지 URL
+    
+    let userID: Int                // Blog를 소유한 User Id
     
     private enum CodingKeys: String, CodingKey {
-        case blogID = "id"
+        case id
         case blogName = "blog_name"
         case addressName = "address_name"
         case description
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
         case mainImageURL = "main_image_url"
         case userID = "user_id"
     }
@@ -41,7 +30,7 @@ struct BlogDto: Codable {
 import SwiftUI
 extension View {
     func tempBlog() -> Blog {
-        Blog.init(id: UUID(), userID: UUID(), blogName: "블로그 이름", description: "블로그 설명\n설민석 아니고 설명 주절주절 길게 여러줄이 되나? 싶은 정도로\n\n설명")
+        Blog.init(id: 0, blogName: "블로그 이름", addressName: "WaSans", description: "블로그 설명어어어어엉엉", userID: 0)
     }
 }
 
