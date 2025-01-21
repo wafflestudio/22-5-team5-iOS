@@ -11,7 +11,6 @@ struct MainTabView: View {
     @State var mainTabViewModel: MainTabViewModel = MainTabViewModel()
     @State var notificationViewModel: NotificationViewModel = NotificationViewModel()
     
-    
     init() {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
@@ -28,21 +27,21 @@ struct MainTabView: View {
                     
                     HomeView(mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Text("홈")
+                            Image(mainTabViewModel.selectedTab == TabType.home ? "homeW.fill" : "homeW")
                         }
                         .tag(TabType.home)
                     
                     
                     FeedView(mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Text("피드")
+                            Image(mainTabViewModel.selectedTab == TabType.feed ? "feed.fill" : "feed")
                         }
                         .tag(TabType.feed)
                     
                     
                     Color.clear
                         .tabItem {
-                            Text("글쓰기")
+                            Image("article")
                         }
                         .tag(TabType.write)
                         .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
@@ -55,7 +54,7 @@ struct MainTabView: View {
                     
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Text("알림")
+                            Image(mainTabViewModel.selectedTab == TabType.notification ? "bell.fill" : "bell")
                         }
                         .tag(TabType.notification)
                     
@@ -63,10 +62,9 @@ struct MainTabView: View {
                     //MyBlogView로 추후 연결
                     MyBlogView()
                         .tabItem {
-                            Text("내블로그")
+                            Image(mainTabViewModel.selectedTab == TabType.myBlog ? "myW.edge" : "myW")
                         }
                         .tag(TabType.myBlog)
-                    
                 }
                 .tint(.black)
                 .background(Color.white)
@@ -134,7 +132,6 @@ struct mainTabToolBarTrailingButtons: View {
     }
 }
 
-
 //TabType case 이름은 추후 수정 및 확정
 enum TabType: String {
     case home
@@ -144,3 +141,6 @@ enum TabType: String {
     case myBlog
 }
 
+#Preview {
+    MainTabView()
+}
