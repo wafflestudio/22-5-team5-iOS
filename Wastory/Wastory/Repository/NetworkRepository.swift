@@ -77,6 +77,23 @@ final class NetworkRepository {
         return response
     }
     
+    func deleteMe() async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.deleteMe.url,
+            method: NetworkRouter.deleteMe.method,
+            headers: NetworkRouter.deleteMe.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingString()
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Blog
     func postBlog(addressName: String) async throws {
         let requestBody = [

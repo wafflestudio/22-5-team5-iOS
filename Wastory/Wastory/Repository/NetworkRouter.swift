@@ -12,6 +12,7 @@ enum NetworkRouter {
     // MARK: User
     case postSignUp
     case postSignIn
+    case deleteMe
     
     // MARK: Blog
     case postBlog
@@ -31,6 +32,7 @@ enum NetworkRouter {
         // MARK: User
         case .postSignUp: "/users/signup"
         case .postSignIn: "/users/signin"
+        case .deleteMe: "/users/me"
             
         // MARK: Blog
         case .postBlog: "/blogs"
@@ -50,6 +52,8 @@ enum NetworkRouter {
             return .post
         case .postSignIn:
             return .post
+        case .deleteMe:
+            return .delete
             
         // MARK: Blog
         case .postBlog:
@@ -73,6 +77,8 @@ enum NetworkRouter {
         case .postSignUp:
             return ["Content-Type": "application/json"]
         case .postSignIn:
+            return ["Content-Type": "application/json"]
+        case .deleteMe:
             return ["Content-Type": "application/json"]
             
         // MARK: Blog
