@@ -170,6 +170,7 @@ struct SignInView: View {
                     Spacer()
                 }
             }
+            .navigationBarBackButtonHidden()
         }
     }
 }

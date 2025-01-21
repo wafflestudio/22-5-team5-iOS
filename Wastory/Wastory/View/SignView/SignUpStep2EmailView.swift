@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SignUpStep2EmailView: View {
     @State private var viewModel = SignUpStep2ViewModel()
-    @State private var showUnavailableEmailBox = false
     @State private var showRerequestEmailBox = false
     
     @FocusState private var isEmailFocused: Bool
@@ -141,10 +140,12 @@ struct SignUpStep2EmailView: View {
                                 .opacity(viewModel.isClearEmailButtonInactive() ? 0 : 1)
                                 
                                 Button {
-                                    isEmailFocused = false
-                                    viewModel.touchEmailScreen()
-                                    viewModel.untapNextButton()
-                                    viewModel.requestCode()
+                                    Task {
+                                        isEmailFocused = false
+                                        viewModel.touchEmailScreen()
+                                        viewModel.untapNextButton()
+                                        await viewModel.requestCode()
+                                    }
                                 } label: {
                                     Text("인증요청")
                                         .font(.system(size: 14, weight: .regular))
@@ -276,26 +277,25 @@ struct SignUpStep2EmailView: View {
                     Spacer()
                 }
                 
-                if showUnavailableEmailBox {
+                if viewModel.emailExists {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
-                        .onTapGesture {
-                            showUnavailableEmailBox = false
-                        }
                     
                     Rectangle()
                         .foregroundStyle(.white)
-                        .frame(height: 300)
+                        .frame(height: 240)
                         .cornerRadius(12)
                         .padding(.horizontal, 20)
                     
-                    VStack(spacing: 12) {
+                    VStack(spacing: 0) {
                         HStack {
                             Text("이미 와스토리 계정에 사용 중인 이메일입니다.")
-                                .font(.system(size: 15, weight: .semibold))
+                                .font(.system(size: 17, weight: .semibold))
                                 .padding(.horizontal, 40)
                             Spacer()
                         }
+                        Spacer()
+                            .frame(height: 12)
                         HStack {
                             Text("등록된 와스토리 계정으로 로그인하거나, 다른 이메일을 입력해 주세요.")
                                 .font(.system(size: 14))
@@ -303,26 +303,29 @@ struct SignUpStep2EmailView: View {
                                 .padding(.horizontal, 40)
                             Spacer()
                         }
+                        Spacer()
+                            .frame(height: 24)
                         
-                        Button {
-                            showUnavailableEmailBox = false
-                        } label: {
+                        NavigationLink(destination: SignInView()) {
                             Text("로그인")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(.black)
-                                .padding(.vertical, 16)
+                                .padding(.vertical, 12)
                                 .frame(maxWidth: .infinity, idealHeight: 45)
                                 .background(Color.kakaoYellow)
                                 .cornerRadius(6)
                         }
                         .padding(.horizontal, 40)
+                        Spacer()
+                            .frame(height: 12)
                         Button {
-                            showUnavailableEmailBox = false
+                            viewModel.toggleEmailExists()
+                            viewModel.email = ""
                         } label: {
                             Text("다시 입력")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(.black)
-                                .padding(.vertical, 16)
+                                .padding(.vertical, 12)
                                 .frame(maxWidth: .infinity, idealHeight: 45)
                                 .background(Color.disabledNextButtonGray)
                                 .cornerRadius(6)
