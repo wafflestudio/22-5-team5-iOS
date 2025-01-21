@@ -154,7 +154,9 @@ struct DropView: View {
                             Spacer()
                                 .frame(width: 110)
                             Button {
-                                //
+                                Task {
+                                    await viewModel.deleteAccount()
+                                }
                             } label: {
                                 Text("탈퇴")
                                     .font(.system(size: 16, weight: .light))
