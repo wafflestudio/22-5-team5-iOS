@@ -159,24 +159,20 @@ struct SettingItem<DetailView: View>: View {
     let description: String
     let detailView: DetailView
     var body: some View {
-        HStack(spacing: 0) {
-            Text(title)
-                .font(.system(size: 17, weight: .regular))
-            Spacer()
-            Text(description)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color.settingItemDescGray)
-            Spacer()
-                .frame(width: 20)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 15, weight: .regular))
-                .foregroundStyle(Color.settingItemDescGray)
-        }
-        .background {
-            NavigationLink(destination: detailView) {
-                Rectangle()
-                    .fill(.clear)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        NavigationLink(destination: detailView) {
+            HStack(spacing: 0) {
+                Text(title)
+                    .font(.system(size: 17, weight: .regular))
+                    .foregroundStyle(.black)
+                Spacer()
+                Text(description)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(Color.settingItemDescGray)
+                Spacer()
+                    .frame(width: 20)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(Color.settingItemDescGray)
             }
         }
         .padding(.horizontal, 20)
