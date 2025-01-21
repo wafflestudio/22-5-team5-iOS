@@ -24,7 +24,7 @@ struct SettingView: View {
                     Spacer()
                         .frame(height: 30)
                     
-                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.getUsername(), detailView: EmptyView())
+                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView())
                     SettingDivider(thickness: 10)
                     
                     SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
@@ -193,9 +193,4 @@ extension Color {
     static let settingItemDescGray: Color = .init(red: 187 / 255, green: 187 / 255, blue: 187 / 255)   // 설정 목록 세부 정보 색상
     static let settingDivderGray: Color = .init(red: 247 / 255, green: 247 / 255, blue: 247 / 255)   // 설정 분리선 색상
     static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
-}
-
-
-#Preview {
-    SettingView()
 }
