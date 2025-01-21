@@ -24,7 +24,7 @@ enum NetworkRouter {
     
     //MARK: Comment
     case postComment(postID: Int)
-    case getArticleComments(postID: Int)
+    case getArticleComments(postID: Int, page: Int)
     
     
     
@@ -49,7 +49,7 @@ enum NetworkRouter {
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
-        case let .getArticleComments(postID): "/comments/article/\(postID)"
+        case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
         }
     }
     

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Comment: Codable, Identifiable {
+struct Comment: Codable, Identifiable, Equatable {
     let id: Int                  // Comment Id(주소)
     let userName: Int                  // Comment 작성자 userName
     

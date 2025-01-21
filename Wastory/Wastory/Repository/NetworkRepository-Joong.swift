@@ -30,12 +30,21 @@ extension NetworkRepository {
     
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
-        let requestBody = [
-            "content": content,
-            "parent_id": "\(parentID ?? 0)",
-            "secret": "\(isSecret)",
-            "level": "\(parentID ?? 0 == 0)"
-        ]
+        var requestBody = [String: String]()
+        if let _ = parentID {
+            requestBody = [
+                "content": content,
+                "parent_id": "\(parentID!)",
+                "secret": "\(isSecret ? 1 : 0)",
+                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+            ]
+        } else {
+            requestBody = [
+                "content": content,
+                "secret": "\(isSecret ? 1 : 0)",
+                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+            ]
+        }
         var urlRequest = try URLRequest(
             url: NetworkRouter.postComment(postID: postID).url,
             method: NetworkRouter.postComment(postID: postID).method,
@@ -56,20 +65,12 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
-    func getArticleComments(postID: Int, page: Int) async throws -> [Comment] {
-        var urlRequest = try URLRequest(
-            url: NetworkRouter.getArticleComments(postID: postID).url,
-            method: NetworkRouter.getArticleComments(postID: postID).method,
-            headers: NetworkRouter.getArticleComments(postID: postID).headers
+    func getArticleComments(postID: Int, page: Int) async throws -> CommentListDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getArticleComments(postID: postID, page: page).url,
+            method: NetworkRouter.getArticleComments(postID: postID, page: page).method,
+            headers: NetworkRouter.getArticleComments(postID: postID, page: page).headers
         )
-        
-        if let url = urlRequest.url {
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-            components?.queryItems = [
-                URLQueryItem(name: "page", value: "\(page)")
-            ]
-            urlRequest.url = components?.url
-        }
         
         logRequest(urlRequest)
         
@@ -88,7 +89,10 @@ extension NetworkRepository {
         .serializingDecodable(CommentListDto.self, decoder: decoder)
         .value
         
-        return response.comments
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
     }
+    
     
 }

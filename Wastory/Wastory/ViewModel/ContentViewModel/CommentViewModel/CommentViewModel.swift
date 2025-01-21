@@ -40,9 +40,16 @@ import Observation
     }
     
     
-    //Network
+    //pagination
+    var page = 1
+    var isPageEnded: Bool = false
     
-    var comments: [Comment] = [Comment.init(id: 1, blogID: 1, children: [Comment.init(id: 2, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false), Comment.init(id: 3, blogID: 1, content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: false)], content: "comment context waffle studio team 5 lets go bongjunho sonheoungmin Jpar", createdAt: Date(), isSecret: true), Comment.init(id: 4, blogID: 1, content: "second comment", createdAt: Date(), isSecret: true), Comment.init(id: 5, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 6, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false), Comment.init(id: 7, blogID: 1, content: "second comment", createdAt: Date(), isSecret: false)]
+    
+    //Network
+    var postID: Int?
+    var comments: [Comment] = []
+    
+    var totalCommentsCount: Int = 0
     
     
     var writingCommentText: String = ""
@@ -50,6 +57,10 @@ import Observation
     var isTextFieldFocused: Bool = false
     var targetCommentID: Int?
     var isTargetToComment: Bool = false
+    
+    func setPostID(_ id: Int) {
+        postID = id
+    }
     
     func isWritingCommentEmpty() -> Bool {
         writingCommentText.isEmpty
@@ -68,6 +79,52 @@ import Observation
     func updateIsTextFieldFocused() {
         isTextFieldFocused = false
         isTextFieldFocused = true
+    }
+    
+    func postComment() async {
+        if !writingCommentText.isEmpty {
+            do {
+                _ = try await NetworkRepository.shared.postComment(
+                    postID: self.postID ?? 0,
+                    content: writingCommentText,
+                    parentID: targetCommentID ?? nil,
+                    isSecret: self.isWritingCommentSecret
+                )
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func getComments() async {
+        if !isPageEnded {
+            do {
+                let response = try await NetworkRepository.shared.getArticleComments(postID: postID ?? 0, page: page)
+                
+                //comments 저장
+                if page == 1 {
+                    comments = response.comments
+                } else {
+                    comments.append(contentsOf: response.comments)
+                }
+                
+                //totalCount 저장
+                totalCommentsCount = response.totalCount
+                
+                //pagination
+                if response.comments != [] {
+                    page += 1
+                } else {
+                    isPageEnded = true
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func resetPage() {
+        page = 1
     }
 }
 
