@@ -24,7 +24,7 @@ struct SettingView: View {
                     Spacer()
                         .frame(height: 30)
                     
-                    SettingItem(title: "대표 블로그 설정", description: UserInfoRepository.shared.getUsername(), detailView: EmptyView())
+                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.getUsername(), detailView: EmptyView())
                     SettingDivider(thickness: 10)
                     
                     SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
@@ -199,7 +199,7 @@ extension Color {
     static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
 }
 
-/*
+
 #Preview {
     SettingView()
-}*/
+}
