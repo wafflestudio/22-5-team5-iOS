@@ -10,6 +10,7 @@ import Observation
 
 @Observable final class SignUpStep2ViewModel {
     var email: String = ""
+    var emailExists: Bool = false
     var code: String = ""
     
     private var isCodeRequested: Bool = false
@@ -38,10 +39,23 @@ import Observation
         return email.isEmpty
     }
     
-    func requestCode() {
+    func requestCode() async {
         if isEmailValid() {
+            do {
+                emailExists = try await NetworkRepository.shared.postEmailExists(email: email)
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
+            if emailExists { return }
+            
+            // TODO: 인증 코드 API 연결 필요
             isCodeRequested = true
         }
+    }
+    
+    func toggleEmailExists() {
+        emailExists.toggle()
     }
     
     func isEmailValid() -> Bool {

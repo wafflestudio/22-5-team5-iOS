@@ -31,6 +31,30 @@ final class NetworkRepository {
     }
     
     // MARK: - User
+    func postEmailExists(email: String) async throws -> Bool {
+        let requestBody = [
+            "email": email
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postEmailExists.url,
+            method: NetworkRouter.postEmailExists.method,
+            headers: NetworkRouter.postEmailExists.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingString()
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        // response: {"verification":???}
+        return response[16..<response.count - 1] == "true"
+    }
+    
     func postSignUp(userID: String, userPW: String) async throws {
         let requestBody = [
             "email": userID,
