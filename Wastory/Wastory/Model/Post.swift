@@ -59,6 +59,6 @@ struct PostListDto: Codable {
 import SwiftUI
 extension View {
     func tempPost() -> Post {
-        Post.init(id: 1, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5)
+        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5)
     }
 }

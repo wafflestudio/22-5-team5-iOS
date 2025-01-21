@@ -41,7 +41,7 @@ struct CommentView: View {
                             .frame(width: 4)
                         
                         //comment count
-                        Text("55")
+                        Text("\(viewModel.totalCommentsCount)")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                         
@@ -143,7 +143,11 @@ struct CommentView: View {
                             .frame(width: 10)
                         
                         Button(action: {
-                            //댓글 등록
+                            Task {
+                                await viewModel.postComment()
+                                viewModel.resetPage()
+                                await viewModel.getComments()
+                            }
                         }) {
                             Text("등록")
                                 .font(.system(size: 16, weight: .light))
@@ -163,6 +167,12 @@ struct CommentView: View {
                 .background(Color.white)
                 
             }//VStack
+        }
+        .onAppear {
+            viewModel.setPostID(postID)
+            Task {
+                await viewModel.getComments()
+            }
         }
     } //Body
 }

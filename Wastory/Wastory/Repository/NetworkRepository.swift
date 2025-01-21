@@ -222,6 +222,8 @@ final class NetworkRepository {
         .serializingDecodable(PostListDto.self, decoder: decoder)
         .value
         
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
         return response.articles
     }
 }

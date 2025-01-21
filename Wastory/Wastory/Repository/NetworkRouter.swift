@@ -23,6 +23,12 @@ enum NetworkRouter {
     case postArticle
     case getArticlesInBlog(blogID: Int)
     
+    //MARK: Comment
+    case postComment(postID: Int)
+    case getArticleComments(postID: Int, page: Int)
+    
+    
+    
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
     }
@@ -42,6 +48,10 @@ enum NetworkRouter {
         // MARK: Article
         case .postArticle: "/articles/create"
         case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
+            
+        // MARK: Comment
+        case let .postComment(postID): "/comments/article/\(postID)"
+        case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
         }
     }
     
@@ -68,6 +78,12 @@ enum NetworkRouter {
             return .post
         case .getArticlesInBlog:
             return .get
+        
+        // MARK: Comment
+        case .postComment:
+            return .post
+        case .getArticleComments:
+            return .get
         }
     }
     
@@ -93,6 +109,13 @@ enum NetworkRouter {
         case .postArticle:
             return ["Content-Type": "application/json"]
         case .getArticlesInBlog:
+            return ["Content-Type": "application/json"]
+            
+            
+        // MARK: Comment
+        case .postComment:
+            return ["Content-Type": "application/json"]
+        case .getArticleComments:
             return ["Content-Type": "application/json"]
         }
     }
