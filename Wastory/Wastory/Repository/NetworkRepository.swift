@@ -98,7 +98,11 @@ final class NetworkRepository {
     
     // MARK: Article
     func postArticle(title: String, content: String, categoryID: Int) async throws {
-        let requestBody = articleOtd(title: title, content: content, categoryID: categoryID)
+        let requestBody = [
+            "title": title,
+            "content": content,
+            "category_id": "\(categoryID)"
+        ]
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
             method: NetworkRouter.postArticle.method,
@@ -109,7 +113,7 @@ final class NetworkRepository {
         _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable(articleDto.self).value
+        ).validate().serializingDecodable(Post.self).value
     }
     
     func getArticlesInBlog(blogID: Int) async throws -> [Post] {
@@ -122,50 +126,8 @@ final class NetworkRepository {
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
-        ).validate().serializingDecodable([articleDto].self).value
+        ).validate().serializingDecodable([Post].self).value
         
-        return response.map { article in
-            Post(
-                id: article.articleID,
-                blogID: 0,
-                title: article.title,
-                description: article.content,
-                createdAt: ISO8601DateFormatter().date(from: article.createdAt) ?? Date(),
-                commentCount: 0,
-                likeCount: 0
-            )
-        }
+        return response
     }
-}
-
-struct articleOtd: Codable {
-    let title: String
-    let content: String
-    let categoryID: Int
-    
-    private enum CodingKeys: String, CodingKey {
-        case title
-        case content
-        case categoryID = "category_id"
-    }
-}
-
-struct articleDto: Codable {
-    let articleID: Int
-    let title: String
-    let content: String
-    let createdAt: String
-    let updatedAt: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case articleID = "id"
-        case title
-        case content
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-    }
-}
-
-struct articlesDto: Codable {
-    let articles: [articleDto]
 }

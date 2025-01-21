@@ -61,13 +61,6 @@ import Observation
     //Network
     
     var searchPostResult: [Post] = [
-        Post.init(id: 1, blogID: 1, title: "asdfasdf", description: "asdfasdfasdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 2, blogID: 1, title: "asdf1asdf", description: "asdfa6sdfasdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 3, blogID: 1, title: "asdf2asdf", description: "asdf5asdfasdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 4, blogID: 1, title: "asdf3asdf", description: "asdf4asdfasdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 5, blogID: 1, title: "asdf4asdf", description: "asdfasdfasd3fasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 6, blogID: 1, title: "asd5fasdf", description: "asdfasdfa2sdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
-        Post.init(id: 7, blogID: 1, title: "as6dfasdf", description: "asdfasdf1asdfasdfasdfasdf", createdAt: Date(), commentCount: 5, likeCount: 55),
     ]
     
     var searchBlogResult: [Blog] = [
