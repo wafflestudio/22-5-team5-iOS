@@ -14,8 +14,8 @@ struct Post: Codable, Identifiable, Hashable {
     var categoryID: Int?           // Post가 블로그 내에 속한 카테고리 Id (카테고리 미제작 시 불필요)
         
     var title: String               // Post 제목
-    var description: String?        // Post 미리보기
     var content: String?            // Post 내용 (HTML을 String으로 변환하여 저장)
+    var description: String?        // Post 미리보기
     var createdAt: Date             // 발행일
     let blogID: Int                 // Post가 게시된 Blog Id(주소)
     var mainImageUrl: String?       // Post 대표이미지 URL
@@ -28,9 +28,9 @@ struct Post: Codable, Identifiable, Hashable {
         case homeTopicID
         case categoryID
         case title
-        case description
         case content
-        case createdAt
+        case description
+        case createdAt = "created_at"
         case blogID = "blog_id"
         case mainImageUrl = "main_image_url"
         case viewCount = "views"
@@ -38,6 +38,21 @@ struct Post: Codable, Identifiable, Hashable {
         case commentCount = "article_comments"
     }
 }
+
+struct PostListDto: Codable {
+    let page: Int
+    let perPage: Int
+    let totalCount: Int
+    let articles: [Post]
+    
+    private enum CodingKeys: String, CodingKey {
+        case page
+        case perPage = "per_page"
+        case totalCount = "total_count"
+        case articles
+    }
+}
+
 
 
 
