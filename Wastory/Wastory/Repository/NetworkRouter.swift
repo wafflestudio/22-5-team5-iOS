@@ -10,6 +10,7 @@ import Alamofire
 
 enum NetworkRouter {
     // MARK: User
+    case postEmailExists
     case postSignUp
     case postSignIn
     case deleteMe
@@ -36,6 +37,7 @@ enum NetworkRouter {
     var path: String {
         switch self {
         // MARK: User
+        case .postEmailExists: "/users/email-exists"
         case .postSignUp: "/users/signup"
         case .postSignIn: "/users/signin"
         case .deleteMe: "/users/me"
@@ -58,6 +60,8 @@ enum NetworkRouter {
     var method: HTTPMethod {
         switch self {
         // MARK: User
+        case .postEmailExists:
+            return .post
         case .postSignUp:
             return .post
         case .postSignIn:
@@ -90,6 +94,8 @@ enum NetworkRouter {
     var headers: HTTPHeaders? {
         switch self {
         // MARK: User
+        case .postEmailExists:
+            return ["Content-Type": "application/json"]
         case .postSignUp:
             return ["Content-Type": "application/json"]
         case .postSignIn:
