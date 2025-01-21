@@ -12,7 +12,7 @@ final class NetworkRepository {
     static let shared = NetworkRepository()    // 싱글톤 인스턴스
     
     // MARK: - Debugging Helpers
-    private func logRequest(_ urlRequest: URLRequest, body: Any? = nil) {
+    func logRequest(_ urlRequest: URLRequest, body: Any? = nil) {
         print("\n🌐 ━━━ Network Request ━━━")
         print("📍 URL: \(urlRequest.url?.absoluteString ?? "nil")")
         print("📝 Method: \(urlRequest.method?.rawValue ?? "nil")")
@@ -23,7 +23,7 @@ final class NetworkRepository {
         print("━━━━━━━━━━━━━━━━━━━━━")
     }
     
-    private func logResponse<T>(_ response: T, url: String) {
+    func logResponse<T>(_ response: T, url: String) {
         print("\n✨ ━━━ Network Response ━━━")
         print("📍 URL: \(url)")
         print("📦 Response: \(response)")
@@ -202,6 +202,8 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(PostListDto.self, decoder: decoder)
         .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response.articles
     }
