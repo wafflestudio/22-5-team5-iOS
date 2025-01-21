@@ -33,7 +33,7 @@ struct WastoryApp: App {
             else {
                 if UserInfoRepository.shared.isUserActive() == false {
                     NavigationStack {
-                        SignInView()
+                        SignTypeView()
                             .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
                                 SignUpStep5AddressView()
                             }
