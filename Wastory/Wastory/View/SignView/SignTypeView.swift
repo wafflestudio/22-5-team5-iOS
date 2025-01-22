@@ -75,7 +75,3 @@ struct SignTypeView: View {
         }
     }
 }
-
-#Preview {
-    SignTypeView()
-}
