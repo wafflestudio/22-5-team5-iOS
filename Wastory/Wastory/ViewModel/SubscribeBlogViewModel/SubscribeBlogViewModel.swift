@@ -40,7 +40,11 @@ import Observation
     }
     
     //ViewType
-    let subscribeType: SubscribeType = .subscribing
+    var subscribeType: SubscribeType = .subscribing
+    
+    func initSubscribeType(_ type: SubscribeType) {
+        subscribeType = type
+    }
     
     func isSubscribing() -> Bool {
         subscribeType == .subscribing

@@ -61,6 +61,9 @@ struct SubscribeBlogView: View {
                 }
             }
         }
+        .onAppear {
+            viewModel.initSubscribeType(subscribeType)
+        }
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : (viewModel.isSubscribing() ? "구독중" : "구독자"))
         .navigationBarTitleDisplayMode(.inline)
