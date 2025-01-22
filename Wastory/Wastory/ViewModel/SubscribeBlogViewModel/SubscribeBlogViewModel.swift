@@ -1,0 +1,63 @@
+//
+//  SubscribeBlogViewModel.swift
+//  Wastory
+//
+//  Created by 중워니 on 1/22/25.
+//
+
+
+import SwiftUI
+import Observation
+
+@Observable final class SubscribeBlogViewModel {
+    private var isNavTitleHidden: Bool = true
+    
+    private var initialScrollPosition: CGFloat = 0
+    
+    
+    func setInitialScrollPosition(_ scrollPosition: CGFloat) {
+        initialScrollPosition = scrollPosition
+    }
+    
+    func changeIsNavTitleHidden(by newValue: CGFloat, _ oldValue: CGFloat) {
+        if oldValue == initialScrollPosition {
+            if (!isNavTitleHidden) {
+                isNavTitleHidden = true
+            }
+        } else if newValue <= initialScrollPosition - 53 {
+            if (isNavTitleHidden) {
+                isNavTitleHidden = false
+            }
+        } else {
+            if (!isNavTitleHidden) {
+                isNavTitleHidden = true
+            }
+        }
+    }
+    
+    func getIsNavTitleHidden() -> Bool {
+        isNavTitleHidden
+    }
+    
+    //ViewType
+    let subscribeType: SubscribeType = .subscribing
+    
+    func isSubscribing() -> Bool {
+        subscribeType == .subscribing
+    }
+    
+    
+    //pagination
+    var page = 1
+    var isPageEnded: Bool = false
+    
+    func resetPage() {
+        page = 1
+    }
+    
+    //Network
+    var blogs: [Blog] = []
+    
+    var totalCount: Int?
+}
+
