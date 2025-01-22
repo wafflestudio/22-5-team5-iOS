@@ -39,6 +39,13 @@ struct BlogPostListView: View {
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.blogPosts.enumerated()), id: \.offset) { index, post in
                     BlogPostListCell(post: post)
+                        .onAppear {
+                            if index == viewModel.blogPosts.count - 1 {
+                                Task {
+                                    await viewModel.getPostsInBlog()
+                                }
+                            }
+                        }
                 }
             }
         } //VStack
