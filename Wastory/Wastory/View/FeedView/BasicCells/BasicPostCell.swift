@@ -9,7 +9,7 @@ import SwiftUI
 
 // "피드"의 List에 표시 될 Cell
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
-struct FeedCell: View {
+struct BasicPostCell: View {
     let post: Post
     //let blogName
     //let blogMainImageUrl     <- post id로 fetch

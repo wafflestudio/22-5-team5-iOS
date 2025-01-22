@@ -66,28 +66,32 @@ struct FeedView: View {
                     Spacer()
                     
                     // 구독중
-                    VStack(alignment: .trailing, spacing: 0) {
-                        Text("구독중")
-                            .font(.system(size: 13, weight: .light))
-                            .foregroundStyle(Color.gray)
-                            .padding(.bottom, 4)
-                        
-                        Text("\(subscribingCount)")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundStyle(Color.black)
+                    NavigationLink(destination: SubscribeBlogView(subscribeType: .subscribing)) {
+                        VStack(alignment: .trailing, spacing: 0) {
+                            Text("구독중")
+                                .font(.system(size: 13, weight: .light))
+                                .foregroundStyle(Color.gray)
+                                .padding(.bottom, 4)
+                            
+                            Text("\(subscribingCount)")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(Color.black)
+                        }
+                        .padding(.trailing, 12)
                     }
-                    .padding(.trailing, 12)
                     
                     // 구독자
-                    VStack(alignment: .trailing, spacing: 0) {
-                        Text("구독자")
-                            .font(.system(size: 13, weight: .light))
-                            .foregroundStyle(Color.gray)
-                            .padding(.bottom, 4)
-                        
-                        Text("\(subscriberCount)")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundStyle(Color.black)
+                    NavigationLink(destination: SubscribeBlogView(subscribeType: .subscriber)) {
+                        VStack(alignment: .trailing, spacing: 0) {
+                            Text("구독자")
+                                .font(.system(size: 13, weight: .light))
+                                .foregroundStyle(Color.gray)
+                                .padding(.bottom, 4)
+                            
+                            Text("\(subscriberCount)")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(Color.black)
+                        }
                     }
                 }
                 .padding(.trailing, 22)
@@ -119,7 +123,7 @@ struct FeedView: View {
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
-                        FeedCell(post: post)
+                        BasicPostCell(post: post)
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }

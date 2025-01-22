@@ -74,13 +74,13 @@ struct SearchView: View {
                         
                         if viewModel.isSearchType(is: .post) {
                             ForEach(Array(viewModel.searchPostResult.enumerated()), id: \.offset) { index, post in
-                                FeedCell(post: post)
+                                BasicPostCell(post: post)
                                 Divider()
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
                         } else if viewModel.isSearchType(is: .blog) {
                             ForEach(Array(viewModel.searchBlogResult.enumerated()), id: \.offset) { index, blog in
-                                SearchedBlogCell(blog: blog)
+                                BasicBlogCell(blog: blog)
                                 Divider()
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
