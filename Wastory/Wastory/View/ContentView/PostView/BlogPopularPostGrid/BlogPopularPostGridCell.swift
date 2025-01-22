@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct BlogPopularPostGridCell: View {
-    
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.postViewModel) var viewModel
     
@@ -46,7 +45,3 @@ struct BlogPopularPostGridCell: View {
     }
 }
 
-
-#Preview {
-    BlogPostListCell()
-}

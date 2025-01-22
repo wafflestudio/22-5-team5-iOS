@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BlogPostListCell: View {
+    let post: Post
     
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.blogViewModel) var viewModel
@@ -16,7 +17,7 @@ struct BlogPostListCell: View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 18, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
                         .lineLimit(2)
@@ -24,7 +25,7 @@ struct BlogPostListCell: View {
                     Spacer()
                         .frame(height: 5)
                     
-                    Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
+                    Text(post.description ?? "")
                         .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                         .lineLimit(2)
@@ -36,7 +37,7 @@ struct BlogPostListCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "heart")
                             
-                            Text("50")
+                            Text("\(post.likeCount)")
                         }
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -48,7 +49,7 @@ struct BlogPostListCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "ellipsis.bubble")
                             
-                            Text("5")
+                            Text("\(post.commentCount)")
                         }
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -96,7 +97,3 @@ struct BlogPostListCell: View {
     }
 }
 
-
-#Preview {
-    BlogPostListCell()
-}

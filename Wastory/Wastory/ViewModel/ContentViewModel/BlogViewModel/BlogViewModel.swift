@@ -82,6 +82,11 @@ import Observation
     var page = 1
     var isPageEnded: Bool = false
     
+    func resetPage() {
+        page = 1
+        isPageEnded = false
+    }
+    
     
     //Network
     var popularBlogPosts: [Post] = []
@@ -113,6 +118,7 @@ import Observation
         }
     }
     
+    // - 블로그 내 인기글List views 순으로 get하기 (pagination 기능 있음)
     func getPopularBlogPosts() async {
         do {
             popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blogID, sortBy: PopularPostSortedType.views.api)

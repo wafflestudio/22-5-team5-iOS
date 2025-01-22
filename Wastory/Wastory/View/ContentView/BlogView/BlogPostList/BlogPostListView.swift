@@ -37,8 +37,8 @@ struct BlogPostListView: View {
                 .frame(height: 5)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.blogPosts.enumerated()), id: \.offset) { index, item in
-                    BlogPostListCell()
+                ForEach(Array(viewModel.blogPosts.enumerated()), id: \.offset) { index, post in
+                    BlogPostListCell(post: post)
                 }
             }
         } //VStack

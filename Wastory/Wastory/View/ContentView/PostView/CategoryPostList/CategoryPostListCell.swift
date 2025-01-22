@@ -94,8 +94,3 @@ struct CategoryPostListCell: View {
         }
     }
 }
-
-
-#Preview {
-    BlogPostListCell()
-}

@@ -35,8 +35,8 @@ struct PopularBlogPostListView: View {
                 .frame(height: 10)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.popularBlogPosts.prefix(3).enumerated()), id: \.offset) { index, item in
-                    PopularBlogPostCell()
+                ForEach(Array(viewModel.popularBlogPosts.prefix(3).enumerated()), id: \.offset) { index, post in
+                    PopularBlogPostCell(post: post)
                     Divider()
                         .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
                 }
