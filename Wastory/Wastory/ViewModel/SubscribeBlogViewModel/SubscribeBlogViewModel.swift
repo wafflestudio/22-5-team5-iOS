@@ -60,7 +60,11 @@ import Observation
     }
     
     //Network
-    var blogs: [Blog] = []
+    var blogs: [Blog] = [
+        Blog(id: 1, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1),
+        Blog(id: 2, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1),
+        Blog(id: 3, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1)
+    ]
     
     var totalCount: Int?
 }
