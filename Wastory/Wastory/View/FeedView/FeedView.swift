@@ -123,7 +123,7 @@ struct FeedView: View {
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
-                        FeedCell(post: post)
+                        BasicPostCell(post: post)
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }

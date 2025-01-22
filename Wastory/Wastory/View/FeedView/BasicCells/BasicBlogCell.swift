@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SearchedBlogCell: View {
+struct BasicBlogCell: View {
     let blog: Blog
     @Environment(\.contentViewModel) var contentViewModel
     

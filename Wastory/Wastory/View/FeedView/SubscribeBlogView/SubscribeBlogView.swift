@@ -54,9 +54,9 @@ struct SubscribeBlogView: View {
                         .frame(height: 20)
                     
                     
-                    // MARK: 댓글List
+                    // MARK: BlogList
                     ForEach(viewModel.blogs) { blog in
-                        SearchedBlogCell(blog: blog)
+                        BasicBlogCell(blog: blog)
                     }
                 }
             }
