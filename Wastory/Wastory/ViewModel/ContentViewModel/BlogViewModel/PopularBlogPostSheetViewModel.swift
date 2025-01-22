@@ -11,10 +11,10 @@ import SwiftUI
 import Observation
 
 @Observable final class PopularBlogPostSheetViewModel {
-    var blogID: Int = 0
+    var blog: Blog?
     
-    func initBlogID(_ id: Int) {
-        blogID = id
+    func initBlog(_ blog: Blog) {
+        self.blog = blog
     }
     
     
@@ -87,7 +87,7 @@ import Observation
     
     func getPopularBlogPosts() async {
         do {
-            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blogID, sortBy: sortCriterion.api)
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: sortCriterion.api)
         } catch {
             print("Error: \(error.localizedDescription)")
         }

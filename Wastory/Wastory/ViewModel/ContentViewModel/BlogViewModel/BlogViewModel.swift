@@ -11,10 +11,10 @@ import SwiftUI
 import Observation
 
 @Observable final class BlogViewModel {
-    var blogID: Int = 0
+    var blog: Blog?
     
-    func initBlogID(_ id: Int) {
-        blogID = id
+    func initBlog(_ blog: Blog) {
+        self.blog = blog
     }
     
     
@@ -96,7 +96,7 @@ import Observation
     func getPostsInBlog() async {
         if !isPageEnded {
             do {
-                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: self.blogID, page: self.page)
+                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: self.blog!.id, page: self.page)
                 
                 //comments 저장
                 if self.page == 1 {
@@ -120,7 +120,7 @@ import Observation
     // - 블로그 내 인기글List views 순으로 get하기 (pagination 기능 있음)
     func getPopularBlogPosts() async {
         do {
-            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blogID, sortBy: PopularPostSortedType.views.api)
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)
         } catch {
             print("Error: \(error.localizedDescription)")
         }

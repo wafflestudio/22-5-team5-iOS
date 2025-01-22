@@ -92,7 +92,7 @@ struct BlogPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(post)
         }
     }
 }

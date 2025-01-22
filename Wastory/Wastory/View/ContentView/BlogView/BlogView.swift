@@ -20,7 +20,7 @@ struct BlogView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
-                    BlogHeaderView()
+                    BlogHeaderView(blog: blog)
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -106,7 +106,7 @@ struct BlogView: View {
             
         } //ZStack
         .onAppear {
-            viewModel.initBlogID(blog.id)
+            viewModel.initBlog(blog)
             Task {
                 await viewModel.getPostsInBlog()
             }

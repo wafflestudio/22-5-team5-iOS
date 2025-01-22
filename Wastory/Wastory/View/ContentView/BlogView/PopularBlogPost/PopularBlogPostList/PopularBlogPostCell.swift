@@ -79,7 +79,7 @@ struct PopularBlogPostCell: View {
         } //VStack
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(post)
         }
     }
 }

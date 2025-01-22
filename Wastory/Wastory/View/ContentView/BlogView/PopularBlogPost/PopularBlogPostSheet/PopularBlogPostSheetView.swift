@@ -124,7 +124,7 @@ struct PopularBlogPostSheetView: View {
         
         } //VStack
         .onAppear {
-            viewModel.initBlogID(blog.id)
+            viewModel.initBlog(blog)
             Task {
                 await viewModel.getPopularBlogPosts()
             }
