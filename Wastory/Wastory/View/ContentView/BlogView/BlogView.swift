@@ -105,6 +105,15 @@ struct BlogView: View {
             .ignoresSafeArea()
             
         } //ZStack
+        .onAppear {
+            viewModel.initBlogID(blog.id)
+            Task {
+                await viewModel.getPostsInBlog()
+            }
+            Task {
+                await viewModel.getPopularBlogPosts()
+            }
+        }
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar

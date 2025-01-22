@@ -11,6 +11,14 @@ import SwiftUI
 import Observation
 
 @Observable final class BlogViewModel {
+    var blogID: Int = 0
+    
+    
+    func initBlogID(_ id: Int) {
+        blogID = id
+    }
+    
+    
     private var isNavTitleHidden: Bool = true
     
     private var initialScrollPosition: CGFloat = 0
@@ -23,9 +31,6 @@ import Observation
     var selectedCategory: String = "분류 전체보기"
     
     
-    var popularBlogPostItems: [String] = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8", "item 9", "item 10"]
-    
-    var blogPostListItems: [String] = ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6", "item 7", "item 8", "item 9", "item 10"]
     
     
     func setInitialScrollPosition(_ scrollPosition: CGFloat) {
@@ -70,6 +75,52 @@ import Observation
     func setCategory(to category: String) {
         selectedCategory = category
     }
+    
+    
+    
+    //pagination
+    var page = 1
+    var isPageEnded: Bool = false
+    
+    
+    //Network
+    var popularBlogPosts: [Post] = []
+    
+    var blogPosts: [Post] = []
+    
+    // - 블로그 내 글List get하기 (pagination 기능 있음)
+    func getPostsInBlog() async {
+        if !isPageEnded {
+            do {
+                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: self.blogID, page: self.page)
+                
+                //comments 저장
+                if self.page == 1 {
+                    blogPosts = response
+                } else {
+                    blogPosts.append(contentsOf: response)
+                }
+                
+                //pagination
+                if !response.isEmpty {
+                    self.page += 1
+                } else {
+                    self.isPageEnded = true
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func getPopularBlogPosts() async {
+        do {
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blogID, sortBy: PopularPostSortedType.views.api)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
 }
 
 

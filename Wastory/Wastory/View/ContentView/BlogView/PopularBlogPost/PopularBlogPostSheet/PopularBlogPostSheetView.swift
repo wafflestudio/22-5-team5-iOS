@@ -171,3 +171,33 @@ struct PopularBlogPostSheetView: View {
         }
     }
 }
+
+
+
+enum PopularPostSortedType: String, CaseIterable {
+    case views
+    case comments
+    case likes
+    
+    var korName: String {
+        switch self {
+        case .views:
+            return "조회순"
+        case .comments:
+            return "댓글순"
+        case .likes:
+            return "공감순"
+        }
+    }
+    
+    var api: String {
+        switch self {
+        case .views:
+            return "views"
+        case .comments:
+            return "comments"
+        case .likes:
+            return "likes"
+        }
+    }
+}
