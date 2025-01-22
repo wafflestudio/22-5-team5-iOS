@@ -170,8 +170,12 @@ struct SignInView: View {
                     Spacer()
                 }
             }
-            .navigationBarBackButtonHidden()
+        }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                CustomBackButton()
+            }
         }
     }
 }
-

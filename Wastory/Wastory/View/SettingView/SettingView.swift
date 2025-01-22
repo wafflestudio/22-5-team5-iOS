@@ -24,7 +24,7 @@ struct SettingView: View {
                     Spacer()
                         .frame(height: 30)
                     
-                    SettingItem(title: "대표 블로그 설정", description: UserInfoRepository.shared.getUsername(), detailView: EmptyView())
+                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView())
                     SettingDivider(thickness: 10)
                     
                     SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
@@ -159,24 +159,20 @@ struct SettingItem<DetailView: View>: View {
     let description: String
     let detailView: DetailView
     var body: some View {
-        HStack(spacing: 0) {
-            Text(title)
-                .font(.system(size: 17, weight: .regular))
-            Spacer()
-            Text(description)
-                .font(.system(size: 14, weight: .regular))
-                .foregroundStyle(Color.settingItemDescGray)
-            Spacer()
-                .frame(width: 20)
-            Image(systemName: "chevron.right")
-                .font(.system(size: 15, weight: .regular))
-                .foregroundStyle(Color.settingItemDescGray)
-        }
-        .background {
-            NavigationLink(destination: detailView) {
-                Rectangle()
-                    .fill(.clear)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        NavigationLink(destination: detailView) {
+            HStack(spacing: 0) {
+                Text(title)
+                    .font(.system(size: 17, weight: .regular))
+                    .foregroundStyle(.black)
+                Spacer()
+                Text(description)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(Color.settingItemDescGray)
+                Spacer()
+                    .frame(width: 20)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(Color.settingItemDescGray)
             }
         }
         .padding(.horizontal, 20)
@@ -198,8 +194,3 @@ extension Color {
     static let settingDivderGray: Color = .init(red: 247 / 255, green: 247 / 255, blue: 247 / 255)   // 설정 분리선 색상
     static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
 }
-
-/*
-#Preview {
-    SettingView()
-}*/
