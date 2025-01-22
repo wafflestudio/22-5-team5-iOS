@@ -42,6 +42,17 @@ struct BlogView: View {
                     
                 } //VStack
             } //ScrollView
+            // MARK: refreshing
+            .refreshable {
+                print("refresh")
+                viewModel.resetPage()
+                Task {
+                    await viewModel.getPostsInBlog()
+                }
+                Task {
+                    await viewModel.getPopularBlogPosts()
+                }
+            }
             
             
             //MARK: CategorySheet
