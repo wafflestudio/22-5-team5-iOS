@@ -15,6 +15,11 @@ import Observation
     var password: String = ""
     var password2: String = ""
     
+    var isPasswordSecureFieldRendered: Bool = false
+    var isPasswordFieldTapped: Bool = false
+    var isNavigationActive: Bool = false
+    var activeAlert: PasswordSettingAlertType?
+    
     let forbiddenCharactersRegex = "[^A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{}|;:',.<>?/`~]"
     let numberOnlyRegex = "^[0-9]+$"
     let lettersOnlyRegex = "^[A-Za-z]+$"

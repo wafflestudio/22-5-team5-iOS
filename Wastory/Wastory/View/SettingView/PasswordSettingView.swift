@@ -14,11 +14,6 @@ struct PasswordSettingView: View {
     @FocusState private var isPassword0Focused: Bool
     @FocusState private var isPasswordFocused: Bool
     @FocusState private var isPassword2Focused: Bool
-    
-    @State private var isPasswordSecureFieldRendered: Bool = false
-    @State private var isPasswordFieldTapped: Bool = false
-    @State private var isNavigationActive: Bool = false
-    @State private var activeAlert: PasswordSettingAlertType?
 
     var body: some View {
         NavigationStack {
@@ -29,7 +24,7 @@ struct PasswordSettingView: View {
                         isPassword0Focused = false
                         isPasswordFocused = false
                         isPassword2Focused = false
-                        isPasswordFieldTapped = true
+                        viewModel.isPasswordFieldTapped = true
                     }
                 
                 VStack {
@@ -72,7 +67,7 @@ struct PasswordSettingView: View {
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 isPassword0Focused = true
-                                isPasswordSecureFieldRendered = true
+                                viewModel.isPasswordSecureFieldRendered = true
                             }
                         }
                         
@@ -94,10 +89,10 @@ struct PasswordSettingView: View {
                     Spacer()
                         .frame(height: 5)
                     Rectangle()
-                        .foregroundStyle(!isPasswordSecureFieldRendered || isPassword0Focused ? .black : viewModel.password0Validator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
+                        .foregroundStyle(!viewModel.isPasswordSecureFieldRendered || isPassword0Focused ? .black : viewModel.password0Validator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
                         .frame(height: 1)
                         .padding(.horizontal, 20)
-                    if isPasswordSecureFieldRendered && !isPassword0Focused && !viewModel.password0Validator().isEmpty {
+                    if viewModel.isPasswordSecureFieldRendered && !isPassword0Focused && !viewModel.password0Validator().isEmpty {
                         Spacer()
                             .frame(height: 5)
                         HStack {
@@ -110,7 +105,6 @@ struct PasswordSettingView: View {
                     }
                     Spacer()
                         .frame(height: 40)
-                    
                     
                     // MARK: - 새로운 비밀번호
                     HStack {
@@ -131,7 +125,7 @@ struct PasswordSettingView: View {
                         .autocapitalization(.none)
                         .onChange(of: isPasswordFocused) { newValue, oldValue in
                             if isPasswordFocused {
-                                isPasswordFieldTapped = true
+                                viewModel.isPasswordFieldTapped = true
                             }
                         }
                         
@@ -153,12 +147,12 @@ struct PasswordSettingView: View {
                     Spacer()
                         .frame(height: 5)
                     Rectangle()
-                        .foregroundStyle(!isPasswordFieldTapped || isPasswordFocused ? .black : viewModel.passwordValidator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
+                        .foregroundStyle(!viewModel.isPasswordFieldTapped || isPasswordFocused ? .black : viewModel.passwordValidator().isEmpty ? .emailCautionTextGray : Color.emptyEmailWarnRed)
                         .frame(height: 1)
                         .padding(.horizontal, 20)
                     Spacer()
                         .frame(height: 5)
-                    if isPasswordFieldTapped && !isPasswordFocused && !viewModel.passwordValidator().isEmpty {
+                    if viewModel.isPasswordFieldTapped && !isPasswordFocused && !viewModel.passwordValidator().isEmpty {
                         Spacer()
                             .frame(height: 5)
                         HStack {
@@ -179,7 +173,7 @@ struct PasswordSettingView: View {
                         .autocapitalization(.none)
                         .onChange(of: isPassword2Focused) { newValue, oldValue in
                             if isPassword2Focused {
-                                isPasswordFieldTapped = true
+                                viewModel.isPasswordFieldTapped = true
                             }
                         }
                         
@@ -201,10 +195,10 @@ struct PasswordSettingView: View {
                     Spacer()
                         .frame(height: 5)
                     Rectangle()
-                        .foregroundStyle(isPassword2Focused ? .black : !isPasswordFieldTapped || isPasswordFocused || viewModel.isPasswordValid() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
+                        .foregroundStyle(isPassword2Focused ? .black : !viewModel.isPasswordFieldTapped || isPasswordFocused || viewModel.isPasswordValid() ? Color.emailCautionTextGray : Color.emptyEmailWarnRed)
                         .frame(height: 1)
                         .padding(.horizontal, 20)
-                    if isPasswordFieldTapped && !isPasswordFocused && !isPassword2Focused && !viewModel.isPasswordValid() {
+                    if viewModel.isPasswordFieldTapped && !isPasswordFocused && !isPassword2Focused && !viewModel.isPasswordValid() {
                         Spacer()
                             .frame(height: 5)
                         HStack {
@@ -228,17 +222,17 @@ struct PasswordSettingView: View {
                         isPassword0Focused = false
                         isPasswordFocused = false
                         isPassword2Focused = false
-                        isPasswordFieldTapped = true
+                        viewModel.isPasswordFieldTapped = true
                         Task {
                             let result = await viewModel.updatePassword()
                             if result == 2 {
                                 dismiss()
                             }
                             else if result == 1 {
-                                activeAlert = .samePassword
+                                viewModel.activeAlert = .samePassword
                             }
                             else {
-                                activeAlert = .wrongPassword
+                                viewModel.activeAlert = .wrongPassword
                             }
                         }
                     } label: {
@@ -262,7 +256,7 @@ struct PasswordSettingView: View {
                 CustomBackButtonLight()
             }
         }
-        .alert(item: $activeAlert) { alertType in
+        .alert(item: $viewModel.activeAlert) { alertType in
             switch alertType {
             case .wrongPassword:
                 return Alert(

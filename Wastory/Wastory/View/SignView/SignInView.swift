@@ -179,4 +179,3 @@ struct SignInView: View {
         }
     }
 }
-
