@@ -13,7 +13,6 @@ import Observation
 @Observable final class BlogViewModel {
     var blogID: Int = 0
     
-    
     func initBlogID(_ id: Int) {
         blogID = id
     }

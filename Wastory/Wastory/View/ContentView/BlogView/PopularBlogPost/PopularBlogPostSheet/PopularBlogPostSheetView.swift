@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct PopularBlogPostSheetView: View {
-    @State var viewModel = PopularBlogPostSheetViewModel()
+    let blog: Blog
     
+    @State var viewModel = PopularBlogPostSheetViewModel()
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -46,7 +47,7 @@ struct PopularBlogPostSheetView: View {
                             viewModel.toggleIsCriterionSelectionSheetPresent()
                         }) {
                             HStack(spacing: 0) {
-                                Text("\(viewModel.getSortCriterion())  ")
+                                Text("\(viewModel.getSortCriterion().korName)  ")
                                 
                                 Image(systemName: "chevron.down")
                             }
@@ -61,8 +62,8 @@ struct PopularBlogPostSheetView: View {
                     
                     //MARK: PostList
                     LazyVStack(spacing: 0) {
-                        ForEach(Array(viewModel.popularBlogPostItems.enumerated()), id: \.offset) { index, item in
-                            PopularBlogPostSheetCell(index: index + 1, viewModel: viewModel)
+                        ForEach(Array(viewModel.popularBlogPosts.enumerated()), id: \.offset) { index, post in
+                            PopularBlogPostSheetCell(post: post, index: index + 1, viewModel: viewModel)
                             
                             Divider()
                                 .foregroundStyle(Color.secondaryLabelColor)
@@ -122,6 +123,12 @@ struct PopularBlogPostSheetView: View {
             .ignoresSafeArea()
         
         } //VStack
+        .onAppear {
+            viewModel.initBlogID(blog.id)
+            Task {
+                await viewModel.getPopularBlogPosts()
+            }
+        }
         // MARK: NavBar
         // TODO: rightTabButton - 검색버튼과 본인계정버튼은 4개의 TabView에 공통 적용이므로 추후 제작
         .navigationTitle(Text(viewModel.getIsNavTitleHidden() ? "" : "인기글"))
@@ -143,13 +150,17 @@ struct PopularBlogPostSheetView: View {
     }
     
     //MARK: CriterionSelectionSheet Row(Button)
-    @ViewBuilder func CriterionSelectionButton(for criterion: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+    @ViewBuilder func CriterionSelectionButton(for criterion: PopularPostSortedType, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
+            print(criterion)
             viewModel.setSortCriterion(to: criterion)
             viewModel.toggleIsCriterionSelectionSheetPresent()
+            Task {
+                await viewModel.getPopularBlogPosts()
+            }
         }) {
             HStack(spacing: 0) {
-                Text("\(criterion)")
+                Text("\(criterion.korName)")
                     .font(.system(size: 17, weight: viewModel.isCurrentSortCriterion(is: criterion) ? .semibold : .light))
                     .foregroundStyle(Color.primaryLabelColor)
                     .padding()
@@ -173,31 +184,3 @@ struct PopularBlogPostSheetView: View {
 }
 
 
-
-enum PopularPostSortedType: String, CaseIterable {
-    case views
-    case comments
-    case likes
-    
-    var korName: String {
-        switch self {
-        case .views:
-            return "조회순"
-        case .comments:
-            return "댓글순"
-        case .likes:
-            return "공감순"
-        }
-    }
-    
-    var api: String {
-        switch self {
-        case .views:
-            return "views"
-        case .comments:
-            return "comments"
-        case .likes:
-            return "likes"
-        }
-    }
-}

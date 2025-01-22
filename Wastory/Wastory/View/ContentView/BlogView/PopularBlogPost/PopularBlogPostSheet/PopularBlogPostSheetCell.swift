@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PopularBlogPostSheetCell: View {
+    let post: Post
     let index: Int
     @Bindable var viewModel: PopularBlogPostSheetViewModel
     @Environment(\.contentViewModel) var contentViewModel
@@ -24,7 +25,7 @@ struct PopularBlogPostSheetCell: View {
                     .frame(width: 10)
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 18, weight: .light))
                         .lineLimit(1)
                     
@@ -35,7 +36,7 @@ struct PopularBlogPostSheetCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "heart")
                             
-                            Text("50")
+                            Text("\(post.likeCount)")
                         }
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -47,7 +48,7 @@ struct PopularBlogPostSheetCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "ellipsis.bubble")
                             
-                            Text("5")
+                            Text("\(post.commentCount)")
                         }
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -59,7 +60,7 @@ struct PopularBlogPostSheetCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Text("조회")
                             
-                            Text("999+")
+                            Text(post.viewCount >= 1000 ? "999+" : "\(post.viewCount)")
                         }
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)

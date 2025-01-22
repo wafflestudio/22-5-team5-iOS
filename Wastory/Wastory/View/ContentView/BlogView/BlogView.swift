@@ -35,7 +35,7 @@ struct BlogView: View {
                     
                     
                     // 인기글 TODO: 인기글 모두보기 View
-                    PopularBlogPostListView()
+                    PopularBlogPostListView(blog: blog)
                     
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
                     BlogPostListView()
