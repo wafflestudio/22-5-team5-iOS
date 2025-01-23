@@ -194,7 +194,13 @@ struct PostView: View {
         .environment(\.postViewModel, viewModel)
         //MARK: Networking
         .onAppear {
-            
+            viewModel.initContent(post, blog)
+            Task {
+                await viewModel.getPostsInBlogInCategory()
+            }
+            Task {
+                await viewModel.getPopularBlogPosts()
+            }
         }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar

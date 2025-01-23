@@ -31,10 +31,12 @@ struct CategoryPostListView: View {
                 
                 Spacer()
                 
-                contentViewModel.navigateToBlogViewButton(tempBlog()) {
-                    Text("더보기")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
+                if let _ = viewModel.blog {
+                    contentViewModel.navigateToBlogViewButton(viewModel.blog!) {
+                        Text("더보기")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
+                    }
                 }
             }
             .padding(.horizontal, 20)
@@ -44,9 +46,9 @@ struct CategoryPostListView: View {
                 .frame(height: 5)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.categoryPostListItems.enumerated()), id: \.offset) { index, item in
+                ForEach(Array(viewModel.categoryBlogPosts.prefix(4).enumerated()), id: \.offset) { index, post in
                     if index < 4 {
-                        CategoryPostListCell()
+                        CategoryPostListCell(post: post)
                     }
                 }
             }

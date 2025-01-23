@@ -11,13 +11,19 @@ import SwiftUI
 import Observation
 
 @Observable final class PostViewModel {
+    var post: Post?
+    var blog: Blog?
+    
+    func initContent(_ post: Post, _ blog: Blog) {
+        self.post = post
+        self.blog = blog
+    }
+    
+    
+    
     private var isNavTitleHidden: Bool = false
     
     private var initialScrollPosition: CGFloat = 0
-    
-    var categoryPostListItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
-    
-    var blogPopularPostGridItems: [String] = ["item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"]
     
     
     //blogPopularPostGrid
@@ -57,11 +63,36 @@ import Observation
     }
     
     //Network
-    var blog: Blog?
+    var popularBlogPosts: [Post] = []
     
-    func fetchBlog(id: Int) async throws {
-//        blog = try await NetworkRepository.shared.getBlog(blogID: id)
+    var categoryBlogPosts: [Post] = []
+    
+        // - 블로그 내 인기글List views 순으로 get하기
+    func getPopularBlogPosts() async {
+        do {
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
     }
+    
+        // - 블로그 내 같은 카테고리글List get
+    func getPostsInBlogInCategory() async {
+        if post!.categoryID == nil {
+            do {
+            categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlog(blogID: blog!.id, page: 1)
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        } else {
+            do {
+                categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: blog!.id, categoryID: post!.categoryID!, page: 1)
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
 }
 
 // Environment Key 정의

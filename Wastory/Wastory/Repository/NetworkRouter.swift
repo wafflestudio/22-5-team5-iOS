@@ -58,7 +58,7 @@ enum NetworkRouter {
         case .postArticle: "/articles/create"
         case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
         case let .getTopArticlesInBlog(blogID, sortBy): "/articles/blogs/\(blogID)/sort_by/\(sortBy)"
-        case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page): "/articles/blogs/\(blogID)/categories/\(categoryID)"
+        case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: _): "/articles/blogs/\(blogID)/categories/\(categoryID)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
