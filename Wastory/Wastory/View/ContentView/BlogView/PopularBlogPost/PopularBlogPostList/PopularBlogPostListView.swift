@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PopularBlogPostListView: View {
+    let blog: Blog
+    
     @Environment(\.blogViewModel) var viewModel
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -23,7 +25,7 @@ struct PopularBlogPostListView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: PopularBlogPostSheetView()) {
+                NavigationLink(destination: PopularBlogPostSheetView(blog: blog)) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -35,8 +37,8 @@ struct PopularBlogPostListView: View {
                 .frame(height: 10)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.popularBlogPostItems[0..<3].enumerated()), id: \.offset) { index, item in
-                    PopularBlogPostCell()
+                ForEach(Array(viewModel.popularBlogPosts.prefix(3).enumerated()), id: \.offset) { index, post in
+                    PopularBlogPostCell(post: post)
                     Divider()
                         .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
                 }
@@ -45,5 +47,6 @@ struct PopularBlogPostListView: View {
             .shadow(color: Color.black.opacity(0.1), radius: 7)
         }
         .padding(.horizontal, 20)
+        
     }
 }

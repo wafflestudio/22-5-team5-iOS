@@ -46,6 +46,36 @@ extension NetworkRepository {
 //            .serializingString().value
 //    }
     
+    // MARK: - Article
+    func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getTopArticlesInBlog(blogID: blogID, sortBy: sortBy).url,
+            method: NetworkRouter.getTopArticlesInBlog(blogID: blogID, sortBy: sortBy).method,
+            headers: NetworkRouter.getTopArticlesInBlog(blogID: blogID, sortBy: sortBy).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
         var requestBody = [String: String]()

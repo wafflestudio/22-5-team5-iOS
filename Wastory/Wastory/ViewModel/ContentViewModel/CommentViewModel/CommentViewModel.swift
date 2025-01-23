@@ -44,6 +44,10 @@ import Observation
     var page = 1
     var isPageEnded: Bool = false
     
+    func resetPage() {
+        page = 1
+        isPageEnded = false
+    }
     
     //Network
     var postID: Int?
@@ -123,8 +127,5 @@ import Observation
         }
     }
     
-    func resetPage() {
-        page = 1
-    }
 }
 

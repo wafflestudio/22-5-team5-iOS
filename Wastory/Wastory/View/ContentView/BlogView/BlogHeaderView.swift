@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BlogHeaderView: View {
+    let blog: Blog
+    
     var body: some View {
         ZStack{
             Color.loadingCoralRed// 임시 배경 TODO: Blog.mainImage의 대표 색을 추출해 그라데이션으로 표현
@@ -16,7 +18,7 @@ struct BlogHeaderView: View {
                 Spacer()
                     .frame(height: 120)
                 
-                Text("블로그 제목")
+                Text(blog.blogName)
                     .font(.system(size: 30, weight: .bold))
                     .foregroundStyle(Color.primaryDarkModeLabelColor)
                 
@@ -38,7 +40,7 @@ struct BlogHeaderView: View {
                 Spacer()
                     .frame(height: 17)
                 
-                Text("블로그 설명 \n블로그에 대한 긴 설명 \n\n더더 더 긴 블로그에 대한 설명더더 더 긴 블로그에 대한 설명더더 더 긴 블로그에 대한 설명")
+                Text(blog.description)
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Color.secondaryDarkModeLabelColor)
                     .lineSpacing(4)
@@ -101,8 +103,4 @@ struct BlogHeaderView: View {
             .padding(.horizontal, 20)
         }
     }
-}
-
-#Preview {
-    BlogHeaderView()
 }
