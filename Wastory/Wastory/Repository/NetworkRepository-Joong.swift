@@ -46,6 +46,29 @@ extension NetworkRepository {
 //            .serializingString().value
 //    }
     
+    // MARK: - Blog
+    func getBlogByID(blogID: Int) async throws -> Blog {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getBlogByID(blogID: blogID).url,
+            method: NetworkRouter.getBlogByID(blogID: blogID).method,
+            headers: NetworkRouter.getBlogByID(blogID: blogID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Blog.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(
