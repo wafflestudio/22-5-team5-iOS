@@ -9,8 +9,14 @@ import SwiftUI
 
 struct MyBlogView: View {
     var body: some View {
-        NavigationLink(destination: MyCategoryView()) {
-            Text("카테고리 관리")
+        VStack {
+            NavigationLink(destination: MyCategoryView()) {
+                Text("카테고리 관리")
+            }
+            
+            NavigationLink(destination: MyBlogSettingsView()) {
+                Text("블로그 설정")
+            }
         }
     }
 }
