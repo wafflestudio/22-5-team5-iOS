@@ -14,7 +14,6 @@ struct PostView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
     
-    @State var isLiked: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -201,6 +200,9 @@ struct PostView: View {
             Task {
                 await viewModel.getPopularBlogPosts()
             }
+            Task {
+                await viewModel.getIsLiked()
+            }
         }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
@@ -239,14 +241,16 @@ struct PostView: View {
                     
                     //좋아요 버튼
                     Button(action: {
-                        isLiked.toggle()
+                        Task {
+                            await viewModel.likeButtonAction()
+                        }
                     }) {
                         HStack(spacing: 3) {
-                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                            Image(systemName: viewModel.isLiked ? "heart.fill" : "heart")
                                 .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
+                                .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
                             
-                            Text("\(post.likeCount)")
+                            Text("\(post.likeCount + viewModel.likeCountAdjuster())")
                                 .font(.system(size: 16, weight: .light))
                                 .foregroundStyle(Color.bottomBarLabelColor)
                         }

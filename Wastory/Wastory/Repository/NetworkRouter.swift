@@ -33,6 +33,10 @@ enum NetworkRouter {
     case postComment(postID: Int)
     case getArticleComments(postID: Int, page: Int)
     
+    //MARK: Like
+    case postLike
+    case getIsLiked(postID: Int)
+    
     
     
     var url: URL {
@@ -63,6 +67,10 @@ enum NetworkRouter {
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
+            
+        //MARK: Like
+        case .postLike: "/likes/create"
+        case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
         }
     }
     
@@ -104,6 +112,12 @@ enum NetworkRouter {
         case .postComment:
             return .post
         case .getArticleComments:
+            return .get
+            
+        //MARK: Like
+        case .postLike:
+            return .post
+        case .getIsLiked:
             return .get
         }
     }
@@ -147,6 +161,12 @@ enum NetworkRouter {
         case .postComment:
             return ["Content-Type": "application/json"]
         case .getArticleComments:
+            return ["Content-Type": "application/json"]
+        
+        //MARK: Like
+        case .postLike:
+            return ["Content-Type": "application/json"]
+        case .getIsLiked:
             return ["Content-Type": "application/json"]
         }
     }

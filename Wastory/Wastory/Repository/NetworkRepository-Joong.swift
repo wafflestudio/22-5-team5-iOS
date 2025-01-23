@@ -204,5 +204,50 @@ extension NetworkRepository {
         return response
     }
     
+    // MARK: - Like
+    func postLike(postID: Int) async throws {
+        let requestBody = [
+            "article_id": postID
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postLike.url,
+            method: NetworkRouter.postLike.method,
+            headers: NetworkRouter.postLike.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
     
+    func getIsLiked(postID: Int) async throws -> Bool { //Blog Press Like
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getIsLiked(postID: postID).url,
+            method: NetworkRouter.getIsLiked(postID: postID).method,
+            headers: NetworkRouter.getIsLiked(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Bool.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
 }
