@@ -99,6 +99,45 @@ extension NetworkRepository {
         return response.articles
     }
     
+    func getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).url,
+            method: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).method,
+            headers: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+        
+    }
+        
+    
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
         var requestBody = [String: String]()

@@ -26,6 +26,7 @@ enum NetworkRouter {
     case postArticle
     case getArticlesInBlog(blogID: Int)
     case getTopArticlesInBlog(blogID: Int, sortBy: String)
+    case getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int)
     
     
     //MARK: Comment
@@ -57,6 +58,7 @@ enum NetworkRouter {
         case .postArticle: "/articles/create"
         case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
         case let .getTopArticlesInBlog(blogID, sortBy): "/articles/blogs/\(blogID)/sort_by/\(sortBy)"
+        case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page): "/articles/blogs/\(blogID)/categories/\(categoryID)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
@@ -94,6 +96,8 @@ enum NetworkRouter {
         case .getArticlesInBlog:
             return .get
         case .getTopArticlesInBlog:
+            return .get
+        case .getArticlesInBlogInCategory:
             return .get
             
         // MARK: Comment
@@ -134,6 +138,8 @@ enum NetworkRouter {
         case .getArticlesInBlog:
             return ["Content-Type": "application/json"]
         case .getTopArticlesInBlog:
+            return ["Content-Type": "application/json"]
+        case .getArticlesInBlogInCategory:
             return ["Content-Type": "application/json"]
             
             
