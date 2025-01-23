@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Observation
+import Kingfisher
 
 @Observable final class MyBlogSettingsViewModel {
     var mainImage: UIImage? = nil
@@ -22,6 +23,21 @@ import Observation
     var blogDescription: String = ""
     var username: String = ""
     
+    var isBlogNameValid: Bool {
+        !blogName.isEmpty && blogName.count <= 40
+    }
+    
+    var isBlogDescriptionValid: Bool {
+        blogDescription.count <= 255
+    }
+    
+    var isUsernameValid: Bool {
+        !username.isEmpty && username.count <= 32
+    }
+    
+    var isSubmitValid: Bool {
+        isBlogNameValid && isBlogDescriptionValid && isUsernameValid
+    }
     
     func getInitialData() async {
         do {
