@@ -69,8 +69,6 @@ import Observation
     
     var isLiked: Bool = false
     
-    var initialIsLiked: Bool = false
-    
         // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
@@ -102,25 +100,18 @@ import Observation
         do {
             let response = try await NetworkRepository.shared.getIsLiked(postID: post!.id)
             isLiked = response
-            initialIsLiked = response
         } catch {
             print("Error: \(error.localizedDescription)")
         }
     }
     
-    func likeCountAdjuster() -> Int {
-        if initialIsLiked {
-            return isLiked ? 0 : -1
-        } else {
-            return isLiked ? 1 : 0
-        }
-    }
     
         // - 좋아요 기능
     func createLike() async {
         do {
             try await NetworkRepository.shared.postLike(postID: post!.id)
             isLiked = true
+            post!.likeCount += 1
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -131,6 +122,7 @@ import Observation
 //        do {
 //            try await NetworkRepository.shared.deleteLike(postID: post!.id)
 //            isLiked = false
+//            post!.likeCount -= 1
 //        } catch {
 //            print("Error: \(error.localizedDescription)")
 //        }

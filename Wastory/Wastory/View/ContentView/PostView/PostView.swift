@@ -250,7 +250,7 @@ struct PostView: View {
                                 .font(.system(size: 20, weight: .light))
                                 .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
                             
-                            Text("\(post.likeCount + viewModel.likeCountAdjuster())")
+                            Text("\((viewModel.post ?? Post.defaultPost).likeCount)")
                                 .font(.system(size: 16, weight: .light))
                                 .foregroundStyle(Color.bottomBarLabelColor)
                         }
