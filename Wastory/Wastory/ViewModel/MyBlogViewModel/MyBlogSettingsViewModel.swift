@@ -36,7 +36,7 @@ import Kingfisher
     }
     
     var isSubmitValid: Bool {
-        isBlogNameValid && isBlogDescriptionValid && isUsernameValid
+        isBlogNameValid && isBlogDescriptionValid //&& isUsernameValid
     }
     
     func getInitialData() async {
@@ -46,6 +46,16 @@ import Kingfisher
             blogName = blog.blogName
             blogDescription = blog.description
             username = UserInfoRepository.shared.getUsername()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    //Network
+    func patchBlog() async {
+        do {
+            try await NetworkRepository.shared.patchBlog(blogName: blogName, description: blogDescription)
+            // UserName update
         } catch {
             print("Error: \(error.localizedDescription)")
         }

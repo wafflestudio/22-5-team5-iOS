@@ -183,7 +183,10 @@ struct MyBlogSettingsView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    //patch 내용
+                    Task {
+                        await viewModel.patchBlog()
+                        dismiss()
+                    }
                 }) {
                     Text("완료")
                         .font(.system(size: 14, weight: .light))
