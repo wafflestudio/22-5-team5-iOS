@@ -74,7 +74,7 @@ struct HomePostListCell: View {
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay {
-                        contentViewModel.navigateToPostViewButton(tempPost())
+                        contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
                     }
             }
             
@@ -88,7 +88,7 @@ struct HomePostListCell: View {
         }
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
         }
     }
 }

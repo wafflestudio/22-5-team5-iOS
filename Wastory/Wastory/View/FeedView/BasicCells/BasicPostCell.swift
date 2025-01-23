@@ -97,7 +97,7 @@ struct BasicPostCell: View {
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.navigateToPostViewButton(post)
+                    contentViewModel.navigateToPostViewButton(post, blog)
                 }
                 
         }
@@ -109,7 +109,7 @@ struct BasicPostCell: View {
             }
         }
         .background {
-            contentViewModel.navigateToPostViewButton(post)
+            contentViewModel.navigateToPostViewButton(post, blog)
         }
     }
 }

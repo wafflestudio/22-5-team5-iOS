@@ -17,8 +17,8 @@ import Observation
         }
     }
     
-    func navigateToPostViewButton(_ post: Post) -> some View { //TODO: 보여줄 Post 정하기
-        NavigationLink(destination: PostView(post: post)) {
+    func navigateToPostViewButton(_ post: Post, _ blog: Blog) -> some View { //TODO: 보여줄 Post 정하기
+        NavigationLink(destination: PostView(post: post, blog: blog)) {
             Rectangle()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .foregroundStyle(Color.clear)

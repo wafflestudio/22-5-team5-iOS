@@ -90,7 +90,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
         }
     }
 }
