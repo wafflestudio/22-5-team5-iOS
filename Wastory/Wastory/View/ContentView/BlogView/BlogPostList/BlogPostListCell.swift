@@ -59,13 +59,9 @@ struct BlogPostListCell: View {
                             .frame(width: 15)
                         
                         //조회수 Text
-                        HStack(alignment: .center, spacing: 1) {
-                            Text("5")
-                            
-                            Text("시간 전")
-                        }
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
+                        Text("\(timeAgo(from: post.createdAt))")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
                 

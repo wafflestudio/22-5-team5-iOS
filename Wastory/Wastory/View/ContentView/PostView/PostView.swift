@@ -79,7 +79,7 @@ struct PostView: View {
                                 .font(.system(size: 3, weight: .regular))
                                 .foregroundStyle(Color.middleDotColor)
                             
-                            Text("2025. 1. 10. 00:05")
+                            Text("\(timeFormatter(from: post.createdAt))")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundStyle(Color.secondaryLabelColor)
                         }

@@ -62,7 +62,7 @@ struct BasicPostCell: View {
                         .foregroundStyle(Color.gray.opacity(0.3))
                     
                     //timeAgo Text
-                    Text("\(post.createdAt.timeIntervalSinceNow)") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
+                    Text("\(timeAgo(from: post.createdAt))") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                 }

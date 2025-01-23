@@ -59,14 +59,10 @@ struct CategoryPostListCell: View {
                             .font(.system(size: 3, weight: .light))
                             .foregroundStyle(Color.gray.opacity(0.3))
                         
-                        //조회수 Text
-                        HStack(alignment: .center, spacing: 1) {
-                            Text("5")
-                            
-                            Text("시간 전")
-                        }
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
+                        //TimeAgo Text
+                        Text("\(timeAgo(from: post.createdAt))")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
                 
