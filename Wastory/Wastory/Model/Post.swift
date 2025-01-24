@@ -37,6 +37,10 @@ struct Post: Codable, Identifiable, Hashable {
         case likeCount = "article_likes"
         case commentCount = "article_comments"
     }
+    
+    static let defaultPost: Post = {
+        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0)
+        }()
 }
 
 struct PostListDto: Codable {

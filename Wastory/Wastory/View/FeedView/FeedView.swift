@@ -11,6 +11,7 @@ import SwiftUI
 struct FeedView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
     @State var viewModel = FeedViewModel()
+    @Environment(\.contentViewModel) var contentViewModel
     
     @State var subscribingCount: Int = 0 // 구독중 count
     @State var subscriberCount:  Int = 0 // 구독자 count

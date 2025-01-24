@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BlogPopularPostGridCell: View {
+    let post: Post
+    
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.postViewModel) var viewModel
     
@@ -31,7 +33,7 @@ struct BlogPopularPostGridCell: View {
             Spacer()
                 .frame(height: 10)
             
-            Text("제목제목제목제목제목제목제목제목제목목")
+            Text(post.title)
                 .font(.system(size: 18, weight: .light))
                 .foregroundStyle(Color.primaryLabelColor)
                 .lineLimit(2)
@@ -40,7 +42,7 @@ struct BlogPopularPostGridCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(post, viewModel.blog!)
         }
     }
 }

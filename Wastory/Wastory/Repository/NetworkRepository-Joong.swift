@@ -67,7 +67,7 @@ extension NetworkRepository {
         
         return response
     }
-    
+
     func patchBlog(blogName: String, description: String) async throws {
         let requestBody = [
             "blog_name": blogName,
