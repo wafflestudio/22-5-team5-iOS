@@ -13,163 +13,180 @@ struct MyBlogSettingsView: View {
     @State private var viewModel = MyBlogSettingsViewModel()
     @Environment(\.dismiss) private var dismiss
     
+    @FocusState private var isBlogNameFocused: Bool
+    @FocusState private var isBlogDescriptionFocused: Bool
+    @FocusState private var isUserNameFocused: Bool
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Spacer()
-                .frame(height: 30)
+        ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isBlogNameFocused = false
+                    isBlogDescriptionFocused = false
+                    isUserNameFocused = false
+                }
             
-            // Blog Main Image
-            HStack {
+            VStack(alignment: .leading, spacing: 0) {
                 Spacer()
+                    .frame(height: 30)
                 
-                ZStack(alignment: .bottomTrailing) {
+                // Blog Main Image
+                HStack {
+                    Spacer()
                     
-                    if let _ = viewModel.mainImage {
-                        Image(uiImage: viewModel.mainImage!)
-                            .resizable()
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .frame(width: 120, height: 120)
-                    } else {
-                        Image("defaultImage")
-                            .resizable()
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .frame(width: 120, height: 120)
-                    }
+                    ZStack(alignment: .bottomTrailing) {
                         
+                        if let _ = viewModel.mainImage {
+                            Image(uiImage: viewModel.mainImage!)
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 120, height: 120)
+                        } else {
+                            Image("defaultImage")
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 120, height: 120)
+                        }
+                        
+                        
+                        Button(action: {
+                            viewModel.toggleImagePickerPresented()
+                        }) {
+                            Image(systemName: "camera")
+                                .font(.system(size: 14, weight: .light))
+                                .frame(width: 35, height: 35)
+                                .foregroundStyle(Color.primaryLabelColor)
+                                .background(
+                                    Circle()
+                                        .foregroundStyle(Color.white)
+                                        .frame(width: 35, height: 35)
+                                )
+                                .overlay(
+                                    Circle()
+                                        .stroke(style: StrokeStyle(lineWidth: 1))
+                                        .foregroundStyle(Color.secondaryLabelColor)
+                                        .frame(width: 35, height: 35)
+                                )
+                        }
+                    }
                     
-                    Button(action: {
-                        viewModel.toggleImagePickerPresented()
-                    }) {
-                        Image(systemName: "camera")
+                    Spacer()
+                    
+                }
+                
+                Spacer()
+                    .frame(height: 30)
+                
+                // BlogName, Description, UserName
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("블로그 이름")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 10)
+                    
+                    TextField("", text: $viewModel.blogName)
+                        .font(.system(size: 16, weight: .thin))
+                        .focused($isBlogNameFocused)
+                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Text("\(viewModel.blogName.count) / 40")
                             .font(.system(size: 14, weight: .light))
-                            .frame(width: 35, height: 35)
-                            .foregroundStyle(Color.primaryLabelColor)
-                            .background(
-                                Circle()
-                                    .foregroundStyle(Color.white)
-                                    .frame(width: 35, height: 35)
-                                )
-                            .overlay(
-                                Circle()
-                                    .stroke(style: StrokeStyle(lineWidth: 1))
-                                    .foregroundStyle(Color.secondaryLabelColor)
-                                    .frame(width: 35, height: 35)
-                                )
+                            .foregroundStyle(isBlogNameFocused ? Color.secondaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
                     }
                 }
                 
                 Spacer()
+                    .frame(height: 30)
                 
-            }
-            
-            Spacer()
-                .frame(height: 30)
-            
-            // BlogName, Description, UserName
-            VStack(alignment: .leading, spacing: 0) {
-                Text("블로그 이름")
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 10)
-                
-                TextField("", text: $viewModel.blogName)
-                    .font(.system(size: 16, weight: .thin))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                Rectangle()
-                    .foregroundStyle(Color.primaryLabelColor)
-                    .frame(height: 1)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                HStack {
-                    Spacer()
-                    
-                    Text("\(viewModel.blogName.count) / 40")
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("블로그 설명")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
-                }
-            }
-            
-            Spacer()
-                .frame(height: 30)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text("블로그 설명")
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 10)
-                
-                TextField("", text: $viewModel.blogDescription)
-                    .font(.system(size: 16, weight: .thin))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                Rectangle()
-                    .foregroundStyle(Color.primaryLabelColor)
-                    .frame(height: 1)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                HStack {
-                    Spacer()
+                        .foregroundStyle(isBlogDescriptionFocused ? Color.primaryLabelColor : Color.secondaryLabelColor)
                     
-                    Text("\(viewModel.blogDescription.count) / 255")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(viewModel.isBlogDescriptionValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
-                }
-            }
-            
-            Spacer()
-                .frame(height: 30)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text("블로그 닉네임")
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 10)
-                
-                TextField("", text: $viewModel.username)
-                    .font(.system(size: 16, weight: .thin))
-                    .foregroundStyle(Color.primaryLabelColor)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                Rectangle()
-                    .foregroundStyle(Color.primaryLabelColor)
-                    .frame(height: 1)
-                
-                Spacer()
-                    .frame(height: 5)
-                
-                HStack {
                     Spacer()
+                        .frame(height: 10)
                     
-                    Text("\(viewModel.username.count) / 32")
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
+                    TextField("", text: $viewModel.blogDescription)
+                        .font(.system(size: 16, weight: .thin))
+                        .focused($isBlogDescriptionFocused)
+                        .foregroundStyle(Color.primaryLabelColor)
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(isBlogDescriptionFocused ? Color.primaryLabelColor : Color.secondaryLabelColor)
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Text("\(viewModel.blogDescription.count) / 255")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
+                    }
                 }
-            }
-            
-            Spacer()
-        }
-        .padding(.horizontal, 20)
+                
+                Spacer()
+                    .frame(height: 30)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("블로그 닉네임")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 10)
+                    
+                    TextField("", text: $viewModel.username)
+                        .font(.system(size: 16, weight: .thin))
+                        .focused($isUserNameFocused)
+                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                    
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Text("\(viewModel.username.count) / 32")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(isUserNameFocused ? Color.secondaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                    }
+                }
+                
+                Spacer()
+            }//VStack
+            .padding(.horizontal, 20)
+        }//ZStack
         // MARK: Network
         .onAppear {
             Task {
