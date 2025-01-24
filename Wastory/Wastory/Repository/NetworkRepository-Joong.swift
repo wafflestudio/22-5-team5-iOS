@@ -32,7 +32,7 @@ extension NetworkRepository {
 //        let requestBody = [
 //            "categoryname": categoryName,
 //            "categorylevel": categoryLevel,
-//            "parent_id": parentId ?? 
+//            "parent_id": parentId ??
 //        ] as [String : Any]
 //        var urlRequest = try URLRequest(
 //            url: NetworkRouter.postSignUp.url,
@@ -40,7 +40,7 @@ extension NetworkRepository {
 //            headers: NetworkRouter.postSignUp.headers
 //        )
 //        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
-//        
+//
 //        _ = try await AF.request(urlRequest)
 //            .validate()
 //            .serializingString().value
@@ -67,7 +67,34 @@ extension NetworkRepository {
         
         return response
     }
-    
+
+    func patchBlog(blogName: String, description: String) async throws {
+        let requestBody = [
+            "blog_name": blogName,
+            "description": description,
+        ]
+        
+        let myBlogAddress = UserInfoRepository.shared.getAddressName()
+        print(myBlogAddress)
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchBlog(blogAddress: myBlogAddress).url,
+            method: NetworkRouter.patchBlog(blogAddress: myBlogAddress).method,
+            headers: NetworkRouter.patchBlog(blogAddress: myBlogAddress).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
     
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
