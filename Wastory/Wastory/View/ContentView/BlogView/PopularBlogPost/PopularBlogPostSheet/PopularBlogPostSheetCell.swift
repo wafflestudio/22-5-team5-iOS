@@ -91,7 +91,6 @@ struct PopularBlogPostSheetCell: View {
         } //VStack
         .background(Color.white)
         .onAppear {
-            print(didAppear)
             if !didAppear {
                 Task {
                     blog = try await contentViewModel.getBlogByID(post.blogID)

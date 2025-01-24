@@ -90,7 +90,6 @@ struct BlogPostListCell: View {
         
         .background(Color.white)
         .onAppear {
-            print(didAppear)
             if !didAppear {
                 Task {
                     blog = try await contentViewModel.getBlogByID(post.blogID)
