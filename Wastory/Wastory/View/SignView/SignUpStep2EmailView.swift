@@ -101,6 +101,11 @@ struct SignUpStep2EmailView: View {
                                     viewModel.code = String(viewModel.code.prefix(viewModel.getCodeLength()))
                                 }
                             }
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    isCodeFocused = true
+                                }
+                            }
                             
                             HStack {
                                 Spacer()
@@ -124,6 +129,11 @@ struct SignUpStep2EmailView: View {
                             .padding(.vertical, 5)
                             .padding(.horizontal, 20)
                             .autocapitalization(.none)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    isEmailFocused = true
+                                }
+                            }
                             
                             HStack {
                                 Spacer()
