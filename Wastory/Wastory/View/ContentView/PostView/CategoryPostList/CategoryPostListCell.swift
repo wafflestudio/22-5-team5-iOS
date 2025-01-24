@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CategoryPostListCell: View {
+    let post: Post
     
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.postViewModel) var viewModel
@@ -16,7 +17,7 @@ struct CategoryPostListCell: View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 20, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
                         .lineLimit(2)
@@ -24,7 +25,7 @@ struct CategoryPostListCell: View {
                     Spacer()
                         .frame(height: 8)
                     
-                    Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
+                    Text(post.description ?? "")
                         .font(.system(size: 18, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                         .lineLimit(2)
@@ -36,7 +37,7 @@ struct CategoryPostListCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "heart")
                             
-                            Text("50")
+                            Text("\(post.likeCount)")
                         }
                         .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -49,7 +50,7 @@ struct CategoryPostListCell: View {
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "ellipsis.bubble")
                             
-                            Text("5")
+                            Text("\(post.commentCount)")
                         }
                         .font(.system(size: 16, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -58,14 +59,10 @@ struct CategoryPostListCell: View {
                             .font(.system(size: 3, weight: .light))
                             .foregroundStyle(Color.gray.opacity(0.3))
                         
-                        //조회수 Text
-                        HStack(alignment: .center, spacing: 1) {
-                            Text("5")
-                            
-                            Text("시간 전")
-                        }
-                        .font(.system(size: 16, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
+                        //TimeAgo Text
+                        Text("\(timeAgo(from: post.createdAt))")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
                 
@@ -90,7 +87,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(post, viewModel.blog!)
         }
     }
 }

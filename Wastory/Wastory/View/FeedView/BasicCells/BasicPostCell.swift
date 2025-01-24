@@ -11,8 +11,8 @@ import SwiftUI
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct BasicPostCell: View {
     let post: Post
-    //let blogName
-    //let blogMainImageUrl     <- post id로 fetch
+    @State var blog: Blog = Blog.defaultBlog
+    
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
@@ -62,13 +62,13 @@ struct BasicPostCell: View {
                         .foregroundStyle(Color.gray.opacity(0.3))
                     
                     //timeAgo Text
-                    Text("\(post.createdAt.timeIntervalSinceNow)") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
+                    Text("\(timeAgo(from: post.createdAt))") //~초 ~분 ~시간 ~일 ~달 전으로 나눠서 표시
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.navigateToBlogViewButton(tempBlog()) {
+                contentViewModel.navigateToBlogViewButton(blog) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -79,7 +79,7 @@ struct BasicPostCell: View {
                             .cornerRadius(5)
                         
                         //blog name
-                        Text("Blog name")
+                        Text(blog.blogName)
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                     }
@@ -97,14 +97,19 @@ struct BasicPostCell: View {
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.navigateToPostViewButton(tempPost())
+                    contentViewModel.navigateToPostViewButton(post, blog)
                 }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
+        .onAppear {
+            Task {
+                blog = try await contentViewModel.getBlogByID(post.blogID)
+            }
+        }
         .background {
-            contentViewModel.navigateToPostViewButton(tempPost())
+            contentViewModel.navigateToPostViewButton(post, blog)
         }
     }
 }

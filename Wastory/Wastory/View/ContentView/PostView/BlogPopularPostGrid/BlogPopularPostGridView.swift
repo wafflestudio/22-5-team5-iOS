@@ -37,8 +37,8 @@ struct BlogPopularPostGridView: View {
                 .frame(height: 5)
             
             LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(viewModel.blogPopularPostGridItems.prefix(6), id: \.self) { item in
-                    BlogPopularPostGridCell()
+                ForEach(viewModel.popularBlogPosts.prefix(6), id: \.self) { post in
+                    BlogPopularPostGridCell(post: post)
                 }
             }
             .padding(.horizontal, 20)

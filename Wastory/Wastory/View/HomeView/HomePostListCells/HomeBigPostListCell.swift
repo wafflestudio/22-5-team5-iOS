@@ -39,7 +39,7 @@ struct HomeBigPostListCell: View {
                         .foregroundStyle(Color.unreadNotification)
                         .padding(.horizontal, 20)
                         .overlay(
-                            contentViewModel.navigateToPostViewButton(tempPost())
+                            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
                         )
                     
                     //블로그 정보 button
@@ -116,7 +116,7 @@ struct HomeBigPostListCell: View {
                 }
                 .padding(.horizontal, 20)
                 .overlay(
-                    contentViewModel.navigateToPostViewButton(tempPost())
+                    contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
                     )
             } // VStack
         

@@ -10,6 +10,8 @@ import SwiftUI
 struct PopularBlogPostSheetCell: View {
     let post: Post
     let index: Int
+    @State var blog: Blog = Blog.defaultBlog
+    
     @Bindable var viewModel: PopularBlogPostSheetViewModel
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -87,8 +89,13 @@ struct PopularBlogPostSheetCell: View {
             
         } //VStack
         .background(Color.white)
+        .onAppear {
+            Task {
+                blog = try await contentViewModel.getBlogByID(post.blogID)
+            }
+        }
         .overlay {
-            contentViewModel.navigateToPostViewButton(post)
+            contentViewModel.navigateToPostViewButton(post, blog)
         }
     }
 }

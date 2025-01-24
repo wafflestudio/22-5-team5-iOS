@@ -25,6 +25,10 @@ struct Blog: Codable, Identifiable, Hashable {
         case mainImageURL = "main_image_url"
         case userID = "user_id"
     }
+    
+    static let defaultBlog: Blog = {
+            Blog(id: 0, blogName: "", addressName: "", description: "", userID: 0)
+        }()
 }
 
 import SwiftUI

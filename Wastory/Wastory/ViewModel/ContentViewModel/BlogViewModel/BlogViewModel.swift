@@ -117,7 +117,7 @@ import Observation
         }
     }
     
-    // - 블로그 내 인기글List views 순으로 get하기 (pagination 기능 있음)
+    // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
             popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)

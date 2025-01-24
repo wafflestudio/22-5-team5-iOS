@@ -46,6 +46,29 @@ extension NetworkRepository {
 //            .serializingString().value
 //    }
     
+    // MARK: - Blog
+    func getBlogByID(blogID: Int) async throws -> Blog {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getBlogByID(blogID: blogID).url,
+            method: NetworkRouter.getBlogByID(blogID: blogID).method,
+            headers: NetworkRouter.getBlogByID(blogID: blogID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Blog.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(
@@ -75,6 +98,45 @@ extension NetworkRepository {
         
         return response.articles
     }
+    
+    func getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).url,
+            method: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).method,
+            headers: NetworkRouter.getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: page).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+        
+    }
+        
     
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
@@ -142,5 +204,50 @@ extension NetworkRepository {
         return response
     }
     
+    // MARK: - Like
+    func postLike(postID: Int) async throws {
+        let requestBody = [
+            "article_id": postID
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postLike.url,
+            method: NetworkRouter.postLike.method,
+            headers: NetworkRouter.postLike.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
     
+    func getIsLiked(postID: Int) async throws -> Bool { //Blog Press Like
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getIsLiked(postID: postID).url,
+            method: NetworkRouter.getIsLiked(postID: postID).method,
+            headers: NetworkRouter.getIsLiked(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Bool.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
 }

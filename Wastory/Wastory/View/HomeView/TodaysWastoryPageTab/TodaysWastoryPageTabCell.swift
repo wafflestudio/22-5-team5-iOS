@@ -94,7 +94,7 @@ struct TodaysWastoryPageTabCell: View {
                 .padding(.horizontal, 25)
             }//Vstack
             .background {
-                contentViewModel.navigateToPostViewButton(tempPost())
+                contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
             }
         }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))

@@ -20,16 +20,22 @@ enum NetworkRouter {
     case postBlog
     case getMyBlog
     case getBlog(blogAddress: String)
+    case getBlogByID(blogID: Int)
     
     // MARK: Article
     case postArticle
     case getArticlesInBlog(blogID: Int)
     case getTopArticlesInBlog(blogID: Int, sortBy: String)
+    case getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int)
     
     
     //MARK: Comment
     case postComment(postID: Int)
     case getArticleComments(postID: Int, page: Int)
+    
+    //MARK: Like
+    case postLike
+    case getIsLiked(postID: Int)
     
     
     
@@ -50,15 +56,21 @@ enum NetworkRouter {
         case .postBlog: "/blogs"
         case .getMyBlog: "/blogs/my_blog"
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
+        case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
         case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
         case let .getTopArticlesInBlog(blogID, sortBy): "/articles/blogs/\(blogID)/sort_by/\(sortBy)"
+        case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: _): "/articles/blogs/\(blogID)/categories/\(categoryID)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
+            
+        //MARK: Like
+        case .postLike: "/likes/create"
+        case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
         }
     }
     
@@ -83,6 +95,8 @@ enum NetworkRouter {
             return .get
         case .getBlog:
             return .get
+        case .getBlogByID:
+            return .get
         
         // MARK: Article
         case .postArticle:
@@ -91,11 +105,19 @@ enum NetworkRouter {
             return .get
         case .getTopArticlesInBlog:
             return .get
+        case .getArticlesInBlogInCategory:
+            return .get
             
         // MARK: Comment
         case .postComment:
             return .post
         case .getArticleComments:
+            return .get
+            
+        //MARK: Like
+        case .postLike:
+            return .post
+        case .getIsLiked:
             return .get
         }
     }
@@ -121,6 +143,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getBlog:
             return ["Content-Type": "application/json"]
+        case .getBlogByID:
+            return ["Content-Type": "application/json"]
             
         // MARK: Article
         case .postArticle:
@@ -129,12 +153,20 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getTopArticlesInBlog:
             return ["Content-Type": "application/json"]
+        case .getArticlesInBlogInCategory:
+            return ["Content-Type": "application/json"]
             
             
         // MARK: Comment
         case .postComment:
             return ["Content-Type": "application/json"]
         case .getArticleComments:
+            return ["Content-Type": "application/json"]
+        
+        //MARK: Like
+        case .postLike:
+            return ["Content-Type": "application/json"]
+        case .getIsLiked:
             return ["Content-Type": "application/json"]
         }
     }

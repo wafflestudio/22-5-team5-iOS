@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BlogPostListCell: View {
     let post: Post
+    @State var blog: Blog = Blog.defaultBlog
     
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.blogViewModel) var viewModel
@@ -58,13 +59,9 @@ struct BlogPostListCell: View {
                             .frame(width: 15)
                         
                         //조회수 Text
-                        HStack(alignment: .center, spacing: 1) {
-                            Text("5")
-                            
-                            Text("시간 전")
-                        }
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
+                        Text("\(timeAgo(from: post.createdAt))")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                     }
                 }
                 
@@ -91,8 +88,13 @@ struct BlogPostListCell: View {
         } //VStack
         
         .background(Color.white)
+        .onAppear {
+            Task {
+                blog = try await contentViewModel.getBlogByID(post.blogID)
+            }
+        }
         .overlay {
-            contentViewModel.navigateToPostViewButton(post)
+            contentViewModel.navigateToPostViewButton(post, blog)
         }
     }
 }

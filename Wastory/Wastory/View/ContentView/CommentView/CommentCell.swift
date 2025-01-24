@@ -66,7 +66,7 @@ struct CommentCell: View {
                         .frame(height: 10)
                     
                     HStack(spacing: 6) {
-                        Text("5시간전")
+                        Text("\(timeAgo(from: comment.createdAt))")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                         
