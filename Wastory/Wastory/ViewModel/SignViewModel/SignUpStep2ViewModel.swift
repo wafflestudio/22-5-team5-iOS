@@ -41,6 +41,7 @@ import Observation
     
     func requestCode() async {
         if isEmailValid() {
+            // 이메일 중복 검사
             do {
                 emailExists = try await NetworkRepository.shared.postEmailExists(email: email)
             }
@@ -49,8 +50,14 @@ import Observation
             }
             if emailExists { return }
             
-            // TODO: 인증 코드 API 연결 필요
-            isCodeRequested = true
+            // 이메일 인증 코드 발송
+            do {
+                try await NetworkRepository.shared.postRequestVerification(email: email)
+                isCodeRequested = true
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
         }
     }
     
