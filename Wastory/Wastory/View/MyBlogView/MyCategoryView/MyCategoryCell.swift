@@ -214,6 +214,7 @@ struct MyCategoryCell: View {
                 MyCategoryCell(category: child, viewModel: viewModel)
             }
         }//V
+        .background(Color.white)
         .onTapGesture {
             if category.categoryName != "카테고리 없음" {
                 viewModel.toggleSelectedCategoryId(with: category.id)
