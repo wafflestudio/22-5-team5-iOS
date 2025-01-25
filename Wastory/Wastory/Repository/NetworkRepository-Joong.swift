@@ -294,18 +294,27 @@ extension NetworkRepository {
         // 압축된 이미지 크기 출력
         print("압축된 이미지 크기: \(imageData.count / 1024) KB")
         
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.postImage.url,
+            method: NetworkRouter.postImage.method,
+            headers: NetworkRouter.postImage.headers
+        )
+        
+        logRequest(urlRequest)
+        
         // 서버로 요청
         let response = try await AF.upload(
             multipartFormData: { formData in
                 formData.append(imageData, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")
             },
-            to: NetworkRouter.postImage.url,
-            headers: NetworkRouter.postImage.headers,
+            with: urlRequest,
             interceptor: NetworkInterceptor()
         )
         .validate()
         .serializingDecodable(ImageDto.self)
         .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
 
         return response.fileURL
     }
