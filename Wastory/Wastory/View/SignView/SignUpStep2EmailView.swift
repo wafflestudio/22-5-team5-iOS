@@ -398,7 +398,10 @@ struct SignUpStep2EmailView: View {
                             .frame(height: 2)
                         
                         Button {
-                            showRerequestEmailBox = false
+                            Task {
+                                await viewModel.requestCode()
+                                showRerequestEmailBox = false
+                            }
                         } label: {
                             Text("인증번호 재발송")
                                 .font(.system(size: 16, weight: .regular))
