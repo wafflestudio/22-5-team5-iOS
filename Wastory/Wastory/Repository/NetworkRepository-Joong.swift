@@ -96,6 +96,109 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    // MARK: - Category
+    func postCategory(categoryName: String, parentID: Int?) async throws {
+        var requestBody = [String: String]()
+        if let _ = parentID {
+            requestBody = [
+                "categoryname": categoryName,
+                "categoryLevel": "2",
+                "parent_id": "\(parentID ?? 0)"
+            ]
+        } else {
+            requestBody = [
+                "categoryname": categoryName,
+                "categoryLevel": "1"
+            ]
+        }
+        
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postCategory.url,
+            method: NetworkRouter.postCategory.method,
+            headers: NetworkRouter.postCategory.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getCategoriesInBlog(blogID: Int) async throws -> [Category] {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getCategoriesInBlog(blogID: blogID).url,
+            method: NetworkRouter.getCategoriesInBlog(blogID: blogID).method,
+            headers: NetworkRouter.getCategoriesInBlog(blogID: blogID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(CategoryListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.categories
+    }
+    
+    func patchCategory(categoryName: String, categoryID: Int) async throws {
+        let requestBody = [
+            "categoryname": categoryName
+        ]
+        
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchCategory(categoryID: categoryID).url,
+            method: NetworkRouter.patchCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.patchCategory(categoryID: categoryID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteCategory(categoryID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteCategory(categoryID: categoryID).url,
+            method: NetworkRouter.deleteCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.deleteCategory(categoryID: categoryID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(

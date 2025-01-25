@@ -25,9 +25,9 @@ import Observation
     
     var isCategorySheetPresent: Bool = false
     
-    var categoryItems: [String] = ["분류 전체보기", "Travel", "Food", "Fashion", "Beauty", "Tech", "Life", "Entertainment"] //기본으로 카테고리 없음은 가지고 있어야함
+    var categories: [Category] = []
     
-    var selectedCategory: String = "분류 전체보기"
+    var selectedCategory: Category = Category.allCategory
     
     
     
@@ -63,15 +63,15 @@ import Observation
         }
     }
     
-    func getCategoryItemsCount() -> Int {
-        categoryItems.count
+    func getCategoriesCount() -> Int {
+        categories.count
     }
     
-    func isCurrentCategory(is category: String) -> Bool {
+    func isCurrentCategory(is category: Category) -> Bool {
         selectedCategory == category
     }
     
-    func setCategory(to category: String) {
+    func setCategory(to category: Category) {
         selectedCategory = category
     }
     
@@ -126,6 +126,15 @@ import Observation
         }
     }
     
+    
+    func getCategories() async {
+        do {
+            categories = [Category.allCategory]
+            categories += try await NetworkRepository.shared.getCategoriesInBlog(blogID: blog!.id)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }
 
 

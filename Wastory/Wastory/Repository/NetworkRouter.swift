@@ -23,6 +23,12 @@ enum NetworkRouter {
     case getBlogByID(blogID: Int)
     case patchBlog(blogAddress: String)
     
+    // MARK: Category
+    case postCategory
+    case getCategoriesInBlog(blogID: Int)
+    case patchCategory(categoryID: Int)
+    case deleteCategory(categoryID: Int)
+    
     // MARK: Article
     case postArticle
     case getArticlesInBlog(blogID: Int)
@@ -59,6 +65,12 @@ enum NetworkRouter {
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
         case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         case let .patchBlog(blogAddress): "/blogs/\(blogAddress)"
+            
+        // MARK: Category
+        case .postCategory: "/categories/create"
+        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
+        case let .patchCategory(categoryID): "/categories/\(categoryID)"
+        case let .deleteCategory(categoryID): "/categories/\(categoryID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -101,6 +113,16 @@ enum NetworkRouter {
             return .get
         case .patchBlog:
             return .patch
+            
+        // MARK: Category
+        case .postCategory:
+            return .post
+        case .getCategoriesInBlog:
+            return .get
+        case .patchCategory:
+            return .patch
+        case .deleteCategory:
+            return .delete
         
         // MARK: Article
         case .postArticle:
@@ -152,6 +174,16 @@ enum NetworkRouter {
         case .patchBlog:
             return ["Content-Type": "application/json"]
             
+        // MARK: Category
+        case .postCategory:
+            return ["Content-Type": "application/json"]
+        case .getCategoriesInBlog:
+            return ["Content-Type": "application/json"]
+        case .patchCategory:
+            return ["Content-Type": "application/json"]
+        case .deleteCategory:
+            return ["Content-Type": "application/json"]
+        
         // MARK: Article
         case .postArticle:
             return ["Content-Type": "application/json"]

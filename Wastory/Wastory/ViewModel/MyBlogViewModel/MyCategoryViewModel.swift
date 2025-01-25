@@ -51,7 +51,7 @@ import Observation
     
     var selectedCategoryId: Int = -1
     
-    func cancleCategoryAddButton() {
+    func cancelCategoryAddButton() {
         clearWritingCategoryName()
         isCategoryAddButtonActivated = false
     }
@@ -59,12 +59,14 @@ import Observation
     func toggleSelectedCategoryId(with id: Int) {
         if selectedCategoryId == id {
             selectedCategoryId = -1
+            print(selectedCategoryId)
         } else {
             isCategoryEditing = false
             isCategoryAdding = false
             isCategoryDelete = false
             selectedCategoryId = id
-            cancleCategoryAddButton()
+            cancelCategoryAddButton()
+            print(selectedCategoryId)
         }
     }
     
@@ -84,14 +86,52 @@ import Observation
         isCategoryAdding || isCategoryEditing
     }
     
+    func setCategoryEditing() {
+        isCategoryAdding = false
+        isCategoryDelete = false
+        isCategoryEditing = true
+    }
     
-    func deleteCategory(_ id: Int) {
-        //TODO: 삭제하는 networking 추가
-        toggleSelectedCategoryId(with: id)
+    func setCategoryAdding() {
+        isCategoryAdding = true
+        isCategoryDelete = false
+        isCategoryEditing = false
     }
     
     
     //Network
+    var categories: [Category] = []
     
-    var categories: [Category] = [Category.init(id: 0, categoryName: "asdf", level: 0), Category.init(id: 1, categoryName: "asasdfasdfdfasasdfasdfdf", level: 0, children: [Category.init(id: 5, categoryName: "child1", level: 1), Category.init(id: 6, categoryName: "child2", level: 1)]), Category.init(id: 2, categoryName: "asdf", level: 0),]
+    func postCategory() async {
+        do {
+            print(selectedCategoryId)
+            try await NetworkRepository.shared.postCategory(categoryName: writingCategoryName, parentID: (selectedCategoryId == -1 ? nil : selectedCategoryId))
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getCategories() async {
+        do {
+            categories = try await NetworkRepository.shared.getCategoriesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func patchCategory() async {
+        do {
+            try await NetworkRepository.shared.patchCategory(categoryName: writingCategoryName, categoryID: selectedCategoryId)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteCategory() async {
+        do {
+            try await NetworkRepository.shared.deleteCategory(categoryID: selectedCategoryId)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }

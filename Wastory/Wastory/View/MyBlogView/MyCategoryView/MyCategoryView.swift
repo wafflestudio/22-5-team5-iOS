@@ -58,6 +58,10 @@ struct MyCategoryView: View {
                         if viewModel.isCategoryAddButtonActivated {
                             Button(action: {
                                 viewModel.isCategoryAddButtonActivated.toggle()
+                                Task {
+                                    await viewModel.postCategory()
+                                    await viewModel.getCategories()
+                                }
                             }) {
                                 Text("완료")
                                     .font(.system(size: 14, weight: .semibold))
@@ -106,6 +110,12 @@ struct MyCategoryView: View {
                 }//VStack
             } //ScrollView
         }//VStack
+        // MARK: Networking
+        .onAppear {
+            Task {
+                await viewModel.getCategories()
+            }
+        }
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "카테고리")
         .navigationBarTitleDisplayMode(.inline)
