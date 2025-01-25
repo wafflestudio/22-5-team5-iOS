@@ -69,10 +69,20 @@ import Observation
     
     var isLiked: Bool = false
     
+    func deleteSelfPost(at List: inout [Post]) {
+        for (index, item) in List.enumerated() {
+            if item == self.post! {
+                List.remove(at: index)
+            }
+        }
+    }
+    
+    
         // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
             popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)
+            deleteSelfPost(at: &popularBlogPosts)
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -83,12 +93,14 @@ import Observation
         if post!.categoryID == nil {
             do {
             categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlog(blogID: blog!.id, page: 1)
+            deleteSelfPost(at: &categoryBlogPosts)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
         } else {
             do {
                 categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: blog!.id, categoryID: post!.categoryID!, page: 1)
+                deleteSelfPost(at: &categoryBlogPosts)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
@@ -118,20 +130,20 @@ import Observation
     }
     
         // - 좋아요 취소 기능
-//    func deleteLike() async {
-//        do {
-//            try await NetworkRepository.shared.deleteLike(postID: post!.id)
-//            isLiked = false
-//            post!.likeCount -= 1
-//        } catch {
-//            print("Error: \(error.localizedDescription)")
-//        }
-//    }
+    func deleteLike() async {
+        do {
+            try await NetworkRepository.shared.deleteLike(postID: post!.id)
+            isLiked = false
+            post!.likeCount -= 1
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
     
         // - 좋아요 버튼 액션
     func likeButtonAction() async {
         if isLiked {
-            //await deleteLike()
+            await deleteLike()
         } else {
             await createLike()
         }

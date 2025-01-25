@@ -10,6 +10,8 @@ import Alamofire
 
 enum NetworkRouter {
     // MARK: User
+    case postRequestVerification
+    case postVerifyEmail
     case postEmailExists
     case postSignUp
     case postSignIn
@@ -25,6 +27,12 @@ enum NetworkRouter {
     case getBlogByID(blogID: Int)
     case patchBlog(blogAddress: String)
     
+    // MARK: Category
+    case postCategory
+    case getCategoriesInBlog(blogID: Int)
+    case patchCategory(categoryID: Int)
+    case deleteCategory(categoryID: Int)
+    
     // MARK: Article
     case postArticle
     case getArticlesInBlog(blogID: Int)
@@ -39,6 +47,7 @@ enum NetworkRouter {
     //MARK: Like
     case postLike
     case getIsLiked(postID: Int)
+    case deleteLike(postID: Int)
     
     //MARK: Image
     case generatePreURL
@@ -53,6 +62,8 @@ enum NetworkRouter {
     var path: String {
         switch self {
         // MARK: User
+        case .postRequestVerification: "/users/request-verification"
+        case .postVerifyEmail: "/users/verify-email"
         case .postEmailExists: "/users/email-exists"
         case .postSignUp: "/users/signup"
         case .postSignIn: "/users/signin"
@@ -67,6 +78,12 @@ enum NetworkRouter {
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
         case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         case let .patchBlog(blogAddress): "/blogs/\(blogAddress)"
+            
+        // MARK: Category
+        case .postCategory: "/categories/create"
+        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
+        case let .patchCategory(categoryID): "/categories/\(categoryID)"
+        case let .deleteCategory(categoryID): "/categories/\(categoryID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -81,6 +98,7 @@ enum NetworkRouter {
         //MARK: Like
         case .postLike: "/likes/create"
         case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
+        case let .deleteLike(postID): "/likes/\(postID)"
             
         //MARK: Image
         case .generatePreURL: "/images/generate-presigned-urls"
@@ -91,6 +109,10 @@ enum NetworkRouter {
     var method: HTTPMethod {
         switch self {
         // MARK: User
+        case .postVerifyEmail:
+            return .post
+        case .postRequestVerification:
+            return .post
         case .postEmailExists:
             return .post
         case .postSignUp:
@@ -117,6 +139,16 @@ enum NetworkRouter {
             return .get
         case .patchBlog:
             return .patch
+            
+        // MARK: Category
+        case .postCategory:
+            return .post
+        case .getCategoriesInBlog:
+            return .get
+        case .patchCategory:
+            return .patch
+        case .deleteCategory:
+            return .delete
         
         // MARK: Article
         case .postArticle:
@@ -139,7 +171,9 @@ enum NetworkRouter {
             return .post
         case .getIsLiked:
             return .get
-            
+        case .deleteLike:
+            return .delete
+          
         //MARK: Image
         case .generatePreURL:
             return .post
@@ -151,6 +185,10 @@ enum NetworkRouter {
     var headers: HTTPHeaders? {
         switch self {
         // MARK: User
+        case .postVerifyEmail:
+            return ["Content-Type": "application/json"]
+        case .postRequestVerification:
+            return ["Content-Type": "application/json"]
         case .postEmailExists:
             return ["Content-Type": "application/json"]
         case .postSignUp:
@@ -178,6 +216,16 @@ enum NetworkRouter {
         case .patchBlog:
             return ["Content-Type": "application/json"]
             
+        // MARK: Category
+        case .postCategory:
+            return ["Content-Type": "application/json"]
+        case .getCategoriesInBlog:
+            return ["Content-Type": "application/json"]
+        case .patchCategory:
+            return ["Content-Type": "application/json"]
+        case .deleteCategory:
+            return ["Content-Type": "application/json"]
+        
         // MARK: Article
         case .postArticle:
             return ["Content-Type": "application/json"]
@@ -200,7 +248,9 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getIsLiked:
             return ["Content-Type": "application/json"]
-            
+        case .deleteLike:
+            return ["Content-Type": "application/json"]
+          
         //MARK: Image
         case .generatePreURL:
             return ["Content-Type": "application/json"]
