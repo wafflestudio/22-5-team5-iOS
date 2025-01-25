@@ -25,7 +25,7 @@ struct BlogPostListView: View {
                         .foregroundStyle(Color.primaryLabelColor)
                         .padding(.leading, 20)
                     
-                    Text(viewModel.selectedCategory) // selected category로 설정
+                    Text(viewModel.selectedCategory.categoryName) // selected category로 설정
                         .font(.system(size: 17, weight: .medium))
                         .foregroundStyle(Color.primaryLabelColor)
                     

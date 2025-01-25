@@ -180,7 +180,7 @@ struct MyCategoryCell: View {
                                 if category.articleCount == 0 && category.children == [] {
                                     Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
                                 } else {
-                                    Text("카테고리 내\n글 또는 하위 카테고리가 존재하면\n삭제가 불가합니다")
+                                    Text("글, 또는 하위 카테고리가 존재하면\n삭제가 불가합니다")
                                 }
                             }
                         }//H

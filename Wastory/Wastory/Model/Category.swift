@@ -22,6 +22,10 @@ struct Category: Codable, Identifiable, Hashable {
         case articleCount = "article_count"
         case children
     }
+    
+    static let allCategory: Category = {
+        Category(id: -1, categoryName: "분류 전체보기")
+        }()
 }
 
 struct CategoryListDto: Codable {

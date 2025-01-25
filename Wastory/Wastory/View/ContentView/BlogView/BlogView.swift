@@ -89,9 +89,9 @@ struct BlogView: View {
                                     .padding(.leading, 20)
                                 ScrollView {
                                     VStack(spacing: 0) {
-                                        ForEach(Array(viewModel.categoryItems.enumerated()), id: \.offset) { index, category in
+                                        ForEach(Array(viewModel.categories.enumerated()), id: \.offset) { index, category in
                                             
-                                            CategoryButton(for: category, isLast: index == viewModel.getCategoryItemsCount() - 1, rowHeight: sheetRowHeight)
+                                            CategoryButton(for: category, isLast: index == viewModel.getCategoriesCount() - 1, rowHeight: sheetRowHeight)
                                         }
                                     }
                                     
@@ -124,11 +124,14 @@ struct BlogView: View {
             Task {
                 await viewModel.getPopularBlogPosts()
             }
+            Task {
+                await viewModel.getCategories()
+            }
         }
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
-        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "블로그 이름")
+        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : blog.blogName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
@@ -165,21 +168,23 @@ struct BlogView: View {
     }
     
     //MARK: CategorySheet Row(Button)
-    @ViewBuilder func CategoryButton(for category: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+    @ViewBuilder func CategoryButton(for category: Category, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
             viewModel.setCategory(to: category)
             viewModel.toggleIsCategorySheetPresent()
         }) {
             HStack(spacing: 0) {
-                Text("\(category)")
+                Text("\(category.categoryName)")
                     .font(.system(size: 17, weight: .light))
                     .padding()
                 
                 Spacer()
                 
-                Text("555") // 카테고리 글 갯수
-                    .font(.system(size: 17, weight: .light))
-                    .padding()
+                if category.id != -1 {
+                    Text("\(category.articleCount ?? 0)") // 카테고리 글 갯수
+                        .font(.system(size: 17, weight: .light))
+                        .padding()
+                }
             }
             .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
         }
@@ -188,28 +193,28 @@ struct BlogView: View {
         
         
         //TODO: Children 추가기능 구현
-//        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
-//            
-//            Button(action: {
-//                viewModel.setCategory(to: child)
-//                viewModel.toggleIsCategorySheetPresent()
-//            }) {
-//                HStack(spacing: 0) {
-//                    Text("ㄴ \(child)")
-//                        .font(.system(size: 15, weight: .light))
-//                        .padding()
-//                    
-//                    Spacer()
-//                    
-//                    Text("555") // 카테고리 글 갯수
-//                        .font(.system(size: 15, weight: .light))
-//                        .padding()
-//                }
-//                .foregroundStyle(viewModel.isCurrentCategory(is: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
-//            }
-//            .frame(height: rowHeight)
-//            .frame(maxWidth: .infinity)
-//        }
+        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
+            
+            Button(action: {
+                viewModel.setCategory(to: child)
+                viewModel.toggleIsCategorySheetPresent()
+            }) {
+                HStack(spacing: 0) {
+                    Text("ㄴ \(child.categoryName)")
+                        .font(.system(size: 15, weight: .light))
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Text("\(category.articleCount ?? 0)") // 카테고리 글 갯수
+                        .font(.system(size: 15, weight: .light))
+                        .padding()
+                }
+                .foregroundStyle(viewModel.isCurrentCategory(is: child) ? Color.loadingCoralRed : Color.primaryLabelColor)
+            }
+            .frame(height: rowHeight)
+            .frame(maxWidth: .infinity)
+        }
         
         
         if !isLast {
