@@ -93,7 +93,7 @@ struct MyBlogSettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("블로그 이름")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isBlogNameValid ? (isBlogNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 10)
@@ -101,14 +101,14 @@ struct MyBlogSettingsView: View {
                     TextField("", text: $viewModel.blogName)
                         .font(.system(size: 16, weight: .thin))
                         .focused($isBlogNameFocused)
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(Color.primaryLabelColor)
                     
                     Spacer()
                         .frame(height: 5)
                     
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isBlogNameValid ? (isBlogNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 5)
@@ -118,7 +118,7 @@ struct MyBlogSettingsView: View {
                         
                         Text("\(viewModel.blogName.count) / 40")
                             .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(isBlogNameFocused ? Color.secondaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                            .foregroundStyle(viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
                     }
                 }
                 
@@ -163,7 +163,7 @@ struct MyBlogSettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("블로그 닉네임")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isUsernameValid ? (isUserNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 10)
@@ -171,14 +171,14 @@ struct MyBlogSettingsView: View {
                     TextField("", text: $viewModel.username)
                         .font(.system(size: 16, weight: .thin))
                         .focused($isUserNameFocused)
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(Color.primaryLabelColor)
                     
                     Spacer()
                         .frame(height: 5)
                     
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isUsernameValid ? (isUserNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 5)
@@ -188,7 +188,7 @@ struct MyBlogSettingsView: View {
                         
                         Text("\(viewModel.username.count) / 32")
                             .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(isUserNameFocused ? Color.secondaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                            .foregroundStyle(viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
                     }
                 }
                 
