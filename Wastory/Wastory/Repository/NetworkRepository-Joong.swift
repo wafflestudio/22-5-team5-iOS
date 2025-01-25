@@ -154,6 +154,51 @@ extension NetworkRepository {
         return response.categories
     }
     
+    func patchCategory(categoryName: String, categoryID: Int) async throws {
+        var requestBody = [
+            "categoryname": categoryName
+        ]
+        
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchCategory(categoryID: categoryID).url,
+            method: NetworkRouter.patchCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.patchCategory(categoryID: categoryID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteCategory(categoryID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.deleteCategory(categoryID: categoryID).url,
+            method: NetworkRouter.deleteCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.deleteCategory(categoryID: categoryID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(

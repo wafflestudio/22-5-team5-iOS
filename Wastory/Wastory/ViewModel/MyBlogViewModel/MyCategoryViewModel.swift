@@ -84,17 +84,23 @@ import Observation
         isCategoryAdding || isCategoryEditing
     }
     
+    func setCategoryEditing() {
+        isCategoryAdding = false
+        isCategoryDelete = false
+        isCategoryEditing = true
+    }
     
-    func deleteCategory(_ id: Int) {
-        //TODO: 삭제하는 networking 추가
-        toggleSelectedCategoryId(with: id)
+    func setCategoryAdding() {
+        isCategoryAdding = true
+        isCategoryDelete = false
+        isCategoryEditing = false
     }
     
     
     //Network
     var categories: [Category] = []
     
-    func addCategory() async {
+    func postCategory() async {
         do {
             try await NetworkRepository.shared.postCategory(categoryName: writingCategoryName, parentID: (selectedCategoryId == -1 ? nil : selectedCategoryId))
         } catch {
@@ -105,6 +111,22 @@ import Observation
     func getCategories() async {
         do {
             categories = try await NetworkRepository.shared.getCategoriesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func patchCategory() async {
+        do {
+            try await NetworkRepository.shared.patchCategory(categoryName: writingCategoryName, categoryID: selectedCategoryId)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func deleteCategory() async {
+        do {
+            try await NetworkRepository.shared.deleteCategory(categoryID: selectedCategoryId)
         } catch {
             print("Error: \(error.localizedDescription)")
         }

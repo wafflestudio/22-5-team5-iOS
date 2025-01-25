@@ -66,9 +66,15 @@ struct MyCategoryCell: View {
                             
                             Button(action: {
                                 if viewModel.isCategoryAdding {
-                                    // writingCategoryName으로 된 category 현재 카테고리를 부모로 갖게 추가
-                                } else if viewModel.isCategoryEditing{
-                                    // writingCategoryName으로 현재 카테고리 이름을 수정
+                                    Task {
+                                        await viewModel.postCategory()
+                                        await viewModel.getCategories()
+                                    }
+                                } else if viewModel.isCategoryEditing {
+                                    Task {
+                                        await viewModel.patchCategory()
+                                        await viewModel.getCategories()
+                                    }
                                 }
                                 viewModel.toggleSelectedCategoryId(with: category.id)
                             }) {
@@ -93,7 +99,7 @@ struct MyCategoryCell: View {
                             Spacer()
                             
                             Button(action: {
-                                viewModel.isCategoryEditing.toggle()
+                                viewModel.setCategoryEditing()
                             }) {
                                 Text("수정")
                                     .font(.system(size: 14, weight: .semibold))
@@ -111,9 +117,9 @@ struct MyCategoryCell: View {
                                     )
                             }
                             
-                            if category.level == 0 {
+                            if category.level == 1 {
                                 Button(action: {
-                                    viewModel.isCategoryAdding.toggle()
+                                    viewModel.setCategoryAdding()
                                 }) {
                                     Text("추가")
                                         .font(.system(size: 14, weight: .semibold))
@@ -153,7 +159,10 @@ struct MyCategoryCell: View {
                             .alert("카테고리 삭제", isPresented: $viewModel.isCategoryDelete) {
                                 Button("취소", role: .cancel) {}
                                 Button("삭제", role: .destructive) {
-                                    viewModel.deleteCategory(category.id)
+                                    Task {
+                                        await viewModel.deleteCategory()
+                                        viewModel.toggleSelectedCategoryId(with: category.id)
+                                    }
                                 }
                             } message: {
                                 Text("\(category.categoryName)(를)을 삭제하시겠습니까?")

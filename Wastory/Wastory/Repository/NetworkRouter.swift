@@ -26,6 +26,8 @@ enum NetworkRouter {
     // MARK: Category
     case postCategory
     case getCategoriesInBlog(blogID: Int)
+    case patchCategory(categoryID: Int)
+    case deleteCategory(categoryID: Int)
     
     // MARK: Article
     case postArticle
@@ -67,6 +69,8 @@ enum NetworkRouter {
         // MARK: Category
         case .postCategory: "/categories/create"
         case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
+        case let .patchCategory(categoryID): "/categories/\(categoryID)"
+        case let .deleteCategory(categoryID): "/categories/\(categoryID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -115,6 +119,10 @@ enum NetworkRouter {
             return .post
         case .getCategoriesInBlog:
             return .get
+        case .patchCategory:
+            return .patch
+        case .deleteCategory:
+            return .delete
         
         // MARK: Article
         case .postArticle:
@@ -170,6 +178,10 @@ enum NetworkRouter {
         case .postCategory:
             return ["Content-Type": "application/json"]
         case .getCategoriesInBlog:
+            return ["Content-Type": "application/json"]
+        case .patchCategory:
+            return ["Content-Type": "application/json"]
+        case .deleteCategory:
             return ["Content-Type": "application/json"]
         
         // MARK: Article
