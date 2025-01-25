@@ -13,6 +13,7 @@ enum NetworkRouter {
     case postEmailExists
     case postSignUp
     case postSignIn
+    case getMe
     case deleteMe
     case patchPassword(oldPW: String, newPW: String)
     
@@ -50,6 +51,7 @@ enum NetworkRouter {
         case .postEmailExists: "/users/email-exists"
         case .postSignUp: "/users/signup"
         case .postSignIn: "/users/signin"
+        case .getMe: "/users/me"
         case .deleteMe: "/users/me"
         case .patchPassword: "/users/change_password"
             
@@ -85,6 +87,8 @@ enum NetworkRouter {
             return .post
         case .postSignIn:
             return .post
+        case .getMe:
+            return .get
         case .deleteMe:
             return .delete
         case .patchPassword:
@@ -134,6 +138,8 @@ enum NetworkRouter {
         case .postSignUp:
             return ["Content-Type": "application/json"]
         case .postSignIn:
+            return ["Content-Type": "application/json"]
+        case .getMe:
             return ["Content-Type": "application/json"]
         case .deleteMe:
             return ["Content-Type": "application/json"]

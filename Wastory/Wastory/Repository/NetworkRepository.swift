@@ -101,6 +101,27 @@ final class NetworkRepository {
         return response
     }
     
+    func getMe() async throws -> User {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getMe.url,
+            method: NetworkRouter.getMe.method,
+            headers: NetworkRouter.getMe.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(User.self)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     func deleteMe() async throws {
         let urlRequest = try URLRequest(
             url: NetworkRouter.deleteMe.url,
