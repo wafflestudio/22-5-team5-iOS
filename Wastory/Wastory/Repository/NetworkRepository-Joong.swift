@@ -155,7 +155,7 @@ extension NetworkRepository {
     }
     
     func patchCategory(categoryName: String, categoryID: Int) async throws {
-        var requestBody = [
+        let requestBody = [
             "categoryname": categoryName
         ]
         
@@ -180,7 +180,7 @@ extension NetworkRepository {
     }
     
     func deleteCategory(categoryID: Int) async throws {
-        var urlRequest = try URLRequest(
+        let urlRequest = try URLRequest(
             url: NetworkRouter.deleteCategory(categoryID: categoryID).url,
             method: NetworkRouter.deleteCategory(categoryID: categoryID).method,
             headers: NetworkRouter.deleteCategory(categoryID: categoryID).headers

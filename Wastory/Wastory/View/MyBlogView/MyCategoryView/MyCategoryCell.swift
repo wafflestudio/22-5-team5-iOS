@@ -162,6 +162,7 @@ struct MyCategoryCell: View {
                                     Task {
                                         await viewModel.deleteCategory()
                                         viewModel.toggleSelectedCategoryId(with: category.id)
+                                        await viewModel.getCategories()
                                     }
                                 }
                             } message: {
