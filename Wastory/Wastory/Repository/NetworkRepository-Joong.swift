@@ -257,7 +257,7 @@ extension NetworkRepository {
     }
     
     func deleteLike(postID: Int) async throws {
-        var urlRequest = try URLRequest(
+        let urlRequest = try URLRequest(
             url: NetworkRouter.deleteLike(postID: postID).url,
             method: NetworkRouter.deleteLike(postID: postID).method,
             headers: NetworkRouter.deleteLike(postID: postID).headers
