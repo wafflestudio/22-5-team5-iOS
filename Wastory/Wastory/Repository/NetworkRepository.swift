@@ -73,7 +73,7 @@ final class NetworkRepository {
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
-        return response == "true"
+        return response == "\"True\""
     }
     
     func postEmailExists(email: String) async throws -> Bool {

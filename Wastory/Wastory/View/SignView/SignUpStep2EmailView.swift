@@ -244,6 +244,7 @@ struct SignUpStep2EmailView: View {
                     }
                     
                     ZStack {
+                        /*
                         NavigationLink(destination: SignUpStep3PasswordView()) {
                             Text("다음")
                                 .font(.system(size: 16, weight: .regular))
@@ -260,7 +261,29 @@ struct SignUpStep2EmailView: View {
                                 UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
                             }
                         )
-                        .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)
+                        .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)*/
+                        
+                        Button {
+                            Task {
+                                await viewModel.verifyCode()
+                            }
+                        } label: {
+                            Text("다음")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 51)
+                                .background(Color.kakaoYellow)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 20)
+                        .disabled(!viewModel.isVerificationPossible())
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
+                            }
+                        )
+                        .opacity(viewModel.isVerificationPossible() ? 1 : 0)
                         
                         Button {
                             isEmailFocused = false
@@ -282,7 +305,7 @@ struct SignUpStep2EmailView: View {
                                 .cornerRadius(6)
                         }
                         .padding(.horizontal, 20)
-                        .opacity(viewModel.isVerificationSuccessful() ? 0 : 1)
+                        .opacity(viewModel.isVerificationPossible() ? 0 : 1)
                     }
                     Spacer()
                 }
@@ -426,6 +449,9 @@ struct SignUpStep2EmailView: View {
                         .padding(.horizontal, 40)
                     }
                 }
+            }
+            .navigationDestination(isPresented: $viewModel.isVerificationSuccessful) {
+                SignUpStep3PasswordView()
             }
         }
         .navigationBarBackButtonHidden()
