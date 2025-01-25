@@ -150,7 +150,7 @@ enum NetworkRouter {
     
     var headers: HTTPHeaders? {
         switch self {
-            // MARK: User
+        // MARK: User
         case .postEmailExists:
             return ["Content-Type": "application/json"]
         case .postSignUp:
@@ -162,7 +162,7 @@ enum NetworkRouter {
         case .patchPassword:
             return ["Content-Type": "application/json"]
             
-            // MARK: Blog
+        // MARK: Blog
         case .postBlog:
             return ["Content-Type": "application/json"]
         case .getMyBlog:

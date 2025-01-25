@@ -181,7 +181,7 @@ struct BlogView: View {
                 Spacer()
                 
                 if category.id != -1 {
-                    Text("\(category.articleCount ?? 0)") // 카테고리 글 갯수
+                    Text("\(category.articleCount ?? 0)") // 카테고리 글 개수
                         .font(.system(size: 17, weight: .light))
                         .padding()
                 }
@@ -206,7 +206,7 @@ struct BlogView: View {
                     
                     Spacer()
                     
-                    Text("\(category.articleCount ?? 0)") // 카테고리 글 갯수
+                    Text("\(category.articleCount ?? 0)") // 카테고리 글 개수
                         .font(.system(size: 15, weight: .light))
                         .padding()
                 }
