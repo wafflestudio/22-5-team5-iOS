@@ -1,5 +1,5 @@
 //
-//  Blog 2.swift
+//  Category.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/17/25.
