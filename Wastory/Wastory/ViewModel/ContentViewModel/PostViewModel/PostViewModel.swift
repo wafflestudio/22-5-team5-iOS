@@ -118,20 +118,20 @@ import Observation
     }
     
         // - 좋아요 취소 기능
-//    func deleteLike() async {
-//        do {
-//            try await NetworkRepository.shared.deleteLike(postID: post!.id)
-//            isLiked = false
-//            post!.likeCount -= 1
-//        } catch {
-//            print("Error: \(error.localizedDescription)")
-//        }
-//    }
+    func deleteLike() async {
+        do {
+            try await NetworkRepository.shared.deleteLike(postID: post!.id)
+            isLiked = false
+            post!.likeCount -= 1
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
     
         // - 좋아요 버튼 액션
     func likeButtonAction() async {
         if isLiked {
-            //await deleteLike()
+            await deleteLike()
         } else {
             await createLike()
         }

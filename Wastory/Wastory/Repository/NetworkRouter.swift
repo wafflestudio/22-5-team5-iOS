@@ -37,6 +37,7 @@ enum NetworkRouter {
     //MARK: Like
     case postLike
     case getIsLiked(postID: Int)
+    case deleteLike(postID: Int)
     
     
     
@@ -73,6 +74,7 @@ enum NetworkRouter {
         //MARK: Like
         case .postLike: "/likes/create"
         case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
+        case let .deleteLike(postID): "/likes/\(postID)"
         }
     }
     
@@ -123,6 +125,8 @@ enum NetworkRouter {
             return .post
         case .getIsLiked:
             return .get
+        case .deleteLike:
+            return .delete
         }
     }
     
@@ -173,6 +177,8 @@ enum NetworkRouter {
         case .postLike:
             return ["Content-Type": "application/json"]
         case .getIsLiked:
+            return ["Content-Type": "application/json"]
+        case .deleteLike:
             return ["Content-Type": "application/json"]
         }
     }

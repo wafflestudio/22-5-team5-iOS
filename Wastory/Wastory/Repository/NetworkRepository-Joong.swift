@@ -256,6 +256,26 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    func deleteLike(postID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.deleteLike(postID: postID).url,
+            method: NetworkRouter.deleteLike(postID: postID).method,
+            headers: NetworkRouter.deleteLike(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     func getIsLiked(postID: Int) async throws -> Bool { //Blog Press Like
         let urlRequest = try URLRequest(
             url: NetworkRouter.getIsLiked(postID: postID).url,
