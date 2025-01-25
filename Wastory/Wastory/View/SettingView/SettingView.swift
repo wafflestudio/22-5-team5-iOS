@@ -24,7 +24,7 @@ struct SettingView: View {
                     Spacer()
                         .frame(height: 30)
                     
-                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView())
+                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.checkKaKaoLogin() ? "카카오에서 비밀번호를 변경해 주세요." : UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView(), disabled: UserInfoRepository.shared.checkKaKaoLogin())
                     SettingDivider(thickness: 10)
                     
                     SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
@@ -158,16 +158,18 @@ struct SettingItem<DetailView: View>: View {
     let title: String
     let description: String
     let detailView: DetailView
+    var disabled: Bool = false
+    
     var body: some View {
         NavigationLink(destination: detailView) {
             HStack(spacing: 0) {
                 Text(title)
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(disabled ? Color.settingItemDescGray : .black)
                 Spacer()
                 Text(description)
                     .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(Color.settingItemDescGray)
+                    .foregroundStyle(disabled ? Color.settingDisabledBlue : Color.settingItemDescGray)
                 Spacer()
                     .frame(width: 20)
                 Image(systemName: "chevron.right")
@@ -175,6 +177,7 @@ struct SettingItem<DetailView: View>: View {
                     .foregroundStyle(Color.settingItemDescGray)
             }
         }
+        .disabled(disabled)
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
     }
@@ -193,4 +196,5 @@ extension Color {
     static let settingItemDescGray: Color = .init(red: 187 / 255, green: 187 / 255, blue: 187 / 255)   // 설정 목록 세부 정보 색상
     static let settingDivderGray: Color = .init(red: 247 / 255, green: 247 / 255, blue: 247 / 255)   // 설정 분리선 색상
     static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
+    static let settingDisabledBlue: Color = .init(red: 108 / 255, green: 192 / 255, blue: 255 / 255)   // 불가능 항목 알림 색상 (불쾌감을 주지 않기 위해 청색을 채택)
 }
