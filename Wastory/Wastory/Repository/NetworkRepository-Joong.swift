@@ -294,29 +294,39 @@ extension NetworkRepository {
         // 압축된 이미지 크기 출력
         print("압축된 이미지 크기: \(imageData.count / 1024) KB")
         
-        let urlRequest = try URLRequest(
-            url: NetworkRouter.postImage.url,
-            method: NetworkRouter.postImage.method,
-            headers: NetworkRouter.postImage.headers
-        )
+        //presigned-urls
+        let preRequestBody = [
+            "file_name": "wastory",
+            "file_type": "jpeg"
+        ]
         
-        logRequest(urlRequest)
+        var preUrlRequest = try URLRequest(
+            url: NetworkRouter.generatePreURL.url,
+            method: NetworkRouter.generatePreURL.method,
+            headers: NetworkRouter.generatePreURL.headers
+        )
+        preUrlRequest.httpBody = try JSONEncoder().encode(preRequestBody)
+        
+        logRequest(preUrlRequest, body: preRequestBody)
+//        let urlRequest = try URLRequest(
+//            url: NetworkRouter.postImage.url,
+//            method: NetworkRouter.postImage.method,
+//            headers: NetworkRouter.postImage.headers
+//        )
+        
         
         // 서버로 요청
-        let response = try await AF.upload(
-            multipartFormData: { formData in
-                formData.append(imageData, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")
-            },
-            with: urlRequest,
+        let preResponse = try await AF.request(
+            preUrlRequest,
             interceptor: NetworkInterceptor()
-        )
-        .validate()
-        .serializingDecodable(ImageDto.self)
+        ).validate()
+        .serializingDecodable(PresignedURLDto.self)
         .value
         
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        logResponse(preResponse, url: preUrlRequest.url?.absoluteString ?? "unknown")
 
-        return response.fileURL
+        return preResponse.presignedURL
     }
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {

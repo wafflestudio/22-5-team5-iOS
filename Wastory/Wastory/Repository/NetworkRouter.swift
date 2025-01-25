@@ -39,7 +39,7 @@ enum NetworkRouter {
     case getIsLiked(postID: Int)
     
     //MARK: Image
-    case postImage
+    case generatePreURL
     
     
     
@@ -78,7 +78,7 @@ enum NetworkRouter {
         case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
             
         //MARK: Image
-        case .postImage: "/images/upload"
+        case .generatePreURL: "/images/generate-presigned-urls"
         }
     }
     
@@ -131,7 +131,7 @@ enum NetworkRouter {
             return .get
             
         //MARK: Image
-        case .postImage:
+        case .generatePreURL:
             return .post
         }
     }
@@ -186,8 +186,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
             
         //MARK: Image
-        case .postImage:
-            return ["Content-Type": "multipart/form-data"]
+        case .generatePreURL:
+            return ["Content-Type": "application/json"]
         }
     }
 }
