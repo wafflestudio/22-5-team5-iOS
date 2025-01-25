@@ -69,11 +69,20 @@ extension NetworkRepository {
         return response
     }
 
-    func patchBlog(blogName: String, description: String) async throws {
-        let requestBody = [
-            "blog_name": blogName,
-            "description": description,
-        ]
+    func patchBlog(blogName: String, description: String, mainImageURL: String?) async throws {
+        var requestBody = [String: String]()
+        if mainImageURL == nil {
+            requestBody = [
+                "blog_name": blogName,
+                "description": description,
+            ]
+        } else {
+            requestBody = [
+                "blog_name": blogName,
+                "description": description,
+                "main_image_URL": mainImageURL!
+            ]
+        }
         
         let myBlogAddress = UserInfoRepository.shared.getAddressName()
         print(myBlogAddress)
@@ -308,12 +317,6 @@ extension NetworkRepository {
         preUrlRequest.httpBody = try JSONEncoder().encode(preRequestBody)
         
         logRequest(preUrlRequest, body: preRequestBody)
-//        let urlRequest = try URLRequest(
-//            url: NetworkRouter.postImage.url,
-//            method: NetworkRouter.postImage.method,
-//            headers: NetworkRouter.postImage.headers
-//        )
-        
         
         // 서버로 요청
         let preResponse = try await AF.request(
@@ -323,10 +326,24 @@ extension NetworkRepository {
         .serializingDecodable(PresignedURLDto.self)
         .value
         
-        
         logResponse(preResponse, url: preUrlRequest.url?.absoluteString ?? "unknown")
-
-        return preResponse.presignedURL
+        
+        let urlRequest = try URLRequest(
+            url: preResponse.presignedURL,
+            method: NetworkRouter.uploadImage.method,
+            headers: NetworkRouter.uploadImage.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        _ = AF.upload(
+                imageData,
+                with: urlRequest
+            )
+        
+        logResponse(urlRequest, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return preResponse.fileURL
     }
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {

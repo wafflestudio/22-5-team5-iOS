@@ -17,7 +17,7 @@ import Observation
     }
     
     
-    var blogMainImageURL: String = ""
+    var blogMainImageURL: String? = nil
     var blogName: String = ""
     var blogDescription: String = ""
     var username: String = ""
@@ -39,7 +39,7 @@ import Observation
     }
     
     var isBlogMainImageURLEmpty: Bool {
-        blogMainImageURL.isEmpty
+        blogMainImageURL == nil
     }
     
     func getInitialData() async {
@@ -57,7 +57,7 @@ import Observation
     //Network
     func patchBlog() async {
         do {
-            try await NetworkRepository.shared.patchBlog(blogName: blogName, description: blogDescription)
+            try await NetworkRepository.shared.patchBlog(blogName: blogName, description: blogDescription, mainImageURL: blogMainImageURL)
             // UserName update
         } catch {
             print("Error: \(error.localizedDescription)")
@@ -67,8 +67,8 @@ import Observation
     func postImage() async {
         do {
             if let _ = mainImage {
-                let blogMainImageURL = try await NetworkRepository.shared.postImage(mainImage!)
-                print("Uploaded file URL: \(blogMainImageURL)")
+                blogMainImageURL = try await NetworkRepository.shared.postImage(mainImage!)
+                print("Uploaded file URL: \(blogMainImageURL!)")
             }
         } catch {
             print("Error uploading image: \(error.localizedDescription)")

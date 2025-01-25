@@ -52,7 +52,7 @@ struct MyBlogSettingsView: View {
                                     .clipShape(Circle())
                                     .frame(width: 120, height: 120)
                             } else {
-                                KFImage(URL(string: viewModel.blogMainImageURL))
+                                KFImage(URL(string: viewModel.blogMainImageURL!))
                                     .resizable()
                                     .scaledToFill()
                                     .clipShape(Circle())
