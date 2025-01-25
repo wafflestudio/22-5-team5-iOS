@@ -276,13 +276,13 @@ extension NetworkRepository {
                 "content": content,
                 "parent_id": "\(parentID!)",
                 "secret": "\(isSecret ? 1 : 0)",
-                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
             ]
         } else {
             requestBody = [
                 "content": content,
                 "secret": "\(isSecret ? 1 : 0)",
-                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
             ]
         }
         var urlRequest = try URLRequest(
@@ -347,6 +347,26 @@ extension NetworkRepository {
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
         logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteLike(postID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteLike(postID: postID).url,
+            method: NetworkRouter.deleteLike(postID: postID).method,
+            headers: NetworkRouter.deleteLike(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
         
         // 응답 데이터 확인
         let response = try await AF.request(

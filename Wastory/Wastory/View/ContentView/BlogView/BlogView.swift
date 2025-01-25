@@ -118,6 +118,7 @@ struct BlogView: View {
         } //ZStack
         .onAppear {
             viewModel.initBlog(blog)
+            viewModel.resetPage()
             Task {
                 await viewModel.getPostsInBlog()
             }
