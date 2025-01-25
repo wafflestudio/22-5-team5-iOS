@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kingfisher
 
 struct MyBlogSettingsView: View {
     
@@ -44,11 +45,19 @@ struct MyBlogSettingsView: View {
                                 .clipShape(Circle())
                                 .frame(width: 120, height: 120)
                         } else {
-                            Image("defaultImage")
-                                .resizable()
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 120, height: 120)
+                            if viewModel.isBlogMainImageURLEmpty {
+                                Image("defaultImage")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 120, height: 120)
+                            } else {
+                                KFImage(URL(string: viewModel.blogMainImageURL))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 120, height: 120)
+                            }
                         }
                         
                         
@@ -201,6 +210,7 @@ struct MyBlogSettingsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     Task {
+                        await viewModel.postImage()
                         await viewModel.patchBlog()
                         dismiss()
                     }

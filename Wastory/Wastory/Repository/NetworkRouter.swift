@@ -38,6 +38,9 @@ enum NetworkRouter {
     case postLike
     case getIsLiked(postID: Int)
     
+    //MARK: Image
+    case postImage
+    
     
     
     var url: URL {
@@ -73,6 +76,9 @@ enum NetworkRouter {
         //MARK: Like
         case .postLike: "/likes/create"
         case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
+            
+        //MARK: Image
+        case .postImage: "/images/upload"
         }
     }
     
@@ -123,6 +129,10 @@ enum NetworkRouter {
             return .post
         case .getIsLiked:
             return .get
+            
+        //MARK: Image
+        case .postImage:
+            return .post
         }
     }
     
@@ -174,6 +184,10 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getIsLiked:
             return ["Content-Type": "application/json"]
+            
+        //MARK: Image
+        case .postImage:
+            return ["Content-Type": "multipart/form-data"]
         }
     }
 }

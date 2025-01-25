@@ -5,6 +5,7 @@
 //  Created by mujigae on 1/7/25.
 //
 
+import SwiftUI
 import Foundation
 import Alamofire
 
@@ -277,4 +278,73 @@ extension NetworkRepository {
         
         return response
     }
+    
+    // MARK: - Image
+    func postImage(_ image: UIImage) async throws -> String {
+        // 이미지를 리사이즈
+        guard let resizedImage = resizeImage(image: image, targetSize: CGSize(width: 800, height: 800)) else {
+            throw NSError(domain: "ImageResizeError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to resize the image."])
+        }
+        
+        // 리사이즈된 이미지를 JPEG 데이터로 변환
+        guard let imageData = resizedImage.jpegData(compressionQuality: 0.8) else {
+            throw NSError(domain: "ImageConversionError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert the image to JPEG data."])
+        }
+        
+        // 압축된 이미지 크기 출력
+        print("압축된 이미지 크기: \(imageData.count / 1024) KB")
+        
+        // 서버로 요청
+        let response = try await AF.upload(
+            multipartFormData: { formData in
+                formData.append(imageData, withName: "file", fileName: "image.jpg", mimeType: "image/jpeg")
+            },
+            to: NetworkRouter.postImage.url,
+            headers: NetworkRouter.postImage.headers,
+            interceptor: NetworkInterceptor()
+        )
+        .validate()
+        .serializingDecodable(ImageDto.self)
+        .value
+
+        return response.fileURL
+    }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
+        //        let size = image.size
+        //
+        //        let widthRatio = targetSize.width / size.width
+        //        let heightRatio = targetSize.height / size.height
+        //
+        //        let newSize = CGSize(
+        //            width: size.width * min(widthRatio, heightRatio),
+        //            height: size.height * min(widthRatio, heightRatio)
+        //        )
+        //
+        //        let renderer = UIGraphicsImageRenderer(size: newSize)
+        //        return renderer.image { _ in
+        //            image.draw(in: CGRect(origin: .zero, size: newSize))
+        //        }
+        let size = image.size
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        let ratio = min(widthRatio, heightRatio)
+        
+        let newSize = CGSize(width: size.width * ratio, height: size.height * ratio)
+        
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        let resizedImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        
+        let imageData = resizedImage.jpegData(compressionQuality: 0.8)
+        
+        if imageData!.count >= 1 * 1024 * 1024 {
+            print("\(imageData!.count / 1024)KB")
+            return resizeImage(image: resizedImage, targetSize: CGSize(width: newSize.width * 0.9, height: newSize.height * 0.9))
+        }
+
+        return resizedImage
+    }
+
 }

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Observation
-import Kingfisher
 
 @Observable final class MyBlogSettingsViewModel {
     var mainImage: UIImage? = nil
@@ -39,6 +38,10 @@ import Kingfisher
         isBlogNameValid && isBlogDescriptionValid //&& isUsernameValid
     }
     
+    var isBlogMainImageURLEmpty: Bool {
+        blogMainImageURL.isEmpty
+    }
+    
     func getInitialData() async {
         do {
             let blog = try await NetworkRepository.shared.getMyBlog()
@@ -58,6 +61,17 @@ import Kingfisher
             // UserName update
         } catch {
             print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func postImage() async {
+        do {
+            if let _ = mainImage {
+                let blogMainImageURL = try await NetworkRepository.shared.postImage(mainImage!)
+                print("Uploaded file URL: \(blogMainImageURL)")
+            }
+        } catch {
+            print("Error uploading image: \(error.localizedDescription)")
         }
     }
 }
