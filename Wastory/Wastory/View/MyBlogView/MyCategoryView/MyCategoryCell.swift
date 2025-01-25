@@ -199,7 +199,9 @@ struct MyCategoryCell: View {
             }
         }//V
         .onTapGesture {
-            viewModel.toggleSelectedCategoryId(with: category.id)
+            if category.categoryName != "카테고리 없음" {
+                viewModel.toggleSelectedCategoryId(with: category.id)
+            }
         }
     }
 }
