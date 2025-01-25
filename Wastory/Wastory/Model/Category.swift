@@ -13,14 +13,14 @@ struct Category: Codable, Identifiable, Hashable {
     var categoryName: String
     var level: Int?
     var articleCount: Int?
-    var child: [Category] = []
+    var children: [Category] = []
     
     private enum CodingKeys: String, CodingKey {
         case id
         case categoryName = "category_name"
         case level
         case articleCount = "article_count"
-        case child
+        case children
     }
 }
 

@@ -51,7 +51,7 @@ import Observation
     
     var selectedCategoryId: Int = -1
     
-    func cancleCategoryAddButton() {
+    func cancelCategoryAddButton() {
         clearWritingCategoryName()
         isCategoryAddButtonActivated = false
     }
@@ -59,12 +59,14 @@ import Observation
     func toggleSelectedCategoryId(with id: Int) {
         if selectedCategoryId == id {
             selectedCategoryId = -1
+            print(selectedCategoryId)
         } else {
             isCategoryEditing = false
             isCategoryAdding = false
             isCategoryDelete = false
             selectedCategoryId = id
-            cancleCategoryAddButton()
+            cancelCategoryAddButton()
+            print(selectedCategoryId)
         }
     }
     
@@ -102,6 +104,7 @@ import Observation
     
     func postCategory() async {
         do {
+            print(selectedCategoryId)
             try await NetworkRepository.shared.postCategory(categoryName: writingCategoryName, parentID: (selectedCategoryId == -1 ? nil : selectedCategoryId))
         } catch {
             print("Error: \(error.localizedDescription)")

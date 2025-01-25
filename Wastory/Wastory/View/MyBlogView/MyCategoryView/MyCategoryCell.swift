@@ -16,7 +16,7 @@ struct MyCategoryCell: View {
         VStack(spacing: 0) {
             ZStack {
                 HStack(spacing: 0) {
-                    if category.level != 0 {
+                    if category.level != 1 {
                         Spacer()
                             .frame(width: 30)
                         
@@ -38,6 +38,13 @@ struct MyCategoryCell: View {
                         .lineLimit(1)
                     
                     Spacer()
+                        .frame(width: 5)
+                    
+                    Text("\(category.articleCount ?? 0)")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
+                    
+                    Spacer()
                     
                     
                 }//H
@@ -47,7 +54,7 @@ struct MyCategoryCell: View {
                     
                     if viewModel.isCategoryAddingOrEditing {
                         HStack(spacing: 5) {
-                            if category.level != 0 {
+                            if category.level != 1 {
                                 Spacer()
                                     .frame(width: 20)
                             }
@@ -69,14 +76,16 @@ struct MyCategoryCell: View {
                                     Task {
                                         await viewModel.postCategory()
                                         await viewModel.getCategories()
+                                        viewModel.toggleSelectedCategoryId(with: category.id)
                                     }
                                 } else if viewModel.isCategoryEditing {
                                     Task {
                                         await viewModel.patchCategory()
                                         await viewModel.getCategories()
+                                        viewModel.toggleSelectedCategoryId(with: category.id)
                                     }
                                 }
-                                viewModel.toggleSelectedCategoryId(with: category.id)
+                                
                             }) {
                                 Text("완료")
                                     .font(.system(size: 14, weight: .semibold))
@@ -158,15 +167,21 @@ struct MyCategoryCell: View {
                             }
                             .alert("카테고리 삭제", isPresented: $viewModel.isCategoryDelete) {
                                 Button("취소", role: .cancel) {}
-                                Button("삭제", role: .destructive) {
-                                    Task {
-                                        await viewModel.deleteCategory()
-                                        viewModel.toggleSelectedCategoryId(with: category.id)
-                                        await viewModel.getCategories()
+                                if category.articleCount == 0 && category.children == [] {
+                                    Button("삭제", role: .destructive) {
+                                        Task {
+                                            await viewModel.deleteCategory()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
+                                            await viewModel.getCategories()
+                                        }
                                     }
                                 }
                             } message: {
-                                Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
+                                if category.articleCount == 0 && category.children == [] {
+                                    Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
+                                } else {
+                                    Text("카테고리 내\n글 또는 하위 카테고리가 존재하면\n삭제가 불가합니다")
+                                }
                             }
                         }//H
                     }
@@ -179,8 +194,8 @@ struct MyCategoryCell: View {
             Divider()
                 .foregroundStyle(Color.secondaryLabelColor)
             
-            ForEach(category.child) { item in
-                MyCategoryCell(category: item, viewModel: viewModel)
+            ForEach(category.children) { child in
+                MyCategoryCell(category: child, viewModel: viewModel)
             }
         }//V
         .onTapGesture {
