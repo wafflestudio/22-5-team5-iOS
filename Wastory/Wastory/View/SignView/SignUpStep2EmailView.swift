@@ -101,6 +101,11 @@ struct SignUpStep2EmailView: View {
                                     viewModel.code = String(viewModel.code.prefix(viewModel.getCodeLength()))
                                 }
                             }
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    isCodeFocused = true
+                                }
+                            }
                             
                             HStack {
                                 Spacer()
@@ -124,6 +129,11 @@ struct SignUpStep2EmailView: View {
                             .padding(.vertical, 5)
                             .padding(.horizontal, 20)
                             .autocapitalization(.none)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    isEmailFocused = true
+                                }
+                            }
                             
                             HStack {
                                 Spacer()
@@ -234,6 +244,7 @@ struct SignUpStep2EmailView: View {
                     }
                     
                     ZStack {
+                        /*
                         NavigationLink(destination: SignUpStep3PasswordView()) {
                             Text("다음")
                                 .font(.system(size: 16, weight: .regular))
@@ -250,7 +261,29 @@ struct SignUpStep2EmailView: View {
                                 UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
                             }
                         )
-                        .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)
+                        .opacity(viewModel.isVerificationSuccessful() ? 1 : 0)*/
+                        
+                        Button {
+                            Task {
+                                await viewModel.verifyCode()
+                            }
+                        } label: {
+                            Text("다음")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 51)
+                                .background(Color.kakaoYellow)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 20)
+                        .disabled(!viewModel.isVerificationPossible())
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                UserInfoRepository.shared.setUserID(userID: viewModel.email)    // UserID (email) 결정
+                            }
+                        )
+                        .opacity(viewModel.isVerificationPossible() ? 1 : 0)
                         
                         Button {
                             isEmailFocused = false
@@ -272,11 +305,12 @@ struct SignUpStep2EmailView: View {
                                 .cornerRadius(6)
                         }
                         .padding(.horizontal, 20)
-                        .opacity(viewModel.isVerificationSuccessful() ? 0 : 1)
+                        .opacity(viewModel.isVerificationPossible() ? 0 : 1)
                     }
                     Spacer()
                 }
                 
+                // MARK: - 이메일 중복 경고 창
                 if viewModel.emailExists {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
@@ -334,6 +368,7 @@ struct SignUpStep2EmailView: View {
                     }
                 }
                 
+                // MARK: - 인증 코드 재전송 창
                 if showRerequestEmailBox {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
@@ -388,7 +423,10 @@ struct SignUpStep2EmailView: View {
                             .frame(height: 2)
                         
                         Button {
-                            showRerequestEmailBox = false
+                            Task {
+                                await viewModel.requestCode()
+                                showRerequestEmailBox = false
+                            }
                         } label: {
                             Text("인증번호 재발송")
                                 .font(.system(size: 16, weight: .regular))
@@ -413,6 +451,44 @@ struct SignUpStep2EmailView: View {
                         .padding(.horizontal, 40)
                     }
                 }
+                
+                // MARK: 인증 실패 창
+                if viewModel.isVerificationFailed {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                    
+                    Rectangle()
+                        .foregroundStyle(.white)
+                        .frame(height: 150)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 20)
+                    
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("입력한 인증번호가 올바르지 않습니다.")
+                                .font(.system(size: 17, weight: .semibold))
+                                .padding(.horizontal, 40)
+                            Spacer()
+                        }
+                        Spacer()
+                            .frame(height: 24)
+                        Button {
+                            viewModel.isVerificationFailed.toggle()
+                        } label: {
+                            Text("확인")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 12)
+                                .frame(maxWidth: .infinity, idealHeight: 45)
+                                .background(Color.disabledNextButtonGray)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 40)
+                    }
+                }
+            }
+            .navigationDestination(isPresented: $viewModel.isVerificationSuccessful) {
+                SignUpStep3PasswordView()
             }
         }
         .navigationBarBackButtonHidden()
