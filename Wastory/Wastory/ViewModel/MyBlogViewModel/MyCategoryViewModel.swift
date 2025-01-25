@@ -92,6 +92,21 @@ import Observation
     
     
     //Network
+    var categories: [Category] = []
     
-    var categories: [Category] = [Category.init(id: 0, categoryName: "asdf", level: 0), Category.init(id: 1, categoryName: "asasdfasdfdfasasdfasdfdf", level: 0, children: [Category.init(id: 5, categoryName: "child1", level: 1), Category.init(id: 6, categoryName: "child2", level: 1)]), Category.init(id: 2, categoryName: "asdf", level: 0),]
+    func addCategory() async {
+        do {
+            try await NetworkRepository.shared.postCategory(categoryName: writingCategoryName, parentID: (selectedCategoryId == -1 ? nil : selectedCategoryId))
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getCategories() async {
+        do {
+            categories = try await NetworkRepository.shared.getCategoriesInBlog(blogID: UserInfoRepository.shared.getBlogID())
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }

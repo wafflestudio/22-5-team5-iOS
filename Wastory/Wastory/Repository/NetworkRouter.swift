@@ -23,6 +23,10 @@ enum NetworkRouter {
     case getBlogByID(blogID: Int)
     case patchBlog(blogAddress: String)
     
+    // MARK: Category
+    case postCategory
+    case getCategoriesInBlog(blogID: Int)
+    
     // MARK: Article
     case postArticle
     case getArticlesInBlog(blogID: Int)
@@ -59,6 +63,10 @@ enum NetworkRouter {
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
         case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         case let .patchBlog(blogAddress): "/blogs/\(blogAddress)"
+            
+        // MARK: Category
+        case .postCategory: "/categories/create"
+        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -101,6 +109,12 @@ enum NetworkRouter {
             return .get
         case .patchBlog:
             return .patch
+            
+        // MARK: Category
+        case .postCategory:
+            return .post
+        case .getCategoriesInBlog:
+            return .get
         
         // MARK: Article
         case .postArticle:
@@ -128,7 +142,7 @@ enum NetworkRouter {
     
     var headers: HTTPHeaders? {
         switch self {
-        // MARK: User
+            // MARK: User
         case .postEmailExists:
             return ["Content-Type": "application/json"]
         case .postSignUp:
@@ -140,7 +154,7 @@ enum NetworkRouter {
         case .patchPassword:
             return ["Content-Type": "application/json"]
             
-        // MARK: Blog
+            // MARK: Blog
         case .postBlog:
             return ["Content-Type": "application/json"]
         case .getMyBlog:
@@ -152,6 +166,12 @@ enum NetworkRouter {
         case .patchBlog:
             return ["Content-Type": "application/json"]
             
+        // MARK: Category
+        case .postCategory:
+            return ["Content-Type": "application/json"]
+        case .getCategoriesInBlog:
+            return ["Content-Type": "application/json"]
+        
         // MARK: Article
         case .postArticle:
             return ["Content-Type": "application/json"]

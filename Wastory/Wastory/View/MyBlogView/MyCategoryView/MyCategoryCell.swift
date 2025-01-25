@@ -169,8 +169,8 @@ struct MyCategoryCell: View {
             Divider()
                 .foregroundStyle(Color.secondaryLabelColor)
             
-            ForEach(category.children) { child in
-                MyCategoryCell(category: child, viewModel: viewModel)
+            ForEach(category.child) { item in
+                MyCategoryCell(category: item, viewModel: viewModel)
             }
         }//V
         .onTapGesture {
