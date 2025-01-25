@@ -98,6 +98,14 @@ import Observation
         isCategoryEditing = false
     }
     
+    func clearIfTextEmpty() {
+        if writingCategoryName.isEmpty {
+            unselectCategoryId()
+            cancelCategoryAddButton()
+            isCategoryAdding = false
+            isCategoryEditing = false
+        }
+    }
     
     //Network
     var categories: [Category] = []
