@@ -13,19 +13,17 @@ final class UserInfoRepository {
     
     private var userActive: Bool = false        // 유저의 상태: 로그인 (true) | 로그아웃 (false)
     
-    private var userID = ""         // 아이디
-    private var userPW = ""         // 비밀번호
-    private var addressName = ""    // 블로그 주소 식별자
-    private var blogName = ""       // 블로그 이름
-    private var username = ""       // 닉네임
+    // MARK: User
+    private var userID = ""             // 아이디
+    private var userPW = ""             // 비밀번호
+    private var isKakaoLogin = false    // 카카오 로그인 유저 식별
     
-    private var blogID = 0          // 임시로 만든 API를 위한 블로그 아이디
-    func setBlogID(blogID: Int) {
-        self.blogID = blogID
-    }
-    func getBlogID() -> Int {
-        return blogID
-    }
+    // MARK: Blog
+    private var addressName = ""        // 블로그 주소 식별자
+    private var blogName = ""           // 블로그 이름
+    private var blogID = 0              // 블로그 아이디
+    private var username = ""           // 닉네임 (원래는 닉네임이 블로그에 종속되는 항목이지만 블로그가 1개로 제한됨에 따라 수정할 여지 존재)
+    
     
     // 최초로 블로그를 개설했는지 App이 판단하기 위한 변수
     var needAddressName: Bool = false
@@ -45,6 +43,9 @@ final class UserInfoRepository {
     func setBlogName(blogName: String) {
         self.blogName = blogName
     }
+    func setBlogID(blogID: Int) {
+        self.blogID = blogID
+    }
     func setUsername(username: String) {
         self.username = username
     }
@@ -58,7 +59,8 @@ final class UserInfoRepository {
         }
     }
     
-    func loadUserInfo(userID: String, userPW: String) async {   // 로그인 시 이용
+    // MARK: - 일반 유저 회원가입 및 로그인
+    func loadUserInfo(userID: String, userPW: String) async {
         self.userID = userID
         self.userPW = userPW
         
@@ -67,42 +69,83 @@ final class UserInfoRepository {
                 userID: self.userID,
                 userPW: self.userPW
             )
-            if !response.access_token.isEmpty {
-                print("로그인 성공")  // 테스트용 임시 콘솔 메세지
-                NetworkConfiguration.accessToken = response.access_token
-                NetworkConfiguration.refreshToken = response.refresh_token
-            }
+            NetworkConfiguration.accessToken = response.access_token
+            NetworkConfiguration.refreshToken = response.refresh_token
         } catch {
             print("Error: \(error.localizedDescription)")
             return
         }
         
+        // MARK: Set User Information
         do {
-            let response = try await NetworkRepository.shared.getMyBlog()
-            addressName = response.addressName
-            blogName = response.blogName
-            blogID = response.id
+            let response = try await NetworkRepository.shared.getMe()
+            self.username = response.username
         } catch {
             print("Error: \(error.localizedDescription)")
         }
         
-        if addressName.isEmpty {
-            needAddressName = true
+        // MARK: Set Blog Information
+        do {
+            let response = try await NetworkRepository.shared.getMyBlog()
+            self.addressName = response.addressName
+            self.blogName = response.blogName
+            self.blogID = response.id
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        // MARK: 블로그 주소 설정 여부 확인
+        if self.addressName.isEmpty {
+            self.needAddressName = true
         }
         else {
-            userActive = true
+            self.userActive = true
         }
     }
     
+    // MARK: - 카카오 유저 로그인
+    func loadKakaoUserInfo() async {
+        // MARK: Set User Information
+        do {
+            let response = try await NetworkRepository.shared.getMe()
+            self.userID = response.userID
+            self.isKakaoLogin = true
+            self.username = response.username
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        // MARK: Set Blog Information
+        do {
+            let response = try await NetworkRepository.shared.getMyBlog()
+            self.addressName = response.addressName
+            self.blogName = response.blogName
+            self.blogID = response.id
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        // MARK: 블로그 주소 설정 여부 확인
+        if self.addressName.isEmpty {
+            self.needAddressName = true
+        }
+        else {
+            self.userActive = true
+        }
+    }
+    
+    // MARK: 로그아웃 또는 탈퇴
     func resetUserInfo() {
-        userID = ""
-        userPW = ""
-        addressName = ""
-        blogName = ""
-        blogID = 0
-        username = ""
-        needAddressName = false
-        userActive = false
+        self.userID = ""
+        self.userPW = ""
+        
+        self.addressName = ""
+        self.blogName = ""
+        self.blogID = 0
+        self.username = ""
+        
+        self.needAddressName = false
+        self.userActive = false
     }
     
     func isUserActive() -> Bool {
@@ -115,11 +158,17 @@ final class UserInfoRepository {
     func getUserPW() -> String {
         return userPW
     }
+    func checkKaKaoLogin() -> Bool {
+        return isKakaoLogin
+    }
     func getAddressName() -> String {
         return addressName
     }
     func getBlogName() -> String {
         return blogName
+    }
+    func getBlogID() -> Int {
+        return blogID
     }
     func getUsername() -> String {
         return username

@@ -20,7 +20,10 @@ struct DeepLinkHandler {
             print("Error: Failed to fetch jwt token for kakao users")
             return
         }
-        NetworkConfiguration.accessToken = accessToken
-        NetworkConfiguration.refreshToken = refreshToken
+        Task {
+            NetworkConfiguration.accessToken = accessToken
+            NetworkConfiguration.refreshToken = refreshToken
+            await UserInfoRepository.shared.loadKakaoUserInfo()
+        }
     }
 }

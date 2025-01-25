@@ -73,5 +73,11 @@ struct SignTypeView: View {
                 }
             }
         }
+        .onOpenURL { url in
+            Task {
+                print(url)
+                await DeepLinkHandler.shared.authHandler(url: url)
+            }
+        }
     }
 }
