@@ -35,7 +35,7 @@ import Observation
     }
     
     var isSubmitValid: Bool {
-        isBlogNameValid && isBlogDescriptionValid //&& isUsernameValid
+        isBlogNameValid && isBlogDescriptionValid && isUsernameValid
     }
     
     var isBlogMainImageURLEmpty: Bool {
@@ -58,7 +58,15 @@ import Observation
     func patchBlog() async {
         do {
             try await NetworkRepository.shared.patchBlog(blogName: blogName, description: blogDescription, mainImageURL: blogMainImageURL)
-            // UserName update
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func patchUser() async {
+        do {
+            try await NetworkRepository.shared.patchUsername(newUsername: username)
+            UserInfoRepository.shared.patchUsername(to: username)
         } catch {
             print("Error: \(error.localizedDescription)")
         }

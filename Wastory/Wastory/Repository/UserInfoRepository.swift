@@ -86,6 +86,13 @@ final class UserInfoRepository {
             print("Error: \(error.localizedDescription)")
         }
         
+        do {
+            let response = try await NetworkRepository.shared.getMe()
+            username = response.username
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
         if addressName.isEmpty {
             needAddressName = true
         }
@@ -123,5 +130,10 @@ final class UserInfoRepository {
     }
     func getUsername() -> String {
         return username
+    }
+    
+    
+    func patchUsername(to name: String) {
+        username = name
     }
 }

@@ -47,6 +47,51 @@ extension NetworkRepository {
 //            .serializingString().value
 //    }
     
+    // MARK: - User
+    func patchUsername(newUsername: String) async throws {
+        let requestBody = [
+            "username": newUsername
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchUsername.url,
+            method: NetworkRouter.patchUsername.method,
+            headers: NetworkRouter.patchUsername.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingString()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getMe() async throws -> User {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getMe.url,
+            method: NetworkRouter.getMe.method,
+            headers: NetworkRouter.getMe.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(User.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Blog
     func getBlogByID(blogID: Int) async throws -> Blog {
         let urlRequest = try URLRequest(

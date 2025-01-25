@@ -211,18 +211,21 @@ struct MyBlogSettingsView: View {
                 Button(action: {
                     Task {
                         await viewModel.postImage()
-                        await viewModel.patchBlog()
-                        dismiss()
+                        Task {
+                            await viewModel.patchBlog()
+                            await viewModel.patchUser()
+                            dismiss()
+                        }
                     }
                 }) {
                     Text("완료")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.primaryLabelColor)
+                        .foregroundStyle(viewModel.isSubmitValid ? Color.primaryLabelColor : Color.backgourndSpaceColor)
                         .frame(width: 60, height: 35)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(style: StrokeStyle(lineWidth: 1))
-                                .foregroundStyle(Color.secondaryLabelColor)
+                                .foregroundStyle(viewModel.isSubmitValid ? Color.secondaryLabelColor : Color.backgourndSpaceColor)
                         )
                 }
                 .disabled(!viewModel.isSubmitValid)
