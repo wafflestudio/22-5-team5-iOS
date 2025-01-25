@@ -173,13 +173,13 @@ extension NetworkRepository {
                 "content": content,
                 "parent_id": "\(parentID!)",
                 "secret": "\(isSecret ? 1 : 0)",
-                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
             ]
         } else {
             requestBody = [
                 "content": content,
                 "secret": "\(isSecret ? 1 : 0)",
-                "level": "\(parentID ?? 0 == 0 ? 0 : 1)"
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
             ]
         }
         var urlRequest = try URLRequest(
