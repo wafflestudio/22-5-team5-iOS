@@ -15,13 +15,14 @@ struct User: Codable {
     let blogID: UUID                 // 블로그 주소
     var subscribedBlogIDs: [UUID]    // 구독중인 블로그 주소 List
     var subscriberBlogIDs: [UUID]    // 구독자 블로그 주소 List
+}
+
+struct UserDto: Codable {
+    let userID: String
+    let username: String
     
     private enum CodingKeys: String, CodingKey {
         case userID = "email"
-        case password
         case username
-        case blogID
-        case subscribedBlogIDs
-        case subscriberBlogIDs
     }
 }
