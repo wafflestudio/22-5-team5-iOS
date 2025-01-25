@@ -21,6 +21,7 @@ import Observation
     private var touchedCodeScreen: Bool = false
     
     var isVerificationSuccessful: Bool = false
+    var isVerificationFailed: Bool = false
     
     func getCodeLength() -> Int {
         return codeLength
@@ -124,8 +125,10 @@ import Observation
     func verifyCode() async {
         do {
             let response = try await NetworkRepository.shared.postVerifyEmail(email: email, code: code)
-            print(response)
-            isVerificationSuccessful = true
+            isVerificationSuccessful = response
+            if !isVerificationSuccessful {
+                isVerificationFailed = true
+            }
         }
         catch {
             print("Error: \(error.localizedDescription)")

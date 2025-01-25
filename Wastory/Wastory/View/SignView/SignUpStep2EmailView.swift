@@ -310,6 +310,7 @@ struct SignUpStep2EmailView: View {
                     Spacer()
                 }
                 
+                // MARK: - 이메일 중복 경고 창
                 if viewModel.emailExists {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
@@ -367,6 +368,7 @@ struct SignUpStep2EmailView: View {
                     }
                 }
                 
+                // MARK: - 인증 코드 재전송 창
                 if showRerequestEmailBox {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
@@ -442,6 +444,41 @@ struct SignUpStep2EmailView: View {
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(.black)
                                 .padding(.vertical, 16)
+                                .frame(maxWidth: .infinity, idealHeight: 45)
+                                .background(Color.disabledNextButtonGray)
+                                .cornerRadius(6)
+                        }
+                        .padding(.horizontal, 40)
+                    }
+                }
+                
+                // MARK: 인증 실패 창
+                if viewModel.isVerificationFailed {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                    
+                    Rectangle()
+                        .foregroundStyle(.white)
+                        .frame(height: 150)
+                        .cornerRadius(12)
+                        .padding(.horizontal, 20)
+                    
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("입력한 인증번호가 올바르지 않습니다.")
+                                .font(.system(size: 17, weight: .semibold))
+                                .padding(.horizontal, 40)
+                            Spacer()
+                        }
+                        Spacer()
+                            .frame(height: 24)
+                        Button {
+                            viewModel.isVerificationFailed.toggle()
+                        } label: {
+                            Text("확인")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 12)
                                 .frame(maxWidth: .infinity, idealHeight: 45)
                                 .background(Color.disabledNextButtonGray)
                                 .cornerRadius(6)
