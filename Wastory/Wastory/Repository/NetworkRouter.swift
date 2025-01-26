@@ -19,7 +19,6 @@ enum NetworkRouter {
     case deleteMe
     case patchPassword(oldPW: String, newPW: String)
     case patchUsername
-    case getMe
     
     // MARK: Blog
     case postBlog
@@ -73,7 +72,6 @@ enum NetworkRouter {
         case .deleteMe: "/users/me"
         case .patchPassword: "/users/change_password"
         case .patchUsername: "/users/me"
-        case .getMe: "/users/me"
             
         // MARK: Blog
         case .postBlog: "/blogs"
@@ -131,8 +129,6 @@ enum NetworkRouter {
             return .patch
         case .patchUsername:
             return .patch
-        case .getMe:
-            return .get
             
         // MARK: Blog
         case .postBlog:
@@ -210,8 +206,6 @@ enum NetworkRouter {
         case .patchPassword:
             return ["Content-Type": "application/json"]
         case .patchUsername:
-            return ["Content-Type": "application/json"]
-        case .getMe:
             return ["Content-Type": "application/json"]
             
         // MARK: Blog
