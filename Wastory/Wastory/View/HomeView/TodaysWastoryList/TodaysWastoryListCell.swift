@@ -26,7 +26,7 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                contentViewModel.navigateToBlogViewButton(tempBlog()) {
+                contentViewModel.navigateToBlogViewButton(tempBlog().id) {
                     Text("블로그 이름")
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
@@ -89,7 +89,7 @@ struct TodaysWastoryListCell: View {
         }// VStack
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+            contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
         }
     }
 }

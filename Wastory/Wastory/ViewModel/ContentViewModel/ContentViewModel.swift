@@ -11,14 +11,14 @@ import Observation
 @Observable final class ContentViewModel {
     
     // Button 동작
-    func navigateToBlogViewButton(_ blog: Blog, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
-        NavigationLink(destination: BlogView(blog: blog)) {
+    func navigateToBlogViewButton(_ blogID: Int, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
+        NavigationLink(destination: BlogView(blogID: blogID)) {
             buttonContent()
         }
     }
     
-    func navigateToPostViewButton(_ post: Post, _ blog: Blog) -> some View { //TODO: 보여줄 Post 정하기
-        NavigationLink(destination: PostView(post: post, blog: blog)) {
+    func navigateToPostViewButton(_ postID: Int, _ blogID: Int) -> some View { //TODO: 보여줄 Post 정하기
+        NavigationLink(destination: PostView(postID: postID, blogID: blogID)) {
             Rectangle()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .foregroundStyle(Color.clear)

@@ -11,8 +11,8 @@ import SwiftUI
 import Observation
 
 @Observable final class PostViewModel {
-    var post: Post?
-    var blog: Blog?
+    var post: Post = Post.defaultPost
+    var blog: Blog = Blog.defaultBlog
     
     
     
@@ -80,7 +80,7 @@ import Observation
     
     func deleteSelfPost(at List: inout [Post]) {
         for (index, item) in List.enumerated() {
-            if item == self.post! {
+            if item == self.post {
                 List.remove(at: index)
             }
         }
@@ -90,7 +90,7 @@ import Observation
         // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
-            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog.id, sortBy: PopularPostSortedType.views.api)
             deleteSelfPost(at: &popularBlogPosts)
         } catch {
             print("Error: \(error.localizedDescription)")
@@ -99,16 +99,16 @@ import Observation
     
         // - 블로그 내 같은 카테고리글List get
     func getPostsInBlogInCategory() async {
-        if post!.categoryID == nil {
+        if post.categoryID == nil {
             do {
-            categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlog(blogID: blog!.id, page: 1)
+            categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlog(blogID: blog.id, page: 1)
             deleteSelfPost(at: &categoryBlogPosts)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
         } else {
             do {
-                categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: blog!.id, categoryID: post!.categoryID!, page: 1)
+                categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: blog.id, categoryID: post.categoryID!, page: 1)
                 deleteSelfPost(at: &categoryBlogPosts)
             } catch {
                 print("Error: \(error.localizedDescription)")
@@ -119,7 +119,7 @@ import Observation
         // - 유저가 해당 글을 좋아요 했는지 저장
     func getIsLiked() async {
         do {
-            let response = try await NetworkRepository.shared.getIsLiked(postID: post!.id)
+            let response = try await NetworkRepository.shared.getIsLiked(postID: post.id)
             isLiked = response
         } catch {
             print("Error: \(error.localizedDescription)")
@@ -130,9 +130,9 @@ import Observation
         // - 좋아요 기능
     func createLike() async {
         do {
-            try await NetworkRepository.shared.postLike(postID: post!.id)
+            try await NetworkRepository.shared.postLike(postID: post.id)
             isLiked = true
-            post!.likeCount += 1
+            post.likeCount += 1
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -141,9 +141,9 @@ import Observation
         // - 좋아요 취소 기능
     func deleteLike() async {
         do {
-            try await NetworkRepository.shared.deleteLike(postID: post!.id)
+            try await NetworkRepository.shared.deleteLike(postID: post.id)
             isLiked = false
-            post!.likeCount -= 1
+            post.likeCount -= 1
         } catch {
             print("Error: \(error.localizedDescription)")
         }

@@ -11,7 +11,6 @@ import SwiftUI
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct BasicPostCell: View {
     let post: Post
-    @State var blog: Blog = Blog.defaultBlog
     @State var didAppear: Bool = false
     
     @Environment(\.contentViewModel) var contentViewModel
@@ -69,7 +68,7 @@ struct BasicPostCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.navigateToBlogViewButton(blog) {
+                contentViewModel.navigateToBlogViewButton(post.blogID) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         Image(systemName: "questionmark.app.dashed")
@@ -80,7 +79,7 @@ struct BasicPostCell: View {
                             .cornerRadius(5)
                         
                         //blog name
-                        Text(blog.blogName)
+                        Text(post.blogName ?? "")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                     }
@@ -98,22 +97,14 @@ struct BasicPostCell: View {
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.navigateToPostViewButton(post, blog)
+                    contentViewModel.navigateToPostViewButton(post.id, post.blogID)
                 }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
-        .onAppear {
-            if !didAppear {
-                Task {
-                    blog = try await contentViewModel.getBlogByID(post.blogID)
-                }
-                didAppear = true
-            }
-        }
         .background {
-            contentViewModel.navigateToPostViewButton(post, blog)
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

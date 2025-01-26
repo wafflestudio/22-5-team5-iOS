@@ -67,7 +67,7 @@ struct TodaysWastoryPageTabCell: View {
                     
                     // 블로그 정보
                     HStack {
-                        contentViewModel.navigateToBlogViewButton(tempBlog()) {
+                        contentViewModel.navigateToBlogViewButton(tempBlog().id) {
                             HStack(spacing: 8) {
                                 ZStack {
                                     Image(systemName: "questionmark.text.page.fill")
@@ -94,7 +94,7 @@ struct TodaysWastoryPageTabCell: View {
                 .padding(.horizontal, 25)
             }//Vstack
             .background {
-                contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+                contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
             }
         }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))

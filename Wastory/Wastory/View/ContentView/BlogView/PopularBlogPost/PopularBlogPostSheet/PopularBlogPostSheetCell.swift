@@ -10,7 +10,6 @@ import SwiftUI
 struct PopularBlogPostSheetCell: View {
     let post: Post
     let index: Int
-    @State var blog: Blog = Blog.defaultBlog
     @State var didAppear: Bool = false
     
     @Bindable var viewModel: PopularBlogPostSheetViewModel
@@ -90,16 +89,8 @@ struct PopularBlogPostSheetCell: View {
             
         } //VStack
         .background(Color.white)
-        .onAppear {
-            if !didAppear {
-                Task {
-                    blog = try await contentViewModel.getBlogByID(post.blogID)
-                }
-                didAppear = true
-            }
-        }
         .overlay {
-            contentViewModel.navigateToPostViewButton(post, blog)
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

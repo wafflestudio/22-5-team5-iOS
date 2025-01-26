@@ -39,11 +39,11 @@ struct HomeBigPostListCell: View {
                         .foregroundStyle(Color.unreadNotification)
                         .padding(.horizontal, 20)
                         .overlay(
-                            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+                            contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
                         )
                     
                     //블로그 정보 button
-                    contentViewModel.navigateToBlogViewButton(tempBlog()) {
+                    contentViewModel.navigateToBlogViewButton(tempBlog().id) {
                         HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {
@@ -116,7 +116,7 @@ struct HomeBigPostListCell: View {
                 }
                 .padding(.horizontal, 20)
                 .overlay(
-                    contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+                    contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
                     )
             } // VStack
         

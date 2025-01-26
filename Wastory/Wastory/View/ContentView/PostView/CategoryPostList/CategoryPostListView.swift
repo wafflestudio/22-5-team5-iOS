@@ -31,12 +31,10 @@ struct CategoryPostListView: View {
                 
                 Spacer()
                 
-                if let _ = viewModel.blog {
-                    contentViewModel.navigateToBlogViewButton(viewModel.blog!) {
-                        Text("더보기")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(Color.secondaryLabelColor)
-                    }
+                contentViewModel.navigateToBlogViewButton(viewModel.blog.id) {
+                    Text("더보기")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
                 }
             }
             .padding(.horizontal, 20)

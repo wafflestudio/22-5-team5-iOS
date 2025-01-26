@@ -87,7 +87,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post, viewModel.blog!)
+            contentViewModel.navigateToPostViewButton(post.id, viewModel.blog.id)
         }
     }
 }

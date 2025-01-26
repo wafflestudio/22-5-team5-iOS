@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BlogView: View {
-    let blog: Blog
+    let blogID: Int
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -20,7 +20,7 @@ struct BlogView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
-                    BlogHeaderView(blog: blog)
+                    BlogHeaderView(blog: viewModel.blog)
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -35,7 +35,7 @@ struct BlogView: View {
                     
                     
                     // 인기글 TODO: 인기글 모두보기 View
-                    PopularBlogPostListView(blog: blog)
+                    PopularBlogPostListView(blog: viewModel.blog)
                     
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
                     BlogPostListView()
@@ -117,22 +117,24 @@ struct BlogView: View {
             
         } //ZStack
         .onAppear {
-            viewModel.initBlog(blog)
-            viewModel.resetPage()
             Task {
-                await viewModel.getPostsInBlog()
-            }
-            Task {
-                await viewModel.getPopularBlogPosts()
-            }
-            Task {
-                await viewModel.getCategories()
+                await viewModel.initBlog(blogID)
+                viewModel.resetPage()
+                Task {
+                    await viewModel.getPostsInBlog()
+                }
+                Task {
+                    await viewModel.getPopularBlogPosts()
+                }
+                Task {
+                    await viewModel.getCategories()
+                }
             }
         }
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
-        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : blog.blogName)
+        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : viewModel.blog.blogName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)

@@ -57,7 +57,7 @@ struct BasicBlogCell: View {
         .padding(20)
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToBlogViewButton(tempBlog()) {
+            contentViewModel.navigateToBlogViewButton(tempBlog().id) {
                 Rectangle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .foregroundStyle(Color.clear)
