@@ -254,6 +254,28 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    func getCategory(categoryID: Int) async throws -> Category {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getCategory(categoryID: categoryID).url,
+            method:  NetworkRouter.getCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.getCategory(categoryID: categoryID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Category.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(
@@ -350,7 +372,220 @@ extension NetworkRepository {
         
         return response
     }
+    
+    func getArticlesTodayWastory() async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesTodayWastory.url,
+            method: NetworkRouter.getArticlesTodayWastory.method,
+            headers: NetworkRouter.getArticlesTodayWastory.headers
+        )
         
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "1")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesWeeklyWastory() async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesWeeklyWastory.url,
+            method: NetworkRouter.getArticlesWeeklyWastory.method,
+            headers: NetworkRouter.getArticlesWeeklyWastory.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesHomeTopic(highHomeTopicID: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).url,
+            method: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).method,
+            headers: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "1")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesOfSubscription(blogID: Int, page: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getArticlesOfSubscription(blogID: blogID).url,
+            method:  NetworkRouter.getArticlesOfSubscription(blogID: blogID).method,
+            headers: NetworkRouter.getArticlesOfSubscription(blogID: blogID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func searchArticlesInBlog(searchingWord: String, blogID: Int, page: Int) async throws -> PostListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).url,
+            method:  NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).method,
+            headers: NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func searchArticles(searchingWord: String, page: Int) async throws -> PostListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.searchArticles(searchingWord: searchingWord).url,
+            method:  NetworkRouter.searchArticles(searchingWord: searchingWord).method,
+            headers: NetworkRouter.searchArticles(searchingWord: searchingWord).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
     
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {

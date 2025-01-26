@@ -32,6 +32,7 @@ enum NetworkRouter {
     case getCategoriesInBlog(blogID: Int)
     case patchCategory(categoryID: Int)
     case deleteCategory(categoryID: Int)
+    case getCategory(categoryID: Int)
     
     // MARK: Article
     case postArticle
@@ -39,7 +40,12 @@ enum NetworkRouter {
     case getTopArticlesInBlog(blogID: Int, sortBy: String)
     case getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int)
     case getArticle(postID: Int)
-    
+    case getArticlesTodayWastory
+    case getArticlesWeeklyWastory
+    case getArticlesHomeTopic(highHomeTopicID: Int)
+    case getArticlesOfSubscription(blogID: Int)
+    case searchArticlesInBlog(searchingWord: String, blogID: Int)
+    case searchArticles(searchingWord: String)
     
     //MARK: Comment
     case postComment(postID: Int)
@@ -86,6 +92,7 @@ enum NetworkRouter {
         case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         case let .patchCategory(categoryID): "/categories/\(categoryID)"
         case let .deleteCategory(categoryID): "/categories/\(categoryID)"
+        case let .getCategory(categoryID): "/categories/\(categoryID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -93,6 +100,12 @@ enum NetworkRouter {
         case let .getTopArticlesInBlog(blogID, sortBy): "/articles/blogs/\(blogID)/sort_by/\(sortBy)"
         case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: _): "/articles/blogs/\(blogID)/categories/\(categoryID)"
         case let .getArticle(postID): "/articles/get/\(postID)"
+        case .getArticlesTodayWastory: "/articles/today_wastory"
+        case .getArticlesWeeklyWastory: "/articles/weekly_wastory"
+        case let .getArticlesHomeTopic(highHomeTopicID): "/articles/hometopic/\(highHomeTopicID)"
+        case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
+        case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
+        case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
@@ -153,6 +166,8 @@ enum NetworkRouter {
             return .patch
         case .deleteCategory:
             return .delete
+        case .getCategory:
+            return .get
         
         // MARK: Article
         case .postArticle:
@@ -164,6 +179,18 @@ enum NetworkRouter {
         case .getArticlesInBlogInCategory:
             return .get
         case .getArticle:
+            return .get
+        case .getArticlesTodayWastory:
+            return .get
+        case .getArticlesWeeklyWastory:
+            return .get
+        case .getArticlesHomeTopic:
+            return .get
+        case .getArticlesOfSubscription:
+            return .get
+        case .searchArticlesInBlog:
+            return .get
+        case .searchArticles:
             return .get
             
         // MARK: Comment
@@ -233,6 +260,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .deleteCategory:
             return ["Content-Type": "application/json"]
+        case .getCategory:
+            return ["Content-Type": "application/json"]
         
         // MARK: Article
         case .postArticle:
@@ -245,7 +274,18 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getArticle:
             return ["Content-Type": "application/json"]
-            
+        case .getArticlesTodayWastory:
+            return ["Content-Type": "application/json"]
+        case .getArticlesWeeklyWastory:
+            return ["Content-Type": "application/json"]
+        case .getArticlesHomeTopic:
+            return ["Content-Type": "application/json"]
+        case .getArticlesOfSubscription:
+            return ["Content-Type": "application/json"]
+        case .searchArticlesInBlog:
+            return ["Content-Type": "application/json"]
+        case .searchArticles:
+            return ["Content-Type": "application/json"]
             
         // MARK: Comment
         case .postComment:
