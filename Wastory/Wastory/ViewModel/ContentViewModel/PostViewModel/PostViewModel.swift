@@ -14,10 +14,6 @@ import Observation
     var post: Post?
     var blog: Blog?
     
-    func initContent(_ post: Post, _ blog: Blog) {
-        self.post = post
-        self.blog = blog
-    }
     
     
     
@@ -68,6 +64,19 @@ import Observation
     var categoryBlogPosts: [Post] = []
     
     var isLiked: Bool = false
+    
+    
+    func initContent(_ postID: Int, _ blogID: Int) async {
+        do {
+            self.post = try await NetworkRepository.shared.getArticle(postID: postID)
+            self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+            
+        }
+    }
+    
+    
     
     func deleteSelfPost(at List: inout [Post]) {
         for (index, item) in List.enumerated() {

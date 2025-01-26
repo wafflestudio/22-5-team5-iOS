@@ -34,7 +34,7 @@ struct Blog: Codable, Identifiable, Hashable {
 import SwiftUI
 extension View {
     func tempBlog() -> Blog {
-        Blog.init(id: 5, blogName: "블로그 이름", addressName: "WaSans", description: "블로그 설명어어어어엉엉", userID: 0)
+        Blog.init(id: 1, blogName: "블로그 이름", addressName: "WaSans", description: "블로그 설명어어어어엉엉", userID: 0)
     }
 }
 

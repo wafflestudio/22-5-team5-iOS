@@ -321,6 +321,35 @@ extension NetworkRepository {
         return response.articles
         
     }
+    
+    func getArticle(postID: Int) async throws -> Post {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getArticle(postID: postID).url,
+            method: NetworkRouter.getArticle(postID: postID).method,
+            headers: NetworkRouter.getArticle(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Post.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
         
     
     // MARK: - Comment
