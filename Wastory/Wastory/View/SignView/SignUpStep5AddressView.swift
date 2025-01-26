@@ -135,7 +135,6 @@ struct SignUpStep5AddressView: View {
                                 try await NetworkRepository.shared.postBlog(
                                     addressName: UserInfoRepository.shared.getAddressName()
                                 )
-                                print("블로그 주소 설정 성공")     // 테스트용 콘솔 임시 메세지
                                 viewModel.setUserInfo()
                             } catch {
                                 print("Error: \(error.localizedDescription)")

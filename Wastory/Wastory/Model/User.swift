@@ -8,7 +8,7 @@
 import Foundation
 
 struct User: Codable {
-    var username: String           // 유저네임
+    var username: String?          // 유저네임
     let email: String              // 이메일 주소
     let isKakaoUser: Bool          // 카카오 유저 유무
     

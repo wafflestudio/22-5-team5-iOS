@@ -39,8 +39,7 @@ struct BlogSheet: View {
                                     .padding(.leading, 20)
                                 Spacer()
                                     .frame(width: 20)
-                                //Text(UserInfoRepository.shared.getUsername())
-                                Text(UserInfoRepository.shared.getBlogName())   // 아직 username API가 없어 임시로 대체
+                                Text(UserInfoRepository.shared.getUsername())
                                     .font(.system(size: 17, weight: .semibold))
                                 Spacer()
                                 
