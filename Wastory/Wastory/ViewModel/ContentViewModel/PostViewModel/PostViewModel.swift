@@ -82,8 +82,9 @@ import Observation
     
     func deleteSelfPost(at List: inout [Post]) {
         for (index, item) in List.enumerated() {
-            if item == self.post {
+            if item.id == self.post.id {
                 List.remove(at: index)
+                break
             }
         }
     }
