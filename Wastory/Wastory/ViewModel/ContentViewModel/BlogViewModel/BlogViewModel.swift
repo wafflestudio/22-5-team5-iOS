@@ -124,6 +124,35 @@ import Observation
         }
     }
     
+    // - 블로그 내 카테고리 글 get하기
+    func getPostsInCategory() async {
+        if !isPageEnded {
+            if selectedCategory.id != -1 {
+                do {
+                    let response = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: self.blog.id, categoryID: self.selectedCategory.id, page: self.page)
+                    
+                    //comments 저장
+                    if self.page == 1 {
+                        blogPosts = response
+                    } else {
+                        blogPosts.append(contentsOf: response)
+                    }
+                    
+                    //pagination
+                    if !response.isEmpty {
+                        self.page += 1
+                    } else {
+                        self.isPageEnded = true
+                    }
+                } catch {
+                    print("Error: \(error.localizedDescription)")
+                }
+            } else {
+                await getPostsInBlog()
+            }
+        }
+    }
+    
     // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
@@ -142,6 +171,7 @@ import Observation
             print("Error: \(error.localizedDescription)")
         }
     }
+    
 }
 
 

@@ -174,6 +174,10 @@ struct BlogView: View {
     @ViewBuilder func CategoryButton(for category: Category, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
             viewModel.setCategory(to: category)
+            viewModel.resetPage()
+            Task {
+                await viewModel.getPostsInCategory()
+            }
             viewModel.toggleIsCategorySheetPresent()
         }) {
             HStack(spacing: 0) {
@@ -200,6 +204,10 @@ struct BlogView: View {
             
             Button(action: {
                 viewModel.setCategory(to: child)
+                viewModel.resetPage()
+                Task {
+                    await viewModel.getPostsInCategory()
+                }
                 viewModel.toggleIsCategorySheetPresent()
             }) {
                 HStack(spacing: 0) {
