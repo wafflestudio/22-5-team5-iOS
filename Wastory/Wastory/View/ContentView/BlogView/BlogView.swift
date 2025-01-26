@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BlogView: View {
     let blogID: Int
+    var categoryID: Int = -1
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -121,13 +122,14 @@ struct BlogView: View {
                 await viewModel.initBlog(blogID)
                 viewModel.resetPage()
                 Task {
-                    await viewModel.getPostsInBlog()
-                }
-                Task {
                     await viewModel.getPopularBlogPosts()
                 }
                 Task {
                     await viewModel.getCategories()
+                    if let foundCategory = viewModel.categories.first(where: { $0.id == categoryID }) {
+                        viewModel.selectedCategory = foundCategory
+                    }
+                    await viewModel.getPostsInCategory()
                 }
             }
         }
@@ -200,7 +202,7 @@ struct BlogView: View {
         
         
         //TODO: Children 추가기능 구현
-        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
+        ForEach(Array((category.children ?? []).enumerated()), id: \.offset) { index, child in
             
             Button(action: {
                 viewModel.setCategory(to: child)

@@ -65,6 +65,8 @@ import Observation
     
     var isLiked: Bool = false
     
+    var categoryName: String = "카테고리 get이 필요합니다"
+    
     
     func initContent(_ postID: Int, _ blogID: Int) async {
         do {

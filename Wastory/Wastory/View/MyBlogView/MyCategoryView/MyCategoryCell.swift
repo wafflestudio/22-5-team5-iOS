@@ -210,7 +210,7 @@ struct MyCategoryCell: View {
             Divider()
                 .foregroundStyle(Color.secondaryLabelColor)
             
-            ForEach(category.children) { child in
+            ForEach(category.children ?? []) { child in
                 MyCategoryCell(category: child, viewModel: viewModel)
             }
         }//V

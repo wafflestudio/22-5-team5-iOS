@@ -11,8 +11,8 @@ import Observation
 @Observable final class ContentViewModel {
     
     // Button 동작
-    func navigateToBlogViewButton(_ blogID: Int, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
-        NavigationLink(destination: BlogView(blogID: blogID)) {
+    func navigateToBlogViewButton(_ blogID: Int, _ categoryID: Int? = nil, _ buttonContent: @escaping () -> some View) -> some View { //TODO: 보여줄 Blog 정하기{
+        NavigationLink(destination: BlogView(blogID: blogID, categoryID: categoryID ?? -1)) {
             buttonContent()
         }
     }
