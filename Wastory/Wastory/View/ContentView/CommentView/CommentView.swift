@@ -56,7 +56,7 @@ struct CommentView: View {
                     
                     // MARK: 댓글List
                     ForEach(viewModel.comments) { comment in
-                        CommentCell(comment: comment, isChild: false, viewModel: viewModel)
+                        CommentCell(comment: comment, isChild: false, rootCommentId: comment.id, viewModel: viewModel)
                     }
                 }
             }

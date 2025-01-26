@@ -10,6 +10,7 @@ import SwiftUI
 struct CommentCell: View {
     var comment: Comment
     let isChild: Bool
+    let rootCommentId: Int
     
     @Bindable var viewModel: CommentViewModel
     
@@ -76,7 +77,7 @@ struct CommentCell: View {
                         
                         Button(action: {
                             viewModel.updateIsTextFieldFocused()
-                            viewModel.setTargetCommentID(to: comment.id)
+                            viewModel.setTargetCommentID(to: rootCommentId)
                         }) {
                             Text("답글")
                                 .font(.system(size: 15, weight: .bold))
@@ -108,7 +109,7 @@ struct CommentCell: View {
             
             if !isChild {
                 ForEach(comment.children ?? []) { child in
-                    CommentCell(comment: child, isChild: true, viewModel: viewModel)
+                    CommentCell(comment: child, isChild: true, rootCommentId: comment.id, viewModel: viewModel)
                 }
             }
         }//VStack1
