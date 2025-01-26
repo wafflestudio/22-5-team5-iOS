@@ -31,12 +31,7 @@ import Observation
         }
     }
     
-    
-    //network
-    func getBlogByID(_ blogID: Int) async throws -> Blog {
-        let response = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
-        return response
-    }
+
 }
 
 
