@@ -5,6 +5,7 @@
 //  Created by mujigae on 1/7/25.
 //
 
+import SwiftUI
 import Foundation
 import Alamofire
 
@@ -46,6 +47,51 @@ extension NetworkRepository {
 //            .serializingString().value
 //    }
     
+    // MARK: - User
+    func patchUsername(newUsername: String) async throws {
+        let requestBody = [
+            "username": newUsername
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchUsername.url,
+            method: NetworkRouter.patchUsername.method,
+            headers: NetworkRouter.patchUsername.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingString()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getMe() async throws -> User {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getMe.url,
+            method: NetworkRouter.getMe.method,
+            headers: NetworkRouter.getMe.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(User.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Blog
     func getBlogByID(blogID: Int) async throws -> Blog {
         let urlRequest = try URLRequest(
@@ -68,11 +114,20 @@ extension NetworkRepository {
         return response
     }
 
-    func patchBlog(blogName: String, description: String) async throws {
-        let requestBody = [
-            "blog_name": blogName,
-            "description": description,
-        ]
+    func patchBlog(blogName: String, description: String, mainImageURL: String?) async throws {
+        var requestBody = [String: String]()
+        if mainImageURL == nil {
+            requestBody = [
+                "blog_name": blogName,
+                "description": description,
+            ]
+        } else {
+            requestBody = [
+                "blog_name": blogName,
+                "description": description,
+                "main_image_URL": mainImageURL!
+            ]
+        }
         
         let myBlogAddress = UserInfoRepository.shared.getAddressName()
         print(myBlogAddress)
@@ -400,4 +455,120 @@ extension NetworkRepository {
         
         return response
     }
+    
+    // MARK: - Image
+    func postImage(_ image: UIImage) async throws -> String {
+        // 이미지를 리사이즈
+        guard let resizedImage = resizeImage(image: image, targetSize: CGSize(width: 800, height: 800)) else {
+            throw NSError(domain: "ImageResizeError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to resize the image."])
+        }
+        
+        // 리사이즈된 이미지를 JPEG 데이터로 변환
+        guard let imageData = resizedImage.jpegData(compressionQuality: 0.8) else {
+            throw NSError(domain: "ImageConversionError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert the image to JPEG data."])
+        }
+        
+        // 압축된 이미지 크기 출력
+        print("압축된 이미지 크기: \(imageData.count / 1024) KB")
+        
+        //presigned-urls
+        let preRequestBody = [
+            "file_name": "wastory.jpg",
+            "file_type": "image/jpeg"
+        ]
+        
+        var preUrlRequest = try URLRequest(
+            url: NetworkRouter.generatePreURL.url,
+            method: NetworkRouter.generatePreURL.method,
+            headers: NetworkRouter.generatePreURL.headers
+        )
+        preUrlRequest.httpBody = try JSONEncoder().encode(preRequestBody)
+        
+        logRequest(preUrlRequest, body: preRequestBody)
+        
+        // 서버로 요청
+        let preResponse = try await AF.request(
+            preUrlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PresignedURLDto.self)
+        .value
+        
+        logResponse(preResponse, url: preUrlRequest.url?.absoluteString ?? "unknown")
+        
+        let urlRequest = try URLRequest(
+            url: preResponse.presignedURL,
+            method: NetworkRouter.uploadImage.method,
+            headers: NetworkRouter.uploadImage.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        AF.upload(imageData, with: urlRequest)
+            .validate()
+            .response { response in
+                if let error = response.error {
+                    print("Error details: \(error.localizedDescription)")
+                } else {
+                    print("업로드 성공!")
+                }
+            }
+        
+        
+        logResponse(urlRequest, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return preResponse.fileURL
+    }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
+        let size = image.size
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        let ratio = min(widthRatio, heightRatio)
+        
+        let newSize = CGSize(width: size.width * ratio, height: size.height * ratio)
+        
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        let resizedImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        
+        let imageData = resizedImage.jpegData(compressionQuality: 0.8)
+        
+        if imageData!.count >= 1 * 1024 * 1024 {
+            print("\(imageData!.count / 1024)KB")
+            return resizeImage(image: resizedImage, targetSize: CGSize(width: newSize.width * 0.9, height: newSize.height * 0.9))
+        }
+
+        return resizedImage
+    }
+    
+    func deleteImage(fileURL: String) async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.deleteImage.url,
+            method: NetworkRouter.deleteImage.method,
+            headers: NetworkRouter.deleteImage.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "file_url", value: fileURL)
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(ImageDeleteDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+
 }

@@ -17,6 +17,8 @@ enum NetworkRouter {
     case postSignIn
     case deleteMe
     case patchPassword(oldPW: String, newPW: String)
+    case patchUsername
+    case getMe
     
     // MARK: Blog
     case postBlog
@@ -47,6 +49,11 @@ enum NetworkRouter {
     case getIsLiked(postID: Int)
     case deleteLike(postID: Int)
     
+    //MARK: Image
+    case generatePreURL
+    case uploadImage
+    case deleteImage
+    
     
     
     var url: URL {
@@ -63,6 +70,8 @@ enum NetworkRouter {
         case .postSignIn: "/users/signin"
         case .deleteMe: "/users/me"
         case .patchPassword: "/users/change_password"
+        case .patchUsername: "/users/me"
+        case .getMe: "/users/me"
             
         // MARK: Blog
         case .postBlog: "/blogs"
@@ -91,6 +100,11 @@ enum NetworkRouter {
         case .postLike: "/likes/create"
         case let .getIsLiked(postID): "/likes/blog/press_like/\(postID)"
         case let .deleteLike(postID): "/likes/\(postID)"
+            
+        //MARK: Image
+        case .generatePreURL: "/images/generate-presigned-urls"
+        case .uploadImage: "presignedURL로 대체해서 사용합니다"
+        case .deleteImage: "/images/deletes"
         }
     }
     
@@ -111,6 +125,10 @@ enum NetworkRouter {
             return .delete
         case .patchPassword:
             return .patch
+        case .patchUsername:
+            return .patch
+        case .getMe:
+            return .get
             
         // MARK: Blog
         case .postBlog:
@@ -156,6 +174,14 @@ enum NetworkRouter {
         case .getIsLiked:
             return .get
         case .deleteLike:
+            return .delete
+          
+        //MARK: Image
+        case .generatePreURL:
+            return .post
+        case .uploadImage:
+            return .put
+        case .deleteImage:
             return .delete
         }
     }
@@ -177,6 +203,10 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .patchPassword:
             return ["Content-Type": "application/json"]
+        case .patchUsername:
+            return ["Content-Type": "application/json"]
+        case .getMe:
+            return ["Content-Type": "application/json"]
             
         // MARK: Blog
         case .postBlog:
@@ -223,6 +253,14 @@ enum NetworkRouter {
         case .getIsLiked:
             return ["Content-Type": "application/json"]
         case .deleteLike:
+            return ["Content-Type": "application/json"]
+          
+        //MARK: Image
+        case .generatePreURL:
+            return ["Content-Type": "application/json"]
+        case .uploadImage:
+            return ["Content-Type": "image/jpeg"]
+        case .deleteImage:
             return ["Content-Type": "application/json"]
         }
     }
