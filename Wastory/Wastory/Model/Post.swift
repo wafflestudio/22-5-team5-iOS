@@ -18,6 +18,8 @@ struct Post: Codable, Identifiable, Hashable {
     var description: String?        // Post 미리보기
     var createdAt: Date             // 발행일
     let blogID: Int                 // Post가 게시된 Blog Id(주소)
+    var blogName: String?           // Blog 이름
+    var blogMainImageURL: String?   // Blog 대표이미지 URL
     var mainImageUrl: String?       // Post 대표이미지 URL
     var viewCount: Int              // 조회수
     var likeCount: Int              // Like 개수
@@ -32,6 +34,8 @@ struct Post: Codable, Identifiable, Hashable {
         case description
         case createdAt = "created_at"
         case blogID = "blog_id"
+        case blogName = "blog_name"
+        case blogMainImageURL = "blog_main_image_url"
         case mainImageUrl = "main_image_url"
         case viewCount = "views"
         case likeCount = "article_likes"
