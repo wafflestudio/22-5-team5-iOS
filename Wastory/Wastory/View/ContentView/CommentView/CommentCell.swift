@@ -53,7 +53,7 @@ struct CommentCell: View {
                         
                         Image(systemName: "lock")
                             .font(.system(size: 16, weight: .light))
-                            .foregroundStyle(comment.isSecret ? Color.secondaryLabelColor : Color.clear)
+                            .foregroundStyle(comment.isSecret == 1 ? Color.secondaryLabelColor : Color.clear)
                     }
                     Spacer()
                         .frame(height: 3)
