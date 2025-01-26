@@ -56,18 +56,38 @@ struct MyCategoryView: View {
                             .frame(width: 20)
                         
                         if viewModel.isCategoryAddButtonActivated {
-                            Button(action: {
-                                viewModel.isCategoryAddButtonActivated.toggle()
-                            }) {
-                                Text("완료")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(Color.loadingCoralRed)
-                                    .frame(width: 67, height: 35)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(style: StrokeStyle(lineWidth: 1))
-                                            .foregroundStyle(Color.loadingCoralRed)
-                                    )
+                            if viewModel.writingCategoryName.isEmpty {
+                                Button(action: {
+                                    viewModel.isCategoryAddButtonActivated.toggle()
+                                }) {
+                                    Text("취소")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.primaryLabelColor)
+                                        .frame(width: 67, height: 35)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(style: StrokeStyle(lineWidth: 1))
+                                                .foregroundStyle(Color.secondaryLabelColor)
+                                        )
+                                }
+                            } else {
+                                Button(action: {
+                                    viewModel.isCategoryAddButtonActivated.toggle()
+                                    Task {
+                                        await viewModel.postCategory()
+                                        await viewModel.getCategories()
+                                    }
+                                }) {
+                                    Text("완료")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.loadingCoralRed)
+                                        .frame(width: 67, height: 35)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(style: StrokeStyle(lineWidth: 1))
+                                                .foregroundStyle(Color.loadingCoralRed)
+                                        )
+                                }
                             }
                         } else {
                             Button(action: {
@@ -106,6 +126,12 @@ struct MyCategoryView: View {
                 }//VStack
             } //ScrollView
         }//VStack
+        // MARK: Networking
+        .onAppear {
+            Task {
+                await viewModel.getCategories()
+            }
+        }
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "카테고리")
         .navigationBarTitleDisplayMode(.inline)

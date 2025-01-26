@@ -10,6 +10,7 @@ import SwiftUI
 struct BlogPostListCell: View {
     let post: Post
     @State var blog: Blog = Blog.defaultBlog
+    @State var didAppear: Bool = false
     
     @Environment(\.contentViewModel) var contentViewModel
     @Environment(\.blogViewModel) var viewModel
@@ -89,8 +90,11 @@ struct BlogPostListCell: View {
         
         .background(Color.white)
         .onAppear {
-            Task {
-                blog = try await contentViewModel.getBlogByID(post.blogID)
+            if !didAppear {
+                Task {
+                    blog = try await contentViewModel.getBlogByID(post.blogID)
+                }
+                didAppear = true
             }
         }
         .overlay {

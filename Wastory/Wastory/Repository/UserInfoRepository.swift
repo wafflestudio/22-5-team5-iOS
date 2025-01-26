@@ -178,4 +178,9 @@ final class UserInfoRepository {
     func getUsername() -> String {
         return username
     }
+    
+    
+    func patchUsername(to name: String) {
+        username = name
+    }
 }

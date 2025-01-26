@@ -20,6 +20,9 @@ import Observation
     private let codeLength: Int = 8
     private var touchedCodeScreen: Bool = false
     
+    var isVerificationSuccessful: Bool = false
+    var isVerificationFailed: Bool = false
+    
     func getCodeLength() -> Int {
         return codeLength
     }
@@ -41,6 +44,7 @@ import Observation
     
     func requestCode() async {
         if isEmailValid() {
+            // 이메일 중복 검사
             do {
                 emailExists = try await NetworkRepository.shared.postEmailExists(email: email)
             }
@@ -49,8 +53,14 @@ import Observation
             }
             if emailExists { return }
             
-            // TODO: 인증 코드 API 연결 필요
-            isCodeRequested = true
+            // 이메일 인증 코드 발송
+            do {
+                try await NetworkRepository.shared.postRequestVerification(email: email)
+                isCodeRequested = true
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -112,13 +122,22 @@ import Observation
         return ""
     }
     
-    func isCodeValid() -> Bool {
-        // 인증코드 유효성 검사 코드 필요
-        return true
+    func verifyCode() async {
+        do {
+            let response = try await NetworkRepository.shared.postVerifyEmail(email: email, code: code)
+            isVerificationSuccessful = response
+            if !isVerificationSuccessful {
+                isVerificationFailed = true
+            }
+        }
+        catch {
+            print("Error: \(error.localizedDescription)")
+            return
+        }
     }
     
-    func isVerificationSuccessful() -> Bool {
-        return !code.isEmpty && codeValidator().isEmpty && isCodeValid()
+    func isVerificationPossible() -> Bool {
+        return !code.isEmpty && codeValidator().isEmpty
     }
     
     func touchCodeScreen() {

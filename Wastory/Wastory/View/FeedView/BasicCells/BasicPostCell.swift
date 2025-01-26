@@ -12,6 +12,7 @@ import SwiftUI
 struct BasicPostCell: View {
     let post: Post
     @State var blog: Blog = Blog.defaultBlog
+    @State var didAppear: Bool = false
     
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -104,8 +105,11 @@ struct BasicPostCell: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
         .onAppear {
-            Task {
-                blog = try await contentViewModel.getBlogByID(post.blogID)
+            if !didAppear {
+                Task {
+                    blog = try await contentViewModel.getBlogByID(post.blogID)
+                }
+                didAppear = true
             }
         }
         .background {

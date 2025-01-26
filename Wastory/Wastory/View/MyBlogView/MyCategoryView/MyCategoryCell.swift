@@ -16,7 +16,7 @@ struct MyCategoryCell: View {
         VStack(spacing: 0) {
             ZStack {
                 HStack(spacing: 0) {
-                    if category.level != 0 {
+                    if category.level != 1 {
                         Spacer()
                             .frame(width: 30)
                         
@@ -38,6 +38,13 @@ struct MyCategoryCell: View {
                         .lineLimit(1)
                     
                     Spacer()
+                        .frame(width: 5)
+                    
+                    Text("\(category.articleCount ?? 0)")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
+                    
+                    Spacer()
                     
                     
                 }//H
@@ -47,7 +54,7 @@ struct MyCategoryCell: View {
                     
                     if viewModel.isCategoryAddingOrEditing {
                         HStack(spacing: 5) {
-                            if category.level != 0 {
+                            if category.level != 1 {
                                 Spacer()
                                     .frame(width: 20)
                             }
@@ -64,28 +71,52 @@ struct MyCategoryCell: View {
                             
                             Spacer()
                             
-                            Button(action: {
-                                if viewModel.isCategoryAdding {
-                                    // writingCategoryName으로 된 category 현재 카테고리를 부모로 갖게 추가
-                                } else if viewModel.isCategoryEditing{
-                                    // writingCategoryName으로 현재 카테고리 이름을 수정
-                                }
-                                viewModel.toggleSelectedCategoryId(with: category.id)
-                            }) {
-                                Text("완료")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(Color.loadingCoralRed)
-                                    .frame(width: 67, height: 30)
-                                    .background(
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .foregroundStyle(Color.white)
-                                            
+                            if viewModel.writingCategoryName.isEmpty {
+                                Button(action: {
+                                    viewModel.toggleSelectedCategoryId(with: category.id)
+                                }) {
+                                    Text("취소")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.primaryLabelColor)
+                                        .frame(width: 67, height: 35)
+                                        .background(
                                             RoundedRectangle(cornerRadius: 20)
                                                 .stroke(style: StrokeStyle(lineWidth: 1))
-                                                .foregroundStyle(Color.loadingCoralRed)
+                                                .foregroundStyle(Color.secondaryLabelColor)
+                                        )
+                                }
+                            } else {
+                                Button(action: {
+                                    if viewModel.isCategoryAdding {
+                                        Task {
+                                            await viewModel.postCategory()
+                                            await viewModel.getCategories()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
                                         }
-                                    )
+                                    } else if viewModel.isCategoryEditing {
+                                        Task {
+                                            await viewModel.patchCategory()
+                                            await viewModel.getCategories()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
+                                        }
+                                    }
+                                    
+                                }) {
+                                    Text("완료")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.loadingCoralRed)
+                                        .frame(width: 67, height: 30)
+                                        .background(
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .foregroundStyle(Color.white)
+                                                
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(style: StrokeStyle(lineWidth: 1))
+                                                    .foregroundStyle(Color.loadingCoralRed)
+                                            }
+                                        )
+                                }
                             }
                         }
                     } else {
@@ -93,7 +124,7 @@ struct MyCategoryCell: View {
                             Spacer()
                             
                             Button(action: {
-                                viewModel.isCategoryEditing.toggle()
+                                viewModel.setCategoryEditing()
                             }) {
                                 Text("수정")
                                     .font(.system(size: 14, weight: .semibold))
@@ -111,9 +142,9 @@ struct MyCategoryCell: View {
                                     )
                             }
                             
-                            if category.level == 0 {
+                            if category.level == 1 {
                                 Button(action: {
-                                    viewModel.isCategoryAdding.toggle()
+                                    viewModel.setCategoryAdding()
                                 }) {
                                     Text("추가")
                                         .font(.system(size: 14, weight: .semibold))
@@ -152,11 +183,21 @@ struct MyCategoryCell: View {
                             }
                             .alert("카테고리 삭제", isPresented: $viewModel.isCategoryDelete) {
                                 Button("취소", role: .cancel) {}
-                                Button("삭제", role: .destructive) {
-                                    viewModel.deleteCategory(category.id)
+                                if category.articleCount == 0 && category.children == [] {
+                                    Button("삭제", role: .destructive) {
+                                        Task {
+                                            await viewModel.deleteCategory()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
+                                            await viewModel.getCategories()
+                                        }
+                                    }
                                 }
                             } message: {
-                                Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
+                                if category.articleCount == 0 && category.children == [] {
+                                    Text("\(category.categoryName)(를)을 삭제하시겠습니까?")
+                                } else {
+                                    Text("글, 또는 하위 카테고리가 존재하면\n삭제가 불가합니다")
+                                }
                             }
                         }//H
                     }
@@ -173,8 +214,11 @@ struct MyCategoryCell: View {
                 MyCategoryCell(category: child, viewModel: viewModel)
             }
         }//V
+        .background(Color.white)
         .onTapGesture {
-            viewModel.toggleSelectedCategoryId(with: category.id)
+            if category.categoryName != "카테고리 없음" {
+                viewModel.toggleSelectedCategoryId(with: category.id)
+            }
         }
     }
 }

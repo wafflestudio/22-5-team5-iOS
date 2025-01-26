@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Kingfisher
 
 struct MyBlogSettingsView: View {
     
@@ -44,11 +45,19 @@ struct MyBlogSettingsView: View {
                                 .clipShape(Circle())
                                 .frame(width: 120, height: 120)
                         } else {
-                            Image("defaultImage")
-                                .resizable()
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 120, height: 120)
+                            if viewModel.isBlogMainImageURLEmpty {
+                                Image("defaultImage")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 120, height: 120)
+                            } else {
+                                KFImage(URL(string: viewModel.blogMainImageURL!))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 120, height: 120)
+                            }
                         }
                         
                         
@@ -84,7 +93,7 @@ struct MyBlogSettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("블로그 이름")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isBlogNameValid ? (isBlogNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 10)
@@ -92,14 +101,14 @@ struct MyBlogSettingsView: View {
                     TextField("", text: $viewModel.blogName)
                         .font(.system(size: 16, weight: .thin))
                         .focused($isBlogNameFocused)
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(Color.primaryLabelColor)
                     
                     Spacer()
                         .frame(height: 5)
                     
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(isBlogNameFocused ? Color.primaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isBlogNameValid ? (isBlogNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 5)
@@ -109,7 +118,7 @@ struct MyBlogSettingsView: View {
                         
                         Text("\(viewModel.blogName.count) / 40")
                             .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(isBlogNameFocused ? Color.secondaryLabelColor : (viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                            .foregroundStyle(viewModel.isBlogNameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
                     }
                 }
                 
@@ -154,7 +163,7 @@ struct MyBlogSettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("블로그 닉네임")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isUsernameValid ? (isUserNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 10)
@@ -162,14 +171,14 @@ struct MyBlogSettingsView: View {
                     TextField("", text: $viewModel.username)
                         .font(.system(size: 16, weight: .thin))
                         .focused($isUserNameFocused)
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.primaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(Color.primaryLabelColor)
                     
                     Spacer()
                         .frame(height: 5)
                     
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(isUserNameFocused ? Color.primaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                        .foregroundStyle(viewModel.isUsernameValid ? (isUserNameFocused ? Color.primaryLabelColor : Color.secondaryLabelColor) : Color.loadingCoralRed)
                     
                     Spacer()
                         .frame(height: 5)
@@ -179,7 +188,7 @@ struct MyBlogSettingsView: View {
                         
                         Text("\(viewModel.username.count) / 32")
                             .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(isUserNameFocused ? Color.secondaryLabelColor : (viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed))
+                            .foregroundStyle(viewModel.isUsernameValid ? Color.secondaryLabelColor : Color.loadingCoralRed)
                     }
                 }
                 
@@ -191,6 +200,7 @@ struct MyBlogSettingsView: View {
         .onAppear {
             Task {
                 await viewModel.getInitialData()
+                await viewModel.deletePreviousImage() //MARK: 나중에 지워야함 디버깅용
             }
         }
         // MARK: NavBar
@@ -201,18 +211,22 @@ struct MyBlogSettingsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     Task {
-                        await viewModel.patchBlog()
-                        dismiss()
+                        await viewModel.postImage()
+                        Task {
+                            await viewModel.patchBlog()
+                            await viewModel.patchUser()
+                            dismiss()
+                        }
                     }
                 }) {
                     Text("완료")
                         .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.primaryLabelColor)
+                        .foregroundStyle(viewModel.isSubmitValid ? Color.primaryLabelColor : Color.backgourndSpaceColor)
                         .frame(width: 60, height: 35)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(style: StrokeStyle(lineWidth: 1))
-                                .foregroundStyle(Color.secondaryLabelColor)
+                                .foregroundStyle(viewModel.isSubmitValid ? Color.secondaryLabelColor : Color.backgourndSpaceColor)
                         )
                 }
                 .disabled(!viewModel.isSubmitValid)
