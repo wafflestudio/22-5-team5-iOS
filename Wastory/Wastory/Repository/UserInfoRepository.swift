@@ -53,9 +53,12 @@ final class UserInfoRepository {
     func setUserInfo() {    // 블로그 주소를 설정했을 때 이용
         // 해당 함수가 실행될 때는 이미 userID, userPW, addressName이 모두 empty string이 아니어야 함 (회원가입을 진행했기 때문에)
         Task {
-            self.blogName = addressName + "님의 블로그"
-            self.username = addressName
-            await loadUserInfo(userID: self.userID, userPW: self.userPW)
+            if isKakaoLogin {
+                await loadKakaoUserInfo()
+            }
+            else {
+                await loadUserInfo(userID: self.userID, userPW: self.userPW)
+            }
         }
     }
     
@@ -93,7 +96,6 @@ final class UserInfoRepository {
             self.blogID = response.id
         } catch {
             print("Error: \(error.localizedDescription)")
-            return
         }
         
         // MARK: 블로그 주소 설정 여부 확인
@@ -126,7 +128,6 @@ final class UserInfoRepository {
             self.blogID = response.id
         } catch {
             print("Error: \(error.localizedDescription)")
-            return
         }
         
         // MARK: 블로그 주소 설정 여부 확인
