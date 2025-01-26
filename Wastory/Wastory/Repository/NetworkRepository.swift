@@ -101,7 +101,7 @@ final class NetworkRepository {
         return response
     }
     
-    func getMe() async throws -> UserDto {
+    func getMe() async throws -> User {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getMe.url,
             method: NetworkRouter.getMe.method,
@@ -114,7 +114,7 @@ final class NetworkRepository {
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(UserDto.self)
+        .serializingDecodable(User.self)
         .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")

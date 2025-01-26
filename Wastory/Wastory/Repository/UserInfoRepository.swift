@@ -79,9 +79,10 @@ final class UserInfoRepository {
         // MARK: Set User Information
         do {
             let response = try await NetworkRepository.shared.getMe()
-            self.username = response.username
+            self.username = response.username ?? ""
         } catch {
             print("Error: \(error.localizedDescription)")
+            return
         }
         
         // MARK: Set Blog Information
@@ -92,6 +93,7 @@ final class UserInfoRepository {
             self.blogID = response.id
         } catch {
             print("Error: \(error.localizedDescription)")
+            return
         }
         
         // MARK: 블로그 주소 설정 여부 확인
@@ -108,11 +110,12 @@ final class UserInfoRepository {
         // MARK: Set User Information
         do {
             let response = try await NetworkRepository.shared.getMe()
-            self.userID = response.userID
+            self.userID = response.username ?? ""
             self.isKakaoLogin = true
-            self.username = response.username
+            self.username = response.username ?? ""
         } catch {
             print("Error: \(error.localizedDescription)")
+            return
         }
         
         // MARK: Set Blog Information
@@ -123,6 +126,7 @@ final class UserInfoRepository {
             self.blogID = response.id
         } catch {
             print("Error: \(error.localizedDescription)")
+            return
         }
         
         // MARK: 블로그 주소 설정 여부 확인
