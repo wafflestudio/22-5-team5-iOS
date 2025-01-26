@@ -473,8 +473,8 @@ extension NetworkRepository {
         
         //presigned-urls
         let preRequestBody = [
-            "file_name": "wastory",
-            "file_type": "jpeg"
+            "file_name": "wastory.jpg",
+            "file_type": "image/jpeg"
         ]
         
         var preUrlRequest = try URLRequest(
@@ -504,15 +504,22 @@ extension NetworkRepository {
         
         logRequest(urlRequest)
         
-        _ = AF.upload(
-                imageData,
-                with: urlRequest
-            )
+        AF.upload(imageData, with: urlRequest)
+            .validate()
+            .response { response in
+                if let error = response.error {
+                    print("Error details: \(error.localizedDescription)")
+                } else {
+                    print("업로드 성공!")
+                }
+            }
+        
         
         logResponse(urlRequest, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return preResponse.fileURL
     }
+    
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
         //        let size = image.size
