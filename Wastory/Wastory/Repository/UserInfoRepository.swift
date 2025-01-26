@@ -86,13 +86,6 @@ final class UserInfoRepository {
             print("Error: \(error.localizedDescription)")
         }
         
-        do {
-            let response = try await NetworkRepository.shared.getMe()
-            username = response.username
-        } catch {
-            print("Error: \(error.localizedDescription)")
-        }
-        
         if addressName.isEmpty {
             needAddressName = true
         }
