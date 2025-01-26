@@ -411,7 +411,7 @@ extension NetworkRepository {
     }
     
     func getArticlesWeeklyWastory() async throws -> [Post] {
-        var urlRequest = try URLRequest(
+        let urlRequest = try URLRequest(
             url: NetworkRouter.getArticlesWeeklyWastory.url,
             method: NetworkRouter.getArticlesWeeklyWastory.method,
             headers: NetworkRouter.getArticlesWeeklyWastory.headers

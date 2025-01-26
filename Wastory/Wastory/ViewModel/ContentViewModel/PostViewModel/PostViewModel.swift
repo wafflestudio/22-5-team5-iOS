@@ -65,13 +65,14 @@ import Observation
     
     var isLiked: Bool = false
     
-    var categoryName: String = "카테고리 get이 필요합니다"
+    var categoryName: String = ""
     
     
     func initContent(_ postID: Int, _ blogID: Int) async {
         do {
             self.post = try await NetworkRepository.shared.getArticle(postID: postID)
             self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
+            //self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName
         } catch {
             print("Error: \(error.localizedDescription)")
             

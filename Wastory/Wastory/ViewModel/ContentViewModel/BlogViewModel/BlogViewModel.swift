@@ -13,6 +13,7 @@ import Observation
 @Observable final class BlogViewModel {
     var blog: Blog = Blog.defaultBlog
     
+    var isMyBlog: Bool = false
     
     
     private var isNavTitleHidden: Bool = true
@@ -92,6 +93,9 @@ import Observation
     
     
     func initBlog(_ blogID: Int) async {
+        if blogID == UserInfoRepository.shared.getBlogID() {
+            isMyBlog = true
+        }
         do {
             self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
         } catch {
