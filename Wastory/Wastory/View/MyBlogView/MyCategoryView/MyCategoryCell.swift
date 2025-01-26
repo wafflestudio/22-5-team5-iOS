@@ -71,36 +71,52 @@ struct MyCategoryCell: View {
                             
                             Spacer()
                             
-                            Button(action: {
-                                if viewModel.isCategoryAdding {
-                                    Task {
-                                        await viewModel.postCategory()
-                                        await viewModel.getCategories()
-                                        viewModel.toggleSelectedCategoryId(with: category.id)
-                                    }
-                                } else if viewModel.isCategoryEditing {
-                                    Task {
-                                        await viewModel.patchCategory()
-                                        await viewModel.getCategories()
-                                        viewModel.toggleSelectedCategoryId(with: category.id)
-                                    }
-                                }
-                                
-                            }) {
-                                Text("완료")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundStyle(Color.loadingCoralRed)
-                                    .frame(width: 67, height: 30)
-                                    .background(
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .foregroundStyle(Color.white)
-                                            
+                            if viewModel.writingCategoryName.isEmpty {
+                                Button(action: {
+                                    viewModel.toggleSelectedCategoryId(with: category.id)
+                                }) {
+                                    Text("취소")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.primaryLabelColor)
+                                        .frame(width: 67, height: 35)
+                                        .background(
                                             RoundedRectangle(cornerRadius: 20)
                                                 .stroke(style: StrokeStyle(lineWidth: 1))
-                                                .foregroundStyle(Color.loadingCoralRed)
+                                                .foregroundStyle(Color.secondaryLabelColor)
+                                        )
+                                }
+                            } else {
+                                Button(action: {
+                                    if viewModel.isCategoryAdding {
+                                        Task {
+                                            await viewModel.postCategory()
+                                            await viewModel.getCategories()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
                                         }
-                                    )
+                                    } else if viewModel.isCategoryEditing {
+                                        Task {
+                                            await viewModel.patchCategory()
+                                            await viewModel.getCategories()
+                                            viewModel.toggleSelectedCategoryId(with: category.id)
+                                        }
+                                    }
+                                    
+                                }) {
+                                    Text("완료")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.loadingCoralRed)
+                                        .frame(width: 67, height: 30)
+                                        .background(
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .foregroundStyle(Color.white)
+                                                
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(style: StrokeStyle(lineWidth: 1))
+                                                    .foregroundStyle(Color.loadingCoralRed)
+                                            }
+                                        )
+                                }
                             }
                         }
                     } else {
@@ -198,6 +214,7 @@ struct MyCategoryCell: View {
                 MyCategoryCell(category: child, viewModel: viewModel)
             }
         }//V
+        .background(Color.white)
         .onTapGesture {
             if category.categoryName != "카테고리 없음" {
                 viewModel.toggleSelectedCategoryId(with: category.id)
