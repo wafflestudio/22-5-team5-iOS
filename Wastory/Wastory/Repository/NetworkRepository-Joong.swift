@@ -376,17 +376,36 @@ extension NetworkRepository {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        
-        let response = try await AF.request(
+        let rawResponse = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(CommentListDto.self, decoder: decoder)
+        .serializingString()
         .value
-        
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
-        
-        return response
+
+        // 응답 원문 로그 출력
+        logResponse(rawResponse, url: urlRequest.url?.absoluteString ?? "unknown")
+
+        // JSON 디코더로 다시 CommentListDto로 디코딩
+        guard let responseData = rawResponse.data(using: .utf8) else {
+            throw NSError(domain: "Invalid response data", code: -1, userInfo: nil)
+        }
+
+        let decodedResponse = try decoder.decode(CommentListDto.self, from: responseData)
+
+        // 최종 디코딩된 데이터 반환
+        logResponse(decodedResponse, url: urlRequest.url?.absoluteString ?? "unknown")
+        return decodedResponse
+//        let response = try await AF.request(
+//            urlRequest,
+//            interceptor: NetworkInterceptor()
+//        ).validate()
+//        .serializingDecodable(CommentListDto.self, decoder: decoder)
+//        .value
+//        
+//        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+//        
+//        return response
     }
     
     // MARK: - Like

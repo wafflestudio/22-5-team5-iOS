@@ -9,13 +9,16 @@ import Foundation
 
 struct Comment: Codable, Identifiable {
     let id: Int                  // Comment Id(주소)
-    let userName: Int                  // Comment 작성자 userName
+    var userName: String                  // Comment 작성자 userName
     
     
     var content: String                 // 내용
     var createdAt: Date                 // 발행일
     
-    var isSecret: Bool                  // 비밀 댓글 여부
+    var isSecret: Int                  // 비밀 댓글 여부
+    
+    var blogID: Int
+    var blogMainImageURL: String?
     var children: [Comment]?                // Comment의 답글 id List
     
     enum CodingKeys: String, CodingKey {
@@ -24,6 +27,8 @@ struct Comment: Codable, Identifiable {
         case content
         case createdAt = "created_at"
         case isSecret = "secret"
+        case blogID = "user_blog_id"
+        case blogMainImageURL = "blog_main_img"
         case children
     }
 }
