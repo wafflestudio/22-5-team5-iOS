@@ -14,3 +14,8 @@ struct ImageDto: Codable {
         case fileURL = "file_url"
     }
 }
+
+
+struct ImageDeleteDto: Codable {
+    let message: String
+}

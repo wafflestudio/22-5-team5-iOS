@@ -520,22 +520,7 @@ extension NetworkRepository {
         return preResponse.fileURL
     }
     
-    
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
-        //        let size = image.size
-        //
-        //        let widthRatio = targetSize.width / size.width
-        //        let heightRatio = targetSize.height / size.height
-        //
-        //        let newSize = CGSize(
-        //            width: size.width * min(widthRatio, heightRatio),
-        //            height: size.height * min(widthRatio, heightRatio)
-        //        )
-        //
-        //        let renderer = UIGraphicsImageRenderer(size: newSize)
-        //        return renderer.image { _ in
-        //            image.draw(in: CGRect(origin: .zero, size: newSize))
-        //        }
         let size = image.size
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
@@ -556,6 +541,34 @@ extension NetworkRepository {
         }
 
         return resizedImage
+    }
+    
+    func deleteImage(fileURL: String) async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.deleteImage.url,
+            method: NetworkRouter.deleteImage.method,
+            headers: NetworkRouter.deleteImage.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "file_url", value: fileURL)
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(ImageDeleteDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
 
 }

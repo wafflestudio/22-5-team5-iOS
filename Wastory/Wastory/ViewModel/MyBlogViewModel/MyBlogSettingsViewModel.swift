@@ -82,4 +82,12 @@ import Observation
             print("Error uploading image: \(error.localizedDescription)")
         }
     }
+    
+    func deletePreviousImage() async {
+        do {
+            try await NetworkRepository.shared.deleteImage(fileURL: blogMainImageURL!)
+        } catch {
+            print("Error deleting image: \(error.localizedDescription)")
+        }
+    }
 }

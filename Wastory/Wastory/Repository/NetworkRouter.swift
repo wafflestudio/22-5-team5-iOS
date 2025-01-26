@@ -52,6 +52,7 @@ enum NetworkRouter {
     //MARK: Image
     case generatePreURL
     case uploadImage
+    case deleteImage
     
     
     
@@ -103,6 +104,7 @@ enum NetworkRouter {
         //MARK: Image
         case .generatePreURL: "/images/generate-presigned-urls"
         case .uploadImage: "presignedURL로 대체해서 사용합니다"
+        case .deleteImage: "/images/deletes"
         }
     }
     
@@ -179,6 +181,8 @@ enum NetworkRouter {
             return .post
         case .uploadImage:
             return .put
+        case .deleteImage:
+            return .delete
         }
     }
     
@@ -256,6 +260,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .uploadImage:
             return ["Content-Type": "image/jpeg"]
+        case .deleteImage:
+            return ["Content-Type": "application/json"]
         }
     }
 }

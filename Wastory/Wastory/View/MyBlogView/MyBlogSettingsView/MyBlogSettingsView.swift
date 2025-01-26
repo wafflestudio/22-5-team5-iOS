@@ -200,6 +200,7 @@ struct MyBlogSettingsView: View {
         .onAppear {
             Task {
                 await viewModel.getInitialData()
+                await viewModel.deletePreviousImage()
             }
         }
         // MARK: NavBar
