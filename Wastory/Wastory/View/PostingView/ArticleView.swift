@@ -100,7 +100,7 @@ struct ArticleView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                     .padding(.trailing, 5)
-                    NavigationLink(destination: ArticleSettingView(viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
+                    NavigationLink(destination: ArticleSettingView(mainTabViewModel: mainTabViewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundStyle(.black)

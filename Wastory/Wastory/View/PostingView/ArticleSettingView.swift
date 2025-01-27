@@ -13,9 +13,11 @@ import Foundation
 
 @MainActor
 struct ArticleSettingView: View {
+    @Bindable private var mainTabViewModel: MainTabViewModel
     @State private var viewModel: ArticleSettingViewModel
-
-    init(viewModel: ArticleSettingViewModel) {
+    
+    init(mainTabViewModel: MainTabViewModel, viewModel: ArticleSettingViewModel) {
+        self.mainTabViewModel = mainTabViewModel
         self.viewModel = viewModel
     }
     
@@ -28,10 +30,10 @@ struct ArticleSettingView: View {
                         CustomBackButton(size: 24, weight: .light)
                         Spacer()
                         Button {
-                            // TODO: 발행하고 발행한 아티클로 넘어가는 기능
                             Task {
                                 await viewModel.postArticle()
                             }
+                            mainTabViewModel.toggleIsPostingViewPresent()
                         } label: {
                             Text("발행")
                                 .font(.system(size: 14, weight: .regular))
