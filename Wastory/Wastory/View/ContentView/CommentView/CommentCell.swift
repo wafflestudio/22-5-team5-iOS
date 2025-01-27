@@ -35,21 +35,10 @@ struct CommentCell: View {
                 
                 
                 contentViewModel.navigateToBlogViewButton(comment.blogID) {
-                    VStack(spacing: 0) {
-                        if comment.blogMainImageURL ?? "" == "" {
-                            Image("defaultImage")
-                                .resizable()
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 40, height: 40)
-                        } else {
-                            KFImage(URL(string: comment.blogMainImageURL!))
-                                .resizable()
-                                .scaledToFill()
-                                .clipShape(Circle())
-                                .frame(width: 40, height: 40)
-                        }
-                    }
+                    KFImageWithDefault(imageURL: comment.blogMainImageURL)
+                        .scaledToFill()
+                        .clipShape(Circle())
+                        .frame(width: 40, height: 40)
                 }
                 
                 Spacer()
