@@ -19,13 +19,75 @@ struct ArticleView: View {
     
     var body: some View {
         VStack {
+            // MARK: Custom Navigation Bar
+            ZStack {
+                HStack(spacing: 12) {
+                    Button {
+                        mainTabViewModel.toggleIsArticleViewPresent()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 24, weight: .light))
+                            .foregroundStyle(.black)
+                    }
+                    Spacer()
+                    
+                    HStack(spacing: 0) {
+                        Button {
+                            // 임시 저장 기능
+                        } label: {
+                            Text("저장")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 7)
+                                .padding(.leading, 15)
+                                .padding(.trailing, 10)
+                        }
+                        Rectangle()
+                            .frame(width: 1, height: 10)
+                            .foregroundStyle(Color.codeRequestButtonGray)
+                        Button {
+                            // 임시 저장한 글들을 불러 오는 기능
+                        } label: {
+                            Text(viewModel.getTempPostCount())
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 7)
+                                .padding(.leading, 10)
+                                .padding(.trailing, 15)
+                        }
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                    )
+                    
+                    Button {
+                        // 발행으로 넘어가는 기능
+                    } label: {
+                        Text("완료")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(.black)
+                            .padding(.vertical, 7)
+                            .padding(.horizontal, 15)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                    )
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 6)
+            SettingDivider(thickness: 1)
+            Spacer()
+                .frame(height: 20)
+            
             // MARK: Title TextField
             TextField("제목", text: $viewModel.title)
                 .font(.system(size: 26, weight: .regular))
                 .foregroundStyle(Color.primaryLabelColor)
                 .focused($isTitleFocused)
                 .autocapitalization(.none)
-                .padding(.top, 20)
                 .padding(.horizontal, 23)
             
             Spacer()
@@ -56,66 +118,10 @@ struct ArticleView: View {
             )
             Spacer()
         }
-        .toolbarBackgroundVisibility(.visible)
-        .toolbarBackground(Color.white)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {
-                    mainTabViewModel.toggleIsArticleViewPresent()
-                }) {
-                    Image(systemName: "xmark")
-                    .font(.system(size: 20, weight: .light))
-                }
-            }
-            // TODO: 임시저장버튼 & 완료 버튼
-            ToolbarItem {
-                HStack {
-                    HStack(spacing: 0) {
-                        Button {
-                            // 임시 저장 기능
-                        } label: {
-                            Text("저장")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 3)
-                                .padding(.horizontal, 10)
-                        }
-                        Rectangle()
-                            .frame(width: 1, height: 10)
-                            .foregroundStyle(Color.codeRequestButtonGray)
-                        Button {
-                            // 임시 저장한 글들을 불러 오는 기능
-                        } label: {
-                            Text(viewModel.getTempPostCount())
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 3)
-                                .padding(.leading, 4)
-                                .padding(.trailing, 18)
-                        }
-                    }
-                    .background(.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
-                    )
-                    .padding(.trailing, 5)
-                    NavigationLink(destination: ArticleSettingView(mainTabViewModel: mainTabViewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
-                        Text("완료")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.black)
-                            .padding(.vertical, 3)
-                            .padding(.horizontal, 7)
-                            .padding(.trailing, 7)
-                    }
-                    .background(.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
-                    )
-                    .padding(.trailing, 10)
-                }
-            }
-        }
+        .navigationBarBackButtonHidden()
     }
+}
+
+#Preview {
+    ArticleView(mainTabViewModel: MainTabViewModel())
 }
