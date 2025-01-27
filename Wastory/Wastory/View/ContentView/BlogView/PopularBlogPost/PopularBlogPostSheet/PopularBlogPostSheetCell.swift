@@ -74,8 +74,8 @@ struct PopularBlogPostSheetCell: View {
                 
                 Spacer()
                 
-                Image(systemName: "questionmark.text.page.fill")
-                    .resizable()
+                
+                KFImageWithoutDefault(imageURL: post.mainImageUrl)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 50, height: 50)
                     .clipShape(

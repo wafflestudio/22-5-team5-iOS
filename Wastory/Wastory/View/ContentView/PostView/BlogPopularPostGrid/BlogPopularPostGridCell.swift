@@ -23,8 +23,7 @@ struct BlogPopularPostGridCell: View {
             }
             .frame(height: 0)
             
-            Image(systemName: "questionmark.text.page.fill")
-                .resizable()
+            KFImageWithDefault(imageURL: post.mainImageUrl)
                 .scaledToFill()
                 .frame(width: viewModel.getBlogPopularPostGridCellWidth() ,height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
                 .clipped()

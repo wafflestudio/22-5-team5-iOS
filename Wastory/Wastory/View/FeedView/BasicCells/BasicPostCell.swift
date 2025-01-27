@@ -71,8 +71,7 @@ struct BasicPostCell: View {
                 contentViewModel.navigateToBlogViewButton(post.blogID) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
-                        Image(systemName: "questionmark.app.dashed")
-                            .resizable()
+                        KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                             .frame(width: 20, height: 20)
                             .background(Color.secondaryLabelColor.opacity(0.3))
                             .clipped()
@@ -91,8 +90,7 @@ struct BasicPostCell: View {
             
             //MARK: content Image
             //글 내용에 이미지가 없을 경우 표시하지 않음
-            Image(systemName: "questionmark.text.page.fill")
-                .resizable()
+            KFImageWithoutDefault(imageURL: post.mainImageUrl)
                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                 .frame(width: 100, height: 100)
                 .clipped()

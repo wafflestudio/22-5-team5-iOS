@@ -75,6 +75,18 @@ struct MainTabView: View {
                     }
                 }
                 
+                VStack() {
+                    Spacer()
+                    HStack() {
+                        Spacer()
+                        KFImageWithoutDefault(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
+                            .frame(width: 29, height: 29)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .padding(.bottom, 9.5)
+                            .offset(x: -UIScreen.main.bounds.width/10 + 14.25)
+                    }
+                }
+                
                 // MARK: BlogSheet
                 BlogSheet(mainTabViewModel: mainTabViewModel)
                 
@@ -105,27 +117,10 @@ struct mainTabToolBarTrailingButtons: View {
             Button {
                 mainTabViewModel.toggleIsBlogSheetPresent()
             } label: {
-                ZStack {
-                    Circle()
-                        .fill(Color.mainWBackgroundGray)
-                        .frame(width: 32, height: 32)
-                    VStack(spacing: 2) {
-                        HStack(spacing: 4) {
-                            MainWCircleUnit()
-                            MainWCircleUnit()
-                            MainWCircleUnit()
-                        }
-                        HStack(spacing: 4) {
-                            MainWCircleUnit()
-                            MainWCircleUnit()
-                            MainWCircleUnit()
-                        }
-                        HStack(spacing: 4) {
-                            MainWCircleUnit()
-                            MainWCircleUnit()
-                        }
-                    }
-                }
+                KFImageWithDefaultIcon(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
+                    .scaledToFill()
+                    .frame(width: 32, height: 32)
+                    .clipShape(Circle())
             }
         }
         .frame(height: 44)

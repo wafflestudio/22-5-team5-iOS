@@ -42,6 +42,7 @@ struct HomePostListCell: View {
                     
                     Spacer()
                         .frame(height: 9)
+                    Spacer()
                     
                     HStack(alignment: .center, spacing: 3) {
                         Image(systemName: "heart")

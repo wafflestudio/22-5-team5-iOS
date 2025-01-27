@@ -13,8 +13,7 @@ struct BasicBlogCell: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            Image(systemName: "questionmark.text.page.fill")
-                .resizable()
+            KFImageWithDefaultIcon(imageURL: blog.mainImageURL)
                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                 .frame(width: 60, height: 60)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -57,7 +56,7 @@ struct BasicBlogCell: View {
         .padding(20)
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToBlogViewButton(tempBlog().id) {
+            contentViewModel.navigateToBlogViewButton(blog.id) {
                 Rectangle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .foregroundStyle(Color.clear)

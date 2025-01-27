@@ -55,14 +55,12 @@ import Observation
         if newIndex == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.todaysWastoryIndex = self.todaysWastoryItems.count // 마지막 실제 데이터로 이동
-                print(self.todaysWastoryIndex)
             }
         }
         // 마지막에서 첫 번째로 이동해야 할 때
         else if newIndex == todaysWastoryItems.count + 1 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.todaysWastoryIndex = 1 // 첫 번째 실제 데이터로 이동
-                print(self.todaysWastoryIndex)
             }
         }
     }

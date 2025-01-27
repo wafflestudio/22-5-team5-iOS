@@ -127,8 +127,18 @@ struct BlogView: View {
                 }
                 Task {
                     await viewModel.getCategories()
-                    if let foundCategory = viewModel.categories.first(where: { $0.id == categoryID }) {
-                        viewModel.selectedCategory = foundCategory
+                    for category in viewModel.categories {
+                        if category.id == categoryID {
+                            viewModel.selectedCategory = category
+                            break
+                        } else {
+                            for child in category.children ?? [] {
+                                if child.id == categoryID {
+                                    viewModel.selectedCategory = child
+                                    break
+                                }
+                            }
+                        }
                     }
                     await viewModel.getPostsInCategory()
                 }
