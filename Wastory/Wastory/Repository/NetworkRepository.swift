@@ -343,4 +343,110 @@ final class NetworkRepository {
         
         return response.articles
     }
+    
+    // MARK: - Draft
+    func postDraft(title: String, content: String) async throws -> Draft {
+        let requestBody = [
+            "title": title,
+            "content": content
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postDraft.url,
+            method: NetworkRouter.postDraft.method,
+            headers: NetworkRouter.postDraft.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingDecodable(Draft.self)
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func patchDraft(title: String, content: String, draftID: Int) async throws {
+        let requestBody = [
+            "title": title,
+            "content": content
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchDraft(draftID: draftID).url,
+            method: NetworkRouter.patchDraft(draftID: draftID).method,
+            headers: NetworkRouter.patchDraft(draftID: draftID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingDecodable(Draft.self)
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getDraft(draftID: Int) async throws -> Draft {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getDraft(draftID: draftID).url,
+            method: NetworkRouter.getDraft(draftID: draftID).method,
+            headers: NetworkRouter.getDraft(draftID: draftID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingDecodable(Draft.self)
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getDraftsInBlog(blogID: Int, page: Int) async throws -> DraftListDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getDraftsInBlog(blogID: blogID).url,
+            method: NetworkRouter.getDraftsInBlog(blogID: blogID).method,
+            headers: NetworkRouter.getDraftsInBlog(blogID: blogID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest as! URLConvertible,
+            parameters: [
+                "page": page
+            ]
+        ).validate()
+        .serializingDecodable(DraftListDto.self)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func deleteDraft(draftID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteDraft(draftID: draftID).url,
+            method: NetworkRouter.deleteDraft(draftID: draftID).method,
+            headers: NetworkRouter.deleteDraft(draftID: draftID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(urlRequest)
+            .validate()
+            .serializingString()
+            .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
 }

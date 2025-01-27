@@ -72,6 +72,12 @@ enum NetworkRouter {
     // MARK: HomeTopic
     case getHomeTopicList
     
+    // MARK: Draft
+    case postDraft
+    case patchDraft(draftID: Int)
+    case getDraft(draftID: Int)
+    case getDraftsInBlog(blogID: Int)
+    case deleteDraft(draftID: Int)
     
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
@@ -141,6 +147,13 @@ enum NetworkRouter {
             
         // MARK: HomeTopic
         case .getHomeTopicList: "/hometopics/list"
+            
+        // MARK: Draft
+        case .postDraft: "/drafts/create"
+        case let .patchDraft(draftID): "/drafts/update/\(draftID)"
+        case let .getDraft(draftID): "/drafts/get/\(draftID)"
+        case let .getDraftsInBlog(blogID): "/drafts/blogs/\(blogID)"
+        case let .deleteDraft(draftID): "/drafts/delete/\(draftID)"
         }
     }
     
@@ -253,6 +266,18 @@ enum NetworkRouter {
         // MARK: HomeTopic
         case .getHomeTopicList:
             return .get
+            
+        // MARK: Draft
+        case .postDraft:
+            return .post
+        case let .patchDraft(draftID):
+            return .patch
+        case let .getDraft(draftID):
+            return .get
+        case let .getDraftsInBlog(blogID):
+            return .get
+        case let .deleteDraft(draftID):
+            return .delete
         }
     }
     
@@ -364,6 +389,18 @@ enum NetworkRouter {
             
         // MARK: HomeTopic
         case .getHomeTopicList:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: Draft
+        case .postDraft:
+            return ["Content-Type": "application/json"]
+        case let .patchDraft(draftID):
+            return ["Content-Type": "application/json"]
+        case let .getDraft(draftID):
+            return ["Content-Type": "application/json"]
+        case let .getDraftsInBlog(blogID):
+            return ["Content-Type": "application/json"]
+        case let .deleteDraft(draftID):
             return ["Content-Type": "application/json"]
         }
     }
