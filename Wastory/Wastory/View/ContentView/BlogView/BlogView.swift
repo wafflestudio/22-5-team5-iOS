@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct BlogView: View {
-    let blog: Blog
+    let blogID: Int
+    var categoryID: Int = -1
+    var isMainTab: Bool = false
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -20,7 +22,7 @@ struct BlogView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
-                    BlogHeaderView(blog: blog)
+                    BlogHeaderView(blog: viewModel.blog)
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -35,7 +37,7 @@ struct BlogView: View {
                     
                     
                     // 인기글 TODO: 인기글 모두보기 View
-                    PopularBlogPostListView(blog: blog)
+                    PopularBlogPostListView(blog: viewModel.blog)
                     
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
                     BlogPostListView()
@@ -47,7 +49,7 @@ struct BlogView: View {
                 print("refresh")
                 viewModel.resetPage()
                 Task {
-                    await viewModel.getPostsInBlog()
+                    await viewModel.getPostsInCategory()
                 }
                 Task {
                     await viewModel.getPopularBlogPosts()
@@ -72,7 +74,7 @@ struct BlogView: View {
                     if viewModel.isCategorySheetPresent {
                         let sheetTopSpace: CGFloat = 30
                         let sheetRowHeight: CGFloat = 60
-                        let sheetBottomSpace: CGFloat = 30
+                        let sheetBottomSpace: CGFloat = 30 + (isMainTab ? 100 : 0)
                         let sheetTitleHeight: CGFloat = 50
                         let sheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
                         
@@ -117,25 +119,39 @@ struct BlogView: View {
             
         } //ZStack
         .onAppear {
-            viewModel.initBlog(blog)
-            viewModel.resetPage()
             Task {
-                await viewModel.getPostsInBlog()
-            }
-            Task {
-                await viewModel.getPopularBlogPosts()
-            }
-            Task {
-                await viewModel.getCategories()
+                await viewModel.initBlog(blogID)
+                viewModel.resetPage()
+                Task {
+                    await viewModel.getPopularBlogPosts()
+                }
+                Task {
+                    await viewModel.getCategories()
+                    for category in viewModel.categories {
+                        if category.id == categoryID {
+                            viewModel.selectedCategory = category
+                            break
+                        } else {
+                            for child in category.children ?? [] {
+                                if child.id == categoryID {
+                                    viewModel.selectedCategory = child
+                                    break
+                                }
+                            }
+                        }
+                    }
+                    await viewModel.getPostsInCategory()
+                }
             }
         }
         .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
-        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : blog.blogName)
+        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : viewModel.blog.blogName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
+        .toolbarVisibility(isMainTab ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
@@ -146,9 +162,9 @@ struct BlogView: View {
                     
                     Button(action: {
                         //차단하기 신고하기 sheet present
+                        //if myBlog -> blogSheet present
                     }) {
-                        Image(systemName: "questionmark.text.page.fill")
-                            .resizable()
+                        KFImageWithDefaultIcon(imageURL: viewModel.blog.mainImageURL)
                             .scaledToFill()
                             .clipShape(Circle())
                             .frame(width: 30, height: 30)
@@ -172,6 +188,10 @@ struct BlogView: View {
     @ViewBuilder func CategoryButton(for category: Category, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
             viewModel.setCategory(to: category)
+            viewModel.resetPage()
+            Task {
+                await viewModel.getPostsInCategory()
+            }
             viewModel.toggleIsCategorySheetPresent()
         }) {
             HStack(spacing: 0) {
@@ -194,10 +214,14 @@ struct BlogView: View {
         
         
         //TODO: Children 추가기능 구현
-        ForEach(Array(category.children.enumerated()), id: \.offset) { index, child in
+        ForEach(Array((category.children ?? []).enumerated()), id: \.offset) { index, child in
             
             Button(action: {
                 viewModel.setCategory(to: child)
+                viewModel.resetPage()
+                Task {
+                    await viewModel.getPostsInCategory()
+                }
                 viewModel.toggleIsCategorySheetPresent()
             }) {
                 HStack(spacing: 0) {
@@ -207,7 +231,7 @@ struct BlogView: View {
                     
                     Spacer()
                     
-                    Text("\(category.articleCount ?? 0)") // 카테고리 글 개수
+                    Text("\(child.articleCount ?? 0)") // 카테고리 글 개수
                         .font(.system(size: 15, weight: .light))
                         .padding()
                 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PostView: View {
-    let post: Post
-    let blog: Blog
+    let postID: Int
+    let blogID: Int
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -38,8 +38,8 @@ struct PostView: View {
                             .frame(height: 100)
                         
                         // MARK: 카테고리 버튼
-                        contentViewModel.navigateToBlogViewButton(blog) {
-                            Text("카테고리 없음")
+                        contentViewModel.navigateToBlogViewButton(blogID, viewModel.post.categoryID) {
+                            Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
                                 .background(
@@ -60,7 +60,7 @@ struct PostView: View {
                             .frame(height: 10)
                         
                         // MARK: Title
-                        Text(post.title)
+                        Text(viewModel.post.title)
                             .font(.system(size: 34, weight: .medium))
                             .foregroundStyle(Color.primaryLabelColor)
                             .padding(.horizontal, 20)
@@ -70,7 +70,7 @@ struct PostView: View {
                         
                         // MARK: 블로그 이름 . 작성일자
                         HStack(spacing: 5) {
-                            Text(blog.blogName)
+                            Text(viewModel.blog.blogName)
                                 .font(.system(size: 14, weight: .light))
                                 .foregroundStyle(Color.secondaryLabelColor)
                             
@@ -78,7 +78,7 @@ struct PostView: View {
                                 .font(.system(size: 3, weight: .regular))
                                 .foregroundStyle(Color.middleDotColor)
                             
-                            Text("\(timeFormatter(from: post.createdAt))")
+                            Text("\(timeFormatter(from: viewModel.post.createdAt))")
                                 .font(.system(size: 12, weight: .regular))
                                 .foregroundStyle(Color.secondaryLabelColor)
                         }
@@ -88,7 +88,7 @@ struct PostView: View {
                             .frame(height: 60)
                         
                         // MARK: Content
-                        Text(post.content ?? "")
+                        Text(viewModel.post.content ?? "")
                             .font(.system(size: 20, weight: .light))
                             .foregroundStyle(Color.primaryLabelColor)
                             .padding(.horizontal, 20)
@@ -109,8 +109,8 @@ struct PostView: View {
                     //Blog 세부설명 및 구독버튼
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
-                            contentViewModel.navigateToBlogViewButton(blog) {
-                                Text(blog.blogName)
+                            contentViewModel.navigateToBlogViewButton(blogID) {
+                                Text(viewModel.blog.blogName)
                                     .font(.system(size: 18, weight: .light))
                                     .foregroundStyle(Color.primaryLabelColor)
                                     .multilineTextAlignment(.leading)
@@ -120,8 +120,8 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 5)
                             
-                            contentViewModel.navigateToBlogViewButton(blog) {
-                                Text(blog.description)
+                            contentViewModel.navigateToBlogViewButton(blogID) {
+                                Text(viewModel.blog.description)
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
                                     .lineLimit(3)
@@ -149,9 +149,8 @@ struct PostView: View {
                         
                         Spacer()
                         
-                        contentViewModel.navigateToBlogViewButton(blog) {
-                            Image(systemName: "questionmark.text.page.fill")
-                                .resizable()
+                        contentViewModel.navigateToBlogViewButton(blogID) {
+                            KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
                                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                                 .frame(width: 60, height: 60)
                                 .clipShape(
@@ -164,10 +163,13 @@ struct PostView: View {
                     .padding(.bottom, 30)
                     .background(Color.blogDetailBackgroundColor)
                     
+                    if !viewModel.categoryBlogPosts.isEmpty {
+                        CategoryPostListView()
+                    }
                     
-                    CategoryPostListView()
-                    
-                    BlogPopularPostGridView()
+                    if !viewModel.popularBlogPosts.isEmpty {
+                        BlogPopularPostGridView()
+                    }
                     
                     VStack(spacing: 10) {
                         HStack {
@@ -193,15 +195,17 @@ struct PostView: View {
         .environment(\.postViewModel, viewModel)
         //MARK: Networking
         .onAppear {
-            viewModel.initContent(post, blog)
             Task {
-                await viewModel.getPostsInBlogInCategory()
-            }
-            Task {
-                await viewModel.getPopularBlogPosts()
-            }
-            Task {
-                await viewModel.getIsLiked()
+                await viewModel.initContent(postID, blogID)
+                Task {
+                    await viewModel.getPostsInBlogInCategory()
+                }
+                Task {
+                    await viewModel.getPopularBlogPosts()
+                }
+                Task {
+                    await viewModel.getIsLiked()
+                }
             }
         }
         .ignoresSafeArea(edges: .all)
@@ -211,9 +215,8 @@ struct PostView: View {
         .toolbarVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                contentViewModel.navigateToBlogViewButton(blog) {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
+                contentViewModel.navigateToBlogViewButton(blogID) {
+                    KFImageWithDefaultIcon(imageURL: viewModel.blog.mainImageURL)
                         .scaledToFill()
                         .clipShape(Circle())
                         .frame(width: 30, height: 30)
@@ -250,7 +253,7 @@ struct PostView: View {
                                 .font(.system(size: 20, weight: .light))
                                 .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
                             
-                            Text("\((viewModel.post ?? Post.defaultPost).likeCount)")
+                            Text("\(viewModel.post.likeCount)")
                                 .font(.system(size: 16, weight: .light))
                                 .foregroundStyle(Color.bottomBarLabelColor)
                         }
@@ -260,13 +263,13 @@ struct PostView: View {
                         .frame(width: 25)
                     
                     //댓글 버튼
-                    NavigationLink(destination: CommentView(postID: post.id)) {
+                    NavigationLink(destination: CommentView(postID: postID)) {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.system(size: 20, weight: .light))
                                 .foregroundStyle(Color.primaryLabelColor)
                             
-                            Text("\(post.commentCount)")
+                            Text("\(viewModel.post.commentCount)")
                                 .font(.system(size: 16, weight: .light))
                                 .foregroundStyle(Color.bottomBarLabelColor)
                         }

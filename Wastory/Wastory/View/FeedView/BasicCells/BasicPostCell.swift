@@ -11,7 +11,6 @@ import SwiftUI
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct BasicPostCell: View {
     let post: Post
-    @State var blog: Blog = Blog.defaultBlog
     @State var didAppear: Bool = false
     
     @Environment(\.contentViewModel) var contentViewModel
@@ -69,18 +68,17 @@ struct BasicPostCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.navigateToBlogViewButton(blog) {
+                contentViewModel.navigateToBlogViewButton(post.blogID) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
-                        Image(systemName: "questionmark.app.dashed")
-                            .resizable()
+                        KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                             .frame(width: 20, height: 20)
                             .background(Color.secondaryLabelColor.opacity(0.3))
                             .clipped()
                             .cornerRadius(5)
                         
                         //blog name
-                        Text(blog.blogName)
+                        Text(post.blogName ?? "")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
                     }
@@ -92,28 +90,19 @@ struct BasicPostCell: View {
             
             //MARK: content Image
             //글 내용에 이미지가 없을 경우 표시하지 않음
-            Image(systemName: "questionmark.text.page.fill")
-                .resizable()
+            KFImageWithoutDefault(imageURL: post.mainImageUrl)
                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.navigateToPostViewButton(post, blog)
+                    contentViewModel.navigateToPostViewButton(post.id, post.blogID)
                 }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
-        .onAppear {
-            if !didAppear {
-                Task {
-                    blog = try await contentViewModel.getBlogByID(post.blogID)
-                }
-                didAppear = true
-            }
-        }
         .background {
-            contentViewModel.navigateToPostViewButton(post, blog)
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

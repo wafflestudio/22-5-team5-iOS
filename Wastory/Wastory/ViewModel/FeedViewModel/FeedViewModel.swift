@@ -63,9 +63,40 @@ import Observation
         isScrolled
     }
     
+    //pagination
+    var page = 1
+    var isPageEnded: Bool = false
+    
+    func resetPage() {
+        page = 1
+        isPageEnded = false
+        posts = []
+    }
+    
     //Network
     var posts: [Post] = []
     
+    
+    func getPosts() async {
+        do {
+            let response = try await NetworkRepository.shared.getArticlesOfSubscription(blogID: UserInfoRepository.shared.getBlogID(), page: self.page)
+            
+            if self.page == 1 {
+                self.posts = response
+            } else {
+                self.posts.append(contentsOf: response)
+            }
+            
+            //pagination
+            if !response.isEmpty {
+                self.page += 1
+            } else {
+                self.isPageEnded = true
+            }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }
 
 

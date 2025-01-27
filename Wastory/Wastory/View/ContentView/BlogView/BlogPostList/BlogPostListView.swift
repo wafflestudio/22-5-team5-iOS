@@ -42,12 +42,15 @@ struct BlogPostListView: View {
                         .onAppear {
                             if index == viewModel.blogPosts.count - 1 {
                                 Task {
-                                    await viewModel.getPostsInBlog()
+                                    await viewModel.getPostsInCategory()
                                 }
                             }
                         }
                 }
             }
+            
+            Spacer()
+                .frame(height: 100)
         } //VStack
     }
 }

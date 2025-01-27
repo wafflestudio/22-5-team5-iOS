@@ -13,7 +13,7 @@ struct Category: Codable, Identifiable, Hashable {
     var categoryName: String
     var level: Int?
     var articleCount: Int?
-    var children: [Category] = []
+    var children: [Category]? = []
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -30,7 +30,7 @@ struct Category: Codable, Identifiable, Hashable {
 
 struct CategoryListDto: Codable {
     let categories: [Category]
-    
+   
     private enum CodingKeys: String, CodingKey {
         case categories = "category_list"
     }

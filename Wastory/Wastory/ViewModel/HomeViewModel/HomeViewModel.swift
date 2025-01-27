@@ -9,6 +9,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class HomeViewModel {
     //NavBar Controller
     private var isScrolled: Bool = false
@@ -44,37 +45,10 @@ import Observation
     }
     
     
-    //TodaysWastoryPageTab
-    var todaysWastoryItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    var displayedTodaysWastoryItems: [String] = []
-    var todaysWastoryIndex: Int = 1
-
-    //TodaysWastoryList
-    var todaysWastoryListItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    
-    //Category Popular Post List
-    let categoryList = ["여행·맛집", "리빙·스타일", "가족·연애", "직장·자기계발", "시사·지식", "도서·창작", "엔터테인먼트", "취미·건강"]
-    
-    let categoryIcons : [String: String] =
-    ["여행·맛집": "airplane.departure", "리빙·스타일": "sofa", "가족·연애": "person.2", "직장·자기계발": "cpu", "시사·지식": "chart.bar.xaxis", "도서·창작": "book", "엔터테인먼트": "tv", "취미·건강": "figure.indoor.soccer"]
-    
-    var selectedCategory: String = "여행·맛집"
-    
-    var categoryPopularPostItems: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7"]
-    
-    
-    //Focus Post List
-    var focusPostList1Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    
-    var focusPostList2Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
-    
-    init() {
-        setDisplayedTodaysWastoryItems()
-    }
-    
     //TodayWastoryPageTab
     func setDisplayedTodaysWastoryItems() {
         displayedTodaysWastoryItems = [todaysWastoryItems.last!] + todaysWastoryItems + [todaysWastoryItems.first!]
+        print(displayedTodaysWastoryItems)
     }
     
     func setNextTodaysWastoryIndex(with newIndex: Int) {
@@ -110,5 +84,64 @@ import Observation
         }
     }
     
+    //Network
+    //TodaysWastoryPageTab
+    var todaysWastoryItems: [Post] = []
+    var displayedTodaysWastoryItems: [Post] = []
+    var todaysWastoryIndex: Int = 1
+
+    //TodaysWastoryList
+    var todaysWastoryListItems: [Post] = []
     
+    //Category Popular Post List
+    var categoryList: [HomeTopic] = []
+    
+    let categoryIcons : [Int: String] =
+    [2: "airplane.departure", 3: "sofa", 4: "person.2", 5: "cpu", 6: "chart.bar.xaxis", 7: "book", 8: "tv", 9: "figure.indoor.soccer"]
+    
+    var selectedCategory: HomeTopic = HomeTopic.defaultHomeTopic
+    
+    var categoryPopularPostItems: [Post] = []
+    
+    
+    //Focus Post List
+    var focusPostList1Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+    
+    var focusPostList2Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+    
+    
+    func getTodaysWastoryItems() async {
+        do {
+            todaysWastoryItems = try await NetworkRepository.shared.getArticlesTodayWastory()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getTodaysWastoryListItems() async {
+        do {
+            todaysWastoryListItems = try await NetworkRepository.shared.getArticlesWeeklyWastory()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getHomeTopicList() async {
+        do {
+            categoryList = Array(try await NetworkRepository.shared.getHomeTopicList()[1...8])
+            selectedCategory = categoryList.first!
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getCategoryPopularPostItems() async {
+        do {
+            categoryPopularPostItems = try await NetworkRepository.shared.getArticlesHomeTopic(highHomeTopicID: selectedCategory.id)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    //TODO: Focus get
 }

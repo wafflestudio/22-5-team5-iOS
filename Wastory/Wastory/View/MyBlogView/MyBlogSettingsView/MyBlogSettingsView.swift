@@ -45,19 +45,10 @@ struct MyBlogSettingsView: View {
                                 .clipShape(Circle())
                                 .frame(width: 120, height: 120)
                         } else {
-                            if viewModel.isBlogMainImageURLEmpty {
-                                Image("defaultImage")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .clipShape(Circle())
-                                    .frame(width: 120, height: 120)
-                            } else {
-                                KFImage(URL(string: viewModel.blogMainImageURL!))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .clipShape(Circle())
-                                    .frame(width: 120, height: 120)
-                            }
+                            KFImageWithDefault(imageURL: viewModel.blogMainImageURL)
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 120, height: 120)
                         }
                         
                         

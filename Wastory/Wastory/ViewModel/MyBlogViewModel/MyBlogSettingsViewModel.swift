@@ -39,7 +39,7 @@ import Observation
     }
     
     var isBlogMainImageURLEmpty: Bool {
-        blogMainImageURL == nil
+        blogMainImageURL == "" || blogMainImageURL == nil
     }
     
     func getInitialData() async {

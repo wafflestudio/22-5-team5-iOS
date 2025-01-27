@@ -8,10 +8,12 @@
 import Foundation
 
 func timeAgo(from date: Date) -> String {
-    let secondsAgo = Int(Date().timeIntervalSince(date)) - (60 * 60 * 9)
+    let secondsAgo = Int(Date().timeIntervalSince(date))// - (60 * 60 * 9)
     
     switch secondsAgo {
-    case 0..<60:
+    case 0..<3:
+        return "방금"
+    case 3..<60:
         return "\(secondsAgo)초 전"
     case 60..<(60 * 60):
         let minutes = secondsAgo / 60

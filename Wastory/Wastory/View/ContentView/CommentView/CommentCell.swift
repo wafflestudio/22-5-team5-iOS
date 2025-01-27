@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CommentCell: View {
     var comment: Comment
     let isChild: Bool
+    let rootComment: Comment
     
     @Bindable var viewModel: CommentViewModel
     
@@ -32,9 +34,8 @@ struct CommentCell: View {
                 
                 
                 
-                contentViewModel.navigateToBlogViewButton(tempBlog()) {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
+                contentViewModel.navigateToBlogViewButton(comment.blogID) {
+                    KFImageWithDefault(imageURL: comment.blogMainImageURL)
                         .scaledToFill()
                         .clipShape(Circle())
                         .frame(width: 40, height: 40)
@@ -45,8 +46,8 @@ struct CommentCell: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 5) {
-                        contentViewModel.navigateToBlogViewButton(tempBlog()) {
-                            Text("유저 이름")
+                        contentViewModel.navigateToBlogViewButton(tempBlog().id) {
+                            Text(comment.userName)
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)
                         }
@@ -76,7 +77,7 @@ struct CommentCell: View {
                         
                         Button(action: {
                             viewModel.updateIsTextFieldFocused()
-                            viewModel.setTargetCommentID(to: comment.id)
+                            viewModel.setTargetCommentID(to: rootComment)
                         }) {
                             Text("답글")
                                 .font(.system(size: 15, weight: .bold))
@@ -108,7 +109,7 @@ struct CommentCell: View {
             
             if !isChild {
                 ForEach(comment.children ?? []) { child in
-                    CommentCell(comment: child, isChild: true, viewModel: viewModel)
+                    CommentCell(comment: child, isChild: true, rootComment: comment, viewModel: viewModel)
                 }
             }
         }//VStack1

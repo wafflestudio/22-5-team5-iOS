@@ -21,7 +21,7 @@ struct CategoryPostListView: View {
             
             
             HStack(alignment: .center, spacing: 6) {
-                Text("카테고리 (미선택 시 : 이 블로그)")
+                Text(viewModel.post.categoryID == 0 ? "이 블로그" : viewModel.categoryName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.loadingCoralRed)
                 
@@ -31,12 +31,10 @@ struct CategoryPostListView: View {
                 
                 Spacer()
                 
-                if let _ = viewModel.blog {
-                    contentViewModel.navigateToBlogViewButton(viewModel.blog!) {
-                        Text("더보기")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(Color.secondaryLabelColor)
-                    }
+                contentViewModel.navigateToBlogViewButton(viewModel.blog.id, viewModel.post.categoryID) {
+                    Text("더보기")
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
                 }
             }
             .padding(.horizontal, 20)

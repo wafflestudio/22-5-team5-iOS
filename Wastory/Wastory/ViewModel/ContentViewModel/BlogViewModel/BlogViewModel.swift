@@ -11,11 +11,9 @@ import SwiftUI
 import Observation
 
 @Observable final class BlogViewModel {
-    var blog: Blog?
+    var blog: Blog = Blog.defaultBlog
     
-    func initBlog(_ blog: Blog) {
-        self.blog = blog
-    }
+    var isMyBlog: Bool = false
     
     
     private var isNavTitleHidden: Bool = true
@@ -93,11 +91,23 @@ import Observation
     
     var blogPosts: [Post] = []
     
+    
+    func initBlog(_ blogID: Int) async {
+        if blogID == UserInfoRepository.shared.getBlogID() {
+            isMyBlog = true
+        }
+        do {
+            self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
     // - 블로그 내 글List get하기 (pagination 기능 있음)
     func getPostsInBlog() async {
         if !isPageEnded {
             do {
-                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: self.blog!.id, page: self.page)
+                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: self.blog.id, page: self.page)
                 
                 //comments 저장
                 if self.page == 1 {
@@ -118,10 +128,39 @@ import Observation
         }
     }
     
+    // - 블로그 내 카테고리 글 get하기
+    func getPostsInCategory() async {
+        if !isPageEnded {
+            if selectedCategory.id != -1 {
+                do {
+                    let response = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: self.blog.id, categoryID: self.selectedCategory.id, page: self.page)
+                    
+                    //posts 저장
+                    if self.page == 1 {
+                        blogPosts = response
+                    } else {
+                        blogPosts.append(contentsOf: response)
+                    }
+                    
+                    //pagination
+                    if !response.isEmpty {
+                        self.page += 1
+                    } else {
+                        self.isPageEnded = true
+                    }
+                } catch {
+                    print("Error: \(error.localizedDescription)")
+                }
+            } else {
+                await getPostsInBlog()
+            }
+        }
+    }
+    
     // - 블로그 내 인기글List views 순으로 get하기
     func getPopularBlogPosts() async {
         do {
-            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog!.id, sortBy: PopularPostSortedType.views.api)
+            popularBlogPosts = try await NetworkRepository.shared.getTopArticlesInBlog(blogID: self.blog.id, sortBy: PopularPostSortedType.views.api)
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -131,11 +170,12 @@ import Observation
     func getCategories() async {
         do {
             categories = [Category.allCategory]
-            categories += try await NetworkRepository.shared.getCategoriesInBlog(blogID: blog!.id)
+            categories += try await NetworkRepository.shared.getCategoriesInBlog(blogID: blog.id)
         } catch {
             print("Error: \(error.localizedDescription)")
         }
     }
+    
 }
 
 

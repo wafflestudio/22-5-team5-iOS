@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct TodaysWastoryListCell: View {
+    let post: Post
     let index: Int
     
     @Environment(\.contentViewModel) var contentViewModel
@@ -26,8 +27,8 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                contentViewModel.navigateToBlogViewButton(tempBlog()) {
-                    Text("블로그 이름")
+                contentViewModel.navigateToBlogViewButton(post.blogID) {
+                    Text(post.blogName ?? "")
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
                         .padding(.top, 4)
@@ -41,27 +42,29 @@ struct TodaysWastoryListCell: View {
             
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 17, weight: .medium))
                         .lineLimit(2)
                     
                     Spacer()
                         .frame(height: 9)
                     
+                    Spacer()
+                    
                     HStack(alignment: .center, spacing: 3) {
                         Image(systemName: "heart")
-                        Text("50")
+                        Text("\(post.likeCount)")
                         
                         Spacer()
                             .frame(width: 5)
                         
                         Image(systemName: "ellipsis.bubble")
-                        Text("5")
+                        Text("\(post.commentCount)")
                         
                         Spacer()
                             .frame(width: 5)
                         
-                        Text("5분 전")
+                        Text(timeAgo(from: post.createdAt))
                         
                         Spacer()
                     }
@@ -72,8 +75,7 @@ struct TodaysWastoryListCell: View {
                 
                 Spacer()
                 
-                Image(systemName: "questionmark.text.page.fill")
-                    .resizable()
+                KFImageWithoutDefault(imageURL: post.mainImageUrl)
                     .scaledToFill()
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -89,11 +91,7 @@ struct TodaysWastoryListCell: View {
         }// VStack
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
-}
-
-#Preview {
-    TodaysWastoryListCell(index: 1)
 }

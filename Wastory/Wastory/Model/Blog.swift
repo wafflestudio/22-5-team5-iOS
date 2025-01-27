@@ -31,10 +31,27 @@ struct Blog: Codable, Identifiable, Hashable {
         }()
 }
 
+
+struct BlogListDto: Codable {
+    let page: Int
+    let perPage: Int
+    let totalCount: Int
+    let blogs: [Blog]
+    
+    private enum CodingKeys: String, CodingKey {
+        case page
+        case perPage = "per_page"
+        case totalCount = "total_count"
+        case blogs
+    }
+}
+
+
+
 import SwiftUI
 extension View {
     func tempBlog() -> Blog {
-        Blog.init(id: 5, blogName: "블로그 이름", addressName: "WaSans", description: "블로그 설명어어어어엉엉", userID: 0)
+        Blog.init(id: 1, blogName: "블로그 이름", addressName: "WaSans", description: "블로그 설명어어어어엉엉", userID: 0)
     }
 }
 

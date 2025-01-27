@@ -23,6 +23,7 @@ final class UserInfoRepository {
     private var blogName = ""           // 블로그 이름
     private var blogID = 0              // 블로그 아이디
     private var username = ""           // 닉네임 (원래는 닉네임이 블로그에 종속되는 항목이지만 블로그가 1개로 제한됨에 따라 수정할 여지 존재)
+    private var blogMainImageURL = ""   // 블로그 메인 이미지 URL
     
     
     // 최초로 블로그를 개설했는지 App이 판단하기 위한 변수
@@ -94,6 +95,7 @@ final class UserInfoRepository {
             self.addressName = response.addressName
             self.blogName = response.blogName
             self.blogID = response.id
+            self.blogMainImageURL = response.mainImageURL ?? ""
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -126,6 +128,7 @@ final class UserInfoRepository {
             self.addressName = response.addressName
             self.blogName = response.blogName
             self.blogID = response.id
+            self.blogMainImageURL = response.mainImageURL ?? ""
         } catch {
             print("Error: \(error.localizedDescription)")
         }
@@ -177,6 +180,9 @@ final class UserInfoRepository {
     }
     func getUsername() -> String {
         return username
+    }
+    func getBlogMainImageURL() -> String {
+        return blogMainImageURL
     }
     
     

@@ -31,8 +31,7 @@ struct BlogSheet: View {
                                 .frame(height: 30)
                             
                             HStack {
-                                Image(systemName: "questionmark.text.page.fill")
-                                    .resizable()
+                                KFImageWithDefaultIcon(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 50, height: 50)
                                     .clipShape(Circle())
@@ -59,8 +58,7 @@ struct BlogSheet: View {
                                 .frame(height: 20)
                             
                             HStack {
-                                Image(systemName: "questionmark.text.page.fill")
-                                    .resizable()
+                                KFImageWithDefaultIcon(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 40, height: 40)
                                     .clipShape(

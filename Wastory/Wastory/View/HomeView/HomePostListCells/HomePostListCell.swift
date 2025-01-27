@@ -8,25 +8,24 @@
 import SwiftUI
 
 struct HomePostListCell: View {
+    let post: Post
     
     @Environment(\.contentViewModel) var contentViewModel
     
-    let index: Int
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
                 .frame(height: 20)
             
-            contentViewModel.navigateToBlogViewButton(tempBlog()) {
+            contentViewModel.navigateToBlogViewButton(post.blogID) {
                 HStack(spacing: 8) {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
+                    KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                         .scaledToFill()
                         .frame(width: 20, height: 20)
                         .clipShape(Circle())
                     
-                    Text("블로그 이름")
+                    Text(post.blogName ?? "")
                         .font(.system(size: 13, weight: .regular))
                         .foregroundStyle(Color.primaryLabelColor)
                 }
@@ -37,27 +36,28 @@ struct HomePostListCell: View {
             
             HStack(alignment: .top, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 17, weight: .medium))
                         .lineLimit(2)
                     
                     Spacer()
                         .frame(height: 9)
+                    Spacer()
                     
                     HStack(alignment: .center, spacing: 3) {
                         Image(systemName: "heart")
-                        Text("50")
+                        Text("\(post.likeCount)")
                         
                         Spacer()
                             .frame(width: 5)
                         
                         Image(systemName: "ellipsis.bubble")
-                        Text("5")
+                        Text("\(post.commentCount)")
                         
                         Spacer()
                             .frame(width: 5)
                         
-                        Text("5분 전")
+                        Text(timeAgo(from: post.createdAt))
                         
                         Spacer()
                     }
@@ -68,31 +68,22 @@ struct HomePostListCell: View {
                 
                 Spacer()
                 
-                Image(systemName: "questionmark.text.page.fill")
-                    .resizable()
+                KFImageWithoutDefault(imageURL: post.mainImageUrl)
                     .scaledToFill()
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay {
-                        contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+                        contentViewModel.navigateToPostViewButton(post.id, post.blogID)
                     }
             }
             
             Spacer()
                 .frame(height: 17)
             
-            if index != 4 {
-                Divider()
-                    .foregroundStyle(Color.secondaryLabelColor)
-            }
         }
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(tempPost(), tempBlog())
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
-}
-
-#Preview {
-    HomePostListCell(index: 5)
 }

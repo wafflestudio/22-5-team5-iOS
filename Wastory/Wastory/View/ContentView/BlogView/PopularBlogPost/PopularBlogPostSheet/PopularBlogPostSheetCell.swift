@@ -10,7 +10,6 @@ import SwiftUI
 struct PopularBlogPostSheetCell: View {
     let post: Post
     let index: Int
-    @State var blog: Blog = Blog.defaultBlog
     @State var didAppear: Bool = false
     
     @Bindable var viewModel: PopularBlogPostSheetViewModel
@@ -75,8 +74,8 @@ struct PopularBlogPostSheetCell: View {
                 
                 Spacer()
                 
-                Image(systemName: "questionmark.text.page.fill")
-                    .resizable()
+                
+                KFImageWithoutDefault(imageURL: post.mainImageUrl)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 50, height: 50)
                     .clipShape(
@@ -90,16 +89,8 @@ struct PopularBlogPostSheetCell: View {
             
         } //VStack
         .background(Color.white)
-        .onAppear {
-            if !didAppear {
-                Task {
-                    blog = try await contentViewModel.getBlogByID(post.blogID)
-                }
-                didAppear = true
-            }
-        }
         .overlay {
-            contentViewModel.navigateToPostViewButton(post, blog)
+            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

@@ -32,17 +32,31 @@ enum NetworkRouter {
     case getCategoriesInBlog(blogID: Int)
     case patchCategory(categoryID: Int)
     case deleteCategory(categoryID: Int)
+    case getCategory(categoryID: Int)
     
     // MARK: Article
     case postArticle
     case getArticlesInBlog(blogID: Int)
     case getTopArticlesInBlog(blogID: Int, sortBy: String)
     case getArticlesInBlogInCategory(blogID: Int, categoryID: Int, page: Int)
-    
+    case getArticle(postID: Int)
+    case getArticlesTodayWastory
+    case getArticlesWeeklyWastory
+    case getArticlesHomeTopic(highHomeTopicID: Int)
+    case getArticlesOfSubscription(blogID: Int)
+    case searchArticlesInBlog(searchingWord: String, blogID: Int)
+    case searchArticles(searchingWord: String)
     
     //MARK: Comment
     case postComment(postID: Int)
     case getArticleComments(postID: Int, page: Int)
+    
+    // MARK: Subscription
+    case postSubscription
+    case deleteSubscription
+    case getSubscribingBlogs(page: Int)
+    case getSubscriberBlogs(page: Int)
+    case getIsSubscribing
     
     //MARK: Like
     case postLike
@@ -54,6 +68,8 @@ enum NetworkRouter {
     case uploadImage
     case deleteImage
     
+    // MARK: HomeTopic
+    case getHomeTopicList
     
     
     var url: URL {
@@ -85,16 +101,31 @@ enum NetworkRouter {
         case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         case let .patchCategory(categoryID): "/categories/\(categoryID)"
         case let .deleteCategory(categoryID): "/categories/\(categoryID)"
+        case let .getCategory(categoryID): "/categories/\(categoryID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
         case let .getArticlesInBlog(blogID): "/articles/blogs/\(blogID)"
         case let .getTopArticlesInBlog(blogID, sortBy): "/articles/blogs/\(blogID)/sort_by/\(sortBy)"
         case let .getArticlesInBlogInCategory(blogID: blogID, categoryID: categoryID, page: _): "/articles/blogs/\(blogID)/categories/\(categoryID)"
+        case let .getArticle(postID): "/articles/get/\(postID)"
+        case .getArticlesTodayWastory: "/articles/today_wastory"
+        case .getArticlesWeeklyWastory: "/articles/weekly_wastory"
+        case .getArticlesHomeTopic: "/articles/hometopic/{highHomeTopicID}"
+        case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
+        case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
+        case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
+            
+        // MARK: Subscription
+        case .postSubscription: "/subscription"
+        case .deleteSubscription: "/subscription"
+        case let .getSubscribingBlogs(page): "/subscription/my_subscriptions/\(page)"
+        case let .getSubscriberBlogs(page): "/subscription/my_subscribers/\(page)"
+        case .getIsSubscribing: "/subscription/is_subscribing"
             
         //MARK: Like
         case .postLike: "/likes/create"
@@ -105,6 +136,9 @@ enum NetworkRouter {
         case .generatePreURL: "/images/generate-presigned-urls"
         case .uploadImage: "presignedURL로 대체해서 사용합니다"
         case .deleteImage: "/images/deletes"
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList: "/hometopics/list"
         }
     }
     
@@ -151,6 +185,8 @@ enum NetworkRouter {
             return .patch
         case .deleteCategory:
             return .delete
+        case .getCategory:
+            return .get
         
         // MARK: Article
         case .postArticle:
@@ -161,11 +197,37 @@ enum NetworkRouter {
             return .get
         case .getArticlesInBlogInCategory:
             return .get
+        case .getArticle:
+            return .get
+        case .getArticlesTodayWastory:
+            return .get
+        case .getArticlesWeeklyWastory:
+            return .get
+        case .getArticlesHomeTopic:
+            return .get
+        case .getArticlesOfSubscription:
+            return .get
+        case .searchArticlesInBlog:
+            return .get
+        case .searchArticles:
+            return .get
             
         // MARK: Comment
         case .postComment:
             return .post
         case .getArticleComments:
+            return .get
+        
+        // MARK: Subscription
+        case .postSubscription:
+            return .post
+        case .deleteSubscription:
+            return .delete
+        case .getSubscribingBlogs:
+            return .get
+        case .getSubscriberBlogs:
+            return .get
+        case .getIsSubscribing:
             return .get
             
         //MARK: Like
@@ -183,6 +245,10 @@ enum NetworkRouter {
             return .put
         case .deleteImage:
             return .delete
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList:
+            return .get
         }
     }
     
@@ -229,6 +295,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .deleteCategory:
             return ["Content-Type": "application/json"]
+        case .getCategory:
+            return ["Content-Type": "application/json"]
         
         // MARK: Article
         case .postArticle:
@@ -239,14 +307,39 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getArticlesInBlogInCategory:
             return ["Content-Type": "application/json"]
-            
+        case .getArticle:
+            return ["Content-Type": "application/json"]
+        case .getArticlesTodayWastory:
+            return ["Content-Type": "application/json"]
+        case .getArticlesWeeklyWastory:
+            return ["Content-Type": "application/json"]
+        case .getArticlesHomeTopic:
+            return ["Content-Type": "application/json"]
+        case .getArticlesOfSubscription:
+            return ["Content-Type": "application/json"]
+        case .searchArticlesInBlog:
+            return ["Content-Type": "application/json"]
+        case .searchArticles:
+            return ["Content-Type": "application/json"]
             
         // MARK: Comment
         case .postComment:
             return ["Content-Type": "application/json"]
         case .getArticleComments:
             return ["Content-Type": "application/json"]
-        
+            
+        // MARK: Subscription
+        case .postSubscription:
+            return ["Content-Type": "application/json"]
+        case .deleteSubscription:
+            return ["Content-Type": "application/json"]
+        case .getSubscribingBlogs:
+            return ["Content-Type": "application/json"]
+        case .getSubscriberBlogs:
+            return ["Content-Type": "application/json"]
+        case .getIsSubscribing:
+            return ["Content-Type": "application/json"]
+            
         //MARK: Like
         case .postLike:
             return ["Content-Type": "application/json"]
@@ -261,6 +354,10 @@ enum NetworkRouter {
         case .uploadImage:
             return ["Content-Type": "image/jpeg"]
         case .deleteImage:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList:
             return ["Content-Type": "application/json"]
         }
     }

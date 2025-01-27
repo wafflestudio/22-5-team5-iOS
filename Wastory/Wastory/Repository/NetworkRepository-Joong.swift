@@ -254,6 +254,28 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    func getCategory(categoryID: Int) async throws -> Category {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getCategory(categoryID: categoryID).url,
+            method:  NetworkRouter.getCategory(categoryID: categoryID).method,
+            headers: NetworkRouter.getCategory(categoryID: categoryID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Category.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Article
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(
@@ -321,7 +343,250 @@ extension NetworkRepository {
         return response.articles
         
     }
+    
+    func getArticle(postID: Int) async throws -> Post {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getArticle(postID: postID).url,
+            method: NetworkRouter.getArticle(postID: postID).method,
+            headers: NetworkRouter.getArticle(postID: postID).headers
+        )
         
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Post.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getArticlesTodayWastory() async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesTodayWastory.url,
+            method: NetworkRouter.getArticlesTodayWastory.method,
+            headers: NetworkRouter.getArticlesTodayWastory.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "1")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesWeeklyWastory() async throws -> [Post] {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesWeeklyWastory.url,
+            method: NetworkRouter.getArticlesWeeklyWastory.method,
+            headers: NetworkRouter.getArticlesWeeklyWastory.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesHomeTopic(highHomeTopicID: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).url,
+            method: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).method,
+            headers: NetworkRouter.getArticlesHomeTopic(highHomeTopicID: highHomeTopicID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "high_hometopic_id", value: "\(highHomeTopicID)"),
+                URLQueryItem(name: "page", value: "1")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getArticlesOfSubscription(blogID: Int, page: Int) async throws -> [Post] {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getArticlesOfSubscription(blogID: blogID).url,
+            method:  NetworkRouter.getArticlesOfSubscription(blogID: blogID).method,
+            headers: NetworkRouter.getArticlesOfSubscription(blogID: blogID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func searchArticlesInBlog(searchingWord: String, blogID: Int, page: Int) async throws -> PostListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).url,
+            method:  NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).method,
+            headers: NetworkRouter.searchArticlesInBlog(searchingWord: searchingWord, blogID: blogID).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func searchArticles(searchingWord: String, page: Int) async throws -> PostListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.searchArticles(searchingWord: searchingWord).url,
+            method:  NetworkRouter.searchArticles(searchingWord: searchingWord).method,
+            headers: NetworkRouter.searchArticles(searchingWord: searchingWord).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
     
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
@@ -376,36 +641,135 @@ extension NetworkRepository {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        let rawResponse = try await AF.request(
+        
+        let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingString()
+        .serializingDecodable(CommentListDto.self, decoder: decoder)
         .value
-
-        // 응답 원문 로그 출력
-        logResponse(rawResponse, url: urlRequest.url?.absoluteString ?? "unknown")
-
-        // JSON 디코더로 다시 CommentListDto로 디코딩
-        guard let responseData = rawResponse.data(using: .utf8) else {
-            throw NSError(domain: "Invalid response data", code: -1, userInfo: nil)
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    // MARK: - Subscription
+    func postSubscription(blogID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.postSubscription.url,
+            method:  NetworkRouter.postSubscription.method,
+            headers: NetworkRouter.postSubscription.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "subscribed_id", value: "\(blogID)")
+            ]
+            urlRequest.url = components?.url
         }
-
-        let decodedResponse = try decoder.decode(CommentListDto.self, from: responseData)
-
-        // 최종 디코딩된 데이터 반환
-        logResponse(decodedResponse, url: urlRequest.url?.absoluteString ?? "unknown")
-        return decodedResponse
-//        let response = try await AF.request(
-//            urlRequest,
-//            interceptor: NetworkInterceptor()
-//        ).validate()
-//        .serializingDecodable(CommentListDto.self, decoder: decoder)
-//        .value
-//        
-//        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
-//        
-//        return response
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteSubscription(blogAddress: String) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.deleteSubscription.url,
+            method:  NetworkRouter.deleteSubscription.method,
+            headers: NetworkRouter.deleteSubscription.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "subscribed_address_name", value: blogAddress)
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getSubscribingBlogs(page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscribingBlogs(page:  page).url,
+            method:  NetworkRouter.getSubscribingBlogs(page:  page).method,
+            headers: NetworkRouter.getSubscribingBlogs(page:  page).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getSubscriberBlogs(page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscriberBlogs(page:  page).url,
+            method:  NetworkRouter.getSubscriberBlogs(page:  page).method,
+            headers: NetworkRouter.getSubscriberBlogs(page:  page).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getIsSubscribing(BlogID: Int) async throws -> Bool {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getIsSubscribing.url,
+            method:  NetworkRouter.getIsSubscribing.method,
+            headers: NetworkRouter.getIsSubscribing.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(SubscriptionDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.isSubscribing
     }
     
     // MARK: - Like
@@ -589,5 +953,27 @@ extension NetworkRepository {
         
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
-
+    
+    // MARK: - HomeTopic
+    func getHomeTopicList() async throws -> [HomeTopic] {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getHomeTopicList.url,
+            method:  NetworkRouter.getHomeTopicList.method,
+            headers: NetworkRouter.getHomeTopicList.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+            .serializingDecodable(HomeTopicListDto.self)
+            .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.hometopics
+    }
 }
