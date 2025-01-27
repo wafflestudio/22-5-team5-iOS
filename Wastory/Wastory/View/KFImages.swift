@@ -1,5 +1,5 @@
 //
-//  KFImageWithDefault.swift
+//  KFImages.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/27/25.
