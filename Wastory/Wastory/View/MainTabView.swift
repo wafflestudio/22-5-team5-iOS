@@ -47,7 +47,7 @@ struct MainTabView: View {
                         .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
                             NavigationStack {
                                 // MARK: PostingView
-                                PostingView(mainTabViewModel: mainTabViewModel)
+                                ArticleView(mainTabViewModel: mainTabViewModel)
                             }
                         }
                     

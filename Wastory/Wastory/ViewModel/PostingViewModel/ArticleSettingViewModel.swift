@@ -1,5 +1,5 @@
 //
-//  PostSettingViewModel.swift
+//  ArticleSettingViewModel.swift
 //  Wastory
 //
 //  Created by mujigae on 1/16/25.
@@ -9,7 +9,7 @@ import SwiftUI
 import Observation
 import RichTextKit
 
-@Observable final class PostSettingViewModel {
+@Observable final class ArticleSettingViewModel {
     private let title: String
     private let text: NSAttributedString
     

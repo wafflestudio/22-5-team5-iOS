@@ -1,5 +1,5 @@
 //
-//  PostingViewModel.swift
+//  ArticleViewModel.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/6/25.
@@ -10,7 +10,7 @@ import SwiftUI
 import Observation
 import RichTextKit
 
-@Observable final class PostingViewModel {
+@Observable final class ArticleViewModel {
     var title: String = ""
     var text = NSAttributedString()
     var context = RichTextContext()

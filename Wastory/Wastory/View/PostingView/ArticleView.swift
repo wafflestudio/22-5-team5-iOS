@@ -1,5 +1,5 @@
 //
-//  PostingView.swift
+//  ArticleView.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/6/25.
@@ -9,9 +9,9 @@
 import SwiftUI
 import RichTextKit
 
-struct PostingView: View {
+struct ArticleView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
-    @State private var viewModel = PostingViewModel()
+    @State private var viewModel = ArticleViewModel()
     
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isTextFocused: Bool
@@ -102,7 +102,7 @@ struct PostingView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                     .padding(.trailing, 5)
-                    NavigationLink(destination: PostSettingView(viewModel: PostSettingViewModel(title: viewModel.title, text: viewModel.text))) {
+                    NavigationLink(destination: ArticleSettingView(viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundStyle(.black)

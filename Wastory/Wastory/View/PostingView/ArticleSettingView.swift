@@ -1,5 +1,5 @@
 //
-//  PostSettingView.swift
+//  ArticleSettingView.swift
 //  Wastory
 //
 //  Created by mujigae on 1/16/25.
@@ -11,11 +11,11 @@ import PhotosUI
 
 import Foundation
 
-struct PostSettingView: View {
-    @State private var viewModel: PostSettingViewModel
+struct ArticleSettingView: View {
+    @State private var viewModel: ArticleSettingViewModel
     @Environment(\.contentViewModel) var contentViewModel
 
-    init(viewModel: PostSettingViewModel) {
+    init(viewModel: ArticleSettingViewModel) {
         self.viewModel = viewModel
     }
     
@@ -224,5 +224,5 @@ extension Color {
 }
 
 #Preview {
-    PostSettingView(viewModel: PostSettingViewModel(title: "???", text: NSAttributedString()))
+    ArticleSettingView(viewModel: ArticleSettingViewModel(title: "???", text: NSAttributedString()))
 }
