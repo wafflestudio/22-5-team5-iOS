@@ -21,7 +21,7 @@ struct CategoryPostListView: View {
             
             
             HStack(alignment: .center, spacing: 6) {
-                Text(viewModel.post.categoryID == -1 ? "이 블로그" : viewModel.categoryName)
+                Text(viewModel.post.categoryID == 0 ? "이 블로그" : viewModel.categoryName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.loadingCoralRed)
                 
