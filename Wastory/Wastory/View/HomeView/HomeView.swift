@@ -99,6 +99,7 @@ struct HomeView: View {
             }
             Task {
                 await viewModel.getTodaysWastoryItems()
+                viewModel.setDisplayedTodaysWastoryItems()
             }
             Task {
                 await viewModel.getTodaysWastoryListItems()
@@ -113,6 +114,7 @@ struct HomeView: View {
             }
             Task {
                 await viewModel.getTodaysWastoryListItems()
+                viewModel.setDisplayedTodaysWastoryItems()
             }
         }
         

@@ -12,8 +12,8 @@ struct TodaysWastoryListView: View {
     
     var body: some View {
         LazyVStack(spacing: 0) {
-            ForEach(Array(viewModel.todaysWastoryListItems.enumerated()), id: \.offset) { index, item in
-                TodaysWastoryListCell(index: index + 1)
+            ForEach(Array(viewModel.todaysWastoryListItems.enumerated()), id: \.offset) { index, post in
+                TodaysWastoryListCell(post: post, index: index + 1)
             }
         }
         .background(Color.white)

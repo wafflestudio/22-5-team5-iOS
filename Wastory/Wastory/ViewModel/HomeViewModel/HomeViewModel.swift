@@ -9,6 +9,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class HomeViewModel {
     //NavBar Controller
     private var isScrolled: Bool = false
@@ -47,18 +48,21 @@ import Observation
     //TodayWastoryPageTab
     func setDisplayedTodaysWastoryItems() {
         displayedTodaysWastoryItems = [todaysWastoryItems.last!] + todaysWastoryItems + [todaysWastoryItems.first!]
+        print(displayedTodaysWastoryItems)
     }
     
     func setNextTodaysWastoryIndex(with newIndex: Int) {
         if newIndex == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.todaysWastoryIndex = self.todaysWastoryItems.count // 마지막 실제 데이터로 이동
+                print(self.todaysWastoryIndex)
             }
         }
         // 마지막에서 첫 번째로 이동해야 할 때
         else if newIndex == todaysWastoryItems.count + 1 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.todaysWastoryIndex = 1 // 첫 번째 실제 데이터로 이동
+                print(self.todaysWastoryIndex)
             }
         }
     }
@@ -111,7 +115,6 @@ import Observation
     func getTodaysWastoryItems() async {
         do {
             todaysWastoryItems = try await NetworkRepository.shared.getArticlesTodayWastory()
-            setDisplayedTodaysWastoryItems()
         } catch {
             print("Error: \(error.localizedDescription)")
         }
