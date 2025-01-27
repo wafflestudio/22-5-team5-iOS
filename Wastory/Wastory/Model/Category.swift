@@ -30,7 +30,7 @@ struct Category: Codable, Identifiable, Hashable {
 
 struct CategoryListDto: Codable {
     let categories: [Category]
-    
+   
     private enum CodingKeys: String, CodingKey {
         case categories = "category_list"
     }

@@ -61,6 +61,8 @@ enum NetworkRouter {
     case uploadImage
     case deleteImage
     
+    // MARK: HomeTopic
+    case getHomeTopicList
     
     
     var url: URL {
@@ -102,7 +104,7 @@ enum NetworkRouter {
         case let .getArticle(postID): "/articles/get/\(postID)"
         case .getArticlesTodayWastory: "/articles/today_wastory"
         case .getArticlesWeeklyWastory: "/articles/weekly_wastory"
-        case let .getArticlesHomeTopic(highHomeTopicID): "/articles/hometopic/\(highHomeTopicID)"
+        case .getArticlesHomeTopic: "/articles/hometopic/{highHomeTopicID}"
         case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
         case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
         case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
@@ -120,6 +122,9 @@ enum NetworkRouter {
         case .generatePreURL: "/images/generate-presigned-urls"
         case .uploadImage: "presignedURL로 대체해서 사용합니다"
         case .deleteImage: "/images/deletes"
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList: "/hometopics/list"
         }
     }
     
@@ -214,6 +219,10 @@ enum NetworkRouter {
             return .put
         case .deleteImage:
             return .delete
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList:
+            return .get
         }
     }
     
@@ -307,6 +316,10 @@ enum NetworkRouter {
         case .uploadImage:
             return ["Content-Type": "image/jpeg"]
         case .deleteImage:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: HomeTopic
+        case .getHomeTopicList:
             return ["Content-Type": "application/json"]
         }
     }

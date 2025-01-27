@@ -24,6 +24,22 @@ struct KFImageWithDefault: View {
     }
 }
 
+struct KFImageWithDefaultIcon: View {
+    var imageURL: String?
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if imageURL ?? "" == "" {
+                Image("myW")
+                    .resizable()
+            } else {
+                KFImage(URL(string: imageURL!))
+                    .resizable()
+            }
+        }
+    }
+}
+
 struct KFImageWithoutDefault: View {
     var imageURL: String?
     

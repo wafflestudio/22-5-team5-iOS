@@ -91,6 +91,30 @@ struct HomeView: View {
                 .background(Color.backgourndSpaceColor)
             } //ScrollView
         } //VStack
+        // MARK: Network
+        .onAppear {
+            Task {
+                await viewModel.getHomeTopicList()
+                await viewModel.getCategoryPopularPostItems()
+            }
+            Task {
+                await viewModel.getTodaysWastoryItems()
+            }
+            Task {
+                await viewModel.getTodaysWastoryListItems()
+            }
+        }
+        .refreshable {
+            Task {
+                await viewModel.getCategoryPopularPostItems()
+            }
+            Task {
+                await viewModel.getTodaysWastoryItems()
+            }
+            Task {
+                await viewModel.getTodaysWastoryListItems()
+            }
+        }
         
     }
     

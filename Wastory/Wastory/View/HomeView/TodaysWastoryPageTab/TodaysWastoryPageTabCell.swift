@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TodaysWastoryPageTabCell: View {
+    let post: Post
     
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -16,8 +17,7 @@ struct TodaysWastoryPageTabCell: View {
         ZStack {
             //Background Image
             GeometryReader { geometry in
-                Image(systemName: "questionmark.text.page.fill")
-                    .resizable()
+                KFImageWithDefault(imageURL: post.mainImageUrl)
                     .scaledToFill()
                     .frame(width: geometry.size.width ,height: geometry.size.height)
                     .clipped()
@@ -59,7 +59,7 @@ struct TodaysWastoryPageTabCell: View {
                     }
                     .padding(.bottom, 5)
                     
-                    Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목")
+                    Text(post.title)
                         .font(.system(size: 23, weight: .semibold))
                         .foregroundStyle(Color.todaysWastoryTextColor)
                         .lineLimit(3)
@@ -67,11 +67,10 @@ struct TodaysWastoryPageTabCell: View {
                     
                     // 블로그 정보
                     HStack {
-                        contentViewModel.navigateToBlogViewButton(tempBlog().id) {
+                        contentViewModel.navigateToBlogViewButton(post.blogID) {
                             HStack(spacing: 8) {
                                 ZStack {
-                                    Image(systemName: "questionmark.text.page.fill")
-                                        .resizable()
+                                    KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                                         .scaledToFill()
                                         .clipShape(Circle())
                                     
@@ -81,7 +80,7 @@ struct TodaysWastoryPageTabCell: View {
                                 .frame(width: 23, height: 23)
                                 
                                 // 블로그 이름 Text
-                                Text("블로그이름")
+                                Text(post.blogName ?? "")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(Color.todaysWastoryTextColor)
                             }
@@ -94,7 +93,7 @@ struct TodaysWastoryPageTabCell: View {
                 .padding(.horizontal, 25)
             }//Vstack
             .background {
-                contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
+                contentViewModel.navigateToPostViewButton(post.id, post.blogID)
             }
         }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))

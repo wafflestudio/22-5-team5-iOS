@@ -48,7 +48,7 @@ struct BlogView: View {
                 print("refresh")
                 viewModel.resetPage()
                 Task {
-                    await viewModel.getPostsInBlog()
+                    await viewModel.getPostsInCategory()
                 }
                 Task {
                     await viewModel.getPopularBlogPosts()

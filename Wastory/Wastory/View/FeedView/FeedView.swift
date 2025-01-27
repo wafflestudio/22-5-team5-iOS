@@ -97,30 +97,6 @@ struct FeedView: View {
                 }
                 .padding(.trailing, 22)
                 
-                Button {
-                    Task {
-                        do {
-                            let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID(), page: 1)
-                            viewModel.posts = response
-                            print("성공")
-                        }
-                        catch let DecodingError.dataCorrupted(context) {
-                           print("디코딩 실패 - 데이터 손상: \(context.debugDescription)")
-                       } catch let DecodingError.keyNotFound(key, context) {
-                           print("디코딩 실패 - 키 없음: \(key.stringValue), \(context.debugDescription)")
-                       } catch let DecodingError.typeMismatch(type, context) {
-                           print("디코딩 실패 - 타입 불일치: \(type), \(context.debugDescription)")
-                       } catch let DecodingError.valueNotFound(value, context) {
-                           print("디코딩 실패 - 값 없음: \(value), \(context.debugDescription)")
-                       } catch {
-                           print("알 수 없는 오류: \(error.localizedDescription)")
-                       }
-                    }
-                } label: {
-                    Text("버버버튼튼튼")
-                        .frame(width: 100, height: 100)
-                }
-                
                 //MARK: PostList
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
@@ -131,10 +107,16 @@ struct FeedView: View {
                 }
             }
         }
+        //MARK: Network
         .onAppear {
             Task {
-                let response = try await NetworkRepository.shared.getArticlesInBlog(blogID: UserInfoRepository.shared.getBlogID(), page: 1)
-                viewModel.posts = response
+                await viewModel.getPosts()
+            }
+        }
+        .refreshable {
+            viewModel.resetPage()
+            Task {
+                await viewModel.getPosts()
             }
         }
         

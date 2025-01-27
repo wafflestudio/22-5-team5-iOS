@@ -449,6 +449,7 @@ extension NetworkRepository {
         if let url = urlRequest.url {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
             components?.queryItems = [
+                URLQueryItem(name: "high_hometopic_id", value: "\(highHomeTopicID)"),
                 URLQueryItem(name: "page", value: "1")
             ]
             urlRequest.url = components?.url
@@ -834,5 +835,27 @@ extension NetworkRepository {
         
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
-
+    
+    // MARK: - HomeTopic
+    func getHomeTopicList() async throws -> [HomeTopic] {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getHomeTopicList.url,
+            method:  NetworkRouter.getHomeTopicList.method,
+            headers: NetworkRouter.getHomeTopicList.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+            .serializingDecodable(HomeTopicListDto.self)
+            .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.hometopics
+    }
 }

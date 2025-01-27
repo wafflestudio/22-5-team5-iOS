@@ -32,8 +32,8 @@ struct CategoryPopularPostView: View {
                 HStack(spacing: 5) {
                     Spacer()
                         .frame(width: 20)
-                    ForEach(viewModel.categoryList, id: \.self) { category in
-                        categoryButton(category: category, isSelected: viewModel.selectedCategory == category)
+                    ForEach(viewModel.categoryList) { category in
+                        categoryButton(category: category, isSelected: viewModel.selectedCategory.id == category.id)
                     }
                     Spacer()
                         .frame(width: 20)
@@ -43,28 +43,30 @@ struct CategoryPopularPostView: View {
             .zIndex(1)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.categoryPopularPostItems[0..<2].enumerated()), id: \.offset) { index, item in
-                    HomeBigPostListCell()
+                ForEach(Array(viewModel.categoryPopularPostItems.prefix(2).enumerated()), id: \.offset) { index, item in
+                    if index < 2 {
+                        HomeBigPostListCell()
+                    } else {
+                        HomePostListCell(index: index)
+                    }
                 }
             }
             
-            LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.categoryPopularPostItems[2..<7].enumerated()), id: \.offset) { index, item in
-                    HomePostListCell(index: index)
-                }
-            }
         } //VStack
         .background(Color.white)
     } //Body
     
-    @ViewBuilder func categoryButton(category: String, isSelected: Bool) -> some View {
+    @ViewBuilder func categoryButton(category: HomeTopic, isSelected: Bool) -> some View {
         Button(action: {
             viewModel.selectedCategory = category
+            Task {
+                await viewModel.getCategoryPopularPostItems()
+            }
         }) {
             HStack(spacing: 3) {
-                Image(systemName: viewModel.categoryIcons[category]!)
+                Image(systemName: viewModel.categoryIcons[category.id] ?? "")
                     .font(.system(size: 14))
-                Text(category)
+                Text(category.name)
                     .font(.system(size: 14, weight: isSelected ? .bold : .light))
             }
             .padding(.horizontal, 14)
