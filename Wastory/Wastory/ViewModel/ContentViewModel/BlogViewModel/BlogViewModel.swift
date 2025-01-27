@@ -135,7 +135,7 @@ import Observation
                 do {
                     let response = try await NetworkRepository.shared.getArticlesInBlogInCategory(blogID: self.blog.id, categoryID: self.selectedCategory.id, page: self.page)
                     
-                    //comments 저장
+                    //posts 저장
                     if self.page == 1 {
                         blogPosts = response
                     } else {

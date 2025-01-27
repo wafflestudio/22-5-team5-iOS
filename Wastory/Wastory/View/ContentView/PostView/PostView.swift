@@ -39,7 +39,7 @@ struct PostView: View {
                         
                         // MARK: 카테고리 버튼
                         contentViewModel.navigateToBlogViewButton(blogID, viewModel.post.categoryID) {
-                            Text(viewModel.post.categoryID == -1 ? "카테고리 없음" : viewModel.categoryName)
+                            Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
                                 .background(
