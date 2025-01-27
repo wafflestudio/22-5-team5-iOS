@@ -17,6 +17,8 @@ import RichTextKit
     var isImagePickerPresented: Bool = false
     
     var category: Category = Category.allCategory
+    var isCategorySheetPresent: Bool = false
+    
     var homeTopic: HomeTopic = HomeTopic.defaultHomeTopic
     var isCommentEnabled: Bool = true
 
@@ -37,6 +39,9 @@ import RichTextKit
     }
     
     // MARK: - Category
+    func toggleCategorySheetPresent() {
+        isCategorySheetPresent.toggle()
+    }
     
     
     // MARK: - Optional: Public, HomeTopic, Comment
