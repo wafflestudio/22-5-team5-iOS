@@ -20,8 +20,9 @@ import RichTextKit
     var isCategorySheetPresent: Bool = false
     var categories: [Category] = []
     
-    var homeTopic: HomeTopic = HomeTopic.defaultHomeTopic
+    var homeTopic: HomeTopic = HomeTopic(id: 1, name: "선택 안 함", highCategory: 0)
     var isHomeTopicSheetPresent: Bool = false
+    let defaultHomeTopic: HomeTopic = HomeTopic(id: 1, name: "선택 안 함", highCategory: 0)
     let highCategories: [HomeTopic] = [
         HomeTopic(id: 2, name: "여행·맛집", highCategory: 0),
         HomeTopic(id: 3, name: "리빙·스타일", highCategory: 0),
@@ -142,6 +143,18 @@ import RichTextKit
     // MARK: - HomeTopic
     func toggleIsHomeTopicSheetPresent() {
         isHomeTopicSheetPresent.toggle()
+    }
+    
+    func getHighCategoriesCount() -> Int {
+        return highCategories.count
+    }
+    
+    func setHomeTopic(homeTopic: HomeTopic) {
+        self.homeTopic = homeTopic
+    }
+    
+    func isSelectedHomeTopic(homeTopic: HomeTopic) -> Bool {
+        return self.homeTopic == homeTopic
     }
     
     // MARK: - Optional: Public, Comment

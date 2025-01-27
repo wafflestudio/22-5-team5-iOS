@@ -163,7 +163,7 @@ struct ArticleSettingView: View {
                 SettingDivider(thickness: 1)
                 
                 Button {
-                    // TODO: 홈주제 선택 시트
+                    viewModel.toggleIsHomeTopicSheetPresent()
                 } label: {
                     HStack {
                         Text("홈주제")
@@ -221,6 +221,11 @@ struct ArticleSettingView: View {
             ArticleCategorySheet(viewModel: viewModel)
                 .transition(.move(edge: .bottom))
                 .animation(.easeInOut, value: viewModel.isCategorySheetPresent)
+            
+            // MARK: HomeTopic Selection Sheet
+            ArticleHomeTopicSheet(viewModel: viewModel)
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut, value: viewModel.isHomeTopicSheetPresent)
         }
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
