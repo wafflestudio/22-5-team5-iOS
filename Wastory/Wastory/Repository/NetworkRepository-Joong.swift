@@ -654,6 +654,124 @@ extension NetworkRepository {
         return response
     }
     
+    // MARK: - Subscription
+    func postSubscription(blogID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.postSubscription.url,
+            method:  NetworkRouter.postSubscription.method,
+            headers: NetworkRouter.postSubscription.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "subscribed_id", value: "\(blogID)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteSubscription(blogAddress: String) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.deleteSubscription.url,
+            method:  NetworkRouter.deleteSubscription.method,
+            headers: NetworkRouter.deleteSubscription.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "subscribed_address_name", value: blogAddress)
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getSubscribingBlogs(page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscribingBlogs(page:  page).url,
+            method:  NetworkRouter.getSubscribingBlogs(page:  page).method,
+            headers: NetworkRouter.getSubscribingBlogs(page:  page).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getSubscriberBlogs(page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscriberBlogs(page:  page).url,
+            method:  NetworkRouter.getSubscriberBlogs(page:  page).method,
+            headers: NetworkRouter.getSubscriberBlogs(page:  page).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getIsSubscribing(BlogID: Int) async throws -> Bool {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getIsSubscribing.url,
+            method:  NetworkRouter.getIsSubscribing.method,
+            headers: NetworkRouter.getIsSubscribing.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(SubscriptionDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.isSubscribing
+    }
+    
     // MARK: - Like
     func postLike(postID: Int) async throws {
         let requestBody = [

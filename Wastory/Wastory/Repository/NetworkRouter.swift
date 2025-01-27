@@ -51,6 +51,13 @@ enum NetworkRouter {
     case postComment(postID: Int)
     case getArticleComments(postID: Int, page: Int)
     
+    // MARK: Subscription
+    case postSubscription
+    case deleteSubscription
+    case getSubscribingBlogs(page: Int)
+    case getSubscriberBlogs(page: Int)
+    case getIsSubscribing
+    
     //MARK: Like
     case postLike
     case getIsLiked(postID: Int)
@@ -112,6 +119,13 @@ enum NetworkRouter {
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
+            
+        // MARK: Subscription
+        case .postSubscription: "/subscription"
+        case .deleteSubscription: "/subscription"
+        case let .getSubscribingBlogs(page): "/subscription/my_subscriptions/\(page)"
+        case let .getSubscriberBlogs(page): "/subscription/my_subscribers/\(page)"
+        case .getIsSubscribing: "/subscription/is_subscribing"
             
         //MARK: Like
         case .postLike: "/likes/create"
@@ -202,6 +216,18 @@ enum NetworkRouter {
         case .postComment:
             return .post
         case .getArticleComments:
+            return .get
+        
+        // MARK: Subscription
+        case .postSubscription:
+            return .post
+        case .deleteSubscription:
+            return .delete
+        case .getSubscribingBlogs:
+            return .get
+        case .getSubscriberBlogs:
+            return .get
+        case .getIsSubscribing:
             return .get
             
         //MARK: Like
@@ -301,7 +327,19 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getArticleComments:
             return ["Content-Type": "application/json"]
-        
+            
+        // MARK: Subscription
+        case .postSubscription:
+            return ["Content-Type": "application/json"]
+        case .deleteSubscription:
+            return ["Content-Type": "application/json"]
+        case .getSubscribingBlogs:
+            return ["Content-Type": "application/json"]
+        case .getSubscriberBlogs:
+            return ["Content-Type": "application/json"]
+        case .getIsSubscribing:
+            return ["Content-Type": "application/json"]
+            
         //MARK: Like
         case .postLike:
             return ["Content-Type": "application/json"]
