@@ -15,12 +15,19 @@ import RichTextKit
     
     var mainImage: UIImage? = nil
     var isImagePickerPresented: Bool = false
+    
+    var category: Category = Category.allCategory
+    var homeTopic: HomeTopic = HomeTopic.defaultHomeTopic
+    var isCommentEnabled: Bool = true
 
     init(title: String, text: NSAttributedString) {
         self.title = title
         self.text = text
     }
     
+    // MARK: - Posting
+    
+    // MARK: - Title & Image
     func getTitle() -> String {
         return title
     }
@@ -28,4 +35,9 @@ import RichTextKit
     func toggleImagePickerPresented() {
         isImagePickerPresented.toggle()
     }
+    
+    // MARK: - Category
+    
+    
+    // MARK: - Optional: Public, HomeTopic, Comment
 }
