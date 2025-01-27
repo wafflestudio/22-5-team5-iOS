@@ -86,14 +86,14 @@ struct ArticleSettingView: View {
                 SettingDivider(thickness: 1)
                 
                 Button {
-                    viewModel.toggleCategorySheetPresent()
+                    viewModel.toggleIsCategorySheetPresent()
                 } label: {
                     HStack {
                         Text("카테고리")
                             .font(.system(size: 17, weight: .light))
                             .foregroundStyle(.black)
                         Spacer()
-                        Text(viewModel.category.categoryName)
+                        Text(viewModel.category.id == -1 ? "선택 안 함" : viewModel.category.categoryName)
                             .font(.system(size: 14, weight: .ultraLight))
                             .foregroundStyle(Color.black)
                         Spacer()
@@ -209,6 +209,11 @@ struct ArticleSettingView: View {
                 SettingDivider(thickness: 1)
                 
                 Spacer()
+            }
+            .onAppear {
+                Task {
+                    await viewModel.getCategories()
+                }
             }
             
             // MARK: Category Selection Sheet

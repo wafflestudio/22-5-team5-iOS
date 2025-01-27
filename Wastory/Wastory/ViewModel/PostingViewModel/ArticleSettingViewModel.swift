@@ -18,6 +18,7 @@ import RichTextKit
     
     var category: Category = Category.allCategory
     var isCategorySheetPresent: Bool = false
+    var categories: [Category] = []
     
     var homeTopic: HomeTopic = HomeTopic.defaultHomeTopic
     var isCommentEnabled: Bool = true
@@ -39,10 +40,30 @@ import RichTextKit
     }
     
     // MARK: - Category
-    func toggleCategorySheetPresent() {
+    func toggleIsCategorySheetPresent() {
         isCategorySheetPresent.toggle()
     }
     
+    func getCategories() async {
+        do {
+            categories += try await NetworkRepository.shared.getCategoriesInUser()
+            category = categories[0]
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getCategoriesCount() -> Int {
+        return categories.count
+    }
+    
+    func setCategory(category: Category) {
+        self.category = category
+    }
+    
+    func isSelectedCategory(category: Category) -> Bool {
+        return self.category == category
+    }
     
     // MARK: - Optional: Public, HomeTopic, Comment
 }

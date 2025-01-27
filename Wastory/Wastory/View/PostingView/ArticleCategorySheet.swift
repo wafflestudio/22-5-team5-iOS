@@ -16,7 +16,7 @@ struct ArticleCategorySheet: View {
             (viewModel.isCategorySheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    viewModel.toggleCategorySheetPresent()
+                    viewModel.toggleIsCategorySheetPresent()
                 }
 
             VStack {
@@ -32,24 +32,23 @@ struct ArticleCategorySheet: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Spacer()
                                 .frame(height: sheetTopSpace)
-                            
-                            Text("카테고리")
-                                .font(.system(size: 30, weight: .medium))
-                                .foregroundStyle(Color.primaryLabelColor)
-                                .frame(height: sheetTitleHeight)
-                                .padding(.leading, 20)
+                            HStack {
+                                Text("카테고리")
+                                    .font(.system(size: 30, weight: .regular))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                                    .frame(height: sheetTitleHeight)
+                                    .padding(.leading, 20)
+                                Spacer()
+                            }
                             ScrollView {
-                                VStack(spacing: 0) {/*
+                                VStack(spacing: 0) {
                                     ForEach(Array(viewModel.categories.enumerated()), id: \.offset) { index, category in
-                                        
                                         CategoryButton(for: category, isLast: index == viewModel.getCategoriesCount() - 1, rowHeight: sheetRowHeight)
-                                    }*/
+                                    }
                                 }
-                                
                                 Spacer()
                                     .frame(height: sheetBottomSpace)
                             }
-                            
                         }
                         .frame(height: sheetHeight)
                         .frame(maxWidth: .infinity)
@@ -64,5 +63,44 @@ struct ArticleCategorySheet: View {
             }
         }
         .ignoresSafeArea()
+    }
+    
+    // MARK: CategorySheet Row
+    @ViewBuilder func CategoryButton(for category: Category, isLast: Bool, rowHeight: CGFloat) -> some View {
+        Button(action: {
+            viewModel.setCategory(category: category)
+            viewModel.toggleIsCategorySheetPresent()
+        }) {
+            HStack(spacing: 0) {
+                Text(category.categoryName)
+                    .font(.system(size: 17, weight: .light))
+                    .padding()
+                Spacer()
+            }
+            .foregroundStyle(viewModel.isSelectedCategory(category: category) ? Color.loadingCoralRed : Color.primaryLabelColor)
+        }
+        .frame(height: rowHeight)
+        .frame(maxWidth: .infinity)
+        
+        ForEach(Array((category.children ?? []).enumerated()), id: \.offset) { index, child in
+            Button(action: {
+                viewModel.setCategory(category: child)
+                viewModel.toggleIsCategorySheetPresent()
+            }) {
+                HStack(spacing: 0) {
+                    Text("ㄴ \(child.categoryName)")
+                        .font(.system(size: 15, weight: .light))
+                        .padding()
+                    Spacer()
+                }
+                .foregroundStyle(viewModel.isSelectedCategory(category: child) ? Color.loadingCoralRed : Color.primaryLabelColor)
+            }
+            .frame(height: rowHeight)
+            .frame(maxWidth: .infinity)
+        }
+        
+        if !isLast {
+            SettingDivider(thickness: 1)
+        }
     }
 }

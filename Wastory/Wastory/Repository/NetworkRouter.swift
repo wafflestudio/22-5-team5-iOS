@@ -102,7 +102,7 @@ enum NetworkRouter {
         case let .getCategory(categoryID): "/categories/\(categoryID)"
         case let .patchCategory(categoryID): "/categories/\(categoryID)"
         case let .deleteCategory(categoryID): "/categories/\(categoryID)"
-        case .getCategoriesInUser: "/categories/list/"
+        case .getCategoriesInUser: "/categories/list/user"
         case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         
         // MARK: Article
