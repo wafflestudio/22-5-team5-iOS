@@ -47,7 +47,6 @@ import Observation
     //TodayWastoryPageTab
     func setDisplayedTodaysWastoryItems() {
         displayedTodaysWastoryItems = [todaysWastoryItems.last!] + todaysWastoryItems + [todaysWastoryItems.first!]
-        print(displayedTodaysWastoryItems)
     }
     
     func setNextTodaysWastoryIndex(with newIndex: Int) {

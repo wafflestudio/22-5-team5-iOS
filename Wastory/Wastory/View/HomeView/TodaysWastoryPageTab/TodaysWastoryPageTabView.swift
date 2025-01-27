@@ -15,7 +15,7 @@ struct TodaysWastoryPageTabView: View {
         VStack(spacing: 0) {
             // MARK: 오늘의 와스토리
             TabView(selection: $viewModel.todaysWastoryIndex) {
-                ForEach(Array(viewModel.displayedTodaysWastoryItems.prefix(5).enumerated()), id: \.offset) { index, post in
+                ForEach(Array(viewModel.displayedTodaysWastoryItems.enumerated()), id: \.1.id) { index, post in
                     TodaysWastoryPageTabCell(post: post)
                         .tag(index)
                 }
