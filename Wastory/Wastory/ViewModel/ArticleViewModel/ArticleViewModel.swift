@@ -16,6 +16,8 @@ import RichTextKit
     var context = RichTextContext()
     private var tempPostCount: Int = 0
     
+    var isEmptyTitleEntered: Bool = false
+    
     func getTempPostCount() -> String {
         return String(tempPostCount)
     }

@@ -16,6 +16,7 @@ struct ArticleView: View {
     
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isTextFocused: Bool
+    @State private var debounceWorkItem: DispatchWorkItem?
     
     var body: some View {
         ZStack {
@@ -72,21 +73,45 @@ struct ArticleView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                     
-                    Button {
-                        // 발행으로 넘어가는 기능
-                        isTitleFocused = false
-                        isTextFocused = false
-                    } label: {
-                        Text("완료")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.black)
-                            .padding(.vertical, 7)
-                            .padding(.horizontal, 15)
+                    ZStack {
+                        Button {
+                            isTitleFocused = false
+                            isTextFocused = false
+                            viewModel.isEmptyTitleEntered = true
+                            debounceWorkItem?.cancel()
+                            let workItem = DispatchWorkItem {
+                                withAnimation {
+                                    viewModel.isEmptyTitleEntered = false
+                                }
+                            }
+                            debounceWorkItem = workItem
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: workItem)
+                        } label: {
+                            Text("완료")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 7)
+                                .padding(.horizontal, 15)
+                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                        )
+                        .opacity(viewModel.title.isEmpty ? 1 : 0)
+                        
+                        NavigationLink(destination: ArticleSettingView(mainTabViewModel: mainTabViewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
+                            Text("완료")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.black)
+                                .padding(.vertical, 7)
+                                .padding(.horizontal, 15)
+                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                        )
+                        .opacity(viewModel.title.isEmpty ? 0 : 1)
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
-                    )
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 6)
@@ -130,8 +155,22 @@ struct ArticleView: View {
                 )
                 Spacer()
             }
+            
+            if viewModel.isEmptyTitleEntered {
+                Text("제목을 입력해 주세요.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
         }
         .navigationBarBackButtonHidden()
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
     }
 }
 
