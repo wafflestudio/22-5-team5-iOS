@@ -11,7 +11,7 @@ import Kingfisher
 struct CommentCell: View {
     var comment: Comment
     let isChild: Bool
-    let rootCommentId: Int
+    let rootComment: Comment
     
     @Bindable var viewModel: CommentViewModel
     
@@ -77,7 +77,7 @@ struct CommentCell: View {
                         
                         Button(action: {
                             viewModel.updateIsTextFieldFocused()
-                            viewModel.setTargetCommentID(to: rootCommentId)
+                            viewModel.setTargetCommentID(to: rootComment)
                         }) {
                             Text("답글")
                                 .font(.system(size: 15, weight: .bold))
@@ -109,7 +109,7 @@ struct CommentCell: View {
             
             if !isChild {
                 ForEach(comment.children ?? []) { child in
-                    CommentCell(comment: child, isChild: true, rootCommentId: comment.id, viewModel: viewModel)
+                    CommentCell(comment: child, isChild: true, rootComment: comment, viewModel: viewModel)
                 }
             }
         }//VStack1

@@ -59,7 +59,7 @@ import Observation
     var writingCommentText: String = ""
     var isWritingCommentSecret: Bool = false
     var isTextFieldFocused: Bool = false
-    var targetCommentID: Int?
+    var targetComment: Comment?
     var isTargetToComment: Bool = false
     
     func setPostID(_ id: Int) {
@@ -74,13 +74,13 @@ import Observation
         writingCommentText = ""
     }
     
-    func setTargetCommentID(to id: Int) {
-        targetCommentID = id
+    func setTargetCommentID(to comment: Comment) {
+        targetComment = comment
         isTargetToComment = true
     }
     
     func resetTargetCommentID() {
-        targetCommentID = nil
+        targetComment = nil
         isTargetToComment = false
     }
     
@@ -95,7 +95,7 @@ import Observation
                 _ = try await NetworkRepository.shared.postComment(
                     postID: self.postID ?? 0,
                     content: writingCommentText,
-                    parentID: targetCommentID ?? nil,
+                    parentID: targetComment?.id ?? nil,
                     isSecret: self.isWritingCommentSecret
                 )
             } catch {

@@ -56,7 +56,7 @@ struct CommentView: View {
                     
                     // MARK: 댓글List
                     ForEach(viewModel.comments) { comment in
-                        CommentCell(comment: comment, isChild: false, rootCommentId: comment.id, viewModel: viewModel)
+                        CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
                     }
                 }
             }
@@ -86,7 +86,7 @@ struct CommentView: View {
                 
                 if viewModel.isTargetToComment {
                     HStack(spacing: 0) {
-                        Text("유저이름")
+                        Text(viewModel.targetComment!.userName)
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(Color.primaryLabelColor)
                         
@@ -146,6 +146,7 @@ struct CommentView: View {
                             Task {
                                 await viewModel.postComment()
                                 viewModel.resetPage()
+                                viewModel.resetTargetCommentID()
                                 viewModel.resetWritingCommentText()
                                 await viewModel.getComments()
                                 
