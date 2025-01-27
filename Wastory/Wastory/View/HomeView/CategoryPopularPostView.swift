@@ -43,11 +43,17 @@ struct CategoryPopularPostView: View {
             .zIndex(1)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.categoryPopularPostItems.prefix(2).enumerated()), id: \.offset) { index, item in
+                ForEach(Array(viewModel.categoryPopularPostItems.prefix(7).enumerated()), id: \.offset) { index, post in
                     if index < 2 {
-                        HomeBigPostListCell()
+                        HomeBigPostListCell(post: post)
                     } else {
-                        HomePostListCell(index: index)
+                        HomePostListCell(post: post)
+                    }
+                    
+                    if index == 6 || index == viewModel.categoryPopularPostItems.count - 1 {
+                        Divider()
+                            .foregroundStyle(Color.secondaryLabelColor)
+                            .padding(.horizontal, 20)
                     }
                 }
             }

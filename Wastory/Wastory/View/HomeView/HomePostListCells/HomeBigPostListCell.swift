@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeBigPostListCell: View {
+    let post: Post
     
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -26,8 +27,7 @@ struct HomeBigPostListCell: View {
                         .frame(height: 200)
                         .overlay {
                             ZStack {
-                                Image(systemName: "questionmark.text.page.fill")
-                                    .resizable()
+                                KFImageWithDefault(imageURL: post.mainImageUrl)
                                     .scaledToFill()
                                 
                                 Color.sheetOuterBackgroundColor
@@ -39,16 +39,15 @@ struct HomeBigPostListCell: View {
                         .foregroundStyle(Color.unreadNotification)
                         .padding(.horizontal, 20)
                         .overlay(
-                            contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
+                            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
                         )
                     
                     //블로그 정보 button
-                    contentViewModel.navigateToBlogViewButton(tempBlog().id) {
+                    contentViewModel.navigateToBlogViewButton(post.blogID) {
                         HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {
-                                Image(systemName: "questionmark.text.page.fill")
-                                    .resizable()
+                                KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                                     .scaledToFill()
                                     .clipShape(Circle())
                                 
@@ -58,7 +57,7 @@ struct HomeBigPostListCell: View {
                             .frame(width: 23, height: 23)
                             
                             // 블로그 이름 Text
-                            Text("블로그이름")
+                            Text(post.blogName ?? "")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.todaysWastoryTextColor)
                         }
@@ -72,14 +71,14 @@ struct HomeBigPostListCell: View {
                         .frame(height: 11)
                     
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목목제목제목제목제목제목제목제목")
+                        Text(post.title)
                             .font(.system(size: 17, weight: .medium))
                             .lineLimit(2)
                         
                         Spacer()
                             .frame(height: 9)
                         
-                        Text("내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용")
+                        Text(post.description ?? "")
                             .font(.system(size: 14, weight: .light))
                             .lineLimit(2)
                             .foregroundStyle(Color.secondaryLabelColor)
@@ -89,18 +88,18 @@ struct HomeBigPostListCell: View {
                         
                         HStack(alignment: .center, spacing: 3) {
                             Image(systemName: "heart")
-                            Text("50")
+                            Text("\(post.likeCount)")
                             
                             Spacer()
                                 .frame(width: 5)
                             
                             Image(systemName: "ellipsis.bubble")
-                            Text("5")
+                            Text("\(post.commentCount)")
                             
                             Spacer()
                                 .frame(width: 5)
                             
-                            Text("5분 전")
+                            Text(timeAgo(from: post.createdAt))
                             
                             Spacer()
                         }
@@ -116,13 +115,10 @@ struct HomeBigPostListCell: View {
                 }
                 .padding(.horizontal, 20)
                 .overlay(
-                    contentViewModel.navigateToPostViewButton(tempPost().id, tempBlog().id)
+                    contentViewModel.navigateToPostViewButton(post.id, post.blogID)
                     )
             } // VStack
         
     }
 }
 
-#Preview {
-    HomeBigPostListCell()
-}

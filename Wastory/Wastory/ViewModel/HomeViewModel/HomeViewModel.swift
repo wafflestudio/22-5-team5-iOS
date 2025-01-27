@@ -96,7 +96,7 @@ import Observation
     var categoryList: [HomeTopic] = []
     
     let categoryIcons : [Int: String] =
-    [1: "airplane.departure", 2: "sofa", 3: "person.2", 4: "cpu", 5: "chart.bar.xaxis", 6: "book", 7: "tv", 8: "figure.indoor.soccer"]
+    [2: "airplane.departure", 3: "sofa", 4: "person.2", 5: "cpu", 6: "chart.bar.xaxis", 7: "book", 8: "tv", 9: "figure.indoor.soccer"]
     
     var selectedCategory: HomeTopic = HomeTopic.defaultHomeTopic
     
@@ -128,7 +128,7 @@ import Observation
     
     func getHomeTopicList() async {
         do {
-            categoryList = Array(try await NetworkRepository.shared.getHomeTopicList()[1...9])
+            categoryList = Array(try await NetworkRepository.shared.getHomeTopicList()[1...8])
             selectedCategory = categoryList.first!
         } catch {
             print("Error: \(error.localizedDescription)")

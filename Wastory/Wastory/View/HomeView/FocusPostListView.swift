@@ -51,8 +51,9 @@ struct FocusPostListView: View {
                 .frame(height: 15)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.focusPostList1Items.enumerated()), id: \.offset) { index, item in
-                    HomePostListCell(index: index)
+                ForEach(Array(viewModel.focusPostList1Items.enumerated()), id: \.offset) { index, post in
+                    HomePostListCell(post: Post.defaultPost)
+                    //TODO: Divier 추가
                 }
             }
         }
@@ -102,7 +103,8 @@ struct FocusPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.focusPostList2Items.enumerated()), id: \.offset) { index, item in
-                    HomePostListCell(index: index)
+                    HomePostListCell(post: Post.defaultPost)
+                    //TODO: Divier 추가
                 }
             }
         }
