@@ -128,6 +128,7 @@ final class UserInfoRepository {
             self.addressName = response.addressName
             self.blogName = response.blogName
             self.blogID = response.id
+            self.blogMainImageURL = response.mainImageURL ?? ""
         } catch {
             print("Error: \(error.localizedDescription)")
         }
