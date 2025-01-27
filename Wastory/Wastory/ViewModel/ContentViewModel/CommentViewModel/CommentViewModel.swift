@@ -47,6 +47,7 @@ import Observation
     func resetPage() {
         page = 1
         isPageEnded = false
+        comments = []
     }
     
     //Network

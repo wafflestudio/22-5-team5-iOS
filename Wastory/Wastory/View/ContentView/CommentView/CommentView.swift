@@ -55,10 +55,25 @@ struct CommentView: View {
                     
                     
                     // MARK: 댓글List
-                    ForEach(viewModel.comments) { comment in
+                    ForEach(Array(viewModel.comments.enumerated()), id: \.offset) { index, comment in
                         CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
+                            .onAppear {
+                                if index == viewModel.comments.count - 1 {
+                                    Task {
+                                        await viewModel.getComments()
+                                    }
+                                }
+                            }
                     }
                 }
+            }
+        }
+        .refreshable {
+            viewModel.resetPage()
+            viewModel.resetTargetCommentID()
+            viewModel.resetWritingCommentText()
+            Task {
+                await viewModel.getComments()
             }
         }
         // MARK: NavBar
@@ -149,7 +164,6 @@ struct CommentView: View {
                                 viewModel.resetTargetCommentID()
                                 viewModel.resetWritingCommentText()
                                 await viewModel.getComments()
-                                
                             }
                         }) {
                             Text("등록")
