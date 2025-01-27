@@ -48,6 +48,9 @@ struct BlogPostListView: View {
                         }
                 }
             }
+            
+            Spacer()
+                .frame(height: 100)
         } //VStack
     }
 }

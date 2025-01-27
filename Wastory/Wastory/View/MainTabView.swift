@@ -60,7 +60,7 @@ struct MainTabView: View {
                     
                     
                     //MyBlogView로 추후 연결
-                    BlogView(blogID: UserInfoRepository.shared.getBlogID())
+                    BlogView(blogID: UserInfoRepository.shared.getBlogID(), isMainTab: true)
                         .tabItem {
                             Image(mainTabViewModel.selectedTab == TabType.myBlog ? "myW.edge" : "myW")
                         }

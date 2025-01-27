@@ -10,6 +10,7 @@ import SwiftUI
 struct BlogView: View {
     let blogID: Int
     var categoryID: Int = -1
+    var isMainTab: Bool = false
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -100,6 +101,8 @@ struct BlogView: View {
                                         .frame(height: sheetBottomSpace)
                                 }
                                 
+                                Spacer()
+                                    .frame(height: 100)
                             }
                             .frame(height: sheetHeight)
                             .background(Color.white)
@@ -140,6 +143,7 @@ struct BlogView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
+        .toolbarVisibility(isMainTab ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
