@@ -8,7 +8,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.waffleteam5.wastory</string>
+			<string>com.wafflestudio.Wastory</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wastory</string>
