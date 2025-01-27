@@ -14,7 +14,22 @@ struct BlogHeaderView: View {
     
     var body: some View {
         ZStack{
-            Color.loadingCoralRed// 임시 배경 TODO: Blog.mainImage의 대표 색을 추출해 그라데이션으로 표현
+            ZStack(alignment: .center) {
+                GeometryReader { geometry in
+                    VStack {
+                        KFImageWithDefault(imageURL: blog.mainImageURL)
+                            .scaledToFill()
+                            .frame(width: geometry.size.width + 40 ,height: geometry.size.height + 40)
+                            .blur(radius: 20)
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
+                }
+            }
+            
+            //Background Dimming
+            Color.sheetOuterBackgroundColor
+            
             
             VStack(alignment: .leading, spacing: 0) {
                 Spacer()

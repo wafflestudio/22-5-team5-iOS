@@ -150,8 +150,7 @@ struct PostView: View {
                         Spacer()
                         
                         contentViewModel.navigateToBlogViewButton(blogID) {
-                            Image(systemName: "questionmark.text.page.fill")
-                                .resizable()
+                            KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
                                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                                 .frame(width: 60, height: 60)
                                 .clipShape(
