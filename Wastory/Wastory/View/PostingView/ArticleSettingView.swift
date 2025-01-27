@@ -239,6 +239,8 @@ extension Color {
     static let postingImageTextGray: Color = .init(red: 201 / 255, green: 201 / 255, blue: 201 / 255)     // 대표 이미지 설정 문구 회색
 }
 
+/*
 #Preview {
     ArticleSettingView(viewModel: ArticleSettingViewModel(title: "???", text: NSAttributedString()))
 }
+*/

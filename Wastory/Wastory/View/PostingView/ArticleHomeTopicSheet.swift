@@ -79,7 +79,7 @@ struct ArticleHomeTopicSheet: View {
         VStack(spacing: 10) {
             HStack {
                 Text(highCategory.name)
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                 Spacer()
             }
             .padding(.horizontal, 20)
@@ -106,7 +106,7 @@ struct ArticleHomeTopicSheet: View {
         } label: {
             HStack {
                 Text(homeTopic.name)
-                    .font(.system(size: 17, weight: .light))
+                    .font(.system(size: 14, weight: .light))
                     .foregroundStyle(viewModel.isSelectedHomeTopic(homeTopic: homeTopic) ? Color.loadingCoralRed : .black)
                     .padding(.leading, 10)
                     .padding(.vertical, 10)
