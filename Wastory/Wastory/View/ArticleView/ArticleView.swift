@@ -18,9 +18,16 @@ struct ArticleView: View {
     @FocusState private var isTextFocused: Bool
     
     var body: some View {
-        VStack {
-            // MARK: Custom Navigation Bar
-            ZStack {
+        ZStack {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isTitleFocused = false
+                    isTextFocused = false
+                }
+            
+            VStack {
+                // MARK: Custom Navigation Bar
                 HStack(spacing: 12) {
                     Button {
                         mainTabViewModel.toggleIsArticleViewPresent()
@@ -34,6 +41,8 @@ struct ArticleView: View {
                     HStack(spacing: 0) {
                         Button {
                             // 임시 저장 기능
+                            isTitleFocused = false
+                            isTextFocused = false
                         } label: {
                             Text("저장")
                                 .font(.system(size: 14, weight: .regular))
@@ -47,6 +56,8 @@ struct ArticleView: View {
                             .foregroundStyle(Color.codeRequestButtonGray)
                         Button {
                             // 임시 저장한 글들을 불러 오는 기능
+                            isTitleFocused = false
+                            isTextFocused = false
                         } label: {
                             Text(viewModel.getTempPostCount())
                                 .font(.system(size: 14, weight: .regular))
@@ -63,6 +74,8 @@ struct ArticleView: View {
                     
                     Button {
                         // 발행으로 넘어가는 기능
+                        isTitleFocused = false
+                        isTextFocused = false
                     } label: {
                         Text("완료")
                             .font(.system(size: 14, weight: .regular))
@@ -75,48 +88,48 @@ struct ArticleView: View {
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
                 }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 6)
-            SettingDivider(thickness: 1)
-            Spacer()
-                .frame(height: 20)
-            
-            // MARK: Title TextField
-            TextField("제목", text: $viewModel.title)
-                .font(.system(size: 26, weight: .regular))
-                .foregroundStyle(Color.primaryLabelColor)
-                .focused($isTitleFocused)
-                .autocapitalization(.none)
-                .padding(.horizontal, 23)
-            
-            Spacer()
-                .frame(height: 10)
-            
-            // MARK: Contents TextField
-            ZStack(alignment: .topLeading) {
-                if viewModel.text.string.isEmpty {
-                    HStack {
-                        Text("내용을 입력해주세요.")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundStyle(Color.promptLabelColor)
-                            .padding(.horizontal, 26)
-                            .padding(.top, 9)
-                        Spacer()
+                .padding(.horizontal, 20)
+                .padding(.bottom, 6)
+                SettingDivider(thickness: 1)
+                Spacer()
+                    .frame(height: 20)
+                
+                // MARK: Title TextField
+                TextField("제목", text: $viewModel.title)
+                    .font(.system(size: 26, weight: .regular))
+                    .foregroundStyle(Color.primaryLabelColor)
+                    .focused($isTitleFocused)
+                    .autocapitalization(.none)
+                    .padding(.horizontal, 23)
+                
+                Spacer()
+                    .frame(height: 10)
+                
+                // MARK: Contents TextField
+                ZStack(alignment: .topLeading) {
+                    if viewModel.text.string.isEmpty {
+                        HStack {
+                            Text("내용을 입력해주세요.")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(Color.promptLabelColor)
+                                .padding(.horizontal, 26)
+                                .padding(.top, 9)
+                            Spacer()
+                        }
                     }
+                    RichTextEditor(text: $viewModel.text, context: viewModel.context)
+                        .focusedValue(\.richTextContext, viewModel.context)
+                        .focused($isTextFocused)
+                        .padding(.horizontal, 18)
                 }
-                RichTextEditor(text: $viewModel.text, context: viewModel.context)
-                    .focusedValue(\.richTextContext, viewModel.context)
-                    .focused($isTextFocused)
-                    .padding(.horizontal, 18)
+                RichTextKeyboardToolbar(
+                    context: viewModel.context,
+                    leadingButtons: { _ in },
+                    trailingButtons: { _ in },
+                    formatSheet: { $0 }
+                )
+                Spacer()
             }
-            RichTextKeyboardToolbar(
-                context: viewModel.context,
-                leadingButtons: { _ in },
-                trailingButtons: { _ in },
-                formatSheet: { $0 }
-            )
-            Spacer()
         }
         .navigationBarBackButtonHidden()
     }
