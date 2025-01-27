@@ -74,7 +74,7 @@ struct BlogView: View {
                     if viewModel.isCategorySheetPresent {
                         let sheetTopSpace: CGFloat = 30
                         let sheetRowHeight: CGFloat = 60
-                        let sheetBottomSpace: CGFloat = 30
+                        let sheetBottomSpace: CGFloat = 30 + (isMainTab ? 100 : 0)
                         let sheetTitleHeight: CGFloat = 50
                         let sheetHeight: CGFloat = UIScreen.main.bounds.height * 0.6
                         
@@ -101,8 +101,6 @@ struct BlogView: View {
                                         .frame(height: sheetBottomSpace)
                                 }
                                 
-                                Spacer()
-                                    .frame(height: 100)
                             }
                             .frame(height: sheetHeight)
                             .background(Color.white)
