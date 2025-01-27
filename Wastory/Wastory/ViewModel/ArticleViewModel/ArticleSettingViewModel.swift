@@ -122,12 +122,11 @@ import RichTextKit
     }
     
     func postArticle() async {
-        let htmlText = textToHTML(text)
-        if htmlText != nil {
+        if let htmlText = textToHTML(text) {
             do {
                 try await NetworkRepository.shared.postArticle(
                     title: title,
-                    content: htmlText ?? "",
+                    content: htmlText,
                     description: String(text.string.prefix(20)),
                     main_image_url: mainImageURL ?? "",
                     categoryID: category.id,
