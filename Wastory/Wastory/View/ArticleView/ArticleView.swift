@@ -61,7 +61,7 @@ struct ArticleView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
-                    mainTabViewModel.toggleIsPostingViewPresent()
+                    mainTabViewModel.toggleIsArticleViewPresent()
                 }) {
                     Image(systemName: "xmark")
                     .font(.system(size: 20, weight: .light))

@@ -33,7 +33,7 @@ struct ArticleSettingView: View {
                             Task {
                                 await viewModel.postArticle()
                             }
-                            mainTabViewModel.toggleIsPostingViewPresent()
+                            mainTabViewModel.toggleIsArticleViewPresent()
                         } label: {
                             Text("발행")
                                 .font(.system(size: 14, weight: .regular))

@@ -13,7 +13,7 @@ import Observation
     
     var isBlogSheetPresent: Bool = false
     
-    var isPostingViewPresent: Bool = false
+    var isArticleViewPresent: Bool = false
     
     var isNotificationTypeSheetPresent: Bool = false
 
@@ -41,9 +41,9 @@ import Observation
     }
     
     //MARK: isPostingViewPresent
-    func toggleIsPostingViewPresent() {
+    func toggleIsArticleViewPresent() {
         withAnimation(.easeInOut) {
-            isPostingViewPresent.toggle()
+            isArticleViewPresent.toggle()
         }
     }
 }

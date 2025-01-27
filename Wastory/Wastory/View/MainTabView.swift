@@ -44,9 +44,9 @@ struct MainTabView: View {
                             Image("article")
                         }
                         .tag(TabType.write)
-                        .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
+                        .fullScreenCover(isPresented: $mainTabViewModel.isArticleViewPresent) {
                             NavigationStack {
-                                // MARK: PostingView
+                                // MARK: ArticleView
                                 ArticleView(mainTabViewModel: mainTabViewModel)
                             }
                         }
@@ -70,7 +70,7 @@ struct MainTabView: View {
                 .background(Color.white)
                 .onChange(of: mainTabViewModel.selectedTab) { oldValue, newValue in
                     if newValue == .write {
-                        mainTabViewModel.toggleIsPostingViewPresent()
+                        mainTabViewModel.toggleIsArticleViewPresent()
                         mainTabViewModel.setSelectedTab(to: oldValue)
                     }
                 }
