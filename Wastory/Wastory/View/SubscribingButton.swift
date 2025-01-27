@@ -12,7 +12,8 @@ struct SubscribingButton<Content: View>: View {
     let blogAddress: String
     let subscribedContent: Content
     let notSubscribedContent: Content
-    @State var isSubscribed: Bool = false
+    @State private var didAppear: Bool = false
+    @State private var isSubscribed: Bool = false
 
     init(blogID: Int, blogAddress: String, @ViewBuilder subscribedContent: () -> Content, @ViewBuilder notSubscribedContent: () -> Content) {
         self.blogID = blogID
@@ -50,12 +51,15 @@ struct SubscribingButton<Content: View>: View {
             }
         }
         .onAppear {
-            Task {
-                do {
-                    isSubscribed = try await NetworkRepository.shared.getIsSubscribing(BlogID: blogID)
-                } catch {
-                    print("getissubbed")
-                    print("Error: \(error.localizedDescription)")
+            if !didAppear {
+                Task {
+                    do {
+                        isSubscribed = try await NetworkRepository.shared.getIsSubscribing(BlogID: blogID)
+                        didAppear = true
+                    } catch {
+                        print("getissubbed")
+                        print("Error: \(error.localizedDescription)")
+                    }
                 }
             }
         }

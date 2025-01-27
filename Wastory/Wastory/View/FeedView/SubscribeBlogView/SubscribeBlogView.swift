@@ -55,14 +55,32 @@ struct SubscribeBlogView: View {
                     
                     
                     // MARK: BlogList
-                    ForEach(viewModel.blogs) { blog in
-                        BasicBlogCell(blog: blog)
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(viewModel.blogs.enumerated()), id: \.offset) { index, blog in
+                            BasicBlogCell(blog: blog)
+                                .onAppear {
+                                    if index == viewModel.blogs.count - 1 {
+                                        Task {
+                                            await viewModel.getBlogs()
+                                        }
+                                    }
+                                }
+                        }
                     }
                 }
             }
         }
         .onAppear {
             viewModel.initSubscribeType(subscribeType)
+            Task {
+                await viewModel.getBlogs()
+            }
+        }
+        .refreshable {
+            viewModel.resetPage()
+            Task {
+                await viewModel.getBlogs()
+            }
         }
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : (viewModel.isSubscribing() ? "구독중" : "구독자"))

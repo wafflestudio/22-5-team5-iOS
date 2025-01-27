@@ -57,15 +57,45 @@ import Observation
     
     func resetPage() {
         page = 1
+        blogs = []
+        isPageEnded = false
     }
     
     //Network
-    var blogs: [Blog] = [
-        Blog(id: 1, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1),
-        Blog(id: 2, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1),
-        Blog(id: 3, blogName: "1번 블로그", addressName: "random", description: "블로그설명 주룩주룩", userID: 1)
-    ]
+    var blogs: [Blog] = []
     
     var totalCount: Int?
+    
+    
+    func getBlogs() async {
+        if !isPageEnded {
+            do {
+                var response = BlogListDto.defaultBlogListDto
+                if subscribeType == .subscribing {
+                    response = try await NetworkRepository.shared.getSubscribingBlogs(page: page)
+                } else {
+                    response = try await NetworkRepository.shared.getSubscriberBlogs(page: page)
+                }
+                
+                //blogs 저장
+                if self.page == 1 {
+                    blogs = response.blogs
+                } else {
+                    blogs.append(contentsOf: response.blogs)
+                }
+                
+                totalCount = response.totalCount
+                
+                //pagination
+                if !response.blogs.isEmpty {
+                    self.page += 1
+                } else {
+                    self.isPageEnded = true
+                }
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
 }
 
