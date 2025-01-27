@@ -146,7 +146,9 @@ struct CommentView: View {
                             Task {
                                 await viewModel.postComment()
                                 viewModel.resetPage()
+                                viewModel.resetWritingCommentText()
                                 await viewModel.getComments()
+                                
                             }
                         }) {
                             Text("등록")

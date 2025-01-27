@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CommentCell: View {
     var comment: Comment
@@ -33,12 +34,22 @@ struct CommentCell: View {
                 
                 
                 
-                contentViewModel.navigateToBlogViewButton(tempBlog().id) {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
-                        .scaledToFill()
-                        .clipShape(Circle())
-                        .frame(width: 40, height: 40)
+                contentViewModel.navigateToBlogViewButton(comment.blogID) {
+                    VStack(spacing: 0) {
+                        if comment.blogMainImageURL ?? "" == "" {
+                            Image("defaultImage")
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        } else {
+                            KFImage(URL(string: comment.blogMainImageURL!))
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -47,7 +58,7 @@ struct CommentCell: View {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 5) {
                         contentViewModel.navigateToBlogViewButton(tempBlog().id) {
-                            Text("유저 이름")
+                            Text(comment.userName)
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)
                         }

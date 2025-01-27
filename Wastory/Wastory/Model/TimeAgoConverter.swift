@@ -8,7 +8,7 @@
 import Foundation
 
 func timeAgo(from date: Date) -> String {
-    let secondsAgo = Int(Date().timeIntervalSince(date)) - (60 * 60 * 9)
+    let secondsAgo = Int(Date().timeIntervalSince(date))// - (60 * 60 * 9)
     
     switch secondsAgo {
     case 0..<60:

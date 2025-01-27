@@ -70,6 +70,10 @@ import Observation
         writingCommentText.isEmpty
     }
     
+    func resetWritingCommentText() {
+        writingCommentText = ""
+    }
+    
     func setTargetCommentID(to id: Int) {
         targetCommentID = id
         isTargetToComment = true
