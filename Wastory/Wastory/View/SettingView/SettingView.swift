@@ -148,7 +148,7 @@ struct SettingView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                CustomBackButtonLight()
+                CustomBackButton(weight: .regular)
             }
         }
     }

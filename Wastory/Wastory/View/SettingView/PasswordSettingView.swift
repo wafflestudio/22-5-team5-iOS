@@ -253,7 +253,7 @@ struct PasswordSettingView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                CustomBackButtonLight()
+                CustomBackButton(weight: .regular)
             }
         }
         .alert(item: $viewModel.activeAlert) { alertType in

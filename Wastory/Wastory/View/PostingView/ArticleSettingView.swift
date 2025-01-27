@@ -24,7 +24,7 @@ struct ArticleSettingView: View {
                 // MARK: Custom Navigation Bar
                 ZStack {
                     HStack {
-                        CustomBackButton(size: 24, font: .light)
+                        CustomBackButton(size: 24, weight: .light)
                         Spacer()
                         Button {
                             // TODO: 발행하고 발행한 아티클로 넘어가는 기능
