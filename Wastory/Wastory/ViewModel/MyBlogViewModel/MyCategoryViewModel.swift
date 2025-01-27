@@ -8,6 +8,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class MyCategoryViewModel {
     private var isNavTitleHidden: Bool = true
     

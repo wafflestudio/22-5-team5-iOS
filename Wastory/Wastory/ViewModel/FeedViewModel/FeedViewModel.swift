@@ -76,6 +76,8 @@ import Observation
     //Network
     var posts: [Post] = []
     
+    var subscriberCount: Int = 0
+    var subscribingCount: Int = 0
     
     func getPosts() async {
         do {
@@ -93,6 +95,15 @@ import Observation
             } else {
                 self.isPageEnded = true
             }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getSubscriptionCounts() async {
+        do {
+            subscriberCount = try await NetworkRepository.shared.getMySubscriberBlogs(page: 1).totalCount
+            subscribingCount = try await NetworkRepository.shared.getMySubscribingBlogs(page: 1).totalCount
         } catch {
             print("Error: \(error.localizedDescription)")
         }

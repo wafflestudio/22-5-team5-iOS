@@ -9,6 +9,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class CommentViewModel {
     private var isNavTitleHidden: Bool = true
     

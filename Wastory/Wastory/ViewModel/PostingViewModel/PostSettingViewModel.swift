@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 import RichTextKit
 
+@MainActor
 @Observable final class PostSettingViewModel {
     private let title: String
     private let text: NSAttributedString

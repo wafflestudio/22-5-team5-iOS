@@ -9,6 +9,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class SubscribeBlogViewModel {
     private var isNavTitleHidden: Bool = true
     
@@ -72,9 +73,9 @@ import Observation
             do {
                 var response = BlogListDto.defaultBlogListDto
                 if subscribeType == .subscribing {
-                    response = try await NetworkRepository.shared.getSubscribingBlogs(page: page)
+                    response = try await NetworkRepository.shared.getMySubscribingBlogs(page: page)
                 } else {
-                    response = try await NetworkRepository.shared.getSubscriberBlogs(page: page)
+                    response = try await NetworkRepository.shared.getMySubscriberBlogs(page: page)
                 }
                 
                 //blogs 저장

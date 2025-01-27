@@ -183,9 +183,9 @@ import Observation
     
     func getSubscriptionCounts() async {
         do {
-            subscriberCount = try await NetworkRepository.shared.getSubscriberBlogs(page: 1).totalCount
+            subscriberCount = try await NetworkRepository.shared.getSubscriberBlogs(blogID: blog.id, page: 1).totalCount
             if isMyBlog {
-                subscribingCount = try await NetworkRepository.shared.getSubscribingBlogs(page: 1).totalCount
+                subscribingCount = try await NetworkRepository.shared.getMySubscribingBlogs(page: 1).totalCount
             }
         } catch {
             print("Error: \(error.localizedDescription)")

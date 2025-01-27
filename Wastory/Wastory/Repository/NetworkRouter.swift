@@ -54,6 +54,8 @@ enum NetworkRouter {
     // MARK: Subscription
     case postSubscription
     case deleteSubscription
+    case getMySubscribingBlogs(page: Int)
+    case getMySubscriberBlogs(page: Int)
     case getSubscribingBlogs(page: Int)
     case getSubscriberBlogs(page: Int)
     case getIsSubscribing
@@ -123,8 +125,10 @@ enum NetworkRouter {
         // MARK: Subscription
         case .postSubscription: "/subscription"
         case .deleteSubscription: "/subscription"
-        case let .getSubscribingBlogs(page): "/subscription/my_subscriptions/\(page)"
-        case let .getSubscriberBlogs(page): "/subscription/my_subscribers/\(page)"
+        case let .getMySubscribingBlogs(page): "/subscription/my_subscriptions/\(page)"
+        case let .getMySubscriberBlogs(page): "/subscription/my_subscribers/\(page)"
+        case let .getSubscribingBlogs(page): "/subscription/subscriptions/\(page)"
+        case let .getSubscriberBlogs(page): "/subscription/subscribers/\(page)"
         case .getIsSubscribing: "/subscription/is_subscribing"
             
         //MARK: Like
@@ -223,6 +227,10 @@ enum NetworkRouter {
             return .post
         case .deleteSubscription:
             return .delete
+        case .getMySubscribingBlogs:
+            return .get
+        case .getMySubscriberBlogs:
+            return .get
         case .getSubscribingBlogs:
             return .get
         case .getSubscriberBlogs:
@@ -332,6 +340,10 @@ enum NetworkRouter {
         case .postSubscription:
             return ["Content-Type": "application/json"]
         case .deleteSubscription:
+            return ["Content-Type": "application/json"]
+        case .getMySubscribingBlogs:
+            return ["Content-Type": "application/json"]
+        case .getMySubscriberBlogs:
             return ["Content-Type": "application/json"]
         case .getSubscribingBlogs:
             return ["Content-Type": "application/json"]

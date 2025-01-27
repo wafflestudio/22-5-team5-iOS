@@ -709,11 +709,11 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
-    func getSubscribingBlogs(page: Int) async throws -> BlogListDto {
+    func getMySubscribingBlogs(page: Int) async throws -> BlogListDto {
         let urlRequest = try URLRequest(
-            url:     NetworkRouter.getSubscribingBlogs(page:  page).url,
-            method:  NetworkRouter.getSubscribingBlogs(page:  page).method,
-            headers: NetworkRouter.getSubscribingBlogs(page:  page).headers
+            url:     NetworkRouter.getMySubscribingBlogs(page:  page).url,
+            method:  NetworkRouter.getMySubscribingBlogs(page:  page).method,
+            headers: NetworkRouter.getMySubscribingBlogs(page:  page).headers
         )
         
         logRequest(urlRequest)
@@ -730,12 +730,70 @@ extension NetworkRepository {
         return response
     }
     
-    func getSubscriberBlogs(page: Int) async throws -> BlogListDto {
+    func getMySubscriberBlogs(page: Int) async throws -> BlogListDto {
         let urlRequest = try URLRequest(
-            url:     NetworkRouter.getSubscriberBlogs(page:  page).url,
-            method:  NetworkRouter.getSubscriberBlogs(page:  page).method,
-            headers: NetworkRouter.getSubscriberBlogs(page:  page).headers
+            url:     NetworkRouter.getMySubscriberBlogs(page: page).url,
+            method:  NetworkRouter.getMySubscriberBlogs(page: page).method,
+            headers: NetworkRouter.getMySubscriberBlogs(page: page).headers
         )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getSubscribingBlogs(blogID: Int, page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscribingBlogs(page: page).url,
+            method:  NetworkRouter.getSubscribingBlogs(page: page).method,
+            headers: NetworkRouter.getSubscribingBlogs(page: page).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "blog_id", value: "\(blogID)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getSubscriberBlogs(blogID: Int, page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getSubscriberBlogs(page: page).url,
+            method:  NetworkRouter.getSubscriberBlogs(page: page).method,
+            headers: NetworkRouter.getSubscriberBlogs(page: page).headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "blog_id", value: "\(blogID)")
+            ]
+            urlRequest.url = components?.url
+        }
         
         logRequest(urlRequest)
         
