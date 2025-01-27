@@ -60,7 +60,7 @@ struct ArticleView: View {
                             isTitleFocused = false
                             isTextFocused = false
                         } label: {
-                            Text(viewModel.getTempPostCount())
+                            Text(viewModel.getDraftsCount())
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(.black)
                                 .padding(.vertical, 7)
