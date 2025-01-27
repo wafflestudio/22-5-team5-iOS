@@ -107,6 +107,7 @@ struct FeedView: View {
         }
         //MARK: Network
         .onAppear {
+            viewModel.resetPage()
             Task {
                 await viewModel.getPosts()
             }
