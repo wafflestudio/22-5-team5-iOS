@@ -29,10 +29,11 @@ enum NetworkRouter {
     
     // MARK: Category
     case postCategory
-    case getCategoriesInBlog(blogID: Int)
+    case getCategory(categoryID: Int)
     case patchCategory(categoryID: Int)
     case deleteCategory(categoryID: Int)
-    case getCategory(categoryID: Int)
+    case getCategoriesInUser
+    case getCategoriesInBlog(blogID: Int)
     
     // MARK: Article
     case postArticle
@@ -98,10 +99,11 @@ enum NetworkRouter {
             
         // MARK: Category
         case .postCategory: "/categories/create"
-        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
+        case let .getCategory(categoryID): "/categories/\(categoryID)"
         case let .patchCategory(categoryID): "/categories/\(categoryID)"
         case let .deleteCategory(categoryID): "/categories/\(categoryID)"
-        case let .getCategory(categoryID): "/categories/\(categoryID)"
+        case .getCategoriesInUser: "/categories/list/"
+        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -179,13 +181,15 @@ enum NetworkRouter {
         // MARK: Category
         case .postCategory:
             return .post
-        case .getCategoriesInBlog:
+        case .getCategory:
             return .get
         case .patchCategory:
             return .patch
         case .deleteCategory:
             return .delete
-        case .getCategory:
+        case .getCategoriesInUser:
+            return .get
+        case .getCategoriesInBlog:
             return .get
         
         // MARK: Article
@@ -289,13 +293,15 @@ enum NetworkRouter {
         // MARK: Category
         case .postCategory:
             return ["Content-Type": "application/json"]
-        case .getCategoriesInBlog:
+        case .getCategory:
             return ["Content-Type": "application/json"]
         case .patchCategory:
             return ["Content-Type": "application/json"]
         case .deleteCategory:
             return ["Content-Type": "application/json"]
-        case .getCategory:
+        case .getCategoriesInUser:
+            return ["Content-Type": "application/json"]
+        case .getCategoriesInBlog:
             return ["Content-Type": "application/json"]
         
         // MARK: Article

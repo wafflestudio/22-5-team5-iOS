@@ -255,6 +255,28 @@ final class NetworkRepository {
         return response
     }
     
+    // MARK: - Category
+    func getCategoriesInUser() async throws -> [Category] {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getCategoriesInUser.url,
+            method: NetworkRouter.getCategoriesInUser.method,
+            headers: NetworkRouter.getCategoriesInUser.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(CategoryListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.categories
+    }
+    
     // MARK: - Article
     func postArticle(title: String, content: String, description: String, categoryID: Int) async throws {
         let requestBody = [
