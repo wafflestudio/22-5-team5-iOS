@@ -14,7 +14,7 @@ struct BlogPopularPostGridCell: View {
     @Environment(\.postViewModel) var viewModel
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             GeometryReader { geometry in
                 Color.clear
                     .onAppear() {
@@ -36,6 +36,8 @@ struct BlogPopularPostGridCell: View {
                 .font(.system(size: 18, weight: .light))
                 .foregroundStyle(Color.primaryLabelColor)
                 .lineLimit(2)
+            
+            Spacer()
         } //VStack
         .padding(.vertical, 10)
         

@@ -164,10 +164,13 @@ struct PostView: View {
                     .padding(.bottom, 30)
                     .background(Color.blogDetailBackgroundColor)
                     
+                    if !viewModel.categoryBlogPosts.isEmpty {
+                        CategoryPostListView()
+                    }
                     
-                    CategoryPostListView()
-                    
-                    BlogPopularPostGridView()
+                    if !viewModel.popularBlogPosts.isEmpty {
+                        BlogPopularPostGridView()
+                    }
                     
                     VStack(spacing: 10) {
                         HStack {
