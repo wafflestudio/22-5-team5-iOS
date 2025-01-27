@@ -25,7 +25,7 @@ struct PostSettingView: View {
                 .frame(height: 30)
             HStack(alignment: .top) {
                 Text(viewModel.getTitle())
-                    .font(.system(size: 16))
+                    .font(.system(size: 17, weight: .light))
                     .padding(.top, 10)
                 Spacer()
                 Button {
@@ -209,7 +209,7 @@ struct PostSettingView: View {
                 }
                 .background(.black)
                 .cornerRadius(40)
-                .padding(.trailing, 20)
+                .padding(.trailing, 10)
             }
         }
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {

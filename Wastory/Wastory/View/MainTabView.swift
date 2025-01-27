@@ -46,7 +46,7 @@ struct MainTabView: View {
                         .tag(TabType.write)
                         .fullScreenCover(isPresented: $mainTabViewModel.isPostingViewPresent) {
                             NavigationStack {
-                                //MARK: PostingView
+                                // MARK: PostingView
                                 PostingView(mainTabViewModel: mainTabViewModel)
                             }
                         }

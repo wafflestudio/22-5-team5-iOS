@@ -25,7 +25,7 @@ struct PostingView: View {
                 .focused($isTitleFocused)
                 .autocapitalization(.none)
                 .padding(.top, 20)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 23)
             
             Spacer()
                 .frame(height: 10)
@@ -115,7 +115,7 @@ struct PostingView: View {
                         RoundedRectangle(cornerRadius: 40)
                             .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                     )
-                    .padding(.trailing, 20)
+                    .padding(.trailing, 10)
                 }
             }
         }
