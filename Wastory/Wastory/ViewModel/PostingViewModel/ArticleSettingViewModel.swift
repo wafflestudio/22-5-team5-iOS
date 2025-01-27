@@ -15,6 +15,7 @@ import RichTextKit
     
     var mainImage: UIImage? = nil
     var isImagePickerPresented: Bool = false
+    var mainImageURL: String? = nil
     
     var category: Category = Category.allCategory
     var isCategorySheetPresent: Bool = false
@@ -104,7 +105,42 @@ import RichTextKit
     }
     
     // MARK: - Posting
+    func textToHTML(_ text: NSAttributedString) -> String? {
+        do {
+            let htmlData = try text.data(
+                from: NSRange(location: 0, length: text.length),
+                documentAttributes: [.documentType: NSAttributedString.DocumentType.html]
+            )
+            if let htmlString = String(data: htmlData, encoding: .utf8) {
+                return htmlString
+            }
+        }
+        catch {
+            print("Error convertnig Rich Text to HTML: \(error)")
+        }
+        return nil
+    }
     
+    func postArticle() async {
+        let htmlText = textToHTML(text)
+        if htmlText != nil {
+            do {
+                try await NetworkRepository.shared.postArticle(
+                    title: title,
+                    content: htmlText ?? "",
+                    description: String(text.string.prefix(20)),
+                    main_image_url: mainImageURL ?? "",
+                    categoryID: category.id,
+                    homeTopicID: homeTopic.id,
+                    secret: 0
+                )
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
     // MARK: - Title & Image
     func getTitle() -> String {
         return title
@@ -112,6 +148,16 @@ import RichTextKit
     
     func toggleImagePickerPresented() {
         isImagePickerPresented.toggle()
+    }
+    
+    func postImage() async {
+        do {
+            if let _ = mainImage {
+                mainImageURL = try await NetworkRepository.shared.postImage(mainImage!)
+            }
+        } catch {
+            print("Error uploading image: \(error.localizedDescription)")
+        }
     }
     
     // MARK: - Category

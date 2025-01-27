@@ -29,6 +29,9 @@ struct ArticleSettingView: View {
                         Spacer()
                         Button {
                             // TODO: 발행하고 발행한 아티클로 넘어가는 기능
+                            Task {
+                                await viewModel.postArticle()
+                            }
                         } label: {
                             Text("발행")
                                 .font(.system(size: 14, weight: .regular))

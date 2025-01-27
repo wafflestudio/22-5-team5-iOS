@@ -73,9 +73,6 @@ struct ArticleView: View {
                     HStack(spacing: 0) {
                         Button {
                             // 임시 저장 기능
-                            Task {
-                                await viewModel.postArticle()
-                            }
                         } label: {
                             Text("저장")
                                 .font(.system(size: 14, weight: .regular))

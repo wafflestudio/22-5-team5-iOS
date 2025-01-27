@@ -278,12 +278,15 @@ final class NetworkRepository {
     }
     
     // MARK: - Article
-    func postArticle(title: String, content: String, description: String, categoryID: Int) async throws {
+    func postArticle(title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int) async throws {
         let requestBody = [
             "title": title,
             "content": content,
             "description": description,
-            "category_id": "\(categoryID)"
+            "main_image_url": main_image_url,
+            "category_id": "\(categoryID)",
+            "homeTopic_id": "\(homeTopicID)",
+            "secret": "\(secret)"
         ]
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
@@ -294,7 +297,6 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
-        // 응답 데이터 확인
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()

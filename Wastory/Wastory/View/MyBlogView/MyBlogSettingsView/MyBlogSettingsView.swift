@@ -191,7 +191,7 @@ struct MyBlogSettingsView: View {
         .onAppear {
             Task {
                 await viewModel.getInitialData()
-                await viewModel.deletePreviousImage() //MARK: 나중에 지워야함 디버깅용
+                //await viewModel.deletePreviousImage() //MARK: 나중에 지워야함 디버깅용
             }
         }
         // MARK: NavBar
