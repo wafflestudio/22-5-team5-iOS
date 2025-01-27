@@ -710,7 +710,7 @@ extension NetworkRepository {
     }
     
     func getSubscribingBlogs(page: Int) async throws -> BlogListDto {
-        var urlRequest = try URLRequest(
+        let urlRequest = try URLRequest(
             url:     NetworkRouter.getSubscribingBlogs(page:  page).url,
             method:  NetworkRouter.getSubscribingBlogs(page:  page).method,
             headers: NetworkRouter.getSubscribingBlogs(page:  page).headers
@@ -731,7 +731,7 @@ extension NetworkRepository {
     }
     
     func getSubscriberBlogs(page: Int) async throws -> BlogListDto {
-        var urlRequest = try URLRequest(
+        let urlRequest = try URLRequest(
             url:     NetworkRouter.getSubscriberBlogs(page:  page).url,
             method:  NetworkRouter.getSubscriberBlogs(page:  page).method,
             headers: NetworkRouter.getSubscriberBlogs(page:  page).headers
@@ -757,6 +757,14 @@ extension NetworkRepository {
             method:  NetworkRouter.getIsSubscribing.method,
             headers: NetworkRouter.getIsSubscribing.headers
         )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "subscribed_id", value: "\(BlogID)")
+            ]
+            urlRequest.url = components?.url
+        }
         
         logRequest(urlRequest)
         

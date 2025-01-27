@@ -24,14 +24,22 @@ struct SubscribingButton<Content: View>: View {
     var body: some View {
         Button(action: {
             if isSubscribed {
-                Task {
-                    try await NetworkRepository.shared.deleteSubscription(blogAddress: blogAddress)
-                    isSubscribed.toggle()
+                Task{
+                    do {
+                        try await NetworkRepository.shared.deleteSubscription(blogAddress: blogAddress)
+                        isSubscribed = false
+                    } catch {
+                        print("Error: \(error.localizedDescription)")
+                    }
                 }
             } else {
                 Task {
-                    try await NetworkRepository.shared.postSubscription(blogID: blogID)
-                    isSubscribed.toggle()
+                    do {
+                        try await NetworkRepository.shared.postSubscription(blogID: blogID)
+                        isSubscribed = true
+                    } catch {
+                        print("Error: \(error.localizedDescription)")
+                    }
                 }
             }
         }) {
@@ -43,7 +51,12 @@ struct SubscribingButton<Content: View>: View {
         }
         .onAppear {
             Task {
-                isSubscribed = try await NetworkRepository.shared.getIsSubscribing(BlogID: blogID)
+                do {
+                    isSubscribed = try await NetworkRepository.shared.getIsSubscribing(BlogID: blogID)
+                } catch {
+                    print("getissubbed")
+                    print("Error: \(error.localizedDescription)")
+                }
             }
         }
     }

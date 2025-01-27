@@ -92,6 +92,11 @@ import Observation
     var blogPosts: [Post] = []
     
     
+    var subscriberCount: Int = 0
+    
+    var subscribingCount: Int = 0
+    
+    
     func initBlog(_ blogID: Int) async {
         if blogID == UserInfoRepository.shared.getBlogID() {
             isMyBlog = true
@@ -171,6 +176,17 @@ import Observation
         do {
             categories = [Category.allCategory]
             categories += try await NetworkRepository.shared.getCategoriesInBlog(blogID: blog.id)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getSubscriptionCounts() async {
+        do {
+            subscriberCount = try await NetworkRepository.shared.getSubscriberBlogs(page: 1).totalCount
+            if isMyBlog {
+                subscribingCount = try await NetworkRepository.shared.getSubscribingBlogs(page: 1).totalCount
+            }
         } catch {
             print("Error: \(error.localizedDescription)")
         }
