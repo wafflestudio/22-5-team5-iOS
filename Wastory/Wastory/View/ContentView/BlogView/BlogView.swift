@@ -162,9 +162,9 @@ struct BlogView: View {
                     
                     Button(action: {
                         //차단하기 신고하기 sheet present
+                        //if myBlog -> blogSheet present
                     }) {
-                        Image(systemName: "questionmark.text.page.fill")
-                            .resizable()
+                        KFImageWithDefaultIcon(imageURL: viewModel.blog.mainImageURL)
                             .scaledToFill()
                             .clipShape(Circle())
                             .frame(width: 30, height: 30)

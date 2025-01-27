@@ -217,8 +217,7 @@ struct PostView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 contentViewModel.navigateToBlogViewButton(blogID) {
-                    Image(systemName: "questionmark.text.page.fill")
-                        .resizable()
+                    KFImageWithDefaultIcon(imageURL: viewModel.blog.mainImageURL)
                         .scaledToFill()
                         .clipShape(Circle())
                         .frame(width: 30, height: 30)
