@@ -9,6 +9,7 @@
 import SwiftUI
 import RichTextKit
 
+@MainActor
 struct ArticleView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
     @State private var viewModel = ArticleViewModel()

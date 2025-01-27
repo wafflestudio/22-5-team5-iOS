@@ -11,6 +11,7 @@ import PhotosUI
 
 import Foundation
 
+@MainActor
 struct ArticleSettingView: View {
     @State private var viewModel: ArticleSettingViewModel
 
