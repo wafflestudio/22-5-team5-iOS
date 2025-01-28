@@ -9,6 +9,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class HomeViewModel {
     //NavBar Controller
     private var isScrolled: Bool = false
