@@ -12,7 +12,7 @@ struct PostView: View {
     let blogID: Int
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     
     var body: some View {
@@ -38,7 +38,7 @@ struct PostView: View {
                             .frame(height: 100)
                         
                         // MARK: 카테고리 버튼
-                        contentViewModel.navigateToBlogViewButton(blogID, viewModel.post.categoryID) {
+                        NavigateToBlogViewButton(blogID, viewModel.post.categoryID) {
                             Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
@@ -111,7 +111,7 @@ struct PostView: View {
                     //Blog 세부설명 및 구독버튼
                     HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
-                            contentViewModel.navigateToBlogViewButton(blogID) {
+                            NavigateToBlogViewButton(blogID) {
                                 Text(viewModel.blog.blogName)
                                     .font(.system(size: 18, weight: .light))
                                     .foregroundStyle(Color.primaryLabelColor)
@@ -122,7 +122,7 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 5)
                             
-                            contentViewModel.navigateToBlogViewButton(blogID) {
+                            NavigateToBlogViewButton(blogID) {
                                 Text(viewModel.blog.description)
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
@@ -174,7 +174,7 @@ struct PostView: View {
                         
                         Spacer()
                         
-                        contentViewModel.navigateToBlogViewButton(blogID) {
+                        NavigateToBlogViewButton(blogID) {
                             KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
                                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                                 .frame(width: 60, height: 60)
@@ -189,11 +189,11 @@ struct PostView: View {
                     .background(Color.blogDetailBackgroundColor)
                     
                     if !viewModel.categoryBlogPosts.isEmpty {
-                        CategoryPostListView()
+                        CategoryPostListView(viewModel: viewModel)
                     }
                     
                     if !viewModel.popularBlogPosts.isEmpty {
-                        BlogPopularPostGridView()
+                        BlogPopularPostGridView(viewModel: viewModel)
                     }
                     
                     VStack(spacing: 10) {
@@ -217,7 +217,6 @@ struct PostView: View {
             }// ScrollView
             .background(Color.backgourndSpaceColor)
         }// VStack
-        .environment(\.postViewModel, viewModel)
         //MARK: Networking
         .onAppear {
             Task {
@@ -240,7 +239,7 @@ struct PostView: View {
         .toolbarVisibility(viewModel.getIsNavTitleHidden() ? .hidden : .visible, for: .navigationBar)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                contentViewModel.navigateToBlogViewButton(blogID) {
+                NavigateToBlogViewButton(blogID) {
                     KFImageWithDefaultIcon(imageURL: viewModel.blog.mainImageURL)
                         .scaledToFill()
                         .clipShape(Circle())
@@ -288,7 +287,7 @@ struct PostView: View {
                         .frame(width: 25)
                     
                     //댓글 버튼
-                    NavigationLink(destination: CommentView(postID: postID, blogID: nil)) {
+                    NavigationLink(destination: CommentView(postID: viewModel.post.id, blogID: nil)) {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.system(size: 20, weight: .light))

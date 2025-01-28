@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PopularBlogPostListView: View {
-    @Environment(\.blogViewModel) var viewModel
-    @Environment(\.contentViewModel) var contentViewModel
-    
+//    @Environment(\.blogViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+    @Bindable var viewModel: BlogViewModel
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
@@ -36,7 +36,7 @@ struct PopularBlogPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.popularBlogPosts.prefix(3).enumerated()), id: \.offset) { index, post in
-                    PopularBlogPostCell(post: post)
+                    PopularBlogPostCell(post: post, viewModel: viewModel)
                     Divider()
                         .foregroundStyle(index == 2 ? Color.clear : Color.secondaryLabelColor)
                 }

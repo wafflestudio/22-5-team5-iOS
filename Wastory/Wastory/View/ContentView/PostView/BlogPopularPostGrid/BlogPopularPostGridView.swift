@@ -9,9 +9,10 @@ import SwiftUI
 
 struct BlogPopularPostGridView: View {
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.postViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.postViewModel) var viewModel
     
+    @Bindable var viewModel: PostViewModel
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -38,7 +39,7 @@ struct BlogPopularPostGridView: View {
             
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(viewModel.popularBlogPosts.prefix(6), id: \.self) { post in
-                    BlogPopularPostGridCell(post: post)
+                    BlogPopularPostGridCell(post: post, viewModel: viewModel)
                 }
             }
             .padding(.horizontal, 20)

@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct CommentView: View {
-    let postID: Int?
-    let blogID: Int?
+    var postID: Int? = nil
+    var blogID: Int? = nil
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         ZStack {

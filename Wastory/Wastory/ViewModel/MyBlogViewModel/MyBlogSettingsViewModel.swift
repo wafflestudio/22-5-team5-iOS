@@ -8,7 +8,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class MyBlogSettingsViewModel {
     var mainImage: UIImage? = nil
     var isImagePickerPresented: Bool = false

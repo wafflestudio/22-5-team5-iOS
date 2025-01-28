@@ -13,7 +13,7 @@ struct BlogView: View {
     var isMainTab: Bool = false
     @State var viewModel = BlogViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     @State var isPopularPresent: Bool = false
     
@@ -22,7 +22,7 @@ struct BlogView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
-                    BlogHeaderView()
+                    BlogHeaderView(viewModel: viewModel)
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -37,10 +37,10 @@ struct BlogView: View {
                     
                     
                     // 인기글 TODO: 인기글 모두보기 View
-                    PopularBlogPostListView()
+                    PopularBlogPostListView(viewModel: viewModel)
                     
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
-                    BlogPostListView()
+                    BlogPostListView(viewModel: viewModel)
                     
                 } //VStack
             } //ScrollView
@@ -150,7 +150,6 @@ struct BlogView: View {
                 }
             }
         }
-        .environment(\.blogViewModel, viewModel)
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : viewModel.blog.blogName)
@@ -161,7 +160,7 @@ struct BlogView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
-                    contentViewModel.navigateToSearchViewButton(blogID: viewModel.blog.id) {
+                    NavigateToSearchViewButton(blogID: viewModel.blog.id) {
                         Text(Image(systemName: "magnifyingglass"))
                             .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
                     }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct BlogHeaderView: View {
-    @Environment(\.blogViewModel) var viewModel
+//    @Environment(\.blogViewModel) var viewModel
+    @Bindable var viewModel: BlogViewModel
     
     var body: some View {
         ZStack{

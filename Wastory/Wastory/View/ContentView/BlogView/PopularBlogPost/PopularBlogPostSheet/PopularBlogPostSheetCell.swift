@@ -12,7 +12,7 @@ struct PopularBlogPostSheetCell: View {
     let index: Int
     @State var didAppear: Bool = false
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -89,7 +89,7 @@ struct PopularBlogPostSheetCell: View {
         } //VStack
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

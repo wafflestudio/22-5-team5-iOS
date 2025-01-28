@@ -12,7 +12,7 @@ struct TodaysWastoryListCell: View {
     let post: Post
     let index: Int
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -27,7 +27,7 @@ struct TodaysWastoryListCell: View {
                     .font(.system(size: 15, weight: .light))
                     .foregroundStyle(Color.secondaryLabelColor)
                 
-                contentViewModel.navigateToBlogViewButton(post.blogID) {
+                NavigateToBlogViewButton(post.blogID) {
                     Text(post.blogName ?? "")
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
@@ -92,7 +92,7 @@ struct TodaysWastoryListCell: View {
         }// VStack
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

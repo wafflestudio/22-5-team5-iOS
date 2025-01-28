@@ -10,9 +10,10 @@ import SwiftUI
 struct CategoryPostListCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.postViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.postViewModel) var viewModel
     
+    @Bindable var viewModel: PostViewModel
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
@@ -86,7 +87,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, viewModel.blog.id)
+            NavigateToPostViewButton(post.id, viewModel.blog.id)
         }
     }
 }

@@ -13,7 +13,7 @@ struct SearchView: View {
     
     @State var viewModel = SearchViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.isSearched {
@@ -198,7 +198,7 @@ struct SearchView: View {
                     
             ToolbarItem(placement: .topBarTrailing) {
                 if viewModel.isSearchingInBlog {
-                    contentViewModel.navigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
+                    NavigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
                         Text("전체검색")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(Color.primaryLabelColor)

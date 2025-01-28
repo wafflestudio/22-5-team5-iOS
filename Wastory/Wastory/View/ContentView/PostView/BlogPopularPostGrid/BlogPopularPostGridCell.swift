@@ -10,8 +10,10 @@ import SwiftUI
 struct BlogPopularPostGridCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.postViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.postViewModel) var viewModel
+    
+    @Bindable var viewModel: PostViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -43,7 +45,7 @@ struct BlogPopularPostGridCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, viewModel.blog.id)
+            NavigateToPostViewButton(post.id, viewModel.blog.id)
         }
     }
 }

@@ -163,16 +163,16 @@ import Observation
     }
     
 }
-
-// Environment Key 정의
-private struct PostViewModelKey: EnvironmentKey {
-    static let defaultValue = PostViewModel()
-}
-
-// Environment Values 확장
-extension EnvironmentValues {
-    var postViewModel: PostViewModel {
-        get { self[PostViewModelKey.self] }
-        set { self[PostViewModelKey.self] = newValue }
-    }
-}
+//
+//// Environment Key 정의
+//private struct PostViewModelKey: EnvironmentKey {
+//    static let defaultValue = PostViewModel()
+//}
+//
+//// Environment Values 확장
+//extension EnvironmentValues {
+//    var postViewModel: PostViewModel {
+//        get { self[PostViewModelKey.self] }
+//        set { self[PostViewModelKey.self] = newValue }
+//    }
+//}

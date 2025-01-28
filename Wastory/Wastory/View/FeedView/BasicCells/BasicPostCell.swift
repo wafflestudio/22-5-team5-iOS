@@ -13,7 +13,7 @@ struct BasicPostCell: View {
     let post: Post
     @State var didAppear: Bool = false
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         
@@ -68,7 +68,7 @@ struct BasicPostCell: View {
                 }
                 
                 //MARK: posted blog info
-                contentViewModel.navigateToBlogViewButton(post.blogID) {
+                NavigateToBlogViewButton(post.blogID) {
                     HStack(alignment: .center, spacing: 9) {
                         //blog image
                         KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
@@ -96,14 +96,14 @@ struct BasicPostCell: View {
                 .frame(width: 100, height: 100)
                 .clipped()
                 .overlay {
-                    contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+                    NavigateToPostViewButton(post.id, post.blogID)
                 }
                 
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 22)
         .background {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

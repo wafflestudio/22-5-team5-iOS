@@ -10,7 +10,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class FeedViewModel {
     //NavBar Controller
     private var isNavTitleHidden: Bool = true

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct BlogPostListView: View {
-    @Environment(\.blogViewModel) var viewModel
+//    @Environment(\.blogViewModel) var viewModel
+    @Bindable var viewModel: BlogViewModel
     
     var body: some View {
         
@@ -38,7 +39,7 @@ struct BlogPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.blogPosts.enumerated()), id: \.offset) { index, post in
-                    BlogPostListCell(post: post)
+                    BlogPostListCell(post: post, viewModel: viewModel)
                         .onAppear {
                             if index == viewModel.blogPosts.count - 1 {
                                 Task {

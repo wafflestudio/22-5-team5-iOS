@@ -103,13 +103,13 @@ struct MainTabView: View {
 
 struct mainTabToolBarTrailingButtons: View {
     @Bindable var mainTabViewModel: MainTabViewModel
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         HStack(spacing: 20) {
             Spacer()
             
-            contentViewModel.navigateToSearchViewButton() {
+            NavigateToSearchViewButton() {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 25, weight: .thin))
             }
