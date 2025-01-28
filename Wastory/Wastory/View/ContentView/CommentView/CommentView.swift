@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CommentView: View {
     let postID: Int
+    let blogID: Int
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -66,6 +67,14 @@ struct CommentView: View {
                             }
                     }
                 }
+            }
+        }
+        // MARK: Network
+        .onAppear {
+            viewModel.setPostID(postID)
+            viewModel.setBlogID(blogID)
+            Task {
+                await viewModel.getComments()
             }
         }
         .refreshable {
@@ -184,12 +193,6 @@ struct CommentView: View {
                 .background(Color.white)
                 
             }//VStack
-        }
-        .onAppear {
-            viewModel.setPostID(postID)
-            Task {
-                await viewModel.getComments()
-            }
         }
     } //Body
 }

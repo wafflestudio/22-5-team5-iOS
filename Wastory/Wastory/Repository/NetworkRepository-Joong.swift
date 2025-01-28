@@ -654,6 +654,71 @@ extension NetworkRepository {
         return response
     }
     
+    func postGuestBookComment(blogID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
+        var requestBody = [String: String]()
+        if let _ = parentID {
+            requestBody = [
+                "content": content,
+                "parent_id": "\(parentID!)",
+                "secret": "\(isSecret ? 1 : 0)",
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
+            ]
+        } else {
+            requestBody = [
+                "content": content,
+                "secret": "\(isSecret ? 1 : 0)",
+                "level": "\(parentID ?? 0 == 0 ? 1 : 2)"
+            ]
+        }
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postGuestBookComment(blogID: blogID).url,
+            method: NetworkRouter.postGuestBookComment(blogID: blogID).method,
+            headers: NetworkRouter.postGuestBookComment(blogID: blogID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        // 응답 데이터 확인
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getGuestBookComments(blogID: Int, page: Int) async throws -> CommentListDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getGuestBookComments(blogID: blogID, page: page).url,
+            method: NetworkRouter.getGuestBookComments(blogID: blogID, page: page).method,
+            headers: NetworkRouter.getGuestBookComments(blogID: blogID, page: page).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(CommentListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Subscription
     func postSubscription(blogID: Int) async throws {
         var urlRequest = try URLRequest(

@@ -53,6 +53,7 @@ import Observation
     
     //Network
     var postID: Int?
+    var blogID: Int?
     var comments: [Comment] = []
     
     var totalCommentsCount: Int = 0
@@ -64,8 +65,12 @@ import Observation
     var targetComment: Comment?
     var isTargetToComment: Bool = false
     
-    func setPostID(_ id: Int) {
+    func setPostID(_ id: Int?) {
         postID = id
+    }
+    
+    func setBlogID(_ id: Int?) {
+        blogID = id
     }
     
     func isWritingCommentEmpty() -> Bool {
