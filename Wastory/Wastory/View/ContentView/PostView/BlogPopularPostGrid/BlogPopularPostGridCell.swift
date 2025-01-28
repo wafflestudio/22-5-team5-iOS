@@ -23,7 +23,7 @@ struct BlogPopularPostGridCell: View {
             }
             .frame(height: 0)
             
-            KFImageWithDefault(imageURL: post.mainImageUrl)
+            KFImageWithDefault(imageURL: post.mainImageURL)
                 .scaledToFill()
                 .frame(width: viewModel.getBlogPopularPostGridCellWidth() ,height: viewModel.getBlogPopularPostGridCellWidth() * 5 / 8)
                 .clipped()

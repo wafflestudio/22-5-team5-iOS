@@ -17,7 +17,7 @@ struct TodaysWastoryPageTabCell: View {
         ZStack {
             //Background Image
             GeometryReader { geometry in
-                KFImageWithDefault(imageURL: post.mainImageUrl)
+                KFImageWithDefault(imageURL: post.mainImageURL)
                     .scaledToFill()
                     .frame(width: geometry.size.width ,height: geometry.size.height)
                     .clipped()

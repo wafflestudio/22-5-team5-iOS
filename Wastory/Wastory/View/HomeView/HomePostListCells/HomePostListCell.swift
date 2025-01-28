@@ -68,7 +68,7 @@ struct HomePostListCell: View {
                 
                 Spacer()
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .scaledToFill()
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))

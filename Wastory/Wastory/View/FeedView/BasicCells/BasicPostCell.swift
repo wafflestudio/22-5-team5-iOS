@@ -90,7 +90,7 @@ struct BasicPostCell: View {
             
             //MARK: content Image
             //글 내용에 이미지가 없을 경우 표시하지 않음
-            KFImageWithoutDefault(imageURL: post.mainImageUrl)
+            KFImageWithoutDefault(imageURL: post.mainImageURL)
                 .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                 .frame(width: 100, height: 100)
                 .clipped()

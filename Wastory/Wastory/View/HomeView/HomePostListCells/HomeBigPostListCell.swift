@@ -27,7 +27,7 @@ struct HomeBigPostListCell: View {
                         .frame(height: 200)
                         .overlay {
                             ZStack {
-                                KFImageWithDefault(imageURL: post.mainImageUrl)
+                                KFImageWithDefault(imageURL: post.mainImageURL)
                                     .scaledToFill()
                                 
                                 Color.sheetOuterBackgroundColor

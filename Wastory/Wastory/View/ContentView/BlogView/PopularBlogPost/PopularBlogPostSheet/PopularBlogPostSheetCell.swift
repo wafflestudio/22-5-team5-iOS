@@ -75,7 +75,7 @@ struct PopularBlogPostSheetCell: View {
                 Spacer()
                 
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 50, height: 50)
                     .clipShape(
