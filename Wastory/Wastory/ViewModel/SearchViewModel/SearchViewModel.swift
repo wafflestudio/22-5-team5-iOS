@@ -97,9 +97,9 @@ import Observation
                     await getSearchedArticles()
                 }
             } else if searchType == .blog {
-//                Task {
-//                    await getSearchedBlogs()
-//                }
+                Task {
+                    await getSearchedBlogs()
+                }
             }
             
         }
@@ -138,27 +138,27 @@ import Observation
     }
     
     
-//    func getSearchedBlogs() async {
-//        do {
-//            let response = try await NetworkRepository.shared.getSearchedBlogs(searchingWord: searchKeyword, page: page)
-//            
-//            //posts 저장
-//            if self.page == 1 {
-//                searchBlogResult = response.blogs
-//                resultCount = response.totalCount
-//            } else {
-//                searchBlogResult.append(contentsOf: response.blogs)
-//            }
-//            
-//            //pagination
-//            if !response.blogs.isEmpty {
-//                self.page += 1
-//            } else {
-//                self.isPageEnded = true
-//            }
-//        } catch {
-//            print("Error: \(error.localizedDescription)")
-//        }
-//    }
+    func getSearchedBlogs() async {
+        do {
+            let response = try await NetworkRepository.shared.searchBlogs(searchingWord: searchKeyword, page: page)
+            
+            //posts 저장
+            if self.page == 1 {
+                searchBlogResult = response.blogs
+                resultCount = response.totalCount
+            } else {
+                searchBlogResult.append(contentsOf: response.blogs)
+            }
+            
+            //pagination
+            if !response.blogs.isEmpty {
+                self.page += 1
+            } else {
+                self.isPageEnded = true
+            }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
     
 }

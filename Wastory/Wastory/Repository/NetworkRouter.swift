@@ -26,6 +26,7 @@ enum NetworkRouter {
     case getBlog(blogAddress: String)
     case getBlogByID(blogID: Int)
     case patchBlog(blogAddress: String)
+    case searchBlogs
     
     // MARK: Category
     case postCategory
@@ -110,6 +111,7 @@ enum NetworkRouter {
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
         case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         case let .patchBlog(blogAddress): "/blogs/\(blogAddress)"
+        case .searchBlogs: "/blogs/search"
             
         // MARK: Category
         case .postCategory: "/categories/create"
@@ -206,6 +208,8 @@ enum NetworkRouter {
             return .get
         case .patchBlog:
             return .patch
+        case .searchBlogs:
+            return .get
             
         // MARK: Category
         case .postCategory:
@@ -345,6 +349,8 @@ enum NetworkRouter {
         case .getBlogByID:
             return ["Content-Type": "application/json"]
         case .patchBlog:
+            return ["Content-Type": "application/json"]
+        case .searchBlogs:
             return ["Content-Type": "application/json"]
             
         // MARK: Category

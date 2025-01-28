@@ -151,6 +151,44 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    func searchBlogs(searchingWord: String, page: Int) async throws -> BlogListDto {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.searchBlogs.url,
+            method:  NetworkRouter.searchBlogs.method,
+            headers: NetworkRouter.searchBlogs.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.queryItems = [
+                URLQueryItem(name: "keywords", value: searchingWord),
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(BlogListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
     // MARK: - Category
     func postCategory(categoryName: String, parentID: Int?) async throws {
         var requestBody = [String: String]()
