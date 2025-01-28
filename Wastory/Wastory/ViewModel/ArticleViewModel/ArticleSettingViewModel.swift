@@ -122,6 +122,15 @@ import RichTextKit
     }
     
     func postArticle() async {
+        if let image = mainImage {
+            do {
+                let response = try await NetworkRepository.shared.postImage(image)
+                mainImageURL = response
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
         if let htmlText = textToHTML(text) {
             do {
                 try await NetworkRepository.shared.postArticle(

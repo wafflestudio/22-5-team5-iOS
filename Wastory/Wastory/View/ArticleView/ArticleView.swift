@@ -41,9 +41,26 @@ struct ArticleView: View {
                     
                     HStack(spacing: 0) {
                         Button {
-                            // 임시 저장 기능
                             isTitleFocused = false
                             isTextFocused = false
+                            if viewModel.title.isEmpty && viewModel.text.length == 0 {
+                                viewModel.isEmptyDraftEntered = true
+                                viewModel.isEmptyTitleEntered = false
+                                debounceWorkItem?.cancel()
+                                let workItem = DispatchWorkItem {
+                                    withAnimation {
+                                        viewModel.isEmptyDraftEntered = false
+                                    }
+                                }
+                                debounceWorkItem = workItem
+                                DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                            }
+                            else {
+                                Task {
+                                    await viewModel.storeDraft()
+                                    await viewModel.resetView()
+                                }
+                            }
                         } label: {
                             Text("저장")
                                 .font(.system(size: 14, weight: .regular))
@@ -77,6 +94,7 @@ struct ArticleView: View {
                         Button {
                             isTitleFocused = false
                             isTextFocused = false
+                            viewModel.isEmptyDraftEntered = false
                             viewModel.isEmptyTitleEntered = true
                             debounceWorkItem?.cancel()
                             let workItem = DispatchWorkItem {
@@ -85,7 +103,7 @@ struct ArticleView: View {
                                 }
                             }
                             debounceWorkItem = workItem
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: workItem)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
                         } label: {
                             Text("완료")
                                 .font(.system(size: 14, weight: .regular))
@@ -156,6 +174,19 @@ struct ArticleView: View {
                 Spacer()
             }
             
+            if viewModel.isEmptyDraftEntered {
+                Text("제목 또는 내용을 입력해 주세요.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
+            
             if viewModel.isEmptyTitleEntered {
                 Text("제목을 입력해 주세요.")
                     .font(.system(size: 14, weight: .regular))
@@ -171,6 +202,11 @@ struct ArticleView: View {
         }
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
+        .onAppear {
+            Task {
+                await viewModel.resetView()
+            }
+        }
     }
 }
 

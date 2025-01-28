@@ -285,7 +285,7 @@ final class NetworkRepository {
             "description": description,
             "main_image_url": main_image_url,
             "category_id": "\(categoryID)",
-            "homeTopic_id": "\(homeTopicID)",
+            "hometopic_id": "\(homeTopicID)",
             "secret": "\(secret)"
         ]
         var urlRequest = try URLRequest(

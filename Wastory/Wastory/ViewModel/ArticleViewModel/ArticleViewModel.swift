@@ -15,12 +15,19 @@ import RichTextKit
     var text = NSAttributedString()
     var context = RichTextContext()
     
+    let cautionDuration: Double = 1.6
+    var isEmptyDraftEntered: Bool = false
     var isEmptyTitleEntered: Bool = false
     
     private var page: Int = 1
     var draftsCount: Int = 0
     var drafts: [Draft] = []
     var currentDraftID: Int = -1
+    
+    func resetView() async {
+        page = 1
+        await getDrafts()
+    }
     
     func getDrafts() async {
         if drafts.count < draftsCount {
