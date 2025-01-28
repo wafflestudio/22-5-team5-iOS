@@ -50,7 +50,7 @@ struct CategoryPopularPostView: View {
                         HomePostListCell(post: post)
                     }
                     
-                    if index == 6 || index == viewModel.categoryPopularPostItems.count - 1 {
+                    if index != 6 || index != viewModel.categoryPopularPostItems.count - 1 {
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                             .padding(.horizontal, 20)

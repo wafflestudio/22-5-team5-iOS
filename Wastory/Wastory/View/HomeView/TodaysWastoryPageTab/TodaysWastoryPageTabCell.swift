@@ -10,14 +10,14 @@ import SwiftUI
 struct TodaysWastoryPageTabCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     
     var body: some View {
         ZStack {
             //Background Image
             GeometryReader { geometry in
-                KFImageWithDefault(imageURL: post.mainImageUrl)
+                KFImageWithDefault(imageURL: post.mainImageURL)
                     .scaledToFill()
                     .frame(width: geometry.size.width ,height: geometry.size.height)
                     .clipped()
@@ -67,7 +67,7 @@ struct TodaysWastoryPageTabCell: View {
                     
                     // 블로그 정보
                     HStack {
-                        contentViewModel.navigateToBlogViewButton(post.blogID) {
+                        NavigateToBlogViewButton(post.blogID) {
                             HStack(spacing: 8) {
                                 ZStack {
                                     KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
@@ -83,6 +83,7 @@ struct TodaysWastoryPageTabCell: View {
                                 Text(post.blogName ?? "")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(Color.todaysWastoryTextColor)
+                                    .lineLimit(1)
                             }
                         }
                         
@@ -93,7 +94,7 @@ struct TodaysWastoryPageTabCell: View {
                 .padding(.horizontal, 25)
             }//Vstack
             .background {
-                contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+                NavigateToPostViewButton(post.id, post.blogID)
             }
         }//ZStack
         .clipShape(RoundedRectangle(cornerRadius: 10))

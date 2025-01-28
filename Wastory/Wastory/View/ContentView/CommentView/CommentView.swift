@@ -8,76 +8,90 @@
 import SwiftUI
 
 struct CommentView: View {
-    let postID: Int
+    var postID: Int? = nil
+    var blogID: Int? = nil
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 0) {
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                                if abs(newValue - oldValue) > 200 {
-                                    viewModel.setInitialScrollPosition(oldValue)
-                                }
-                                viewModel.changeIsNavTitleHidden(by: newValue, oldValue)
-                            }
-                    }
-                    .frame(height: 0)
-                    
-                    // MARK: 화면 상단 구성 요소
-                    HStack(alignment: .top) {
-                        //Navbar title
-                        Text("댓글")
-                            .font(.system(size: 34, weight: .medium))
-                        
+        ZStack {
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 0) {
                         Spacer()
-                            .frame(width: 4)
+                            .frame(height: 20)
                         
-                        //comment count
-                        Text("\(viewModel.totalCommentsCount)")
-                            .font(.system(size: 14, weight: .light))
-                            .foregroundStyle(Color.secondaryLabelColor)
-                        
-                    
-                        Spacer()
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
-                        .frame(height: 20)
-                    
-                    
-                    // MARK: 댓글List
-                    ForEach(Array(viewModel.comments.enumerated()), id: \.offset) { index, comment in
-                        CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
-                            .onAppear {
-                                if index == viewModel.comments.count - 1 {
-                                    Task {
-                                        await viewModel.getComments()
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
+                                    if abs(newValue - oldValue) > 200 {
+                                        viewModel.setInitialScrollPosition(oldValue)
                                     }
+                                    viewModel.changeIsNavTitleHidden(by: newValue, oldValue)
                                 }
+                        }
+                        .frame(height: 0)
+                        
+                        // MARK: 화면 상단 구성 요소
+                        HStack(alignment: .top) {
+                            //Navbar title
+                            Text(viewModel.commentType == .post ? "댓글" : "방명록")
+                                .font(.system(size: 34, weight: .medium))
+                            
+                            Spacer()
+                                .frame(width: 4)
+                            
+                            //comment count
+                            Text("\(viewModel.totalCommentsCount)")
+                                .font(.system(size: 14, weight: .light))
+                                .foregroundStyle(Color.secondaryLabelColor)
+                            
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        Spacer()
+                            .frame(height: 20)
+                        
+                        
+                        // MARK: 댓글List
+                        LazyVStack {
+                            ForEach(Array(viewModel.comments.enumerated()), id: \.offset) { index, comment in
+                                CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
+                                    .onAppear {
+                                        if index == viewModel.comments.count - 1 {
+                                            Task {
+                                                await viewModel.getComments()
+                                            }
+                                        }
+                                    }
                             }
+                        }
                     }
                 }
             }
+            .refreshable {
+                viewModel.resetPage()
+                viewModel.resetTargetComment()
+                viewModel.resetWritingCommentText()
+                Task {
+                    await viewModel.getComments()
+                }
+            }
+            
+            CommentSheet(viewModel: viewModel)
         }
-        .refreshable {
-            viewModel.resetPage()
-            viewModel.resetTargetCommentID()
-            viewModel.resetWritingCommentText()
+        // MARK: Network
+        .onAppear {
+            viewModel.setCommentType(postID, blogID)
             Task {
                 await viewModel.getComments()
             }
         }
         // MARK: NavBar
-        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "댓글")
+        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : (viewModel.commentType == .post ? "댓글" : "방명록"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)
@@ -94,101 +108,105 @@ struct CommentView: View {
         .navigationBarBackButtonHidden()
         //MARK: bottomBar
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 0) {
-                Divider()
-                    .foregroundStyle(Color.secondaryLabelColor)
-                    .frame(maxWidth: .infinity)
-                
-                if viewModel.isTargetToComment {
-                    HStack(spacing: 0) {
-                        Text(viewModel.targetComment!.userName)
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(Color.primaryLabelColor)
-                        
-                        Text("님에게 답글을 씁니다.")
-                            .font(.system(size: 13, weight: .thin))
-                            .foregroundStyle(Color.primaryLabelColor)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            viewModel.resetTargetCommentID()
-                        }) {
-                            Image(systemName:"xmark")
-                                .font(.system(size: 15, weight: .light))
+            if !viewModel.isCommentSheetPresent {
+                VStack(spacing: 0) {
+                    Divider()
+                        .foregroundStyle(Color.secondaryLabelColor)
+                        .frame(maxWidth: .infinity)
+                    
+                    if viewModel.isTargetToComment {
+                        HStack(spacing: 0) {
+                            Text(viewModel.targetComment!.userName)
+                                .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)
+                            
+                            Text("님에게 답글을 씁니다.")
+                                .font(.system(size: 13, weight: .thin))
+                                .foregroundStyle(Color.primaryLabelColor)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.resetTargetComment()
+                            }) {
+                                Image(systemName:"xmark")
+                                    .font(.system(size: 15, weight: .light))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                            }
                         }
-                    }
-                    .frame(height: 37)
-                    .padding(.horizontal, 20)
-                    .background(Color.backgourndSpaceColor)
-                }
-                
-                ZStack {
-                    HStack(spacing: 0) {
-                        if viewModel.isWritingCommentEmpty() {
-                            Text("내용을 입력하세요")
-                                .font(.system(size: 16, weight: .light))
-                                .foregroundStyle(Color.secondaryLabelColor)
-                        }
-                        Spacer()
+                        .frame(height: 37)
+                        .padding(.horizontal, 20)
+                        .background(Color.backgourndSpaceColor)
                     }
                     
-                    HStack(spacing: 0) {
-                        FocusableTextView(
-                            text: $viewModel.writingCommentText,
-                            isFirstResponder: $viewModel.isTextFieldFocused,
-                            font: UIFont.systemFont(ofSize: 16, weight: .light) // 원하는 폰트 설정
-                        )
-                        .frame(height: 50)
-                        .frame(maxWidth: .infinity)
-                        
-                        Spacer()
-                            .frame(width: 10)
-                        
-                        Button(action : {
-                            viewModel.isWritingCommentSecret.toggle()
-                        }) {
-                            Image(systemName: viewModel.isWritingCommentSecret ? "lock" : "lock.open")
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(viewModel.isWritingCommentSecret ? Color.primaryLabelColor : Color.secondaryLabelColor)
-                        }
-                        
-                        Spacer()
-                            .frame(width: 10)
-                        
-                        Button(action: {
-                            Task {
-                                await viewModel.postComment()
-                                viewModel.resetPage()
-                                viewModel.resetTargetCommentID()
-                                viewModel.resetWritingCommentText()
-                                await viewModel.getComments()
+                    ZStack {
+                        HStack(spacing: 0) {
+                            if viewModel.isWritingCommentEmpty() {
+                                Text("내용을 입력하세요")
+                                    .font(.system(size: 16, weight: .light))
+                                    .foregroundStyle(Color.secondaryLabelColor)
                             }
-                        }) {
-                            Text("등록")
-                                .font(.system(size: 16, weight: .light))
-                                .foregroundStyle(Color.secondaryLabelColor)
-                                .frame(width: 65, height: 35)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(style: StrokeStyle(lineWidth: 0.5))
-                                        .foregroundStyle(Color.secondaryLabelColor)
-                                )
+                            Spacer()
                         }
                         
+                        HStack(spacing: 0) {
+                            FocusableTextView(
+                                text: $viewModel.writingCommentText,
+                                isFirstResponder: $viewModel.isTextFieldFocused,
+                                font: UIFont.systemFont(ofSize: 16, weight: .light) // 원하는 폰트 설정
+                            )
+                            .frame(height: 50)
+                            .frame(maxWidth: .infinity)
+                            
+                            Spacer()
+                                .frame(width: 10)
+                            
+                            Button(action : {
+                                viewModel.isWritingCommentSecret.toggle()
+                            }) {
+                                Image(systemName: viewModel.isWritingCommentSecret ? "lock" : "lock.open")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(viewModel.isWritingCommentSecret ? Color.primaryLabelColor : Color.secondaryLabelColor)
+                            }
+                            
+                            Spacer()
+                                .frame(width: 10)
+                            
+                            Button(action: {
+                                Task {
+                                    await viewModel.postComment()
+                                    viewModel.resetPage()
+                                    viewModel.resetTargetComment()
+                                    viewModel.resetWritingCommentText()
+                                    await viewModel.getComments()
+                                }
+                            }) {
+                                Text("등록")
+                                    .font(.system(size: 16, weight: viewModel.isWritingCommentEmpty() ? .light : .semibold))
+                                    .foregroundStyle(viewModel.isWritingCommentEmpty() ? Color.secondaryLabelColor : Color.white)
+                                    .frame(width: 65, height: 35)
+                                    .background(
+                                        VStack(spacing: 0) {
+                                            if viewModel.isWritingCommentEmpty() {
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(style: StrokeStyle(lineWidth: 0.5))
+                                                    .foregroundStyle(Color.secondaryLabelColor)
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .foregroundStyle(Color.primaryLabelColor)
+                                            }
+                                        }
+                                    )
+                            }
+                            .disabled(viewModel.isWritingCommentEmpty())
+                            
+                        }
                     }
-                }
-                .frame(height: 50)
-                .padding(.horizontal, 20)
-                .background(Color.white)
-                
-            }//VStack
-        }
-        .onAppear {
-            viewModel.setPostID(postID)
-            Task {
-                await viewModel.getComments()
+                    .frame(height: 50)
+                    .padding(.horizontal, 20)
+                    .background(Color.white)
+                    
+                }//VStack
             }
         }
     } //Body

@@ -9,7 +9,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class SubscribeBlogViewModel {
     private var isNavTitleHidden: Bool = true
     

@@ -13,7 +13,7 @@ struct SearchView: View {
     
     @State var viewModel = SearchViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.isSearched {
@@ -75,12 +75,26 @@ struct SearchView: View {
                         if viewModel.isSearchType(is: .post) {
                             ForEach(Array(viewModel.searchPostResult.enumerated()), id: \.offset) { index, post in
                                 BasicPostCell(post: post)
+                                    .onAppear {
+                                        if index == viewModel.searchPostResult.count - 1 {
+                                            Task {
+                                                await viewModel.getSearchedArticles()
+                                            }
+                                        }
+                                    }
                                 Divider()
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
                         } else if viewModel.isSearchType(is: .blog) {
                             ForEach(Array(viewModel.searchBlogResult.enumerated()), id: \.offset) { index, blog in
                                 BasicBlogCell(blog: blog)
+                                    .onAppear {
+                                        if index == viewModel.searchBlogResult.count - 1 {
+//                                            Task {
+//                                                await viewModel.getSearchedBlogs()
+//                                            }
+                                        }
+                                    }
                                 Divider()
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
@@ -97,6 +111,10 @@ struct SearchView: View {
             viewModel.setIsSearchingInBlog(blogID)
             viewModel.setPrevSearchKeyword(prevSearchKeyword)
             viewModel.doOnAppear()
+            viewModel.doSearch()
+        }
+        .refreshable {
+            viewModel.resetPage()
             viewModel.doSearch()
         }
         // MARK: NavBar
@@ -132,9 +150,11 @@ struct SearchView: View {
                                 TextField("", text: $viewModel.searchKeyword)
                                     .font(.system(size: 18, weight: .semibold))
                                     .foregroundStyle(Color.primaryLabelColor)
+                                    .autocapitalization(.none)
                                     .textFieldStyle(.plain)
                                     .padding(.horizontal, 15)
                                     .onSubmit {
+                                        viewModel.resetPage()
                                         viewModel.setSearchType(to: .post)
                                         viewModel.doSearch()
                                     }
@@ -155,6 +175,7 @@ struct SearchView: View {
                                 }
                                 
                                 Button (action: {
+                                    viewModel.resetPage()
                                     viewModel.setSearchType(to: .post)
                                     viewModel.doSearch()
                                 }) {
@@ -177,7 +198,7 @@ struct SearchView: View {
                     
             ToolbarItem(placement: .topBarTrailing) {
                 if viewModel.isSearchingInBlog {
-                    contentViewModel.navigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
+                    NavigateToSearchViewButton(prevSearchKeyword: viewModel.searchKeyword) {
                         Text("전체검색")
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundStyle(Color.primaryLabelColor)

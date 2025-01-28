@@ -11,7 +11,7 @@ import SwiftUI
 struct FeedView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
     @State var viewModel = FeedViewModel()
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     
     var body: some View {

@@ -15,7 +15,7 @@ struct CommentCell: View {
     
     @Bindable var viewModel: CommentViewModel
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -34,7 +34,7 @@ struct CommentCell: View {
                 
                 
                 
-                contentViewModel.navigateToBlogViewButton(comment.blogID) {
+                NavigateToBlogViewButton(comment.blogID) {
                     KFImageWithDefault(imageURL: comment.blogMainImageURL)
                         .scaledToFill()
                         .clipShape(Circle())
@@ -46,7 +46,7 @@ struct CommentCell: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 5) {
-                        contentViewModel.navigateToBlogViewButton(tempBlog().id) {
+                        NavigateToBlogViewButton(tempBlog().id) {
                             Text(comment.userName)
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.primaryLabelColor)
@@ -77,7 +77,7 @@ struct CommentCell: View {
                         
                         Button(action: {
                             viewModel.updateIsTextFieldFocused()
-                            viewModel.setTargetCommentID(to: rootComment)
+                            viewModel.setTargetComment(to: rootComment)
                         }) {
                             Text("답글")
                                 .font(.system(size: 15, weight: .bold))
@@ -92,7 +92,10 @@ struct CommentCell: View {
                     .frame(width: 10)
                 
                 Button(action: {
-                    //더보기 : 신고 or 수정 / 삭제 sheet 보여주기
+                    if comment.blogID == UserInfoRepository.shared.getBlogID() {
+                        viewModel.setEditComment(to: comment)
+                        viewModel.toggleIsCommentSheetPresent()
+                    }
                 }) {
                     Image(systemName: "ellipsis")
                         .font(.system(size: 16, weight: .light))

@@ -63,7 +63,7 @@ struct PopularBlogPostSheetView: View {
                     //MARK: PostList
                     LazyVStack(spacing: 0) {
                         ForEach(Array(viewModel.popularBlogPosts.enumerated()), id: \.offset) { index, post in
-                            PopularBlogPostSheetCell(post: post, index: index + 1, viewModel: viewModel)
+                            PopularBlogPostSheetCell(post: post, index: index + 1)
                             
                             Divider()
                                 .foregroundStyle(Color.secondaryLabelColor)

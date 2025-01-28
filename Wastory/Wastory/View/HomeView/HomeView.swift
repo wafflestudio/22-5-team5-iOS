@@ -104,6 +104,12 @@ struct HomeView: View {
             Task {
                 await viewModel.getTodaysWastoryListItems()
             }
+            Task {
+                await viewModel.getFocusPostList1Items()
+            }
+            Task {
+                await viewModel.getFocusPostList2Items()
+            }
         }
         .refreshable {
             Task {
@@ -115,6 +121,12 @@ struct HomeView: View {
             Task {
                 await viewModel.getTodaysWastoryListItems()
                 viewModel.setDisplayedTodaysWastoryItems()
+            }
+            Task {
+                await viewModel.getFocusPostList1Items()
+            }
+            Task {
+                await viewModel.getFocusPostList2Items()
             }
         }
         

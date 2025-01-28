@@ -10,7 +10,7 @@ import SwiftUI
 struct HomePostListCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     
     var body: some View {
@@ -18,7 +18,7 @@ struct HomePostListCell: View {
             Spacer()
                 .frame(height: 20)
             
-            contentViewModel.navigateToBlogViewButton(post.blogID) {
+            NavigateToBlogViewButton(post.blogID) {
                 HStack(spacing: 8) {
                     KFImageWithDefaultIcon(imageURL: post.blogMainImageURL)
                         .scaledToFill()
@@ -28,6 +28,7 @@ struct HomePostListCell: View {
                     Text(post.blogName ?? "")
                         .font(.system(size: 13, weight: .regular))
                         .foregroundStyle(Color.primaryLabelColor)
+                        .lineLimit(1)
                 }
             }
             
@@ -68,12 +69,12 @@ struct HomePostListCell: View {
                 
                 Spacer()
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .scaledToFill()
                     .frame(width: 100, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay {
-                        contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+                        NavigateToPostViewButton(post.id, post.blogID)
                     }
             }
             
@@ -83,7 +84,7 @@ struct HomePostListCell: View {
         }
         .padding(.horizontal, 20)
         .background {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

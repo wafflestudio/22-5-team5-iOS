@@ -26,6 +26,7 @@ enum NetworkRouter {
     case getBlog(blogAddress: String)
     case getBlogByID(blogID: Int)
     case patchBlog(blogAddress: String)
+    case searchBlogs
     
     // MARK: Category
     case postCategory
@@ -44,6 +45,8 @@ enum NetworkRouter {
     case getArticlesTodayWastory
     case getArticlesWeeklyWastory
     case getArticlesHomeTopic(highHomeTopicID: Int)
+    case getFocusArticles1
+    case getFocusArticles2
     case getArticlesOfSubscription(blogID: Int)
     case searchArticlesInBlog(searchingWord: String, blogID: Int)
     case searchArticles(searchingWord: String)
@@ -51,6 +54,10 @@ enum NetworkRouter {
     //MARK: Comment
     case postComment(postID: Int)
     case getArticleComments(postID: Int, page: Int)
+    case postGuestBookComment(blogID: Int)
+    case getGuestBookComments(blogID: Int, page: Int)
+    case patchComment(commentID: Int)
+    case deleteComment(commentID: Int)
     
     // MARK: Subscription
     case postSubscription
@@ -104,6 +111,7 @@ enum NetworkRouter {
         case let .getBlog(blogAddress): "/blogs/\(blogAddress)"
         case let .getBlogByID(blogID): "/blogs/by_id/\(blogID)"
         case let .patchBlog(blogAddress): "/blogs/\(blogAddress)"
+        case .searchBlogs: "/blogs/search"
             
         // MARK: Category
         case .postCategory: "/categories/create"
@@ -122,6 +130,8 @@ enum NetworkRouter {
         case .getArticlesTodayWastory: "/articles/today_wastory"
         case .getArticlesWeeklyWastory: "/articles/weekly_wastory"
         case .getArticlesHomeTopic: "/articles/hometopic/{highHomeTopicID}"
+        case .getFocusArticles1: "/articles/focusview/Js_weekend_plan"
+        case .getFocusArticles2: "/articles/focusview/coffee"
         case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
         case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
         case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
@@ -129,6 +139,10 @@ enum NetworkRouter {
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
+        case let .postGuestBookComment(blogID): "/comments/guestbook/\(blogID)"
+        case let .getGuestBookComments(blogID, page): "/comments/guestbook/\(blogID)/\(page)"
+        case let .patchComment(commentID): "/comments/\(commentID)"
+        case let .deleteComment(commentID): "/comments/\(commentID)"
             
         // MARK: Subscription
         case .postSubscription: "/subscription"
@@ -194,6 +208,8 @@ enum NetworkRouter {
             return .get
         case .patchBlog:
             return .patch
+        case .searchBlogs:
+            return .get
             
         // MARK: Category
         case .postCategory:
@@ -226,6 +242,10 @@ enum NetworkRouter {
             return .get
         case .getArticlesHomeTopic:
             return .get
+        case .getFocusArticles1:
+            return .get
+        case .getFocusArticles2:
+            return .get
         case .getArticlesOfSubscription:
             return .get
         case .searchArticlesInBlog:
@@ -238,6 +258,14 @@ enum NetworkRouter {
             return .post
         case .getArticleComments:
             return .get
+        case .postGuestBookComment:
+            return .post
+        case .getGuestBookComments:
+            return .get
+        case .patchComment:
+            return .patch
+        case .deleteComment:
+            return .delete
         
         // MARK: Subscription
         case .postSubscription:
@@ -322,6 +350,8 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .patchBlog:
             return ["Content-Type": "application/json"]
+        case .searchBlogs:
+            return ["Content-Type": "application/json"]
             
         // MARK: Category
         case .postCategory:
@@ -354,6 +384,10 @@ enum NetworkRouter {
             return ["Content-Type": "application/json"]
         case .getArticlesHomeTopic:
             return ["Content-Type": "application/json"]
+        case .getFocusArticles1:
+            return ["Content-Type": "application/json"]
+        case .getFocusArticles2:
+            return ["Content-Type": "application/json"]
         case .getArticlesOfSubscription:
             return ["Content-Type": "application/json"]
         case .searchArticlesInBlog:
@@ -365,6 +399,14 @@ enum NetworkRouter {
         case .postComment:
             return ["Content-Type": "application/json"]
         case .getArticleComments:
+            return ["Content-Type": "application/json"]
+        case .postGuestBookComment:
+            return ["Content-Type": "application/json"]
+        case .getGuestBookComments:
+            return ["Content-Type": "application/json"]
+        case .patchComment:
+            return ["Content-Type": "application/json"]
+        case .deleteComment:
             return ["Content-Type": "application/json"]
             
         // MARK: Subscription

@@ -9,7 +9,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class HomeViewModel {
     //NavBar Controller
     private var isScrolled: Bool = false
@@ -105,9 +104,9 @@ import Observation
     
     
     //Focus Post List
-    var focusPostList1Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+    var focusPostList1Items: [Post] = []
     
-    var focusPostList2Items: [String] = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"]
+    var focusPostList2Items: [Post] = []
     
     
     func getTodaysWastoryItems() async {
@@ -144,4 +143,19 @@ import Observation
     }
     
     //TODO: Focus get
+    func getFocusPostList1Items() async {
+        do {
+            focusPostList1Items = try await NetworkRepository.shared.getFocusArticles1()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getFocusPostList2Items() async {
+        do {
+            focusPostList2Items = try await NetworkRepository.shared.getFocusArticles2()
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }

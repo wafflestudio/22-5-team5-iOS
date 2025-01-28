@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeBigPostListCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
             VStack(alignment: .leading, spacing: 0) {
@@ -27,7 +27,7 @@ struct HomeBigPostListCell: View {
                         .frame(height: 200)
                         .overlay {
                             ZStack {
-                                KFImageWithDefault(imageURL: post.mainImageUrl)
+                                KFImageWithDefault(imageURL: post.mainImageURL)
                                     .scaledToFill()
                                 
                                 Color.sheetOuterBackgroundColor
@@ -39,11 +39,11 @@ struct HomeBigPostListCell: View {
                         .foregroundStyle(Color.unreadNotification)
                         .padding(.horizontal, 20)
                         .overlay(
-                            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+                            NavigateToPostViewButton(post.id, post.blogID)
                         )
                     
                     //블로그 정보 button
-                    contentViewModel.navigateToBlogViewButton(post.blogID) {
+                    NavigateToBlogViewButton(post.blogID) {
                         HStack(alignment: .center, spacing: 8) {
                             // 블로그 mainImage
                             ZStack {
@@ -60,6 +60,8 @@ struct HomeBigPostListCell: View {
                             Text(post.blogName ?? "")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.todaysWastoryTextColor)
+                                .lineLimit(1)
+                                .padding(.trailing, 20)
                         }
                     }
                     .padding(.leading, 35)
@@ -115,7 +117,7 @@ struct HomeBigPostListCell: View {
                 }
                 .padding(.horizontal, 20)
                 .overlay(
-                    contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+                    NavigateToPostViewButton(post.id, post.blogID)
                     )
             } // VStack
         

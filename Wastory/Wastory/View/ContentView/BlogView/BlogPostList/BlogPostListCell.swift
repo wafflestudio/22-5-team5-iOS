@@ -11,8 +11,9 @@ struct BlogPostListCell: View {
     let post: Post
     @State var didAppear: Bool = false
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.blogViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.blogViewModel) var viewModel
+    @Bindable var viewModel: BlogViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -70,7 +71,7 @@ struct BlogPostListCell: View {
                 
                 Spacer()
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 70, height: 70)
                     .clipShape(
@@ -88,7 +89,7 @@ struct BlogPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

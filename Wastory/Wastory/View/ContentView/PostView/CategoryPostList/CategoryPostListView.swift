@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CategoryPostListView: View {
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.postViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.postViewModel) var viewModel
     
+    @Bindable var viewModel: PostViewModel
     
     var body: some View {
         
@@ -24,6 +25,7 @@ struct CategoryPostListView: View {
                 Text(viewModel.post.categoryID == 0 ? "이 블로그" : viewModel.categoryName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.loadingCoralRed)
+                    .lineLimit(1)
                 
                 Text("의 다른 글") // selected category로 설정
                     .font(.system(size: 18, weight: .semibold))
@@ -31,7 +33,7 @@ struct CategoryPostListView: View {
                 
                 Spacer()
                 
-                contentViewModel.navigateToBlogViewButton(viewModel.blog.id, viewModel.post.categoryID) {
+                NavigateToBlogViewButton(viewModel.blog.id, viewModel.post.categoryID) {
                     Text("더보기")
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
@@ -46,7 +48,7 @@ struct CategoryPostListView: View {
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.categoryBlogPosts.prefix(4).enumerated()), id: \.offset) { index, post in
                     if index < 4 {
-                        CategoryPostListCell(post: post)
+                        CategoryPostListCell(post: post, viewModel: viewModel)
                     }
                 }
             }

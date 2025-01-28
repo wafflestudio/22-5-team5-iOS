@@ -10,7 +10,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class PopularBlogPostSheetViewModel {
     var blog: Blog?
     

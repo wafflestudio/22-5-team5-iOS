@@ -8,7 +8,6 @@
 import SwiftUI
 import Observation
 
-@MainActor
 @Observable final class NotificationViewModel {
     //NavBar Controller
     private var isNavTitleHidden: Bool = true

@@ -19,7 +19,7 @@ struct Post: Codable, Identifiable, Hashable {
     let blogID: Int                 // Post가 게시된 Blog Id(주소)
     var blogName: String?           // Blog 이름
     var blogMainImageURL: String?   // Blog 대표이미지 URL
-    var mainImageUrl: String?       // Post 대표이미지 URL
+    var mainImageURL: String?       // Post 대표이미지 URL
     var categoryID: Int?           // Post가 블로그 내에 속한 카테고리 Id (카테고리 미제작 시 불필요)
     var viewCount: Int              // 조회수
     var likeCount: Int              // Like 개수
@@ -35,7 +35,7 @@ struct Post: Codable, Identifiable, Hashable {
         case blogID = "blog_id"
         case blogName = "blog_name"
         case blogMainImageURL = "blog_main_image_url"
-        case mainImageUrl = "main_image_url"
+        case mainImageURL = "article_main_image_url"
         case categoryID = "category_id"
         case viewCount = "views"
         case likeCount = "article_likes"
@@ -59,6 +59,10 @@ struct PostListDto: Codable {
         case totalCount = "total_count"
         case articles
     }
+    
+    static let defaultPostListDto: PostListDto = {
+        PostListDto(page: 0, perPage: 0, totalCount: 0, articles: [])
+    }()
 }
 
 

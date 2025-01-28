@@ -10,7 +10,7 @@ import SwiftUI
 struct MyCategoryView: View {
     @State var viewModel = MyCategoryViewModel()
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {

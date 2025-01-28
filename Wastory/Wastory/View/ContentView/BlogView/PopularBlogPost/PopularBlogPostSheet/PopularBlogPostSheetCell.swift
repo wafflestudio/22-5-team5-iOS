@@ -12,8 +12,7 @@ struct PopularBlogPostSheetCell: View {
     let index: Int
     @State var didAppear: Bool = false
     
-    @Bindable var viewModel: PopularBlogPostSheetViewModel
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -75,7 +74,7 @@ struct PopularBlogPostSheetCell: View {
                 Spacer()
                 
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 50, height: 50)
                     .clipShape(
@@ -90,7 +89,7 @@ struct PopularBlogPostSheetCell: View {
         } //VStack
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, post.blogID)
+            NavigateToPostViewButton(post.id, post.blogID)
         }
     }
 }

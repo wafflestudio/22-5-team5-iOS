@@ -9,11 +9,11 @@ import SwiftUI
 
 struct BasicBlogCell: View {
     let blog: Blog
-    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            contentViewModel.navigateToBlogViewButton(blog.id) {
+            NavigateToBlogViewButton(blog.id) {
                 KFImageWithDefaultIcon(imageURL: blog.mainImageURL)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 60, height: 60)
@@ -23,7 +23,7 @@ struct BasicBlogCell: View {
             Spacer()
                 .frame(width: 20)
             
-            contentViewModel.navigateToBlogViewButton(blog.id) {
+            NavigateToBlogViewButton(blog.id) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(blog.blogName)
                         .font(.system(size: 16, weight: .regular))
@@ -74,7 +74,7 @@ struct BasicBlogCell: View {
         }
         .padding(20)
         .background(
-            contentViewModel.navigateToBlogViewButton(blog.id) {
+            NavigateToBlogViewButton(blog.id) {
                 Rectangle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .foregroundStyle(Color.clear)

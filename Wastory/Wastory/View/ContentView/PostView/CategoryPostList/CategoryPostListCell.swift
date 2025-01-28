@@ -10,9 +10,10 @@ import SwiftUI
 struct CategoryPostListCell: View {
     let post: Post
     
-    @Environment(\.contentViewModel) var contentViewModel
-    @Environment(\.postViewModel) var viewModel
+//    @Environment(\.contentViewModel) var contentViewModel
+//    @Environment(\.postViewModel) var viewModel
     
+    @Bindable var viewModel: PostViewModel
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
@@ -71,7 +72,7 @@ struct CategoryPostListCell: View {
                 
                 Spacer()
                 
-                KFImageWithoutDefault(imageURL: post.mainImageUrl)
+                KFImageWithoutDefault(imageURL: post.mainImageURL)
                     .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
                     .frame(width: 100, height: 100)
                     .clipped()
@@ -86,7 +87,7 @@ struct CategoryPostListCell: View {
         
         .background(Color.white)
         .overlay {
-            contentViewModel.navigateToPostViewButton(post.id, viewModel.blog.id)
+            NavigateToPostViewButton(post.id, viewModel.blog.id)
         }
     }
 }
