@@ -477,6 +477,64 @@ extension NetworkRepository {
         return response.articles
     }
     
+    func getFocusArticles1() async throws -> [Post] {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getFocusArticles1.url,
+            method:  NetworkRouter.getFocusArticles1.method,
+            headers: NetworkRouter.getFocusArticles1.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
+    func getFocusArticles2() async throws -> [Post] {
+        let urlRequest = try URLRequest(
+            url:     NetworkRouter.getFocusArticles2.url,
+            method:  NetworkRouter.getFocusArticles2.method,
+            headers: NetworkRouter.getFocusArticles2.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(PostListDto.self, decoder: decoder)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.articles
+    }
+    
     func getArticlesOfSubscription(blogID: Int, page: Int) async throws -> [Post] {
         var urlRequest = try URLRequest(
             url:     NetworkRouter.getArticlesOfSubscription(blogID: blogID).url,

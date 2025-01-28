@@ -57,15 +57,17 @@ struct CommentView: View {
                         
                         
                         // MARK: 댓글List
-                        ForEach(Array(viewModel.comments.enumerated()), id: \.offset) { index, comment in
-                            CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
-                                .onAppear {
-                                    if index == viewModel.comments.count - 1 {
-                                        Task {
-                                            await viewModel.getComments()
+                        LazyVStack {
+                            ForEach(Array(viewModel.comments.enumerated()), id: \.offset) { index, comment in
+                                CommentCell(comment: comment, isChild: false, rootComment: comment, viewModel: viewModel)
+                                    .onAppear {
+                                        if index == viewModel.comments.count - 1 {
+                                            Task {
+                                                await viewModel.getComments()
+                                            }
                                         }
                                     }
-                                }
+                            }
                         }
                     }
                 }

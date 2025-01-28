@@ -52,8 +52,14 @@ struct FocusPostListView: View {
             
             LazyVStack(spacing: 0) {
                 ForEach(Array(viewModel.focusPostList1Items.enumerated()), id: \.offset) { index, post in
-                    HomePostListCell(post: Post.defaultPost)
-                    //TODO: Divider 추가
+                    HomePostListCell(post: post)
+                    
+                    if index != viewModel.focusPostList1Items.count - 1 || index == 4 {
+                        Divider()
+                            .foregroundStyle(Color.secondaryLabelColor)
+                            .padding(.horizontal, 20)
+                        
+                    }
                 }
             }
         }
@@ -102,9 +108,15 @@ struct FocusPostListView: View {
                 .frame(height: 15)
             
             LazyVStack(spacing: 0) {
-                ForEach(Array(viewModel.focusPostList2Items.enumerated()), id: \.offset) { index, item in
-                    HomePostListCell(post: Post.defaultPost)
-                    //TODO: Divider 추가
+                ForEach(Array(viewModel.focusPostList2Items.prefix(5).enumerated()), id: \.offset) { index, post in
+                    HomePostListCell(post: post)
+                    
+                    if index != viewModel.focusPostList2Items.count - 1 || index == 4 {
+                        Divider()
+                            .foregroundStyle(Color.secondaryLabelColor)
+                            .padding(.horizontal, 20)
+                        
+                    }
                 }
             }
         }

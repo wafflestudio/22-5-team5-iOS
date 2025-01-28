@@ -93,7 +93,9 @@ struct CommentSheet: View {
                                     
                                     Button(action: {
                                         Task {
+                                            print("patch comment")
                                             await viewModel.patchComment()
+                                            print("patch comment2")
                                             viewModel.resetPage()
                                             viewModel.resetEditingComment()
                                             viewModel.resetEditingCommentText()

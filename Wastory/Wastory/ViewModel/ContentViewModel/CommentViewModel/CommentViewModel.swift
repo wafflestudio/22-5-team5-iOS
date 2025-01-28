@@ -148,7 +148,7 @@ import Observation
     }
     
     func patchComment() async {
-        if !writingCommentText.isEmpty {
+        if !editingCommentText.isEmpty {
             do {
                 print("patch comment")
                 _ = try await NetworkRepository.shared.patchComment(

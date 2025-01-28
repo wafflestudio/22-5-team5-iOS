@@ -44,6 +44,8 @@ enum NetworkRouter {
     case getArticlesTodayWastory
     case getArticlesWeeklyWastory
     case getArticlesHomeTopic(highHomeTopicID: Int)
+    case getFocusArticles1
+    case getFocusArticles2
     case getArticlesOfSubscription(blogID: Int)
     case searchArticlesInBlog(searchingWord: String, blogID: Int)
     case searchArticles(searchingWord: String)
@@ -126,6 +128,8 @@ enum NetworkRouter {
         case .getArticlesTodayWastory: "/articles/today_wastory"
         case .getArticlesWeeklyWastory: "/articles/weekly_wastory"
         case .getArticlesHomeTopic: "/articles/hometopic/{highHomeTopicID}"
+        case .getFocusArticles1: "/articles/focusview/Js_weekend_plan"
+        case .getFocusArticles2: "/articles/focusview/coffee"
         case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
         case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
         case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
@@ -233,6 +237,10 @@ enum NetworkRouter {
         case .getArticlesWeeklyWastory:
             return .get
         case .getArticlesHomeTopic:
+            return .get
+        case .getFocusArticles1:
+            return .get
+        case .getFocusArticles2:
             return .get
         case .getArticlesOfSubscription:
             return .get
@@ -369,6 +377,10 @@ enum NetworkRouter {
         case .getArticlesWeeklyWastory:
             return ["Content-Type": "application/json"]
         case .getArticlesHomeTopic:
+            return ["Content-Type": "application/json"]
+        case .getFocusArticles1:
+            return ["Content-Type": "application/json"]
+        case .getFocusArticles2:
             return ["Content-Type": "application/json"]
         case .getArticlesOfSubscription:
             return ["Content-Type": "application/json"]
