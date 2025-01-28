@@ -270,13 +270,13 @@ enum NetworkRouter {
         // MARK: Draft
         case .postDraft:
             return .post
-        case let .patchDraft(draftID):
+        case .patchDraft:
             return .patch
-        case let .getDraft(draftID):
+        case .getDraft:
             return .get
-        case let .getDraftsInBlog(blogID):
+        case .getDraftsInBlog:
             return .get
-        case let .deleteDraft(draftID):
+        case .deleteDraft:
             return .delete
         }
     }
@@ -394,13 +394,13 @@ enum NetworkRouter {
         // MARK: Draft
         case .postDraft:
             return ["Content-Type": "application/json"]
-        case let .patchDraft(draftID):
+        case .patchDraft:
             return ["Content-Type": "application/json"]
-        case let .getDraft(draftID):
+        case .getDraft:
             return ["Content-Type": "application/json"]
-        case let .getDraftsInBlog(blogID):
+        case .getDraftsInBlog:
             return ["Content-Type": "application/json"]
-        case let .deleteDraft(draftID):
+        case .deleteDraft:
             return ["Content-Type": "application/json"]
         }
     }
