@@ -12,7 +12,8 @@ import SwiftUI
 // "피드"의 List에 표시 될 Cell
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct NotificationCell: View {
-    var notification: Notification
+    @State var notification: Noti
+    @Bindable var viewModel: NotificationViewModel
     
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
@@ -113,29 +114,20 @@ struct NotificationCell: View {
             Spacer()
         }
         .padding(.vertical, 22)
-        .overlay {
-            switch notification.type {
-            case 1:
-                NavigateToPostViewButton(notification.postID ?? 0, notification.blogID)
-            case 2:
-                NavigateToBlogViewButton(notification.blogID) {
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .foregroundStyle(Color.clear)
+        .onTapGesture {
+            print("ontap")
+            viewModel.toggleIsNavigationActive(notification.type)
+            if !notification.checked {
+                viewModel.setTargetNotification(notification)
+                Task {
+                    await viewModel.patchNotificationRead()
+                    notification.checked = true
                 }
-            case 3:
-                NavigateToPostViewButton(notification.postID ?? 0, notification.blogID, true)
-            case 4:
-                NavigationLink(destination: CommentView(postID: nil, blogID: notification.blogID)) {
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .foregroundStyle(Color.clear)
-                }
-            case 5:
-                Color.clear // 쪽지뷰로 이동
-            default:
-                Color.clear
             }
+        }
+        .onLongPressGesture {
+            viewModel.setTargetNotification(notification)
+            viewModel.toggleIsAlertPresent()
         }
     }
 }

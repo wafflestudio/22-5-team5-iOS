@@ -859,7 +859,7 @@ extension NetworkRepository {
     }
     
     // MARK: - Notification
-    func getNotifications(page: Int, type: Int? = nil) async throws -> [Notification] {
+    func getNotifications(page: Int, type: Int? = nil) async throws -> [Noti] {
         var urlRequest = try URLRequest(
             url:     NetworkRouter.getNotifications.url,
             method:  NetworkRouter.getNotifications.method,
@@ -876,7 +876,7 @@ extension NetworkRepository {
             } else {
                 components?.queryItems = [
                     URLQueryItem(name: "page", value: "\(page)"),
-                    URLQueryItem(name: "type", value: "\(type!)")
+                    URLQueryItem(name: "type", value: "\(type ?? 0)")
                 ]
             }
             urlRequest.url = components?.url
@@ -888,7 +888,7 @@ extension NetworkRepository {
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(NotificationListDto.self)
+        .serializingDecodable(NotiListDto.self)
         .value
         
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")

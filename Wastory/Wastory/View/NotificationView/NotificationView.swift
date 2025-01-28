@@ -82,14 +82,51 @@ struct NotificationView: View {
                 //MARK: NotificationList
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.notifications.enumerated()), id: \.offset) { index, notification in
-                        NotificationCell(notification: notification)
+                        NotificationCell(notification: notification, viewModel: viewModel)
                         Divider()
                             .foregroundStyle(Color.gray)
                     }
                 }
             }
         }
-        
+        .onAppear {
+            Task {
+                await viewModel.getNotifications()
+            }
+        }
+        .refreshable {
+            Task {
+                await viewModel.getNotifications()
+            }
+        }
+        .alert("알림 삭제", isPresented: $viewModel.isAlertPresent) {
+            Button("취소", role: .cancel) {}
+            
+            Button("삭제", role: .destructive) {
+                Task {
+                    await viewModel.deleteNotificationRead()
+                    viewModel.resetPage()
+                    await viewModel.getNotifications()
+                }
+            }
+        } message: {
+            Text("알림을 삭제하시겠습니까?")
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation1Active) {
+            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation2Active) {
+            BlogView(blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation3Active) {
+            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0, toComment: true)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation4Active) {
+            CommentView(postID: nil, blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation5Active) {
+            EmptyView()
+        }
         
     }
 }
