@@ -17,6 +17,7 @@ struct CommentView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
+                
                 ScrollView {
                     VStack(spacing: 0) {
                         Spacer()
@@ -71,6 +72,9 @@ struct CommentView: View {
                         }
                     }
                 }
+                .onTapGesture {
+                    viewModel.unfocusTextField()
+                }
             }
             .refreshable {
                 viewModel.resetPage()
@@ -80,6 +84,7 @@ struct CommentView: View {
                     await viewModel.getComments()
                 }
             }
+            
             
             CommentSheet(viewModel: viewModel)
         }
@@ -179,6 +184,7 @@ struct CommentView: View {
                                     viewModel.resetTargetComment()
                                     viewModel.resetWritingCommentText()
                                     await viewModel.getComments()
+                                    viewModel.unfocusTextField()
                                 }
                             }) {
                                 Text("등록")

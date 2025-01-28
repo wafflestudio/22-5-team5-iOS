@@ -141,6 +141,10 @@ import Observation
         isTextFieldFocused = true
     }
     
+    func unfocusTextField() {
+        isTextFieldFocused = false
+    }
+    
     func setEditComment(to comment: Comment) {
         editingCommentText = comment.content
         editingComment = comment
