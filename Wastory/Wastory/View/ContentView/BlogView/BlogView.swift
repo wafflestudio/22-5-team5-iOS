@@ -54,6 +54,9 @@ struct BlogView: View {
                 Task {
                     await viewModel.getPopularBlogPosts()
                 }
+                Task {
+                    await viewModel.getSubscriptionCounts()
+                }
             }
             
             
@@ -141,6 +144,9 @@ struct BlogView: View {
                         }
                     }
                     await viewModel.getPostsInCategory()
+                }
+                Task {
+                    await viewModel.getSubscriptionCounts()
                 }
             }
         }

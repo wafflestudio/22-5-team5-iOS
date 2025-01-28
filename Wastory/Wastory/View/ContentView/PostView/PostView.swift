@@ -131,18 +131,41 @@ struct PostView: View {
                             Spacer()
                                 .frame(height: 15)
                             
-                            Button(action: {
-                                //구독추가
-                            }) {
-                                Text("구독하기 +") // 구독중 V
-                                    .font(.system(size: 14, weight: .light))
-                                    .foregroundStyle(Color.primaryLabelColor)
-                                    .frame(width: 87, height: 35)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(style: StrokeStyle(lineWidth: 1))
-                                            .foregroundStyle(Color.primaryLabelColor) //secondaryLabelColor
-                                    )
+                            if viewModel.blog.id != UserInfoRepository.shared.getBlogID() && viewModel.blog.id != Blog.defaultBlog.id {
+                                SubscribingButton(
+                                    blogID: viewModel.blog.id,
+                                    blogAddress: viewModel.blog.addressName,
+                                    subscribedContent: {
+                                        AnyView(
+                                            HStack(spacing: 0) {
+                                                Text("구독중 ")
+                                                
+                                                Image(systemName: "checkmark")
+                                            }
+                                            .font(.system(size: 14, weight: .light))
+                                            .foregroundStyle(Color.primaryLabelColor)
+                                            .frame(width: 87, height: 35)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(style: StrokeStyle(lineWidth: 1))
+                                                    .foregroundStyle(Color.secondaryLabelColor)
+                                            )
+                                        )
+                                    },
+                                    notSubscribedContent: {
+                                        AnyView(
+                                            Text("구독하기 +") // 구독중 V
+                                                .font(.system(size: 14, weight: .light))
+                                                .foregroundStyle(Color.primaryLabelColor)
+                                                .frame(width: 100, height: 35)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .stroke(style: StrokeStyle(lineWidth: 1))
+                                                        .foregroundStyle(Color.primaryLabelColor)
+                                                )
+                                        )
+                                    }
+                                )
                             }
                         }
                         .padding(.leading, 20)

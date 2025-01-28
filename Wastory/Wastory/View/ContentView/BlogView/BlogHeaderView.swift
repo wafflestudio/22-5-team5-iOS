@@ -48,7 +48,7 @@ struct BlogHeaderView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(Color.secondaryDarkModeLabelColor)
                         
-                        Text("2025")
+                        Text("\(viewModel.subscriberCount)")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(Color.primaryDarkModeLabelColor)
                         
@@ -62,7 +62,7 @@ struct BlogHeaderView: View {
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(Color.secondaryDarkModeLabelColor)
                                 
-                                Text("2025")
+                                Text("\(viewModel.subscriberCount)")
                                     .font(.system(size: 13, weight: .semibold))
                                     .foregroundStyle(Color.primaryDarkModeLabelColor)
                             }
@@ -74,7 +74,7 @@ struct BlogHeaderView: View {
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(Color.secondaryDarkModeLabelColor)
                                 
-                                Text("2025")
+                                Text("\(viewModel.subscribingCount)")
                                     .font(.system(size: 13, weight: .semibold))
                                     .foregroundStyle(Color.primaryDarkModeLabelColor)
                             }
@@ -95,19 +95,38 @@ struct BlogHeaderView: View {
                 
                 if !viewModel.isMyBlog {
                     HStack(spacing: 10) {
-                        Button(action: {
-                            //User.subscribingBlogID에 추가
-                        }) {
-                            ZStack {
-                                Color.white // 버튼 배경 흰색
-                                Text("구독하기")
-                                    .font(.system(size: 14, weight: .light))
-                                    .blendMode(.destinationOut) // 텍스트를 배경에서 투명하게 처리
-                            }
-                            .compositingGroup() // 블렌드 모드 적용
+                        if viewModel.blog.id != Blog.defaultBlog.id {
+                            SubscribingButton(
+                                blogID: viewModel.blog.id,
+                                blogAddress: viewModel.blog.addressName,
+                                subscribedContent: {
+                                    AnyView(
+                                        ZStack {
+                                            Text("구독중")
+                                                .font(.system(size: 14, weight: .light))
+                                                .foregroundStyle(Color.primaryDarkModeLabelColor)
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(style: StrokeStyle(lineWidth: 1))
+                                                .foregroundStyle(Color.secondaryDarkModeLabelColor)
+                                        }
+                                        .frame(width: 87, height: 35)
+                                    )
+                                },
+                                notSubscribedContent: {
+                                    AnyView(
+                                        ZStack {
+                                            Color.white
+                                            Text("구독하기")
+                                                .font(.system(size: 14, weight: .light))
+                                                .blendMode(.destinationOut)
+                                        }
+                                        .compositingGroup()
+                                        .frame(width: 100, height: 35)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    )
+                                }
+                            )
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .frame(width: 100, height: 35)
                         
                         Button(action: {
                             //방명록 View로 이동

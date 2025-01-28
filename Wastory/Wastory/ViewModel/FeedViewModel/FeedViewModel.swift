@@ -10,6 +10,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class FeedViewModel {
     //NavBar Controller
     private var isNavTitleHidden: Bool = true
@@ -76,6 +77,8 @@ import Observation
     //Network
     var posts: [Post] = []
     
+    var subscriberCount: Int = 0
+    var subscribingCount: Int = 0
     
     func getPosts() async {
         do {
@@ -97,18 +100,13 @@ import Observation
             print("Error: \(error.localizedDescription)")
         }
     }
-}
-
-
-// Environment Key 정의
-private struct FeedViewModelKey: EnvironmentKey {
-    static let defaultValue = FeedViewModel()
-}
-
-// Environment Values 확장
-extension EnvironmentValues {
-    var feedViewModel: FeedViewModel {
-        get { self[FeedViewModelKey.self] }
-        set { self[FeedViewModelKey.self] = newValue }
+    
+    func getSubscriptionCounts() async {
+        do {
+            subscriberCount = try await NetworkRepository.shared.getMySubscriberBlogs(page: 1).totalCount
+            subscribingCount = try await NetworkRepository.shared.getMySubscribingBlogs(page: 1).totalCount
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
     }
 }

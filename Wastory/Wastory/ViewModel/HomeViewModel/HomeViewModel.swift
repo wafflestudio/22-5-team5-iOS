@@ -47,7 +47,7 @@ import Observation
     
     //TodayWastoryPageTab
     func setDisplayedTodaysWastoryItems() {
-        displayedTodaysWastoryItems = [todaysWastoryItems.last!] + todaysWastoryItems + [todaysWastoryItems.first!]
+        displayedTodaysWastoryItems = [todaysWastoryItems.last ?? Post.defaultPost] + todaysWastoryItems + [todaysWastoryItems.first ?? Post.defaultPost]
         print(displayedTodaysWastoryItems)
     }
     

@@ -13,8 +13,6 @@ struct FeedView: View {
     @State var viewModel = FeedViewModel()
     @Environment(\.contentViewModel) var contentViewModel
     
-    @State var subscribingCount: Int = 0 // 구독중 count
-    @State var subscriberCount:  Int = 0 // 구독자 count
     
     var body: some View {
         VStack(spacing: 0) {
@@ -74,7 +72,7 @@ struct FeedView: View {
                                 .foregroundStyle(Color.gray)
                                 .padding(.bottom, 4)
                             
-                            Text("\(subscribingCount)")
+                            Text("\(viewModel.subscribingCount)")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.black)
                         }
@@ -89,7 +87,7 @@ struct FeedView: View {
                                 .foregroundStyle(Color.gray)
                                 .padding(.bottom, 4)
                             
-                            Text("\(subscriberCount)")
+                            Text("\(viewModel.subscriberCount)")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.black)
                         }
@@ -109,14 +107,21 @@ struct FeedView: View {
         }
         //MARK: Network
         .onAppear {
+            viewModel.resetPage()
             Task {
                 await viewModel.getPosts()
+            }
+            Task {
+                await viewModel.getSubscriptionCounts()
             }
         }
         .refreshable {
             viewModel.resetPage()
             Task {
                 await viewModel.getPosts()
+            }
+            Task {
+                await viewModel.getSubscriptionCounts()
             }
         }
         

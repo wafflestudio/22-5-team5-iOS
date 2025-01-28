@@ -44,6 +44,10 @@ struct BlogListDto: Codable {
         case totalCount = "total_count"
         case blogs
     }
+    
+    static let defaultBlogListDto: BlogListDto = {
+        BlogListDto(page: 0, perPage: 0, totalCount: 0, blogs: [])
+    }()
 }
 
 
