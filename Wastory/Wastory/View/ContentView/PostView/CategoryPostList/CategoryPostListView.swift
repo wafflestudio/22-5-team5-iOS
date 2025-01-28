@@ -24,6 +24,7 @@ struct CategoryPostListView: View {
                 Text(viewModel.post.categoryID == 0 ? "이 블로그" : viewModel.categoryName)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Color.loadingCoralRed)
+                    .lineLimit(1)
                 
                 Text("의 다른 글") // selected category로 설정
                     .font(.system(size: 18, weight: .semibold))

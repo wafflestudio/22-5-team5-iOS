@@ -81,6 +81,7 @@ struct BasicPostCell: View {
                         Text(post.blogName ?? "")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
+                            .lineLimit(1)
                     }
                 }
             }

@@ -28,6 +28,7 @@ struct HomePostListCell: View {
                     Text(post.blogName ?? "")
                         .font(.system(size: 13, weight: .regular))
                         .foregroundStyle(Color.primaryLabelColor)
+                        .lineLimit(1)
                 }
             }
             

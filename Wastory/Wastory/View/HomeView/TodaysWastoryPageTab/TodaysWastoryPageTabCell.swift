@@ -83,6 +83,7 @@ struct TodaysWastoryPageTabCell: View {
                                 Text(post.blogName ?? "")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(Color.todaysWastoryTextColor)
+                                    .lineLimit(1)
                             }
                         }
                         

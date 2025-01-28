@@ -42,6 +42,7 @@ struct PostView: View {
                             Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.primaryLabelColor)
+                                .lineLimit(1)
                                 .background(
                                     VStack(spacing: 0) {
                                         Spacer()
@@ -73,6 +74,7 @@ struct PostView: View {
                             Text(viewModel.blog.blogName)
                                 .font(.system(size: 14, weight: .light))
                                 .foregroundStyle(Color.secondaryLabelColor)
+                                .lineLimit(1)
                             
                             Image(systemName: "circle.fill")
                                 .font(.system(size: 3, weight: .regular))

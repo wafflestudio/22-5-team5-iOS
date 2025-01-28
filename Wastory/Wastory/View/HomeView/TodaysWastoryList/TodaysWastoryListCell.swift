@@ -32,6 +32,7 @@ struct TodaysWastoryListCell: View {
                         .font(.system(size: 11, weight: .light))
                         .foregroundStyle(Color.primaryLabelColor)
                         .padding(.top, 4)
+                        .lineLimit(1)
                 }
                 
                 Spacer()
