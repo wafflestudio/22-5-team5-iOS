@@ -78,7 +78,7 @@ enum NetworkRouter {
     case postDraft
     case patchDraft(draftID: Int)
     case getDraft(draftID: Int)
-    case getDraftsInBlog(blogID: Int)
+    case getDraftsInBlog(blogID: Int, page: Int)
     case deleteDraft(draftID: Int)
     
     var url: URL {
@@ -156,7 +156,7 @@ enum NetworkRouter {
         case .postDraft: "/drafts/create"
         case let .patchDraft(draftID): "/drafts/update/\(draftID)"
         case let .getDraft(draftID): "/drafts/get/\(draftID)"
-        case let .getDraftsInBlog(blogID): "/drafts/blogs/\(blogID)"
+        case let .getDraftsInBlog(blogID, page): "/drafts/blogs/\(blogID)/\(page)"
         case let .deleteDraft(draftID): "/drafts/delete/\(draftID)"
         }
     }

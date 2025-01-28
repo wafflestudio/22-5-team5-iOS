@@ -433,9 +433,9 @@ final class NetworkRepository {
     
     func getDraftsInBlog(blogID: Int, page: Int) async throws -> DraftListDto {
         let urlRequest = try URLRequest(
-            url: NetworkRouter.getDraftsInBlog(blogID: blogID).url,
-            method: NetworkRouter.getDraftsInBlog(blogID: blogID).method,
-            headers: NetworkRouter.getDraftsInBlog(blogID: blogID).headers
+            url: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).url,
+            method: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).method,
+            headers: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).headers
         )
         
         logRequest(urlRequest)
@@ -446,10 +446,7 @@ final class NetworkRepository {
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
         let response = try await AF.request(
-            urlRequest as! URLConvertible,
-            parameters: [
-                "page": page
-            ],
+            urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
         .serializingDecodable(DraftListDto.self, decoder: decoder)
