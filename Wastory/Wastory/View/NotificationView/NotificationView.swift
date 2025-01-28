@@ -12,8 +12,6 @@ struct NotificationView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
     
     //임시 데이터 배열
-    var items: [String] = ["아이템 1", "아이템 2", "아이템 3", "아이템 4", "아이템 5"]
-    
     var body: some View {
         VStack(spacing: 0) {
             //MARK: NavBar
@@ -70,7 +68,7 @@ struct NotificationView: View {
                         mainTabViewModel.toggleIsNotificationTypeSheetPresent()
                     }) {
                         HStack(spacing: 0) {
-                            Text("\(viewModel.getNotificationType())  ")
+                            Text(viewModel.notificationTypes[viewModel.notificationType] ?? "")
                             
                             Image(systemName: "chevron.down")
                         }
@@ -83,8 +81,8 @@ struct NotificationView: View {
                 
                 //MARK: NotificationList
                 LazyVStack(spacing: 0) {
-                    ForEach(items, id: \.self) { _ in
-                        NotificationCell()
+                    ForEach(Array(viewModel.notifications.enumerated()), id: \.offset) { index, notification in
+                        NotificationCell(notification: notification)
                         Divider()
                             .foregroundStyle(Color.gray)
                     }

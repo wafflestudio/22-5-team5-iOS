@@ -858,6 +858,92 @@ extension NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
+    // MARK: - Notification
+    func getNotifications(page: Int, type: Int? = nil) async throws -> [Notification] {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.getNotifications.url,
+            method:  NetworkRouter.getNotifications.method,
+            headers: NetworkRouter.getNotifications.headers
+        )
+        
+        if let url = urlRequest.url {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            
+            if let _ = type {
+                components?.queryItems = [
+                    URLQueryItem(name: "page", value: "\(page)"),
+                ]
+            } else {
+                components?.queryItems = [
+                    URLQueryItem(name: "page", value: "\(page)"),
+                    URLQueryItem(name: "type", value: "\(type!)")
+                ]
+            }
+            urlRequest.url = components?.url
+        }
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(NotificationListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.notifications
+    }
+    
+    func patchNotification(notificationID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.patchNotification.url,
+            method:  NetworkRouter.patchNotification.method,
+            headers: NetworkRouter.patchNotification.headers
+        )
+        
+        let requestBody = [
+            "notification_id": "\(notificationID)"
+        ]
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteNotification(notificationID: Int) async throws {
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.deleteNotification.url,
+            method:  NetworkRouter.deleteNotification.method,
+            headers: NetworkRouter.deleteNotification.headers
+        )
+        
+        let requestBody = [
+            "notification_id": "\(notificationID)"
+        ]
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Subscription
     func postSubscription(blogID: Int) async throws {
         var urlRequest = try URLRequest(

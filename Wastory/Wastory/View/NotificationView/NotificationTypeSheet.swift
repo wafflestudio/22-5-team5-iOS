@@ -36,10 +36,8 @@ struct NotificationTypeSheet: View {
                             Spacer()
                                 .frame(height: typeSheetTopSpace)
                             
-                            ForEach(viewModel.notificationTypes.indices, id: \.self) { index in
-                                let type = viewModel.notificationTypes[index]
-                                
-                                NotificationTypeButton(for: type, isLast: index == viewModel.notificationTypes.count - 1, rowHeight: typeSheetRowHeight)
+                            ForEach(0...viewModel.notificationTypes.count - 1, id: \.self) { index in
+                                NotificationTypeButton(for: index, isLast: index == viewModel.notificationTypes.count - 1, rowHeight: typeSheetRowHeight)
                             }
                             
                             Spacer()
@@ -62,13 +60,13 @@ struct NotificationTypeSheet: View {
     }
     
     //MARK: NotificationTypeSheet Row(Button)
-    @ViewBuilder func NotificationTypeButton(for type: String, isLast: Bool, rowHeight: CGFloat) -> some View {
+    @ViewBuilder func NotificationTypeButton(for type: Int, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
             viewModel.setNotificationType(to: type)
             mainTabViewModel.toggleIsNotificationTypeSheetPresent()
         }) {
             HStack(spacing: 0) {
-                Text("\(type)")
+                Text(viewModel.notificationTypes[type] ?? "")
                     .font(.system(size: 17, weight: viewModel.isCurrentType(is: type) ? .semibold : .light))
                     .foregroundStyle(Color.primaryLabelColor)
                     .padding()

@@ -63,8 +63,15 @@ import Observation
     }
     
     //notification
-    let notificationTypes = ["전체 알림", "새글 알림", "구독 알림", "댓글 알림", "방명록 알림", "챌린지 알림"]
-    var notificationType: String = "전체 알림"
+    let notificationTypes: [Int: String] = [
+        0: "전체 알림",
+        1: "새글 알림",
+        2: "구독 알림",
+        3: "댓글 알림",
+        4: "방명록 알림",
+        5: "쪽지 알림"
+    ]
+    var notificationType: Int = 0
     
     var typeSheetHeight: CGFloat = 0
     
@@ -77,16 +84,16 @@ import Observation
     
     
     //MARK: NotificationType
-    func getNotificationType() -> String {
+    func getNotificationType() -> Int {
         notificationType
     }
     
     
-    func setNotificationType(to type: String) {
+    func setNotificationType(to type: Int) {
         notificationType = type
     }
     
-    func isCurrentType(is type: String) -> Bool {
+    func isCurrentType(is type: Int) -> Bool {
         type == notificationType
     }
     
@@ -95,4 +102,12 @@ import Observation
     }
     
     
+    
+    
+    //Network
+    var notifications: [Notification] = [Notification.default1Notification, Notification.default2Notification, Notification.default3Notification, Notification.default4Notification]
+    
+    
+//    func getNotifications
+
 }

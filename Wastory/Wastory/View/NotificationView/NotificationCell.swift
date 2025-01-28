@@ -12,17 +12,17 @@ import SwiftUI
 // "피드"의 List에 표시 될 Cell
 // [제목, 내용 및 이미지, 좋아요 수, 댓글 수, 업로드 시간, 업로드된 블로그] 정보가 필요.
 struct NotificationCell: View {
+    var notification: Notification
     
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
             HStack(spacing: 0) {
                 Circle()
                     .frame(width: 5, height: 5)
-                    .foregroundStyle(Color.unreadNotification) //TODO: 읽은 상태라면 .clear
+                    .foregroundStyle(notification.checked ? Color.clear : Color.unreadNotification)
                     .padding(.trailing, 7)
                 
-                Image(systemName: "questionmark.text.page.fill.rtl")
-                    .resizable()
+                KFImageWithDefaultIcon(imageURL: notification.blogMainImageURL)
                     .frame(width: 40, height: 40)
                     .scaledToFit()
                     .clipShape(Circle())
@@ -33,21 +33,68 @@ struct NotificationCell: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    Text("중워니")
+                    Text(notification.username.prefix(7) + ((notification.username.count > 7) ? "..." : ""))
                         .font(.system(size: 15, weight: .semibold))
                     
-                    Text("님이 새 글을 발행했습니다.") // 알림 종류에 따라 변화
-                        .font(.system(size: 15, weight: .light))
+                    switch notification.type {
+                    case 1:
+                        Text("님이 새 글을 발행했습니다.")
+                            .font(.system(size: 15, weight: .light))
+                    case 2:
+                        Text("님이 내 블로그를 구독합니다.")
+                            .font(.system(size: 15, weight: .light))
+                    case 3:
+                        HStack(spacing: 0) {
+                            Text("님이 ")
+                                .font(.system(size: 15, weight: .light))
+                            Text((notification.postTitle ?? "").prefix(7) + ((notification.postTitle ?? "").count > 7 ? "..." : ""))
+                                .font(.system(size: 15, weight: .semibold))
+                            Text("에 댓글을 남겼습니다.")
+                                .font(.system(size: 15, weight: .light))
+                        }
+                    case 4:
+                        Text("님이 방명록을 남겼습니다.")
+                            .font(.system(size: 15, weight: .light))
+                    case 5:
+                        Text("님이 쪽지를 보냈습니다.")
+                            .font(.system(size: 15, weight: .light))
+                    default:
+                        Text("")
+                    }
                 }
                 .padding(.bottom, 8)
                 
-                Text("\"" + "알림종류에 따라 달라짐 예: 새글 알림 경우에는 새글의 제목이 표시가 됨. 댓글의 경우에는 댓글의 내용이 표시가 됨\"") // 알림 종류에 따라 변화
-                    .font(.system(size: 15, weight: .light))
-                    .lineLimit(2)
-                    .padding(.bottom, 8)
+                switch notification.type {
+                case 1:
+                    Text("\"" + (notification.postTitle ?? "") + "\"") // 알림 종류에 따라 변화
+                        .font(.system(size: 15, weight: .light))
+                        .lineLimit(2)
+                        .padding(.bottom, 8)
+                case 2:
+                    Color.clear
+                        .frame(height: 5)
+                case 3:
+                    Text("\"" + (notification.commentContent ?? "") + "\"") // 알림 종류에 따라 변화
+                        .font(.system(size: 15, weight: .light))
+                        .lineLimit(2)
+                        .padding(.bottom, 8)
+                case 4:
+                    Text("\"" + (notification.commentContent ?? "") + "\"") // 알림 종류에 따라 변화
+                        .font(.system(size: 15, weight: .light))
+                        .lineLimit(2)
+                        .padding(.bottom, 8)
+                case 5:
+                    Text("\"" + (notification.commentContent ?? "") + "\"") // 알림 종류에 따라 변화
+                        .font(.system(size: 15, weight: .light))
+                        .lineLimit(2)
+                        .padding(.bottom, 8)
+                default:
+                    Text("")
+                }
+                
                 
                 HStack(spacing: 6) {
-                    Text("블로그 이름")
+                    Text(notification.blogname)
                         .font(.system(size: 13, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                     
@@ -55,20 +102,41 @@ struct NotificationCell: View {
                         .font(.system(size: 3, weight: .regular))
                         .foregroundStyle(Color.middleDotColor)
                     
-                    Text("1시간 전")
+                    Text(timeAgo(from: notification.createdAt))
                         .font(.system(size: 13, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)
                 }
                 
             }
-            .padding(.trailing, 40)
+            .padding(.trailing, 20)
             
             Spacer()
         }
         .padding(.vertical, 22)
+        .overlay {
+            switch notification.type {
+            case 1:
+                NavigateToPostViewButton(notification.postID ?? 0, notification.blogID)
+            case 2:
+                NavigateToBlogViewButton(notification.blogID) {
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundStyle(Color.clear)
+                }
+            case 3:
+                NavigateToPostViewButton(notification.postID ?? 0, notification.blogID, true)
+            case 4:
+                NavigationLink(destination: CommentView(postID: nil, blogID: notification.blogID)) {
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundStyle(Color.clear)
+                }
+            case 5:
+                Color.clear // 쪽지뷰로 이동
+            default:
+                Color.clear
+            }
+        }
     }
 }
 
-#Preview {
-    NotificationCell()
-}

@@ -59,6 +59,11 @@ enum NetworkRouter {
     case patchComment(commentID: Int)
     case deleteComment(commentID: Int)
     
+    // MARK: - Notification
+    case getNotifications
+    case patchNotification
+    case deleteNotification
+    
     // MARK: Subscription
     case postSubscription
     case deleteSubscription
@@ -143,6 +148,11 @@ enum NetworkRouter {
         case let .getGuestBookComments(blogID, page): "/comments/guestbook/\(blogID)/\(page)"
         case let .patchComment(commentID): "/comments/\(commentID)"
         case let .deleteComment(commentID): "/comments/\(commentID)"
+            
+        // MARK: - Notification
+        case .getNotifications: "/notifications/my_notifications"
+        case .patchNotification: "/notifications/my_notifications"
+        case .deleteNotification: "/notifications/my_notifications"
             
         // MARK: Subscription
         case .postSubscription: "/subscription"
@@ -265,6 +275,14 @@ enum NetworkRouter {
         case .patchComment:
             return .patch
         case .deleteComment:
+            return .delete
+            
+        // MARK: - Notification
+        case .getNotifications:
+            return .get
+        case .patchNotification:
+            return .patch
+        case .deleteNotification:
             return .delete
         
         // MARK: Subscription
@@ -407,6 +425,14 @@ enum NetworkRouter {
         case .patchComment:
             return ["Content-Type": "application/json"]
         case .deleteComment:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: - Notification
+        case .getNotifications:
+            return ["Content-Type": "application/json"]
+        case .patchNotification:
+            return ["Content-Type": "application/json"]
+        case .deleteNotification:
             return ["Content-Type": "application/json"]
             
         // MARK: Subscription
