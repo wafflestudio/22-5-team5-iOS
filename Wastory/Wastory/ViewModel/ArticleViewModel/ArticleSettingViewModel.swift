@@ -136,7 +136,7 @@ import RichTextKit
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: htmlText,
-                    description: String(text.string.prefix(20)),
+                    description: String(text.string.prefix(80)),
                     main_image_url: mainImageURL ?? "",
                     categoryID: category.id,
                     homeTopicID: homeTopic.id,

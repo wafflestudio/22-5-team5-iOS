@@ -178,6 +178,7 @@ struct ArticleSettingView: View {
                         Text(viewModel.homeTopic.id == 0 ? "선택 안 함" : viewModel.homeTopic.name)
                             .font(.system(size: 14, weight: .ultraLight))
                             .foregroundStyle(Color.black)
+                            .lineLimit(1)
                         Spacer()
                             .frame(width: 10)
                         Image(systemName: "chevron.right")
