@@ -29,10 +29,11 @@ enum NetworkRouter {
     
     // MARK: Category
     case postCategory
-    case getCategoriesInBlog(blogID: Int)
+    case getCategory(categoryID: Int)
     case patchCategory(categoryID: Int)
     case deleteCategory(categoryID: Int)
-    case getCategory(categoryID: Int)
+    case getCategoriesInUser
+    case getCategoriesInBlog(blogID: Int)
     
     // MARK: Article
     case postArticle
@@ -73,6 +74,12 @@ enum NetworkRouter {
     // MARK: HomeTopic
     case getHomeTopicList
     
+    // MARK: Draft
+    case postDraft
+    case patchDraft(draftID: Int)
+    case getDraft(draftID: Int)
+    case getDraftsInBlog(blogID: Int)
+    case deleteDraft(draftID: Int)
     
     var url: URL {
         URL(string: NetworkConfiguration.baseURL + self.path)!
@@ -100,10 +107,11 @@ enum NetworkRouter {
             
         // MARK: Category
         case .postCategory: "/categories/create"
-        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
+        case let .getCategory(categoryID): "/categories/\(categoryID)"
         case let .patchCategory(categoryID): "/categories/\(categoryID)"
         case let .deleteCategory(categoryID): "/categories/\(categoryID)"
-        case let .getCategory(categoryID): "/categories/\(categoryID)"
+        case .getCategoriesInUser: "/categories/list/user"
+        case let .getCategoriesInBlog(blogID): "/categories/list/\(blogID)"
         
         // MARK: Article
         case .postArticle: "/articles/create"
@@ -143,6 +151,13 @@ enum NetworkRouter {
             
         // MARK: HomeTopic
         case .getHomeTopicList: "/hometopics/list"
+            
+        // MARK: Draft
+        case .postDraft: "/drafts/create"
+        case let .patchDraft(draftID): "/drafts/update/\(draftID)"
+        case let .getDraft(draftID): "/drafts/get/\(draftID)"
+        case let .getDraftsInBlog(blogID): "/drafts/blogs/\(blogID)"
+        case let .deleteDraft(draftID): "/drafts/delete/\(draftID)"
         }
     }
     
@@ -183,13 +198,15 @@ enum NetworkRouter {
         // MARK: Category
         case .postCategory:
             return .post
-        case .getCategoriesInBlog:
+        case .getCategory:
             return .get
         case .patchCategory:
             return .patch
         case .deleteCategory:
             return .delete
-        case .getCategory:
+        case .getCategoriesInUser:
+            return .get
+        case .getCategoriesInBlog:
             return .get
         
         // MARK: Article
@@ -257,6 +274,18 @@ enum NetworkRouter {
         // MARK: HomeTopic
         case .getHomeTopicList:
             return .get
+            
+        // MARK: Draft
+        case .postDraft:
+            return .post
+        case .patchDraft:
+            return .patch
+        case .getDraft:
+            return .get
+        case .getDraftsInBlog:
+            return .get
+        case .deleteDraft:
+            return .delete
         }
     }
     
@@ -297,13 +326,15 @@ enum NetworkRouter {
         // MARK: Category
         case .postCategory:
             return ["Content-Type": "application/json"]
-        case .getCategoriesInBlog:
+        case .getCategory:
             return ["Content-Type": "application/json"]
         case .patchCategory:
             return ["Content-Type": "application/json"]
         case .deleteCategory:
             return ["Content-Type": "application/json"]
-        case .getCategory:
+        case .getCategoriesInUser:
+            return ["Content-Type": "application/json"]
+        case .getCategoriesInBlog:
             return ["Content-Type": "application/json"]
         
         // MARK: Article
@@ -370,6 +401,18 @@ enum NetworkRouter {
             
         // MARK: HomeTopic
         case .getHomeTopicList:
+            return ["Content-Type": "application/json"]
+            
+        // MARK: Draft
+        case .postDraft:
+            return ["Content-Type": "application/json"]
+        case .patchDraft:
+            return ["Content-Type": "application/json"]
+        case .getDraft:
+            return ["Content-Type": "application/json"]
+        case .getDraftsInBlog:
+            return ["Content-Type": "application/json"]
+        case .deleteDraft:
             return ["Content-Type": "application/json"]
         }
     }

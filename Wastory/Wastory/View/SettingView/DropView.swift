@@ -172,7 +172,7 @@ struct DropView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                CustomBackButtonLight()
+                CustomBackButton(weight: .regular)
             }
         }
         .toolbarBackgroundVisibility(.visible)

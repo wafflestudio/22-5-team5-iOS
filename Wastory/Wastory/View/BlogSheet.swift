@@ -12,7 +12,7 @@ struct BlogSheet: View {
     
     var body: some View {
         ZStack {
-            //MARK: Background Dimming
+            // MARK: Background Dimming
             (mainTabViewModel.isBlogSheetPresent ? Color.sheetOuterBackgroundColor : Color.clear)
                 .frame(maxHeight: .infinity)
                 .frame(maxWidth: .infinity)
@@ -20,8 +20,7 @@ struct BlogSheet: View {
                 .onTapGesture {
                     mainTabViewModel.toggleIsBlogSheetPresent()
                 }
-            
-            //MARK: NotificationTypeSheet List
+
             VStack {
                 Spacer()
                 if mainTabViewModel.isBlogSheetPresent {

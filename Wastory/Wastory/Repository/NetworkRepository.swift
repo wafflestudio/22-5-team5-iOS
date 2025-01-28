@@ -255,13 +255,38 @@ final class NetworkRepository {
         return response
     }
     
+    // MARK: - Category
+    func getCategoriesInUser() async throws -> [Category] {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getCategoriesInUser.url,
+            method: NetworkRouter.getCategoriesInUser.method,
+            headers: NetworkRouter.getCategoriesInUser.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(CategoryListDto.self)
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response.categories
+    }
+    
     // MARK: - Article
-    func postArticle(title: String, content: String, description: String, categoryID: Int) async throws {
+    func postArticle(title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int) async throws {
         let requestBody = [
             "title": title,
             "content": content,
             "description": description,
-            "category_id": "\(categoryID)"
+            "main_image_url": main_image_url,
+            "category_id": "\(categoryID)",
+            "hometopic_id": "\(homeTopicID)",
+            "secret": "\(secret)"
         ]
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
@@ -272,7 +297,6 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
-        // 응답 데이터 확인
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
@@ -318,5 +342,140 @@ final class NetworkRepository {
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response.articles
+    }
+    
+    // MARK: - Draft
+    func postDraft(title: String, content: String) async throws -> Draft {
+        let requestBody = [
+            "title": title,
+            "content": content
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.postDraft.url,
+            method: NetworkRouter.postDraft.method,
+            headers: NetworkRouter.postDraft.headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self, decoder: decoder)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func patchDraft(title: String, content: String, draftID: Int) async throws {
+        let requestBody = [
+            "title": title,
+            "content": content
+        ]
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchDraft(draftID: draftID).url,
+            method: NetworkRouter.patchDraft(draftID: draftID).method,
+            headers: NetworkRouter.patchDraft(draftID: draftID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest, body: requestBody)
+        
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self, decoder: decoder)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func getDraft(draftID: Int) async throws -> Draft {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getDraft(draftID: draftID).url,
+            method: NetworkRouter.getDraft(draftID: draftID).method,
+            headers: NetworkRouter.getDraft(draftID: draftID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self, decoder: decoder)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func getDraftsInBlog(blogID: Int, page: Int) async throws -> DraftListDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.getDraftsInBlog(blogID: blogID).url,
+            method: NetworkRouter.getDraftsInBlog(blogID: blogID).method,
+            headers: NetworkRouter.getDraftsInBlog(blogID: blogID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
+        let response = try await AF.request(
+            urlRequest as! URLConvertible,
+            parameters: [
+                "page": page
+            ],
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(DraftListDto.self, decoder: decoder)
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+        
+        return response
+    }
+    
+    func deleteDraft(draftID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteDraft(draftID: draftID).url,
+            method: NetworkRouter.deleteDraft(draftID: draftID).method,
+            headers: NetworkRouter.deleteDraft(draftID: draftID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingString()
+        .value
+            
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
 }
