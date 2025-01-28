@@ -16,6 +16,8 @@ import Observation
     
     
     
+    var showComments = false
+    
     
     private var isNavTitleHidden: Bool = false
     

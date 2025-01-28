@@ -287,7 +287,9 @@ struct PostView: View {
                         .frame(width: 25)
                     
                     //댓글 버튼
-                    NavigationLink(destination: CommentView(postID: viewModel.post.id, blogID: nil)) {
+                    Button(action: {
+                        viewModel.showComments.toggle()
+                    }) {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.system(size: 20, weight: .light))
@@ -305,6 +307,11 @@ struct PostView: View {
                 .frame(height: 50)
                 .padding(.horizontal, 20)
                 .background(Color.white)
+                .fullScreenCover(isPresented: $viewModel.showComments) {
+                    NavigationStack {
+                        CommentView(postID: viewModel.post.id, blogID: nil)
+                    }
+                }
             }
         }
 
