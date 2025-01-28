@@ -359,11 +359,16 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(Draft.self)
+        .serializingDecodable(Draft.self, decoder: decoder)
         .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
@@ -385,11 +390,16 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(Draft.self)
+        .serializingDecodable(Draft.self, decoder: decoder)
         .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
@@ -404,11 +414,16 @@ final class NetworkRepository {
         
         logRequest(urlRequest)
         
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(Draft.self)
+        .serializingDecodable(Draft.self, decoder: decoder)
         .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
@@ -425,6 +440,11 @@ final class NetworkRepository {
         
         logRequest(urlRequest)
         
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest as! URLConvertible,
             parameters: [
@@ -432,7 +452,7 @@ final class NetworkRepository {
             ],
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(DraftListDto.self)
+        .serializingDecodable(DraftListDto.self, decoder: decoder)
         .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
