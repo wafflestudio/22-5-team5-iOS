@@ -161,7 +161,7 @@ struct BlogView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 20) {
-                    contentViewModel.navigateToSearchViewButton(blogID: 0) {
+                    contentViewModel.navigateToSearchViewButton(blogID: viewModel.blog.id) {
                         Text(Image(systemName: "magnifyingglass"))
                             .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
                     }
