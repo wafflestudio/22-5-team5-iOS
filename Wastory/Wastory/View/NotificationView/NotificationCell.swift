@@ -115,7 +115,6 @@ struct NotificationCell: View {
         }
         .padding(.vertical, 22)
         .onTapGesture {
-            print("ontap")
             viewModel.toggleIsNavigationActive(notification.type)
             if !notification.checked {
                 viewModel.setTargetNotification(notification)

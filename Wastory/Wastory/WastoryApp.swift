@@ -19,32 +19,31 @@ struct WastoryApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            if isLoading {
-//                LoadingView()
-//                    .onAppear {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                            Task {
-//                                await UserInfoRepository.shared.loadUserInfo(userID: userID, userPW: userPW)
-//                                self.isLoading = false
-//                            }
-//                        }
-//                    }
-//            }
-//            else {
-//                if UserInfoRepository.shared.isUserActive() == false {
-//                    NavigationStack {
-//                        SignTypeView()
-//                            .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
-//                                SignUpStep5AddressView()
-//                            }
-//                    }
-//                }
-//                else {
-//                    MainTabView()
-////                        .environment(\.contentViewModel, contentViewModel)
-//                }
-//            }
-            MainTabView()
+            if isLoading {
+                LoadingView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            Task {
+                                await UserInfoRepository.shared.loadUserInfo(userID: userID, userPW: userPW)
+                                self.isLoading = false
+                            }
+                        }
+                    }
+            }
+            else {
+                if UserInfoRepository.shared.isUserActive() == false {
+                    NavigationStack {
+                        SignTypeView()
+                            .navigationDestination(isPresented: $userInfoRepository.needAddressName) {
+                                SignUpStep5AddressView()
+                            }
+                    }
+                }
+                else {
+                    MainTabView()
+//                        .environment(\.contentViewModel, contentViewModel)
+                }
+            }
         }
     }
 }

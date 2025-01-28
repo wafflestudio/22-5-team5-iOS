@@ -63,6 +63,10 @@ struct NotificationTypeSheet: View {
     @ViewBuilder func NotificationTypeButton(for type: Int, isLast: Bool, rowHeight: CGFloat) -> some View {
         Button(action: {
             viewModel.setNotificationType(to: type)
+            viewModel.resetPage()
+            Task {
+                await viewModel.getNotifications()
+            }
             mainTabViewModel.toggleIsNotificationTypeSheetPresent()
         }) {
             HStack(spacing: 0) {

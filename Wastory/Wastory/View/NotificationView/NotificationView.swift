@@ -90,9 +90,9 @@ struct NotificationView: View {
             }
         }
         .onAppear {
-            Task {
-                await viewModel.getNotifications()
-            }
+//            Task {
+//                await viewModel.getNotifications()
+//            }
         }
         .refreshable {
             Task {
