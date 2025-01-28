@@ -10,7 +10,6 @@ import SwiftUI
 import Observation
 import RichTextKit
 
-@MainActor
 @Observable final class PostingViewModel {
     var title: String = ""
     var text = NSAttributedString()
