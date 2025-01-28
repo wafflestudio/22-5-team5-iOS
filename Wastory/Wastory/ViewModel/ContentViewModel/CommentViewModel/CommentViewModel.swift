@@ -54,6 +54,9 @@ import Observation
     //Network
     var postID: Int?
     var blogID: Int?
+    
+    var commentType: CommentType = .post
+    
     var comments: [Comment] = []
     
     var totalCommentsCount: Int = 0
@@ -65,12 +68,13 @@ import Observation
     var targetComment: Comment?
     var isTargetToComment: Bool = false
     
-    func setPostID(_ id: Int?) {
-        postID = id
-    }
-    
-    func setBlogID(_ id: Int?) {
-        blogID = id
+    func setCommentType(_ postID: Int?, _ blogID: Int?) {
+        self.postID = postID
+        self.blogID = blogID
+        
+        if self.postID == nil {
+            commentType = .blog
+        }
     }
     
     func isWritingCommentEmpty() -> Bool {
@@ -99,12 +103,21 @@ import Observation
     func postComment() async {
         if !writingCommentText.isEmpty {
             do {
-                _ = try await NetworkRepository.shared.postComment(
-                    postID: self.postID ?? 0,
-                    content: writingCommentText,
-                    parentID: targetComment?.id ?? nil,
-                    isSecret: self.isWritingCommentSecret
-                )
+                if commentType == .post {
+                    _ = try await NetworkRepository.shared.postComment(
+                        postID: self.postID ?? 0,
+                        content: writingCommentText,
+                        parentID: targetComment?.id ?? nil,
+                        isSecret: self.isWritingCommentSecret
+                    )
+                } else if commentType == .blog {
+                    _ = try await NetworkRepository.shared.postGuestBookComment(
+                        blogID: self.blogID ?? 0,
+                        content: writingCommentText,
+                        parentID: targetComment?.id ?? nil,
+                        isSecret: self.isWritingCommentSecret
+                    )
+                }
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
@@ -114,7 +127,13 @@ import Observation
     func getComments() async {
         if !isPageEnded {
             do {
-                let response = try await NetworkRepository.shared.getArticleComments(postID: postID ?? 0, page: page)
+                var response = CommentListDto.defaultCommentListDto
+                if commentType == .post {
+                    response = try await NetworkRepository.shared.getArticleComments(postID: postID ?? 0, page: page)
+                } else if commentType == .blog {
+                    response = try await NetworkRepository.shared.getGuestBookComments(blogID: blogID ?? 0, page: page)
+                }
+                
                 
                 //comments 저장
                 if page == 1 {

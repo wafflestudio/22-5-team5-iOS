@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CommentView: View {
-    let postID: Int
-    let blogID: Int
+    let postID: Int?
+    let blogID: Int?
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
     @Environment(\.contentViewModel) var contentViewModel
@@ -35,7 +35,7 @@ struct CommentView: View {
                     // MARK: 화면 상단 구성 요소
                     HStack(alignment: .top) {
                         //Navbar title
-                        Text("댓글")
+                        Text(viewModel.commentType == .post ? "댓글" : "방명록")
                             .font(.system(size: 34, weight: .medium))
                         
                         Spacer()
@@ -71,8 +71,7 @@ struct CommentView: View {
         }
         // MARK: Network
         .onAppear {
-            viewModel.setPostID(postID)
-            viewModel.setBlogID(blogID)
+            viewModel.setCommentType(postID, blogID)
             Task {
                 await viewModel.getComments()
             }
@@ -86,7 +85,7 @@ struct CommentView: View {
             }
         }
         // MARK: NavBar
-        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : "댓글")
+        .navigationTitle(viewModel.getIsNavTitleHidden() ? "" : (viewModel.commentType == .post ? "댓글" : "방명록"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.automatic, for: .navigationBar)
         .toolbarBackground(Color.white, for: .navigationBar)

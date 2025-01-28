@@ -162,10 +162,3 @@ import Observation
 //    }
     
 }
-
-enum SearchType: String {
-    case post
-    case blog
-    case tag
-}
-

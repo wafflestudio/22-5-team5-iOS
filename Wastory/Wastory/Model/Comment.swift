@@ -45,4 +45,9 @@ struct CommentListDto: Codable {
         case totalCount = "total_count"
         case comments
     }
+    
+    static let defaultCommentListDto: CommentListDto = {
+        CommentListDto(page: 0, perPage: 0, totalCount: 0, comments: [])
+    }()
 }
+

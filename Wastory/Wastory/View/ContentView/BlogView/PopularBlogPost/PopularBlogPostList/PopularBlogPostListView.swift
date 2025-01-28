@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct PopularBlogPostListView: View {
-    let blog: Blog
-    
     @Environment(\.blogViewModel) var viewModel
     @Environment(\.contentViewModel) var contentViewModel
     
@@ -25,7 +23,7 @@ struct PopularBlogPostListView: View {
                 
                 Spacer()
                 
-                NavigationLink(destination: PopularBlogPostSheetView(blog: blog)) {
+                NavigationLink(destination: PopularBlogPostSheetView(blog: viewModel.blog)) {
                     Text("모두보기")
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(Color.secondaryLabelColor)

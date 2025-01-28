@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct BlogHeaderView: View {
-    let blog: Blog
-    
     @Environment(\.blogViewModel) var viewModel
     
     var body: some View {
@@ -17,7 +15,7 @@ struct BlogHeaderView: View {
             ZStack(alignment: .center) {
                 GeometryReader { geometry in
                     VStack {
-                        KFImageWithDefault(imageURL: blog.mainImageURL)
+                        KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
                             .scaledToFill()
                             .frame(width: geometry.size.width + 40 ,height: geometry.size.height + 40)
                             .blur(radius: 20)
@@ -35,7 +33,7 @@ struct BlogHeaderView: View {
                 Spacer()
                     .frame(height: 120)
                 
-                Text(blog.blogName)
+                Text(viewModel.blog.blogName)
                     .font(.system(size: 30, weight: .bold))
                     .foregroundStyle(Color.primaryDarkModeLabelColor)
                 
@@ -85,7 +83,7 @@ struct BlogHeaderView: View {
                 Spacer()
                     .frame(height: 17)
                 
-                Text(blog.description)
+                Text(viewModel.blog.description)
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Color.secondaryDarkModeLabelColor)
                     .lineSpacing(4)
@@ -93,8 +91,9 @@ struct BlogHeaderView: View {
                 Spacer()
                     .frame(height: 17)
                 
-                if !viewModel.isMyBlog {
-                    HStack(spacing: 10) {
+                
+                HStack(spacing: 10) {
+                    if !viewModel.isMyBlog {
                         if viewModel.blog.id != Blog.defaultBlog.id {
                             SubscribingButton(
                                 blogID: viewModel.blog.id,
@@ -109,7 +108,7 @@ struct BlogHeaderView: View {
                                                 .stroke(style: StrokeStyle(lineWidth: 1))
                                                 .foregroundStyle(Color.secondaryDarkModeLabelColor)
                                         }
-                                        .frame(width: 87, height: 35)
+                                            .frame(width: 87, height: 35)
                                     )
                                 },
                                 notSubscribedContent: {
@@ -120,33 +119,14 @@ struct BlogHeaderView: View {
                                                 .font(.system(size: 14, weight: .light))
                                                 .blendMode(.destinationOut)
                                         }
-                                        .compositingGroup()
-                                        .frame(width: 100, height: 35)
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                            .compositingGroup()
+                                            .frame(width: 100, height: 35)
+                                            .clipShape(RoundedRectangle(cornerRadius: 20))
                                     )
                                 }
                             )
                         }
-                        
-                        Button(action: {
-                            //방명록 View로 이동
-                        }) {
-                            Text("방명록")
-                                .font(.system(size: 14, weight: .light))
-                                .foregroundStyle(Color.primaryDarkModeLabelColor)
-                                .frame(width: 87, height: 35)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(style: StrokeStyle(lineWidth: 1))
-                                        .foregroundStyle(Color.secondaryDarkModeLabelColor)
-                                )
-                        }
-                        
-                        Spacer()
-                    }
-                } else {
-                    HStack(spacing: 10) {
-                        
+                    } else {
                         NavigationLink(destination: MyBlogSettingsView()) {
                             ZStack {
                                 Color.white // 버튼 배경 흰색
@@ -158,7 +138,7 @@ struct BlogHeaderView: View {
                         }
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .frame(width: 110, height: 35)
-
+                        
                         NavigationLink(destination: MyCategoryView()) {
                             ZStack {
                                 Color.white // 버튼 배경 흰색
@@ -170,23 +150,21 @@ struct BlogHeaderView: View {
                         }
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .frame(width: 120, height: 35)
-                        
-                        Button(action: {
-                            //방명록 View로 이동
-                        }) {
-                            Text("방명록")
-                                .font(.system(size: 14, weight: .light))
-                                .foregroundStyle(Color.primaryDarkModeLabelColor)
-                                .frame(width: 87, height: 35)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(style: StrokeStyle(lineWidth: 1))
-                                        .foregroundStyle(Color.secondaryDarkModeLabelColor)
-                                )
-                        }
-                        
-                        Spacer()
                     }
+                    
+                    NavigationLink(destination: CommentView(postID: nil, blogID:viewModel.blog.id)) {
+                        Text("방명록")
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.primaryDarkModeLabelColor)
+                            .frame(width: 87, height: 35)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(style: StrokeStyle(lineWidth: 1))
+                                    .foregroundStyle(Color.secondaryDarkModeLabelColor)
+                            )
+                    }
+                    
+                    Spacer()
                 }
                 
                 Spacer()

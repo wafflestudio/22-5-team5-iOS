@@ -286,7 +286,7 @@ struct PostView: View {
                         .frame(width: 25)
                     
                     //댓글 버튼
-                    NavigationLink(destination: CommentView(postID: postID)) {
+                    NavigationLink(destination: CommentView(postID: postID, blogID: nil)) {
                         HStack(spacing: 3) {
                             Image(systemName: "text.bubble")
                                 .font(.system(size: 20, weight: .light))

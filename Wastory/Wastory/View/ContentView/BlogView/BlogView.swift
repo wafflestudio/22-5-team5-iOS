@@ -22,7 +22,7 @@ struct BlogView: View {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
                     
-                    BlogHeaderView(blog: viewModel.blog)
+                    BlogHeaderView()
                     
                     GeometryReader { geometry in
                         Color.clear
@@ -37,7 +37,7 @@ struct BlogView: View {
                     
                     
                     // 인기글 TODO: 인기글 모두보기 View
-                    PopularBlogPostListView(blog: viewModel.blog)
+                    PopularBlogPostListView()
                     
                     // 카테고리 별 글 TODO: 카테고리 선택 sheet 및 카테고리 별로 분류
                     BlogPostListView()

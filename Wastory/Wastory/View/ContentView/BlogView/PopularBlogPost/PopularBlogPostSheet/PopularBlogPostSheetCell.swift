@@ -12,7 +12,6 @@ struct PopularBlogPostSheetCell: View {
     let index: Int
     @State var didAppear: Bool = false
     
-    @Bindable var viewModel: PopularBlogPostSheetViewModel
     @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
