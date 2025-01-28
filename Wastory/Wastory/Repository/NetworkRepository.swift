@@ -359,10 +359,12 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
-        let response = try await AF.request(urlRequest)
-            .validate()
-            .serializingDecodable(Draft.self)
-            .value
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self)
+        .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
@@ -383,10 +385,12 @@ final class NetworkRepository {
         
         logRequest(urlRequest, body: requestBody)
         
-        let response = try await AF.request(urlRequest)
-            .validate()
-            .serializingDecodable(Draft.self)
-            .value
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self)
+        .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
@@ -400,10 +404,12 @@ final class NetworkRepository {
         
         logRequest(urlRequest)
         
-        let response = try await AF.request(urlRequest)
-            .validate()
-            .serializingDecodable(Draft.self)
-            .value
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingDecodable(Draft.self)
+        .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
@@ -423,7 +429,8 @@ final class NetworkRepository {
             urlRequest as! URLConvertible,
             parameters: [
                 "page": page
-            ]
+            ],
+            interceptor: NetworkInterceptor()
         ).validate()
         .serializingDecodable(DraftListDto.self)
         .value
@@ -442,10 +449,12 @@ final class NetworkRepository {
         
         logRequest(urlRequest)
         
-        let response = try await AF.request(urlRequest)
-            .validate()
-            .serializingString()
-            .value
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingString()
+        .value
             
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
