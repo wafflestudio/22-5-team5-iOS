@@ -515,7 +515,7 @@ extension NetworkRepository {
         return response.articles
     }
     
-    func getFocusArticles1() async throws -> [Post] {
+    func getFocusArticles1() async throws -> [Post] { //J의 주말 계획
         let urlRequest = try URLRequest(
             url:     NetworkRouter.getFocusArticles1.url,
             method:  NetworkRouter.getFocusArticles1.method,
@@ -544,7 +544,7 @@ extension NetworkRepository {
         return response.articles
     }
     
-    func getFocusArticles2() async throws -> [Post] {
+    func getFocusArticles2() async throws -> [Post] { //오후에는 커피 한 잔
         let urlRequest = try URLRequest(
             url:     NetworkRouter.getFocusArticles2.url,
             method:  NetworkRouter.getFocusArticles2.method,

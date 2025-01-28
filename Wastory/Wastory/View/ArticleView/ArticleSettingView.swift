@@ -102,7 +102,6 @@ struct ArticleSettingView: View {
                         Text(viewModel.category.id == -1 ? "선택 안 함" : viewModel.category.categoryName)
                             .font(.system(size: 14, weight: .ultraLight))
                             .foregroundStyle(Color.black)
-                            .lineLimit(1)
                         Spacer()
                             .frame(width: 10)
                         Image(systemName: "chevron.right")
