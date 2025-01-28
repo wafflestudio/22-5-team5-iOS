@@ -53,6 +53,8 @@ enum NetworkRouter {
     case getArticleComments(postID: Int, page: Int)
     case postGuestBookComment(blogID: Int)
     case getGuestBookComments(blogID: Int, page: Int)
+    case patchComment(commentID: Int)
+    case deleteComment(commentID: Int)
     
     // MARK: Subscription
     case postSubscription
@@ -133,6 +135,8 @@ enum NetworkRouter {
         case let .getArticleComments(postID, page): "/comments/article/\(postID)/\(page)"
         case let .postGuestBookComment(blogID): "/comments/guestbook/\(blogID)"
         case let .getGuestBookComments(blogID, page): "/comments/guestbook/\(blogID)/\(page)"
+        case let .patchComment(commentID): "/comments/\(commentID)"
+        case let .deleteComment(commentID): "/comments/\(commentID)"
             
         // MARK: Subscription
         case .postSubscription: "/subscription"
@@ -246,6 +250,10 @@ enum NetworkRouter {
             return .post
         case .getGuestBookComments:
             return .get
+        case .patchComment:
+            return .patch
+        case .deleteComment:
+            return .delete
         
         // MARK: Subscription
         case .postSubscription:
@@ -377,6 +385,10 @@ enum NetworkRouter {
         case .postGuestBookComment:
             return ["Content-Type": "application/json"]
         case .getGuestBookComments:
+            return ["Content-Type": "application/json"]
+        case .patchComment:
+            return ["Content-Type": "application/json"]
+        case .deleteComment:
             return ["Content-Type": "application/json"]
             
         // MARK: Subscription

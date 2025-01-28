@@ -40,6 +40,30 @@ import Observation
         isNavTitleHidden
     }
     
+    // Comment Sheet
+    var isCommentSheetPresent: Bool = false
+    
+    var isCommentDeleteAlertPresent: Bool = false
+    
+    var isCommentEditSheetPresent: Bool = false
+    
+    func toggleIsCommentSheetPresent() {
+        withAnimation(.easeInOut) {
+            isCommentSheetPresent.toggle()
+        }
+    }
+    
+    func toggleIsCommentDeleteAlertPresent() {
+        withAnimation(.easeInOut) {
+            isCommentDeleteAlertPresent.toggle()
+        }
+    }
+    
+    func toggleIsCommentEditSheetPresent() {
+        withAnimation(.easeInOut) {
+            isCommentEditSheetPresent.toggle()
+        }
+    }
     
     //pagination
     var page = 1
@@ -68,6 +92,9 @@ import Observation
     var targetComment: Comment?
     var isTargetToComment: Bool = false
     
+    var editingCommentText: String = ""
+    var editingComment: Comment?
+    
     func setCommentType(_ postID: Int?, _ blogID: Int?) {
         self.postID = postID
         self.blogID = blogID
@@ -81,23 +108,63 @@ import Observation
         writingCommentText.isEmpty
     }
     
+    func isEditingCommentEmpty() -> Bool {
+        editingCommentText.isEmpty
+    }
+    
     func resetWritingCommentText() {
         writingCommentText = ""
     }
+    func resetEditingCommentText() {
+        editingCommentText = ""
+    }
     
-    func setTargetCommentID(to comment: Comment) {
+    func setEditingComment(to comment: Comment) {
+        editingComment = comment
+    }
+    
+    func setTargetComment(to comment: Comment) {
         targetComment = comment
         isTargetToComment = true
     }
     
-    func resetTargetCommentID() {
+    func resetTargetComment() {
         targetComment = nil
         isTargetToComment = false
+    }
+    
+    func resetEditingComment() {
+        editingComment = nil
     }
     
     func updateIsTextFieldFocused() {
         isTextFieldFocused = false
         isTextFieldFocused = true
+    }
+    
+    func setEditComment(to comment: Comment) {
+        editingCommentText = comment.content
+        editingComment = comment
+    }
+    
+    func patchComment() async {
+        if !writingCommentText.isEmpty {
+            do {
+                print("patch comment")
+                _ = try await NetworkRepository.shared.patchComment(
+                    commentID: editingComment?.id ?? 0, content: editingCommentText)
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func deleteComment() async {
+        do {
+            _ = try await NetworkRepository.shared.deleteComment(commentID: editingComment?.id ?? 0)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
     }
     
     func postComment() async {

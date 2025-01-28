@@ -719,6 +719,49 @@ extension NetworkRepository {
         return response
     }
     
+    func patchComment(commentID: Int, content: String) async throws {
+        var urlRequest = try URLRequest(
+            url: NetworkRouter.patchComment(commentID: commentID).url,
+            method: NetworkRouter.patchComment(commentID: commentID).method,
+            headers: NetworkRouter.patchComment(commentID: commentID).headers
+        )
+        
+        let requestBody = [
+            "content": content
+        ]
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
+    func deleteComment(commentID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteComment(commentID: commentID).url,
+            method: NetworkRouter.deleteComment(commentID: commentID).method,
+            headers: NetworkRouter.deleteComment(commentID: commentID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Subscription
     func postSubscription(blogID: Int) async throws {
         var urlRequest = try URLRequest(
