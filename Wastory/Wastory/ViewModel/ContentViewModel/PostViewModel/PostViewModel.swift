@@ -86,6 +86,7 @@ import RichTextKit
     // MARK: - Rendering Content
     var text = NSAttributedString()
     var context = RichTextContext()
+    var textHeight: CGFloat = 0
     var isTextLoaded: Bool = false
     
     func DataTotext(_ data: String) -> NSAttributedString? {
@@ -104,13 +105,46 @@ import RichTextKit
             if let loadedText = RichTextHandler.DataTotext(content) {
                 let restoredText = await RichTextImageHandler.restoreImage(loadedText)
                 text = restoredText
+                /*
+                textHeight = text.boundingRect(
+                    with: CGSize(width: UIScreen.main.bounds.width - 40, height: .greatestFiniteMagnitude),
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    context: nil).height + 30*/
+                textHeight = calculateHeight(text: text, screenWidth: UIScreen.main.bounds.width - 40) + 30
+                print("width: ", UIScreen.main.bounds.width - 40)
+                print("height: ", textHeight)
                 isTextLoaded = true
-                print("restored!: ", text)
             }
             else {
                 print("Error: Failed to load text data")
             }
         }
+    }
+    
+    func calculateHeight(text: NSAttributedString, screenWidth: CGFloat) -> CGFloat {
+        var height: CGFloat = 0
+        text.enumerateAttribute(.attachment, in: NSRange(location: 0, length: text.length)) { value, range, _ in
+            if let attachment = value as? NSTextAttachment,
+               let image = attachment.image {
+                let imageAspectRatio = image.size.height / image.size.width
+                height += imageAspectRatio * screenWidth
+            }
+        }
+        
+        let mutableAttrString = NSMutableAttributedString(attributedString: text)
+        let fullRange = NSRange(location: 0, length: mutableAttrString.length)
+        mutableAttrString.enumerateAttribute(.attachment, in: fullRange) { value, range, _ in
+            if value != nil {
+                mutableAttrString.replaceCharacters(in: range, with: "")
+            }
+        }
+        
+        height += mutableAttrString.boundingRect(
+            with: CGSize(width: screenWidth, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            context: nil).height
+        
+        return ceil(height)
     }
     
     
