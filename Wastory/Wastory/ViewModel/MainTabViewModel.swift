@@ -21,9 +21,6 @@ import Observation
     //MARK: selectedTab
     func setSelectedTab(to tab: TabType) {
         selectedTab = tab
-        if tab == .notification {
-            isNotificationUnread = false
-        }
     }
     
     //MARK: isBlogSheetPresent

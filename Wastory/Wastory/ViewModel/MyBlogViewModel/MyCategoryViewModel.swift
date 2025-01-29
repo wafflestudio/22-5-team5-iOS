@@ -107,6 +107,8 @@ import Observation
         }
     }
     
+    var isOverlapAlertPresent: Bool = false
+    
     //Network
     var categories: [Category] = []
     
@@ -115,6 +117,7 @@ import Observation
             print(selectedCategoryId)
             try await NetworkRepository.shared.postCategory(categoryName: writingCategoryName, parentID: (selectedCategoryId == -1 ? nil : selectedCategoryId))
         } catch {
+            isOverlapAlertPresent = true
             print("Error: \(error.localizedDescription)")
         }
     }
@@ -131,6 +134,7 @@ import Observation
         do {
             try await NetworkRepository.shared.patchCategory(categoryName: writingCategoryName, categoryID: selectedCategoryId)
         } catch {
+            isOverlapAlertPresent = true
             print("Error: \(error.localizedDescription)")
         }
     }

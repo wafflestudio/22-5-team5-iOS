@@ -869,7 +869,7 @@ extension NetworkRepository {
         if let url = urlRequest.url {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
             
-            if let _ = type {
+            if type ?? 0 == 0 {
                 components?.queryItems = [
                     URLQueryItem(name: "page", value: "\(page)"),
                 ]
@@ -884,11 +884,19 @@ extension NetworkRepository {
         
         logRequest(urlRequest)
         
+        // ISO8601DateFormatter로 날짜 처리
+        let decoder = JSONDecoder()
+        
+        // DateFormatter를 사용하여 ISO8601 형식을 맞추기
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        
         let response = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
-        .serializingDecodable(NotiListDto.self)
+            .serializingDecodable(NotiListDto.self, decoder: decoder)
         .value
         
         logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")

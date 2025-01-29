@@ -73,6 +73,9 @@ struct MainTabView: View {
                         mainTabViewModel.toggleIsArticleViewPresent()
                         mainTabViewModel.setSelectedTab(to: oldValue)
                     }
+                    if newValue == .notification {
+                        mainTabViewModel.isNotificationUnread = false
+                    }
                 }
                 
                 VStack() {
@@ -80,6 +83,7 @@ struct MainTabView: View {
                     HStack() {
                         Spacer()
                         KFImageWithoutDefault(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
+                            .scaledToFill()
                             .frame(width: 29, height: 29)
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                             .padding(.bottom, 9.5)

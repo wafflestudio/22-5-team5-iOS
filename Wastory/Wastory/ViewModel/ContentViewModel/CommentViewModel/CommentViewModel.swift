@@ -84,6 +84,8 @@ import Observation
     
     var totalCommentsCount: Int = 0
     
+    var isMyBlog: Bool = false
+    
     
     var writingCommentText: String = ""
     var isWritingCommentSecret: Bool = false
@@ -97,6 +99,7 @@ import Observation
     func setCommentType(_ postID: Int?, _ blogID: Int?) {
         self.postID = postID
         self.blogID = blogID
+        self.isMyBlog = (blogID == UserInfoRepository.shared.getBlogID())
         
         if self.postID == nil {
             commentType = .blog

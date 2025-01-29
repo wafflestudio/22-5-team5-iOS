@@ -24,8 +24,8 @@ struct NotificationCell: View {
                     .padding(.trailing, 7)
                 
                 KFImageWithDefaultIcon(imageURL: notification.blogMainImageURL)
+                    .scaledToFill()
                     .frame(width: 40, height: 40)
-                    .scaledToFit()
                     .clipShape(Circle())
             }
             .padding(.leading, 10)
@@ -114,10 +114,11 @@ struct NotificationCell: View {
             Spacer()
         }
         .padding(.vertical, 22)
+        .background(Color.white)
         .onTapGesture {
+            viewModel.setTargetNotification(notification)
             viewModel.toggleIsNavigationActive(notification.type)
             if !notification.checked {
-                viewModel.setTargetNotification(notification)
                 Task {
                     await viewModel.patchNotificationRead()
                     notification.checked = true

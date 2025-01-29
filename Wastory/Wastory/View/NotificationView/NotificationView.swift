@@ -80,7 +80,7 @@ struct NotificationView: View {
                 .padding(.trailing, 22)
                 
                 //MARK: NotificationList
-                LazyVStack(spacing: 0) {
+                VStack(spacing: 0) {
                     ForEach(Array(viewModel.notifications.enumerated()), id: \.offset) { index, notification in
                         NotificationCell(notification: notification, viewModel: viewModel)
                         Divider()
@@ -90,9 +90,9 @@ struct NotificationView: View {
             }
         }
         .onAppear {
-//            Task {
-//                await viewModel.getNotifications()
-//            }
+            Task {
+                await viewModel.getNotifications()
+            }
         }
         .refreshable {
             Task {
@@ -113,16 +113,19 @@ struct NotificationView: View {
             Text("알림을 삭제하시겠습니까?")
         }
         .navigationDestination(isPresented: $viewModel.isNavigation1Active) {
-            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0)
+            PostView(postID: viewModel.getTargetNotificationPostID(), blogID: viewModel.getTargetNotificationBlogID())
+                .onAppear {
+                    print("\(viewModel.targetNotification)")}
         }
         .navigationDestination(isPresented: $viewModel.isNavigation2Active) {
-            BlogView(blogID: viewModel.targetNotification?.blogID ?? 0)
+            BlogView(blogID: viewModel.getTargetNotificationBlogID())
         }
         .navigationDestination(isPresented: $viewModel.isNavigation3Active) {
-            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0, toComment: true)
+            PostView(postID: viewModel.getTargetNotificationPostID(), blogID: viewModel.getTargetNotificationBlogID(), toComment: true).onAppear {
+                print("\(viewModel.targetNotification)")}
         }
         .navigationDestination(isPresented: $viewModel.isNavigation4Active) {
-            CommentView(postID: nil, blogID: viewModel.targetNotification?.blogID ?? 0)
+            CommentView(postID: nil, blogID: viewModel.getTargetNotificationBlogID())
         }
         .navigationDestination(isPresented: $viewModel.isNavigation5Active) {
             EmptyView()

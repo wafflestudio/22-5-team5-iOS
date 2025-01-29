@@ -184,6 +184,9 @@ final class UserInfoRepository {
     func getBlogMainImageURL() -> String {
         return blogMainImageURL
     }
+    func getIsKakaoLogin() -> Bool {
+        return isKakaoLogin
+    }
     
     
     func patchUsername(to name: String) {

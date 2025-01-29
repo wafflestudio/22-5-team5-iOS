@@ -67,6 +67,7 @@ struct MyCategoryCell: View {
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
+                            .textInputAutocapitalization(.never)
                             .textFieldStyle(.roundedBorder)
                             
                             Spacer()

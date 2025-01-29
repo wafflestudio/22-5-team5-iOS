@@ -84,6 +84,7 @@ struct CommentSheet: View {
                                             .frame(maxWidth: .infinity)
                                             .frame(height: 300)
                                             .background(Color.secondaryLabelColor.opacity(0.1))
+                                            .textInputAutocapitalization(.never)
                                     }
                                     .padding()
                                 }

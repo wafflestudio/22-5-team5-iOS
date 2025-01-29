@@ -277,6 +277,7 @@ struct FocusableTextView: UIViewRepresentable {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.textContainer.lineFragmentPadding = 0
         textView.textContainerInset = .zero
+        textView.autocapitalizationType = .none
         
         // 레이아웃 우선순위 설정
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
