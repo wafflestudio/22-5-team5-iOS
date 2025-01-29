@@ -88,6 +88,7 @@ import RichTextKit
     var context = RichTextContext()
     var textHeight: CGFloat = 0
     var isTextLoaded: Bool = false
+    let screenWidth: CGFloat = UIScreen.main.bounds.width - 40
     
     func DataTotext(_ data: String) -> NSAttributedString? {
         if let text = Data(base64Encoded: data) {
@@ -103,16 +104,9 @@ import RichTextKit
     func loadText() async {
         if let content = post.content {
             if let loadedText = RichTextHandler.DataTotext(content) {
-                let restoredText = await RichTextImageHandler.restoreImage(loadedText)
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
                 text = restoredText
-                /*
-                textHeight = text.boundingRect(
-                    with: CGSize(width: UIScreen.main.bounds.width - 40, height: .greatestFiniteMagnitude),
-                    options: [.usesLineFragmentOrigin, .usesFontLeading],
-                    context: nil).height + 30*/
-                textHeight = calculateHeight(text: text, screenWidth: UIScreen.main.bounds.width - 40) + 30
-                print("width: ", UIScreen.main.bounds.width - 40)
-                print("height: ", textHeight)
+                textHeight = calculateHeight(text: text, screenWidth: screenWidth) + 30
                 isTextLoaded = true
             }
             else {

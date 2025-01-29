@@ -31,6 +31,7 @@ import RichTextKit
     var inputImage: UIImage?
     var isGalleryPickerPresent: Bool = false
     var isCameraPickerPresent: Bool = false
+    let screenWidth: CGFloat = UIScreen.main.bounds.width - 40
     
     func insertImage(inputImage: UIImage, context: RichTextContext) {
         let cursorLocation = context.selectedRange.location
@@ -78,7 +79,7 @@ import RichTextKit
             let response = try await NetworkRepository.shared.getDraft(draftID: draftID)
             title = response.title
             if let loadedText = RichTextHandler.DataTotext(response.content) {
-                let restoredText = await RichTextImageHandler.restoreImage(loadedText)
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
                 text = restoredText
             }
             else {
