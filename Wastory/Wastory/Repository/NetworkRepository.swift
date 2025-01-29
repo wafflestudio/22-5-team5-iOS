@@ -295,16 +295,14 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
-        let response = try await AF.request(
+        _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
         .serializingData()
         .value
-        
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
     func getArticlesInBlog(blogID: Int, page: Int) async throws -> [Post] {
@@ -357,7 +355,7 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
@@ -370,8 +368,6 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
@@ -388,21 +384,19 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
-        let response = try await AF.request(
+        _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
     func getDraft(draftID: Int) async throws -> Draft {
@@ -425,17 +419,15 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
     
     func getDraftsInBlog(blogID: Int, page: Int) async throws -> DraftListDto {
         let urlRequest = try URLRequest(
-            url: NetworkRouter.getDraftsInBlog(blogID: blogID).url,
-            method: NetworkRouter.getDraftsInBlog(blogID: blogID).method,
-            headers: NetworkRouter.getDraftsInBlog(blogID: blogID).headers
+            url: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).url,
+            method: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).method,
+            headers: NetworkRouter.getDraftsInBlog(blogID: blogID, page: page).headers
         )
         
         logRequest(urlRequest)
@@ -446,16 +438,11 @@ final class NetworkRepository {
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
         let response = try await AF.request(
-            urlRequest as! URLConvertible,
-            parameters: [
-                "page": page
-            ],
+            urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
         .serializingDecodable(DraftListDto.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
