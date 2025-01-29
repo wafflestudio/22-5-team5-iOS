@@ -85,6 +85,7 @@ struct MainTabView: View {
                         KFImageWithoutDefault(imageURL: UserInfoRepository.shared.getBlogMainImageURL())
                             .frame(width: 29, height: 29)
                             .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .scaledToFill()
                             .padding(.bottom, 9.5)
                             .offset(x: -UIScreen.main.bounds.width/10 + 14.25)
                     }

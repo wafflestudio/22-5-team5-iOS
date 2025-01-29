@@ -25,7 +25,7 @@ struct NotificationCell: View {
                 
                 KFImageWithDefaultIcon(imageURL: notification.blogMainImageURL)
                     .frame(width: 40, height: 40)
-                    .scaledToFit()
+                    .scaledToFill()
                     .clipShape(Circle())
             }
             .padding(.leading, 10)
