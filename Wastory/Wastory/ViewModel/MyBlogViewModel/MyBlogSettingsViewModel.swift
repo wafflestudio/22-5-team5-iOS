@@ -58,7 +58,11 @@ import Observation
     func patchBlog() async {
         do {
             try await NetworkRepository.shared.patchBlog(blogName: blogName, description: blogDescription, mainImageURL: blogMainImageURL)
-            await UserInfoRepository.shared.loadUserInfo(userID: UserInfoRepository.shared.getUserID(), userPW: UserInfoRepository.shared.getUserPW())
+            if UserInfoRepository.shared.getIsKakaoLogin() {
+                await UserInfoRepository.shared.loadKakaoUserInfo()
+            } else {
+                await UserInfoRepository.shared.loadUserInfo(userID: UserInfoRepository.shared.getUserID(), userPW: UserInfoRepository.shared.getUserPW())
+            }
         } catch {
             print("Error: \(error.localizedDescription)")
         }
