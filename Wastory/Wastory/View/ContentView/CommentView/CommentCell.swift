@@ -153,7 +153,7 @@ struct CommentCell: View {
                         Spacer()
                         Spacer()
                             .frame(width: 10)
-                    } else if comment.isSecret == 0 {
+                    } else if comment.isSecret == 1 {
                         KFImageWithDefault(imageURL: "")
                             .scaledToFill()
                             .clipShape(Circle())
