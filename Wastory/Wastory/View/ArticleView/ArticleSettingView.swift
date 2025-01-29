@@ -64,8 +64,8 @@ struct ArticleSettingView: View {
                         if let mainImage = viewModel.mainImage {
                             Image(uiImage: mainImage)
                                 .resizable()
-                                .frame(width: 100, height: 100)
                                 .scaledToFill()
+                                .frame(width: 100, height: 100)
                                 .clipped()
                         }
                         else {
