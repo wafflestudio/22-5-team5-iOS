@@ -149,6 +149,9 @@ struct MyCategoryView: View {
             }
         } //toolbar
         .navigationBarBackButtonHidden()
+        .alert("카테고리 이름은 중복이 불가합니다", isPresented: $viewModel.isOverlapAlertPresent) {
+            Button("확인", role: .cancel) {}
+        }
     }
 }
 
