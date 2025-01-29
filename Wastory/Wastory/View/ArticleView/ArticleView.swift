@@ -47,6 +47,7 @@ struct ArticleView: View {
                             if viewModel.title.isEmpty && viewModel.text.length == 0 {
                                 viewModel.isEmptyDraftEntered = true
                                 viewModel.isEmptyTitleEntered = false
+                                viewModel.isDraftSaved = false
                                 debounceWorkItem?.cancel()
                                 let workItem = DispatchWorkItem {
                                     withAnimation {
@@ -58,8 +59,19 @@ struct ArticleView: View {
                             }
                             else {
                                 Task {
+                                    viewModel.isEmptyDraftEntered = false
+                                    viewModel.isEmptyTitleEntered = false
+                                    viewModel.isDraftSaved = true
                                     await viewModel.storeDraft()
                                     await viewModel.resetView()
+                                    debounceWorkItem?.cancel()
+                                    let workItem = DispatchWorkItem {
+                                        withAnimation {
+                                            viewModel.isDraftSaved = false
+                                        }
+                                    }
+                                    debounceWorkItem = workItem
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
                                 }
                             }
                         } label: {
@@ -97,6 +109,7 @@ struct ArticleView: View {
                             isTextFocused = false
                             viewModel.isEmptyDraftEntered = false
                             viewModel.isEmptyTitleEntered = true
+                            viewModel.isDraftSaved = false
                             debounceWorkItem?.cancel()
                             let workItem = DispatchWorkItem {
                                 withAnimation {
@@ -208,6 +221,19 @@ struct ArticleView: View {
                     .transition(.opacity)
             }
             
+            if viewModel.isDraftSaved {
+                Text("작성 중인 글이 저장되었습니다.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
+            
             if isPickerSelectorPresent {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
@@ -248,6 +274,7 @@ struct ArticleView: View {
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftSaved)
         .fullScreenCover(
             isPresented: $viewModel.isCameraPickerPresent,
             onDismiss: {

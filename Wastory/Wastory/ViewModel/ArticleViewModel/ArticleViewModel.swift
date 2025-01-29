@@ -27,6 +27,7 @@ import RichTextKit
     var currentDraftID: Int = -1
     var isDraftSheetPresent: Bool = false
     var resetEditor: Bool = false
+    var isDraftSaved: Bool = false
     
     var inputImage: UIImage?
     var isGalleryPickerPresent: Bool = false
