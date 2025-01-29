@@ -314,7 +314,7 @@ struct PostView: View {
                 .background(Color.white)
                 .fullScreenCover(isPresented: $viewModel.showComments) {
                     NavigationStack {
-                        CommentView(postID: viewModel.post.id, blogID: nil)
+                        CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id)
                     }
                 }
             }
