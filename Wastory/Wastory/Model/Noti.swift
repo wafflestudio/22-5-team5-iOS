@@ -22,10 +22,10 @@ struct Noti: Codable, Identifiable, Hashable {
     
     private enum CodingKeys: String, CodingKey {
         case id
-        case type
-        case username = "user_name"
-        case blogname = "blog_name"
+        case type = "notification_type"
+        case username = "username"
         case blogID = "blog_id"
+        case blogname = "blog_name"
         case blogMainImageURL = "blog_main_image_url"
         case postID = "article_id"
         case postTitle = "article_title"

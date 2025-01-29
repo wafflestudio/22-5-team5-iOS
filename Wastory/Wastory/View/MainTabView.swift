@@ -73,6 +73,9 @@ struct MainTabView: View {
                         mainTabViewModel.toggleIsArticleViewPresent()
                         mainTabViewModel.setSelectedTab(to: oldValue)
                     }
+                    if newValue == .notification {
+                        mainTabViewModel.isNotificationUnread = false
+                    }
                 }
                 
                 VStack() {

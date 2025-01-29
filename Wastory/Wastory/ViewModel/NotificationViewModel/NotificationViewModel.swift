@@ -137,14 +137,21 @@ import Observation
     }
     
     //Network
-    var notifications: [Noti] = [Noti.default1Notification, Noti.default2Notification, Noti.default3Notification, Noti.default4Notification]
+    var notifications: [Noti] = []
     
-    var targetNotification: Noti? = nil
+    var targetNotification: Noti = Noti.default1Notification
     
-    func setTargetNotification(_ notification: Noti?) {
+    func setTargetNotification(_ notification: Noti) {
         targetNotification = notification
     }
     
+    func getTargetNotificationPostID() -> Int {
+        targetNotification.postID ?? 0
+    }
+    
+    func getTargetNotificationBlogID() -> Int {
+        targetNotification.blogID
+    }
     
     var isAlertPresent: Bool = false
     
@@ -177,9 +184,9 @@ import Observation
     }
     
     func patchNotificationRead() async {
-        if !targetNotification!.checked {
+        if !targetNotification.checked {
             do {
-                let _ = try await NetworkRepository.shared.patchNotification(notificationID: targetNotification!.id)
+                let _ = try await NetworkRepository.shared.patchNotification(notificationID: targetNotification.id)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
@@ -188,7 +195,7 @@ import Observation
     
     func deleteNotificationRead() async {
         do {
-            let _ = try await NetworkRepository.shared.deleteNotification(notificationID: targetNotification!.id)
+            let _ = try await NetworkRepository.shared.deleteNotification(notificationID: targetNotification.id)
         } catch {
             print("Error: \(error.localizedDescription)")
         }

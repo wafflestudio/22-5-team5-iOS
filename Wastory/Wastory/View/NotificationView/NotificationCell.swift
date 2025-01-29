@@ -114,10 +114,11 @@ struct NotificationCell: View {
             Spacer()
         }
         .padding(.vertical, 22)
+        .background(Color.white)
         .onTapGesture {
+            viewModel.setTargetNotification(notification)
             viewModel.toggleIsNavigationActive(notification.type)
             if !notification.checked {
-                viewModel.setTargetNotification(notification)
                 Task {
                     await viewModel.patchNotificationRead()
                     notification.checked = true
