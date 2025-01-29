@@ -161,9 +161,7 @@ struct ArticleView: View {
                             Spacer()
                         }
                     }
-                    RichTextEditor(text: $viewModel.text, context: viewModel.context) {
-                        $0.imageConfiguration.maxImageSize = (width: .points(200), height: .points(200))
-                    }
+                    RichTextEditor(text: $viewModel.text, context: viewModel.context)
                         .focusedValue(\.richTextContext, viewModel.context)
                         .focused($isTextFocused)
                         .padding(.horizontal, 18)

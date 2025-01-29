@@ -35,7 +35,16 @@ import RichTextKit
     
     func insertImage(inputImage: UIImage, context: RichTextContext) {
         let cursorLocation = context.selectedRange.location
-        let insertion = RichTextInsertion<UIImage>.image(inputImage, at: cursorLocation, moveCursor: true)
+        
+        let imageAspectRatio = inputImage.size.height / inputImage.size.width
+        let height = imageAspectRatio * screenWidth
+
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: screenWidth, height: height))
+        let resizedImage = renderer.image { _ in
+            inputImage.draw(in: CGRect(origin: .zero, size: CGSize(width: screenWidth, height: height)))
+        }
+        
+        let insertion = RichTextInsertion<UIImage>.image(resizedImage, at: cursorLocation, moveCursor: true)
         let action = RichTextAction.pasteImage(insertion)
         context.handle(action)
     }
