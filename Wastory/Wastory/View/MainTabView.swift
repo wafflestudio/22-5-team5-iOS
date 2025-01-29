@@ -97,6 +97,11 @@ struct MainTabView: View {
                 
             } //ZStack
         }// NavStack
+        .onAppear {
+            Task {
+                await mainTabViewModel.setIsNotificationUnread()
+            }
+        }
         
     } //body
 }
