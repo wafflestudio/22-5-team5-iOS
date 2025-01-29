@@ -8,6 +8,7 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable final class MainTabViewModel {
     var selectedTab: TabType = .home
     
@@ -20,6 +21,9 @@ import Observation
     //MARK: selectedTab
     func setSelectedTab(to tab: TabType) {
         selectedTab = tab
+        if tab == .notification {
+            isNotificationUnread = false
+        }
     }
     
     //MARK: isBlogSheetPresent
@@ -44,6 +48,32 @@ import Observation
     func toggleIsArticleViewPresent() {
         withAnimation(.easeInOut) {
             isArticleViewPresent.toggle()
+        }
+    }
+    
+    
+    
+    //MARK: Notification Icon
+    var isNotificationUnread: Bool = false
+    
+    var didAppear: Bool = false
+    
+    func setIsNotificationUnread() async {
+        if !didAppear {
+            do {
+                let response = try await NetworkRepository.shared.getNotifications(page: 1, type: nil)
+                
+                if response.isEmpty {
+                    isNotificationUnread = false
+                } else {
+                    if let _ = response.first(where: { !$0.checked }) {
+                        isNotificationUnread = true
+                    }
+                }
+                didAppear = true
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
         }
     }
 }
