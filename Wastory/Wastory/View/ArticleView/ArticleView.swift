@@ -17,6 +17,7 @@ struct ArticleView: View {
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isTextFocused: Bool
     @State private var debounceWorkItem: DispatchWorkItem?
+    @State private var isPickerSelectorPresent: Bool = false    // ViewModel로 관리할 경우 에러 발생
     
     var body: some View {
         ZStack {
@@ -160,7 +161,9 @@ struct ArticleView: View {
                             Spacer()
                         }
                     }
-                    RichTextEditor(text: $viewModel.text, context: viewModel.context)
+                    RichTextEditor(text: $viewModel.text, context: viewModel.context) {
+                        $0.imageConfiguration.maxImageSize = (width: .points(200), height: .points(200))
+                    }
                         .focusedValue(\.richTextContext, viewModel.context)
                         .focused($isTextFocused)
                         .padding(.horizontal, 18)
@@ -169,7 +172,13 @@ struct ArticleView: View {
                 RichTextKeyboardToolbar(
                     context: viewModel.context,
                     leadingButtons: { _ in },
-                    trailingButtons: { _ in },
+                    trailingButtons: {_ in
+                        Button {
+                            isPickerSelectorPresent = true
+                        } label: {
+                            Image(systemName: "photo")
+                        }
+                    },
                     formatSheet: { $0 }
                 )
                 Spacer()
@@ -201,6 +210,39 @@ struct ArticleView: View {
                     .transition(.opacity)
             }
             
+            if isPickerSelectorPresent {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isPickerSelectorPresent = false
+                    }
+                
+                VStack(spacing: 20) {
+                    Text("이미지를 불러올 방법을 선택해 주세요.")
+                        .font(.system(size: 14, weight: .regular))
+                    HStack(spacing: 50) {
+                        Button {
+                            viewModel.isCameraPickerPresent = true
+                            isPickerSelectorPresent = false
+                        } label: {
+                            Image(systemName: "camera")
+                        }
+                        Button {
+                            viewModel.isGalleryPickerPresent = true
+                            isPickerSelectorPresent = false
+                        } label: {
+                            Image(systemName: "photo.on.rectangle.angled")
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                )
+            }
+            
             ArticleDraftSheet(viewModel: viewModel)
                 .transition(.move(edge: .bottom))
                 .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
@@ -208,6 +250,30 @@ struct ArticleView: View {
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
+        .fullScreenCover(
+            isPresented: $viewModel.isCameraPickerPresent,
+            onDismiss: {
+                if let inputImage = viewModel.inputImage {
+                    viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
+                    viewModel.inputImage = nil
+                }
+            },
+            content: {
+                CameraPicker(selectedImage: $viewModel.inputImage, sourceType: .camera)
+            }
+        )
+        .fullScreenCover(
+            isPresented: $viewModel.isGalleryPickerPresent,
+            onDismiss: {
+                if let inputImage = viewModel.inputImage {
+                    viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
+                    viewModel.inputImage = nil
+                }
+            },
+            content: {
+                ImagePicker(selectedImage: $viewModel.inputImage, sourceType: .photoLibrary)
+            }
+        )
         .onAppear {
             Task {
                 await viewModel.resetView()

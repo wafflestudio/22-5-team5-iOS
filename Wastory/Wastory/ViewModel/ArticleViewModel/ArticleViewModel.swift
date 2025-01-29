@@ -10,6 +10,7 @@ import SwiftUI
 import Observation
 import RichTextKit
 
+@MainActor
 @Observable final class ArticleViewModel {
     var title: String = ""
     var text = NSAttributedString()
@@ -26,6 +27,17 @@ import RichTextKit
     var currentDraftID: Int = -1
     var isDraftSheetPresent: Bool = false
     var resetEditor: Bool = false
+    
+    var inputImage: UIImage?
+    var isGalleryPickerPresent: Bool = false
+    var isCameraPickerPresent: Bool = false
+    
+    func insertImage(inputImage: UIImage, context: RichTextContext) {
+        let cursorLocation = context.selectedRange.location
+        let insertion = RichTextInsertion<UIImage>.image(inputImage, at: cursorLocation, moveCursor: true)
+        let action = RichTextAction.pasteImage(insertion)
+        context.handle(action)
+    }
     
     func resetView() async {
         page = 1
@@ -66,7 +78,8 @@ import RichTextKit
             let response = try await NetworkRepository.shared.getDraft(draftID: draftID)
             title = response.title
             if let loadedText = DataTotext(response.content) {
-                text = loadedText
+                let restoredText = await RichTextImageHandler.restoreImagesFromURLs(loadedText)
+                text = restoredText
             }
             else {
                 print("Error: Failed to load text data")
@@ -79,7 +92,8 @@ import RichTextKit
     }
     
     func storeDraft() async {
-        if let dataText = textToData(text) {
+        let processedText = await RichTextImageHandler.convertImagesToURLs(text)
+        if let dataText = textToData(processedText) {
             if currentDraftID < 0 {
                 do {
                     let response = try await NetworkRepository.shared.postDraft(title: title, content: dataText)
