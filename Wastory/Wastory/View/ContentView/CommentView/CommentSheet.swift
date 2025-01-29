@@ -92,6 +92,17 @@ struct CommentSheet: View {
                                 HStack(spacing: 0) {
                                     Spacer()
                                     
+                                    Button(action : {
+                                        viewModel.toggleEditingCommentSecret()
+                                    }) {
+                                        Image(systemName: viewModel.isEditingCommentSecret == 1 ? "lock" : "lock.open")
+                                            .font(.system(size: 20, weight: .light))
+                                            .foregroundStyle(viewModel.isEditingCommentSecret == 1 ? Color.primaryLabelColor : Color.secondaryLabelColor)
+                                    }
+                                    
+                                    Spacer()
+                                        .frame(width: 10)
+                                    
                                     Button(action: {
                                         Task {
                                             print("patch comment")

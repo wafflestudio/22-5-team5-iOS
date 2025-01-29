@@ -815,7 +815,7 @@ extension NetworkRepository {
         return response
     }
     
-    func patchComment(commentID: Int, content: String) async throws {
+    func patchComment(commentID: Int, content: String, isSecret: Int) async throws {
         var urlRequest = try URLRequest(
             url: NetworkRouter.patchComment(commentID: commentID).url,
             method: NetworkRouter.patchComment(commentID: commentID).method,
@@ -823,7 +823,8 @@ extension NetworkRepository {
         )
         
         let requestBody = [
-            "content": content
+            "content": content,
+            "secret": ("\(isSecret)")
         ]
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
