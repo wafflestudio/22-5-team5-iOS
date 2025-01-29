@@ -869,7 +869,7 @@ extension NetworkRepository {
         if let url = urlRequest.url {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
             
-            if let _ = type {
+            if type ?? 0 == 0 {
                 components?.queryItems = [
                     URLQueryItem(name: "page", value: "\(page)"),
                 ]
