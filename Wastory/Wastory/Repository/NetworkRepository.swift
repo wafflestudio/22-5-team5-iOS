@@ -295,16 +295,14 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
-        let response = try await AF.request(
+        _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()
         .serializingData()
         .value
-        
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
     func getArticlesInBlog(blogID: Int, page: Int) async throws -> [Post] {
@@ -393,7 +391,7 @@ final class NetworkRepository {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
-        let response = try await AF.request(
+        _ = try await AF.request(
             urlRequest,
             interceptor: NetworkInterceptor()
         ).validate()

@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 import RichTextKit
 
+@MainActor
 @Observable final class ArticleSettingViewModel {
     private let title: String
     private let text: NSAttributedString
@@ -105,20 +106,14 @@ import RichTextKit
     }
     
     // MARK: - Posting
-    func textToHTML(_ text: NSAttributedString) -> String? {
+    func textToData(_ text: NSAttributedString) -> String? {
         do {
-            let htmlData = try text.data(
-                from: NSRange(location: 0, length: text.length),
-                documentAttributes: [.documentType: NSAttributedString.DocumentType.html]
-            )
-            if let htmlString = String(data: htmlData, encoding: .utf8) {
-                return htmlString
-            }
+            let data = try NSKeyedArchiver.archivedData(withRootObject: text, requiringSecureCoding: false)
+            return data.base64EncodedString()
+        } catch {
+            print("Failed to archive NSAttributedString: \(error)")
+            return nil
         }
-        catch {
-            print("Error convertnig Rich Text to HTML: \(error)")
-        }
-        return nil
     }
     
     func postArticle() async {
@@ -131,11 +126,12 @@ import RichTextKit
             }
         }
         
-        if let htmlText = textToHTML(text) {
+        let processedText = await RichTextImageHandler.convertImage(text)
+        if let dataText = textToData(processedText) {
             do {
                 try await NetworkRepository.shared.postArticle(
                     title: title,
-                    content: htmlText,
+                    content: dataText,
                     description: String(text.string.prefix(80)),
                     main_image_url: mainImageURL ?? "",
                     categoryID: category.id,

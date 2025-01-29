@@ -10,7 +10,7 @@ import Foundation
 struct Draft: Codable {
     let id: Int             // Draft ID (주소)
     let title: String       // Draft 제목
-    let content: String     // Draft 내용 (HTML을 String으로 변환하여 저장)
+    let content: String     // Draft 내용 (SwiftData를 String으로 변환하여 저장)
     let createdAt: Date     // 저장된 시간
     
     private enum CodingKeys: String, CodingKey {
