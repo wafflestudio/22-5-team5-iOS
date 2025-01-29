@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Draft: Codable, Identifiable {
+struct Draft: Codable {
     let id: Int             // Draft ID (주소)
     let title: String       // Draft 제목
     let content: String     // Draft 내용 (HTML을 String으로 변환하여 저장)
@@ -21,11 +21,23 @@ struct Draft: Codable, Identifiable {
     }
 }
 
+struct DraftDto: Codable, Identifiable, Hashable {
+    let id: Int             // Draft ID (주소)
+    let title: String       // Draft 제목
+    let createdAt: Date     // 저장된 시간
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case createdAt = "created_at"
+    }
+}
+
 struct DraftListDto: Codable {
     let page: Int
     let perPage: Int
     let totalCount: Int
-    let drafts: [Draft]
+    let drafts: [DraftDto]
     
     private enum CodingKeys: String, CodingKey {
         case page

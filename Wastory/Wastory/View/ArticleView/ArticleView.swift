@@ -73,9 +73,9 @@ struct ArticleView: View {
                             .frame(width: 1, height: 10)
                             .foregroundStyle(Color.codeRequestButtonGray)
                         Button {
-                            // 임시 저장한 글들을 불러 오는 기능
                             isTitleFocused = false
                             isTextFocused = false
+                            viewModel.isDraftSheetPresent = true
                         } label: {
                             Text(viewModel.getDraftsCount())
                                 .font(.system(size: 14, weight: .regular))
@@ -199,8 +199,13 @@ struct ArticleView: View {
                     )
                     .transition(.opacity)
             }
+            
+            ArticleDraftSheet(viewModel: viewModel)
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
         }
         .navigationBarBackButtonHidden()
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
         .onAppear {
             Task {
@@ -208,8 +213,4 @@ struct ArticleView: View {
             }
         }
     }
-}
-
-#Preview {
-    ArticleView(mainTabViewModel: MainTabViewModel())
 }
