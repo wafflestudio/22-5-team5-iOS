@@ -105,7 +105,7 @@ import Observation
     
         // - 블로그 내 같은 카테고리글List get
     func getPostsInBlogInCategory() async {
-        if post.categoryID == nil {
+        if post.categoryID == nil || post.categoryID == 0 {
             do {
             categoryBlogPosts = try await NetworkRepository.shared.getArticlesInBlog(blogID: blog.id, page: 1)
             deleteSelfPost(at: &categoryBlogPosts)

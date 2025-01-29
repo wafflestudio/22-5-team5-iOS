@@ -1,12 +1,11 @@
 //
-//  ContentViewModel.swift
+//  NavigationToContentButtons.swift
 //  Wastory
 //
 //  Created by 중워니 on 1/9/25.
 //
 
 import SwiftUI
-import Observation
 
 //@Observable final class ContentViewModel {
 //    
@@ -71,14 +70,16 @@ struct NavigateToBlogViewButton<Content: View>: View {
 struct NavigateToPostViewButton: View {
     let postID: Int
     let blogID: Int
+    var toComment: Bool
     
-    init(_ postID: Int, _ blogID: Int) {
+    init(_ postID: Int, _ blogID: Int, _ toComment: Bool? = false) {
         self.postID = postID
         self.blogID = blogID
+        self.toComment = toComment ?? false
     }
 
     var body: some View {
-        NavigationLink(destination: PostView(postID: postID, blogID: blogID)) {
+        NavigationLink(destination: PostView(postID: postID, blogID: blogID, toComment: toComment)) {
             Rectangle()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .foregroundStyle(Color.clear)

@@ -10,6 +10,7 @@ import SwiftUI
 struct PostView: View {
     let postID: Int
     let blogID: Int
+    @State var toComment: Bool = false
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
 //    @Environment(\.contentViewModel) var contentViewModel
@@ -230,6 +231,10 @@ struct PostView: View {
                 Task {
                     await viewModel.getIsLiked()
                 }
+            }
+            if toComment {
+                viewModel.showComments.toggle()
+                toComment = false
             }
         }
         .ignoresSafeArea(edges: .all)

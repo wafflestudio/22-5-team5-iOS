@@ -12,8 +12,6 @@ struct NotificationView: View {
     @Bindable var mainTabViewModel: MainTabViewModel
     
     //임시 데이터 배열
-    var items: [String] = ["아이템 1", "아이템 2", "아이템 3", "아이템 4", "아이템 5"]
-    
     var body: some View {
         VStack(spacing: 0) {
             //MARK: NavBar
@@ -70,7 +68,7 @@ struct NotificationView: View {
                         mainTabViewModel.toggleIsNotificationTypeSheetPresent()
                     }) {
                         HStack(spacing: 0) {
-                            Text("\(viewModel.getNotificationType())  ")
+                            Text(viewModel.notificationTypes[viewModel.notificationType] ?? "")
                             
                             Image(systemName: "chevron.down")
                         }
@@ -83,15 +81,52 @@ struct NotificationView: View {
                 
                 //MARK: NotificationList
                 LazyVStack(spacing: 0) {
-                    ForEach(items, id: \.self) { _ in
-                        NotificationCell()
+                    ForEach(Array(viewModel.notifications.enumerated()), id: \.offset) { index, notification in
+                        NotificationCell(notification: notification, viewModel: viewModel)
                         Divider()
                             .foregroundStyle(Color.gray)
                     }
                 }
             }
         }
-        
+        .onAppear {
+//            Task {
+//                await viewModel.getNotifications()
+//            }
+        }
+        .refreshable {
+            Task {
+                await viewModel.getNotifications()
+            }
+        }
+        .alert("알림 삭제", isPresented: $viewModel.isAlertPresent) {
+            Button("취소", role: .cancel) {}
+            
+            Button("삭제", role: .destructive) {
+                Task {
+                    await viewModel.deleteNotificationRead()
+                    viewModel.resetPage()
+                    await viewModel.getNotifications()
+                }
+            }
+        } message: {
+            Text("알림을 삭제하시겠습니까?")
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation1Active) {
+            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation2Active) {
+            BlogView(blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation3Active) {
+            PostView(postID: viewModel.targetNotification?.postID ?? 0, blogID: viewModel.targetNotification?.blogID ?? 0, toComment: true)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation4Active) {
+            CommentView(postID: nil, blogID: viewModel.targetNotification?.blogID ?? 0)
+        }
+        .navigationDestination(isPresented: $viewModel.isNavigation5Active) {
+            EmptyView()
+        }
         
     }
 }

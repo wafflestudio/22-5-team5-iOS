@@ -99,6 +99,13 @@ struct FeedView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(viewModel.posts.enumerated()), id: \.offset) { index, post in
                         BasicPostCell(post: post)
+                            .onAppear {
+                                if index == viewModel.posts.count - 1 {
+                                    Task {
+                                        await viewModel.getPosts()
+                                    }
+                                }
+                            }
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
                     }

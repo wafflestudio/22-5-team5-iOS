@@ -13,7 +13,6 @@ enum SearchType: String {
     case tag
 }
 
-
 enum CommentType: String {
     case post
     case blog
