@@ -164,6 +164,7 @@ struct ArticleView: View {
                         .focusedValue(\.richTextContext, viewModel.context)
                         .focused($isTextFocused)
                         .padding(.horizontal, 18)
+                        .id(viewModel.resetEditor)
                 }
                 RichTextKeyboardToolbar(
                     context: viewModel.context,
