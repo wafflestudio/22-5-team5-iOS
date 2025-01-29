@@ -19,6 +19,8 @@ import RichTextKit
     let cautionDuration: Double = 1.6
     var isEmptyDraftEntered: Bool = false
     var isEmptyTitleEntered: Bool = false
+    var isDraftSaved: Bool = false
+    var isDraftDeleted: Bool = false
     
     private var page: Int = 1
     private var isPageEnded: Bool = false
@@ -27,7 +29,9 @@ import RichTextKit
     var currentDraftID: Int = -1
     var isDraftSheetPresent: Bool = false
     var resetEditor: Bool = false
-    var isDraftSaved: Bool = false
+    var deleteDraftID: Int = -1
+    var isDraftDeleteSheetPresent: Bool = false
+    var showDeleteAlert: Bool = false
     
     var inputImage: UIImage?
     var isGalleryPickerPresent: Bool = false
@@ -54,6 +58,7 @@ import RichTextKit
         page = 1
         isPageEnded = false
         await getDrafts()
+        deleteDraftID = -1
     }
     
     func getDrafts() async {
@@ -122,7 +127,22 @@ import RichTextKit
         }
     }
     
+    func deleteDraft() async {
+        do {
+            try await NetworkRepository.shared.deleteDraft(draftID: deleteDraftID)
+            await resetView()
+            currentDraftID = -1
+            deleteDraftID = -1
+        } catch {
+            print("Delete Draft Error: \(error.localizedDescription)")
+        }
+    }
+    
     func toggleIsDraftSheetPresent() {
         isDraftSheetPresent.toggle()
+    }
+    
+    func toggleIsDraftDeleteSheetPresent() {
+        isDraftDeleteSheetPresent.toggle()
     }
 }

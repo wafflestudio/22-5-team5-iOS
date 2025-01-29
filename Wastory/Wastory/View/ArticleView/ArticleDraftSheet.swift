@@ -68,6 +68,10 @@ struct ArticleDraftSheet: View {
                     .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
                 }
             }
+            
+            ArticleDraftDeleteSheet(viewModel: viewModel)
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut, value: viewModel.isDraftDeleteSheetPresent)
         }
         .ignoresSafeArea()
     }
@@ -97,6 +101,13 @@ struct ArticleDraftSheet: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 20)
+        .simultaneousGesture(LongPressGesture().onEnded { _ in
+            withAnimation {
+                viewModel.deleteDraftID = draft.id
+                viewModel.isDraftDeleteSheetPresent = true
+            }
+        })
+        .disabled(viewModel.isDraftDeleteSheetPresent)
         SettingDivider(thickness: 1)
     }
 }

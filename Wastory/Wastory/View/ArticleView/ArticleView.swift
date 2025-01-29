@@ -48,6 +48,7 @@ struct ArticleView: View {
                                 viewModel.isEmptyDraftEntered = true
                                 viewModel.isEmptyTitleEntered = false
                                 viewModel.isDraftSaved = false
+                                viewModel.isDraftDeleted = false
                                 debounceWorkItem?.cancel()
                                 let workItem = DispatchWorkItem {
                                     withAnimation {
@@ -62,6 +63,7 @@ struct ArticleView: View {
                                     viewModel.isEmptyDraftEntered = false
                                     viewModel.isEmptyTitleEntered = false
                                     viewModel.isDraftSaved = true
+                                    viewModel.isDraftDeleted = false
                                     await viewModel.storeDraft()
                                     await viewModel.resetView()
                                     debounceWorkItem?.cancel()
@@ -110,6 +112,7 @@ struct ArticleView: View {
                             viewModel.isEmptyDraftEntered = false
                             viewModel.isEmptyTitleEntered = true
                             viewModel.isDraftSaved = false
+                            viewModel.isDraftDeleted = false
                             debounceWorkItem?.cancel()
                             let workItem = DispatchWorkItem {
                                 withAnimation {
@@ -195,6 +198,112 @@ struct ArticleView: View {
                 Spacer()
             }
             
+            if isPickerSelectorPresent {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isPickerSelectorPresent = false
+                    }
+                
+                VStack(spacing: 20) {
+                    Text("이미지를 불러올 방법을 선택해 주세요.")
+                        .font(.system(size: 14, weight: .regular))
+                    HStack(spacing: 50) {
+                        Button {
+                            viewModel.isCameraPickerPresent = true
+                            isPickerSelectorPresent = false
+                        } label: {
+                            Image(systemName: "camera")
+                        }
+                        Button {
+                            viewModel.isGalleryPickerPresent = true
+                            isPickerSelectorPresent = false
+                        } label: {
+                            Image(systemName: "photo.on.rectangle.angled")
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                )
+            }
+            
+            ArticleDraftSheet(viewModel: viewModel)
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
+            
+            if viewModel.showDeleteAlert {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.showDeleteAlert = false
+                    }
+                
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .frame(height: 120)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 60)
+                Rectangle()
+                    .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                    .frame(width: 1, height: 120)
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .frame(height: 80)
+                    .cornerRadius(12)
+                    .offset(y: -20)
+                    .padding(.horizontal, 60)
+                Rectangle()
+                    .fill(Color.dropCautionBoxEdgeGray)
+                    .frame(height: 1)
+                    .offset(y: 20)
+                    .padding(.horizontal, 60)
+                
+                Text("해당 글을 삭제하시겠습니까?")
+                    .font(.system(size: 16, weight: .light))
+                    .offset(y: -18)
+                
+                HStack(spacing: 0) {
+                    Button {
+                        viewModel.showDeleteAlert = false
+                    } label: {
+                        Text("취소")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(.black)
+                    }
+                    Spacer()
+                        .frame(width: 95)
+                    Button {
+                        Task {
+                            await viewModel.deleteDraft()
+                            viewModel.showDeleteAlert = false
+                            
+                            viewModel.isEmptyDraftEntered = false
+                            viewModel.isEmptyTitleEntered = false
+                            viewModel.isDraftSaved = false
+                            viewModel.isDraftDeleted = true
+                            debounceWorkItem?.cancel()
+                            let workItem = DispatchWorkItem {
+                                withAnimation {
+                                    viewModel.isDraftDeleted = false
+                                }
+                            }
+                            debounceWorkItem = workItem
+                            DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                        }
+                    } label: {
+                        Text("삭제")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(.red)
+                    }
+                }
+                .offset(x: 7)
+                .offset(y: 40)
+            }
+            
             if viewModel.isEmptyDraftEntered {
                 Text("제목 또는 내용을 입력해 주세요.")
                     .font(.system(size: 14, weight: .regular))
@@ -234,47 +343,24 @@ struct ArticleView: View {
                     .transition(.opacity)
             }
             
-            if isPickerSelectorPresent {
-                Color.black.opacity(0.5)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        isPickerSelectorPresent = false
-                    }
-                
-                VStack(spacing: 20) {
-                    Text("이미지를 불러올 방법을 선택해 주세요.")
-                        .font(.system(size: 14, weight: .regular))
-                    HStack(spacing: 50) {
-                        Button {
-                            viewModel.isCameraPickerPresent = true
-                            isPickerSelectorPresent = false
-                        } label: {
-                            Image(systemName: "camera")
-                        }
-                        Button {
-                            viewModel.isGalleryPickerPresent = true
-                            isPickerSelectorPresent = false
-                        } label: {
-                            Image(systemName: "photo.on.rectangle.angled")
-                        }
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 20)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundStyle(.white)
-                )
+            if viewModel.isDraftDeleted {
+                Text("삭제되었습니다.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
             }
-            
-            ArticleDraftSheet(viewModel: viewModel)
-                .transition(.move(edge: .bottom))
-                .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
         }
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftSaved)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftDeleted)
         .fullScreenCover(
             isPresented: $viewModel.isCameraPickerPresent,
             onDismiss: {
