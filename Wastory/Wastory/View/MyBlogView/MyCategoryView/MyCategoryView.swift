@@ -48,6 +48,7 @@ struct MyCategoryView: View {
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(Color.secondaryLabelColor)
                             }
+                            .textInputAutocapitalization(.never)
                             .textFieldStyle(.roundedBorder)
                         }
                         
