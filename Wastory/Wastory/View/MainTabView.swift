@@ -54,7 +54,7 @@ struct MainTabView: View {
                     
                     NotificationView(viewModel: notificationViewModel, mainTabViewModel: mainTabViewModel)
                         .tabItem {
-                            Image(mainTabViewModel.selectedTab == TabType.notification ? "bell.fill" : "bell")
+                            Image(mainTabViewModel.selectedTab == TabType.notification ? "bell.fill" : (mainTabViewModel.isNotificationUnread ? "bell.on" : "bell"))
                         }
                         .tag(TabType.notification)
                     
