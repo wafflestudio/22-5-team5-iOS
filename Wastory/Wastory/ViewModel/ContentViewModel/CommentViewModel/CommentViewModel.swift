@@ -95,6 +95,7 @@ import Observation
     
     var editingCommentText: String = ""
     var editingComment: Comment?
+    var isEditingCommentSecret: Int = 0
     
     func setCommentType(_ postID: Int?, _ blogID: Int?) {
         self.postID = postID
@@ -151,6 +152,11 @@ import Observation
     func setEditComment(to comment: Comment) {
         editingCommentText = comment.content
         editingComment = comment
+        isEditingCommentSecret = comment.isSecret
+    }
+    
+    func toggleEditingCommentSecret() {
+        isEditingCommentSecret = 1 - isEditingCommentSecret
     }
     
     func patchComment() async {
@@ -158,7 +164,7 @@ import Observation
             do {
                 print("patch comment")
                 _ = try await NetworkRepository.shared.patchComment(
-                    commentID: editingComment?.id ?? 0, content: editingCommentText)
+                    commentID: editingComment?.id ?? 0, content: editingCommentText, isSecret: isEditingCommentSecret)
             } catch {
                 print("Error: \(error.localizedDescription)")
             }
