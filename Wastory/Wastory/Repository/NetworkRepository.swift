@@ -357,7 +357,7 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
@@ -370,8 +370,6 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
@@ -388,7 +386,7 @@ final class NetworkRepository {
         )
         urlRequest.httpBody = try JSONEncoder().encode(requestBody)
         
-        logRequest(urlRequest, body: requestBody)
+        logRequest(urlRequest)
         
         let decoder = JSONDecoder()
         let dateFormatter = DateFormatter()
@@ -401,8 +399,6 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
     }
     
     func getDraft(draftID: Int) async throws -> Draft {
@@ -425,8 +421,6 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(Draft.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }
@@ -451,8 +445,6 @@ final class NetworkRepository {
         ).validate()
         .serializingDecodable(DraftListDto.self, decoder: decoder)
         .value
-            
-        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
         
         return response
     }

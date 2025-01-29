@@ -78,7 +78,7 @@ import RichTextKit
             let response = try await NetworkRepository.shared.getDraft(draftID: draftID)
             title = response.title
             if let loadedText = DataTotext(response.content) {
-                let restoredText = await RichTextImageHandler.restoreImagesFromURLs(loadedText)
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText)
                 text = restoredText
             }
             else {
@@ -92,20 +92,20 @@ import RichTextKit
     }
     
     func storeDraft() async {
-        let processedText = await RichTextImageHandler.convertImagesToURLs(text)
+        let processedText = await RichTextImageHandler.convertImage(text)
         if let dataText = textToData(processedText) {
             if currentDraftID < 0 {
                 do {
                     let response = try await NetworkRepository.shared.postDraft(title: title, content: dataText)
                     currentDraftID = response.id
                 } catch {
-                    print("Error: \(error.localizedDescription)")
+                    print("Store Error: \(error.localizedDescription)")
                 }
             } else {
                 do {
                     try await NetworkRepository.shared.patchDraft(title: title, content: dataText, draftID: currentDraftID)
                 } catch {
-                    print("Error: \(error.localizedDescription)")
+                    print("Patch Error: \(error.localizedDescription)")
                 }
             }
         }

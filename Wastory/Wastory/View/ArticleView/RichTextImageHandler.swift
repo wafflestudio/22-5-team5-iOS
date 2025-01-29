@@ -10,61 +10,94 @@ import Kingfisher
 
 @MainActor
 class RichTextImageHandler {
-    // 이미지를 URL로 변환하고 NSAttributedString을 수정하는 함수
-    static func convertImagesToURLs(_ attributedString: NSAttributedString) async -> NSAttributedString {
-        let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+    // MARK: 이미지를 URL로 변환하고 NSAttributedString을 수정하는 함수
+    static func convertImage(_ attributedString: NSAttributedString) async -> NSAttributedString {
+        let mutableAttrString = NSMutableAttributedString(attributedString: attributedString)
+        var attachmentRanges: [(NSRange, NSTextAttachment)] = []
         
-        attributedString.enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedString.length)) { value, range, _ in
-            guard let attachment = value as? NSTextAttachment,
-                  let image = attachment.image else { return }
-            
-            // 이미지 업로드 및 URL 획득
-            Task {
+        // 모든 이미지 첨부파일의 위치를 수집
+        mutableAttrString.enumerateAttribute(.attachment, in: NSRange(location: 0, length: mutableAttrString.length)) { value, range, _ in
+            if let attachment = value as? NSTextAttachment {
+                attachmentRanges.append((range, attachment))
+            }
+        }
+        
+        // 역순으로 처리
+        for (range, attachment) in attachmentRanges.reversed() {
+            if let image = attachment.image ?? attachment.image(forBounds: attachment.bounds, textContainer: nil, characterIndex: 0) {
                 do {
                     let imageURL = try await NetworkRepository.shared.postImage(image)
-                    let urlAttachment = NSTextAttachment()
-                    urlAttachment.bounds = attachment.bounds
+                    let imageMarker = "[[IMAGE_URL]]\(imageURL)[[/IMAGE_URL]]"
                     
-                    // URL을 저장할 커스텀 속성 추가
-                    let attributes: [NSAttributedString.Key: Any] = [
-                        .attachment: urlAttachment,
-                        .customImageURL: imageURL
-                    ]
+                    // 기존 attachment 속성 제거
+                    let attributes = mutableAttrString.attributes(at: range.location, effectiveRange: nil)
+                    var newAttributes = attributes
+                    newAttributes.removeValue(forKey: .attachment)
                     
-                    let replacementString = NSAttributedString(string: "📷", attributes: attributes)
-                    mutableAttributedString.replaceCharacters(in: range, with: replacementString)
+                    // URL 텍스트 삽입 및 속성 적용
+                    let urlAttrString = NSAttributedString(string: imageMarker, attributes: newAttributes)
+                    mutableAttrString.replaceCharacters(in: range, with: urlAttrString)
+                    
+                    print("Image converted to URL: \(imageURL)")
                 } catch {
-                    print("Error: \(error.localizedDescription)")
+                    print("Failed to upload image: \(error)")
                 }
             }
         }
         
-        return mutableAttributedString
+        // attachment 속성 한 번 더 확인하여 제거 - 추후 제거해도 무방할 것으로 보임
+        let fullRange = NSRange(location: 0, length: mutableAttrString.length)
+        mutableAttrString.enumerateAttribute(.attachment, in: fullRange) { value, range, _ in
+            if value != nil {
+                mutableAttrString.removeAttribute(.attachment, range: range)
+            }
+        }
+        
+        return mutableAttrString
     }
     
-    // URL로부터 이미지를 다운로드하여 NSAttributedString을 복원하는 함수
-    static func restoreImagesFromURLs(_ attributedString: NSAttributedString) async -> NSAttributedString {
-        let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+    // MARK: URL로부터 이미지를 복원하는 함수
+    static func restoreImage(_ attributedString: NSAttributedString) async -> NSAttributedString {
+        let mutableAttrString = NSMutableAttributedString(attributedString: attributedString)
+        let pattern = "\\[\\[IMAGE_URL\\]](.+?)\\[\\[/IMAGE_URL\\]]"
         
-        attributedString.enumerateAttribute(.customImageURL, in: NSRange(location: 0, length: attributedString.length)) { value, range, _ in
-            guard let imageURL = value as? String else { return }
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return attributedString
+        }
+        
+        let matches = regex.matches(in: mutableAttrString.string, options: [], range: NSRange(location: 0, length: mutableAttrString.length))
+        
+        for match in matches.reversed() {
+            guard let urlRange = Range(match.range(at: 1), in: mutableAttrString.string) else { continue }
+            let urlString = String(mutableAttrString.string[urlRange])
             
-            Task {
-                if let image = try? await KingfisherManager.shared.retrieveImage(with: .network(imageURL as! Resource)).image {
-                    let imageAttachment = NSTextAttachment()
-                    imageAttachment.image = image
-                    
-                    let replacementString = NSAttributedString(attachment: imageAttachment)
-                    mutableAttributedString.replaceCharacters(in: range, with: replacementString)
+            guard let url = URL(string: urlString) else {
+                print("Invalid URL: \(urlString)")
+                continue
+            }
+            
+            do {
+                let image = try await withCheckedThrowingContinuation { continuation in
+                    KingfisherManager.shared.retrieveImage(with: url) { result in
+                        switch result {
+                        case .success(let imageResult):
+                            continuation.resume(returning: imageResult.image)
+                        case .failure(let error):
+                            continuation.resume(throwing: error)
+                        }
+                    }
                 }
+                
+                let attachment = NSTextAttachment()
+                attachment.image = image
+                let attributedImage = NSAttributedString(attachment: attachment)
+                mutableAttrString.replaceCharacters(in: match.range, with: attributedImage)
+                
+            } catch {
+                print("Image download failed: \(error)")
             }
         }
         
-        return mutableAttributedString
+        return mutableAttrString
     }
-}
-
-// 커스텀 속성 키 정의
-extension NSAttributedString.Key {
-    static let customImageURL = NSAttributedString.Key("customImageURL")
 }
