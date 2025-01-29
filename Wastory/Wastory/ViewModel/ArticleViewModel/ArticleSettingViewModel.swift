@@ -106,16 +106,6 @@ import RichTextKit
     }
     
     // MARK: - Posting
-    func textToData(_ text: NSAttributedString) -> String? {
-        do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: text, requiringSecureCoding: false)
-            return data.base64EncodedString()
-        } catch {
-            print("Failed to archive NSAttributedString: \(error)")
-            return nil
-        }
-    }
-    
     func postArticle() async {
         if let image = mainImage {
             do {
@@ -127,7 +117,7 @@ import RichTextKit
         }
         
         let processedText = await RichTextImageHandler.convertImage(text)
-        if let dataText = textToData(processedText) {
+        if let dataText = RichTextHandler.textToData(processedText) {
             do {
                 try await NetworkRepository.shared.postArticle(
                     title: title,

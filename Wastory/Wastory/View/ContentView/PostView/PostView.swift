@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RichTextKit
 
 struct PostView: View {
     let postID: Int
@@ -15,6 +16,7 @@ struct PostView: View {
     @Environment(\.dismiss) private var dismiss
 //    @Environment(\.contentViewModel) var contentViewModel
     
+    @FocusState private var isTextFocused: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -91,11 +93,16 @@ struct PostView: View {
                             .frame(height: 60)
                         
                         // MARK: Content
+                        /*
                         Text(viewModel.post.content ?? "")
                             .font(.system(size: 20, weight: .light))
                             .foregroundStyle(Color.primaryLabelColor)
                             .padding(.horizontal, 20)
-                        
+                        */
+                        RichTextViewer(viewModel.text)
+                            .id(viewModel.isTextLoaded)
+                            .frame(height: 1000)
+                            .padding(.horizontal, 20)
                         
                         Spacer()
                             .frame(height: 30)
@@ -230,6 +237,9 @@ struct PostView: View {
                 }
                 Task {
                     await viewModel.getIsLiked()
+                }
+                Task {
+                    await viewModel.loadText()
                 }
             }
             if toComment {

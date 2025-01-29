@@ -9,7 +9,9 @@
 
 import SwiftUI
 import Observation
+import RichTextKit
 
+@MainActor
 @Observable final class PostViewModel {
     var post: Post = Post.defaultPost
     var blog: Blog = Blog.defaultBlog
@@ -81,6 +83,35 @@ import Observation
         }
     }
     
+    // MARK: - Rendering Content
+    var text = NSAttributedString()
+    var context = RichTextContext()
+    var isTextLoaded: Bool = false
+    
+    func DataTotext(_ data: String) -> NSAttributedString? {
+        if let text = Data(base64Encoded: data) {
+            do {
+                return try NSAttributedString(data: text, format: .archivedData)
+            } catch {
+                print("Failed to load NSAttributedString: \(error)")
+            }
+        }
+        return nil
+    }
+    
+    func loadText() async {
+        if let content = post.content {
+            if let loadedText = RichTextHandler.DataTotext(content) {
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText)
+                text = restoredText
+                isTextLoaded = true
+                print("restored!: ", text)
+            }
+            else {
+                print("Error: Failed to load text data")
+            }
+        }
+    }
     
     
     func deleteSelfPost(at List: inout [Post]) {
