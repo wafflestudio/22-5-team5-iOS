@@ -33,7 +33,11 @@ struct ArticleSettingView: View {
                         Spacer()
                         Button {
                             Task {
-                                await viewModel.postArticle()
+                                if articleViewModel.editingPost == nil {
+                                    await viewModel.postArticle()
+                                } else {
+                                    await viewModel.patchArticle(postID: articleViewModel.editingPost!.id)
+                                }
                                 dismiss()
                                 articleViewModel.isSubmitted.toggle()
                             }

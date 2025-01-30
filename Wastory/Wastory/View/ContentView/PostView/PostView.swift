@@ -383,7 +383,7 @@ struct PostView: View {
                 }
                 .fullScreenCover(isPresented: $viewModel.navToEdit) {
                     NavigationStack {
-                        EmptyView()
+                        ArticleView(editingPost: viewModel.post)
                     }
                 }
             }

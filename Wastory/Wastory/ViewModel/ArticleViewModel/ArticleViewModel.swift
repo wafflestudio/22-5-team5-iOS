@@ -44,8 +44,14 @@ import RichTextKit
     
     var editingPost: Post?
     
-    func initEditingPost(post: Post?) {
+    func initEditingPost(post: Post) async {
         editingPost = post
+        
+        title = editingPost!.title
+        if let loadedText = RichTextHandler.DataTotext(editingPost?.content ?? "") {
+            let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
+            text = restoredText
+        }
     }
     
     func insertImage(inputImage: UIImage, context: RichTextContext) {

@@ -149,7 +149,7 @@ import RichTextKit
         }
     }
     
-    func patchArticle() async {
+    func patchArticle(postID: Int) async {
         if let image = mainImage {
             do {
                 let response = try await NetworkRepository.shared.postImage(image)
@@ -162,7 +162,8 @@ import RichTextKit
         let (processedText, URLs) = await RichTextImageHandler.convertImage(text)
         if let dataText = RichTextHandler.textToData(processedText) {
             do {
-                try await NetworkRepository.shared.postArticle(
+                try await NetworkRepository.shared.patchArticle(
+                    postID: postID,
                     title: title,
                     content: dataText,
                     description: getDescription(),

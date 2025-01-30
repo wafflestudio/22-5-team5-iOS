@@ -437,7 +437,9 @@ struct ArticleView: View {
         )
         .onAppear {
             if editingPost != nil && viewModel.editingPost == nil {
-                viewModel.initEditingPost(post: editingPost)
+                Task {
+                    await viewModel.initEditingPost(post: editingPost!)
+                }
             }
             Task {
                 await viewModel.resetView()
