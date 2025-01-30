@@ -9,7 +9,9 @@
 
 import SwiftUI
 import Observation
+import RichTextKit
 
+@MainActor
 @Observable final class PostViewModel {
     var post: Post = Post.defaultPost
     var blog: Blog = Blog.defaultBlog
@@ -81,6 +83,63 @@ import Observation
         }
     }
     
+    // MARK: - Rendering Content
+    var text = NSAttributedString()
+    var context = RichTextContext()
+    var textHeight: CGFloat = 0
+    var isTextLoaded: Bool = false
+    let screenWidth: CGFloat = UIScreen.main.bounds.width - 40
+    
+    func DataTotext(_ data: String) -> NSAttributedString? {
+        if let text = Data(base64Encoded: data) {
+            do {
+                return try NSAttributedString(data: text, format: .archivedData)
+            } catch {
+                print("Failed to load NSAttributedString: \(error)")
+            }
+        }
+        return nil
+    }
+    
+    func loadText() async {
+        if let content = post.content {
+            if let loadedText = RichTextHandler.DataTotext(content) {
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
+                text = restoredText
+                textHeight = calculateHeight(text: text, screenWidth: screenWidth) + 30
+                isTextLoaded = true
+            }
+            else {
+                print("Error: Failed to load text data")
+            }
+        }
+    }
+    
+    func calculateHeight(text: NSAttributedString, screenWidth: CGFloat) -> CGFloat {
+        var height: CGFloat = 0
+        text.enumerateAttribute(.attachment, in: NSRange(location: 0, length: text.length)) { value, range, _ in
+            if let attachment = value as? NSTextAttachment,
+               let image = attachment.image {
+                let imageAspectRatio = image.size.height / image.size.width
+                height += imageAspectRatio * screenWidth
+            }
+        }
+        
+        let mutableAttrString = NSMutableAttributedString(attributedString: text)
+        let fullRange = NSRange(location: 0, length: mutableAttrString.length)
+        mutableAttrString.enumerateAttribute(.attachment, in: fullRange) { value, range, _ in
+            if value != nil {
+                mutableAttrString.replaceCharacters(in: range, with: "")
+            }
+        }
+        
+        height += mutableAttrString.boundingRect(
+            with: CGSize(width: screenWidth, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            context: nil).height
+        
+        return ceil(height)
+    }
     
     
     func deleteSelfPost(at List: inout [Post]) {

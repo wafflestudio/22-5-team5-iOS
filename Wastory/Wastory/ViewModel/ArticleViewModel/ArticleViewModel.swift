@@ -19,6 +19,8 @@ import RichTextKit
     let cautionDuration: Double = 1.6
     var isEmptyDraftEntered: Bool = false
     var isEmptyTitleEntered: Bool = false
+    var isDraftSaved: Bool = false
+    var isDraftDeleted: Bool = false
     
     private var page: Int = 1
     private var isPageEnded: Bool = false
@@ -27,14 +29,27 @@ import RichTextKit
     var currentDraftID: Int = -1
     var isDraftSheetPresent: Bool = false
     var resetEditor: Bool = false
+    var deleteDraftID: Int = -1
+    var isDraftDeleteSheetPresent: Bool = false
+    var showDeleteAlert: Bool = false
     
     var inputImage: UIImage?
     var isGalleryPickerPresent: Bool = false
     var isCameraPickerPresent: Bool = false
+    let screenWidth: CGFloat = UIScreen.main.bounds.width - 40
     
     func insertImage(inputImage: UIImage, context: RichTextContext) {
         let cursorLocation = context.selectedRange.location
-        let insertion = RichTextInsertion<UIImage>.image(inputImage, at: cursorLocation, moveCursor: true)
+        
+        let imageAspectRatio = inputImage.size.height / inputImage.size.width
+        let height = imageAspectRatio * screenWidth
+
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: screenWidth, height: height))
+        let resizedImage = renderer.image { _ in
+            inputImage.draw(in: CGRect(origin: .zero, size: CGSize(width: screenWidth, height: height)))
+        }
+        
+        let insertion = RichTextInsertion<UIImage>.image(resizedImage, at: cursorLocation, moveCursor: true)
         let action = RichTextAction.pasteImage(insertion)
         context.handle(action)
     }
@@ -43,6 +58,7 @@ import RichTextKit
         page = 1
         isPageEnded = false
         await getDrafts()
+        deleteDraftID = -1
     }
     
     func getDrafts() async {
@@ -77,8 +93,8 @@ import RichTextKit
         do {
             let response = try await NetworkRepository.shared.getDraft(draftID: draftID)
             title = response.title
-            if let loadedText = DataTotext(response.content) {
-                let restoredText = await RichTextImageHandler.restoreImage(loadedText)
+            if let loadedText = RichTextHandler.DataTotext(response.content) {
+                let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
                 text = restoredText
             }
             else {
@@ -93,7 +109,7 @@ import RichTextKit
     
     func storeDraft() async {
         let processedText = await RichTextImageHandler.convertImage(text)
-        if let dataText = textToData(processedText) {
+        if let dataText = RichTextHandler.textToData(processedText) {
             if currentDraftID < 0 {
                 do {
                     let response = try await NetworkRepository.shared.postDraft(title: title, content: dataText)
@@ -111,95 +127,22 @@ import RichTextKit
         }
     }
     
+    func deleteDraft() async {
+        do {
+            try await NetworkRepository.shared.deleteDraft(draftID: deleteDraftID)
+            await resetView()
+            currentDraftID = -1
+            deleteDraftID = -1
+        } catch {
+            print("Delete Draft Error: \(error.localizedDescription)")
+        }
+    }
+    
     func toggleIsDraftSheetPresent() {
         isDraftSheetPresent.toggle()
     }
     
-    // MARK: - Converters
-    // MARK: Main Converter
-    func textToData(_ text: NSAttributedString) -> String? {
-        do {
-            let data = try NSKeyedArchiver.archivedData(withRootObject: text, requiringSecureCoding: false)
-            return data.base64EncodedString()
-        } catch {
-            print("Failed to archive NSAttributedString: \(error)")
-            return nil
-        }
-    }
-    
-    func DataTotext(_ data: String) -> NSAttributedString? {
-        if let text = Data(base64Encoded: data) {
-            do {
-                return try NSAttributedString(data: text, format: .archivedData)
-            } catch {
-                print("Failed to load NSAttributedString: \(error)")
-            }
-        }
-        return nil
-    }
-    
-    // MARK: Sub Converter (may not use)
-    func HTMLTotext(_ htmlString: String) -> NSAttributedString? {
-        guard let htmlData = htmlString.data(using: .utf8) else { return nil }
-        do {
-            let attributedString = try NSAttributedString(
-                data: htmlData,
-                options: [
-                    .documentType: NSAttributedString.DocumentType.html,
-                    .characterEncoding: String.Encoding.utf8.rawValue
-                ],
-                documentAttributes: nil
-            )
-            return attributedString
-        } catch {
-            print("Error converting HTML to NSAttributedString: \(error)")
-        }
-        return nil
-    }
-    
-    func textToHTML(_ text: NSAttributedString) -> String? {
-        do {
-            let htmlData = try text.data(
-                from: NSRange(location: 0, length: text.length),
-                documentAttributes: [
-                    .documentType: NSAttributedString.DocumentType.html,
-                    .characterEncoding: String.Encoding.utf8.rawValue
-                ]
-            )
-            if let htmlString = String(data: htmlData, encoding: .utf8) {
-                return htmlString
-            }
-        }
-        catch {
-            print("Error convertnig Rich Text to HTML: \(error)")
-        }
-        return nil
-    }
-    
-    func textToRTF(_ text: NSAttributedString) -> String? {
-        do {
-            let rtfData = try text.data(
-                from: NSRange(location: 0, length: text.length),
-                documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
-            return rtfData.base64EncodedString()
-        }
-        catch {
-            print("Error convertnig Rich Text to RTF: \(error)")
-        }
-        return nil
-    }
-    
-    func RTFTotext(_ rtfString: String) -> NSAttributedString? {
-        do {
-            let rtfData = Data(base64Encoded: rtfString)
-            return try NSAttributedString(
-                data: rtfData!,
-                options: [.documentType: NSAttributedString.DocumentType.rtf],
-                documentAttributes: nil)
-        }
-        catch {
-            print("Error convertnig RTF to Rich Text: \(error)")
-        }
-        return nil
+    func toggleIsDraftDeleteSheetPresent() {
+        isDraftDeleteSheetPresent.toggle()
     }
 }

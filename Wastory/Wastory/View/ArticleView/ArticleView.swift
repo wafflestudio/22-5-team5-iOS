@@ -47,6 +47,8 @@ struct ArticleView: View {
                             if viewModel.title.isEmpty && viewModel.text.length == 0 {
                                 viewModel.isEmptyDraftEntered = true
                                 viewModel.isEmptyTitleEntered = false
+                                viewModel.isDraftSaved = false
+                                viewModel.isDraftDeleted = false
                                 debounceWorkItem?.cancel()
                                 let workItem = DispatchWorkItem {
                                     withAnimation {
@@ -58,8 +60,20 @@ struct ArticleView: View {
                             }
                             else {
                                 Task {
+                                    viewModel.isEmptyDraftEntered = false
+                                    viewModel.isEmptyTitleEntered = false
+                                    viewModel.isDraftSaved = true
+                                    viewModel.isDraftDeleted = false
                                     await viewModel.storeDraft()
                                     await viewModel.resetView()
+                                    debounceWorkItem?.cancel()
+                                    let workItem = DispatchWorkItem {
+                                        withAnimation {
+                                            viewModel.isDraftSaved = false
+                                        }
+                                    }
+                                    debounceWorkItem = workItem
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
                                 }
                             }
                         } label: {
@@ -97,6 +111,8 @@ struct ArticleView: View {
                             isTextFocused = false
                             viewModel.isEmptyDraftEntered = false
                             viewModel.isEmptyTitleEntered = true
+                            viewModel.isDraftSaved = false
+                            viewModel.isDraftDeleted = false
                             debounceWorkItem?.cancel()
                             let workItem = DispatchWorkItem {
                                 withAnimation {
@@ -138,37 +154,43 @@ struct ArticleView: View {
                 Spacer()
                     .frame(height: 20)
                 
-                // MARK: Title TextField
-                TextField("제목", text: $viewModel.title)
-                    .font(.system(size: 26, weight: .regular))
-                    .foregroundStyle(Color.primaryLabelColor)
-                    .focused($isTitleFocused)
-                    .autocapitalization(.none)
-                    .padding(.horizontal, 23)
-                
-                Spacer()
-                    .frame(height: 10)
-                
-                // MARK: Contents TextField
-                ZStack(alignment: .topLeading) {
-                    if viewModel.text.string.isEmpty {
-                        HStack {
-                            Text("내용을 입력해주세요.")
-                                .font(.system(size: 15, weight: .regular))
-                                .foregroundStyle(Color.promptLabelColor)
-                                .padding(.horizontal, 26)
-                                .padding(.top, 9)
-                            Spacer()
+                ScrollView {
+                    // MARK: Title TextField
+                    TextField("제목", text: $viewModel.title)
+                        .font(.system(size: 26, weight: .regular))
+                        .foregroundStyle(Color.primaryLabelColor)
+                        .focused($isTitleFocused)
+                        .autocapitalization(.none)
+                        .padding(.horizontal, 23)
+                    
+                    Spacer()
+                        .frame(height: 10)
+                    
+                    // MARK: Contents TextField
+                    ZStack(alignment: .topLeading) {
+                        if viewModel.text.string.isEmpty {
+                            HStack {
+                                Text("내용을 입력해주세요.")
+                                    .font(.system(size: 15, weight: .regular))
+                                    .foregroundStyle(Color.promptLabelColor)
+                                    .padding(.horizontal, 26)
+                                    .padding(.top, 9)
+                                Spacer()
+                            }
                         }
+                        RichTextEditor(text: $viewModel.text, context: viewModel.context)
+                            .focusedValue(\.richTextContext, viewModel.context)
+                            .focused($isTextFocused)
+                            .frame(height: 1000)
+                            .padding(.horizontal, 18)
+                            .id(viewModel.resetEditor)
                     }
-                    RichTextEditor(text: $viewModel.text, context: viewModel.context) {
-                        $0.imageConfiguration.maxImageSize = (width: .points(200), height: .points(200))
-                    }
-                        .focusedValue(\.richTextContext, viewModel.context)
-                        .focused($isTextFocused)
-                        .padding(.horizontal, 18)
-                        .id(viewModel.resetEditor)
+                    Spacer()
                 }
+            }
+            
+            VStack {
+                Spacer()
                 RichTextKeyboardToolbar(
                     context: viewModel.context,
                     leadingButtons: { _ in },
@@ -181,33 +203,7 @@ struct ArticleView: View {
                     },
                     formatSheet: { $0 }
                 )
-                Spacer()
-            }
-            
-            if viewModel.isEmptyDraftEntered {
-                Text("제목 또는 내용을 입력해 주세요.")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .foregroundStyle(Color.settingGearGray)
-                    )
-                    .transition(.opacity)
-            }
-            
-            if viewModel.isEmptyTitleEntered {
-                Text("제목을 입력해 주세요.")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundStyle(.white)
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 15)
-                    .background(
-                        RoundedRectangle(cornerRadius: 6)
-                            .foregroundStyle(Color.settingGearGray)
-                    )
-                    .transition(.opacity)
+                .padding(.bottom, 30)
             }
             
             if isPickerSelectorPresent {
@@ -246,10 +242,133 @@ struct ArticleView: View {
             ArticleDraftSheet(viewModel: viewModel)
                 .transition(.move(edge: .bottom))
                 .animation(.easeInOut, value: viewModel.isDraftSheetPresent)
+            
+            if viewModel.showDeleteAlert {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        viewModel.showDeleteAlert = false
+                    }
+                
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .frame(height: 120)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 60)
+                Rectangle()
+                    .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                    .frame(width: 1, height: 120)
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .frame(height: 80)
+                    .cornerRadius(12)
+                    .offset(y: -20)
+                    .padding(.horizontal, 60)
+                Rectangle()
+                    .fill(Color.dropCautionBoxEdgeGray)
+                    .frame(height: 1)
+                    .offset(y: 20)
+                    .padding(.horizontal, 60)
+                
+                Text("해당 글을 삭제하시겠습니까?")
+                    .font(.system(size: 16, weight: .light))
+                    .offset(y: -18)
+                
+                HStack(spacing: 0) {
+                    Button {
+                        viewModel.showDeleteAlert = false
+                    } label: {
+                        Text("취소")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(.black)
+                    }
+                    Spacer()
+                        .frame(width: 95)
+                    Button {
+                        Task {
+                            await viewModel.deleteDraft()
+                            viewModel.showDeleteAlert = false
+                            
+                            viewModel.isEmptyDraftEntered = false
+                            viewModel.isEmptyTitleEntered = false
+                            viewModel.isDraftSaved = false
+                            viewModel.isDraftDeleted = true
+                            debounceWorkItem?.cancel()
+                            let workItem = DispatchWorkItem {
+                                withAnimation {
+                                    viewModel.isDraftDeleted = false
+                                }
+                            }
+                            debounceWorkItem = workItem
+                            DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                        }
+                    } label: {
+                        Text("삭제")
+                            .font(.system(size: 16, weight: .light))
+                            .foregroundStyle(.red)
+                    }
+                }
+                .offset(x: 7)
+                .offset(y: 40)
+            }
+            
+            if viewModel.isEmptyDraftEntered {
+                Text("제목 또는 내용을 입력해 주세요.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
+            
+            if viewModel.isEmptyTitleEntered {
+                Text("제목을 입력해 주세요.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
+            
+            if viewModel.isDraftSaved {
+                Text("작성 중인 글이 저장되었습니다.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
+            
+            if viewModel.isDraftDeleted {
+                Text("삭제되었습니다.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
         }
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftSaved)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftDeleted)
         .fullScreenCover(
             isPresented: $viewModel.isCameraPickerPresent,
             onDismiss: {

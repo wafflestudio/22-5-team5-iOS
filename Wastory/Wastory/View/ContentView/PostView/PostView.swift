@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RichTextKit
 
 struct PostView: View {
     let postID: Int
@@ -15,6 +16,7 @@ struct PostView: View {
     @Environment(\.dismiss) private var dismiss
 //    @Environment(\.contentViewModel) var contentViewModel
     
+    @FocusState private var isTextFocused: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -34,6 +36,7 @@ struct PostView: View {
                             }
                     }
                     .frame(height: 0)
+                    Spacer()
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer()
                             .frame(height: 100)
@@ -91,22 +94,22 @@ struct PostView: View {
                             .frame(height: 60)
                         
                         // MARK: Content
-                        Text(viewModel.post.content ?? "")
-                            .font(.system(size: 20, weight: .light))
-                            .foregroundStyle(Color.primaryLabelColor)
+                        RichTextViewer(viewModel.text)
+                            .frame(height: viewModel.textHeight)
                             .padding(.horizontal, 20)
-                        
+                            .id(viewModel.isTextLoaded)
                         
                         Spacer()
                             .frame(height: 30)
                         
                         Divider()
                             .foregroundStyle(Color.secondaryLabelColor)
+                        Spacer()
                     }
                     .background(Color.white)
                     // TODO: 태그 버튼 추가하기
                     
-                    
+                    Spacer()
                     
                     
                     //Blog 세부설명 및 구독버튼
@@ -231,10 +234,13 @@ struct PostView: View {
                 Task {
                     await viewModel.getIsLiked()
                 }
-            }
-            if toComment {
-                viewModel.showComments.toggle()
-                toComment = false
+                Task {
+                    await viewModel.loadText()
+                }
+                if toComment {
+                    viewModel.showComments.toggle()
+                    toComment = false
+                }
             }
         }
         .ignoresSafeArea(edges: .all)

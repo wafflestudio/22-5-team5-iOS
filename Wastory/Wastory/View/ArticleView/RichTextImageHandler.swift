@@ -57,7 +57,7 @@ class RichTextImageHandler {
     }
     
     // MARK: URL로부터 이미지를 복원하는 함수
-    static func restoreImage(_ attributedString: NSAttributedString) async -> NSAttributedString {
+    static func restoreImage(_ attributedString: NSAttributedString, screenWidth: CGFloat) async -> NSAttributedString {
         let mutableAttrString = NSMutableAttributedString(attributedString: attributedString)
         let pattern = "\\[\\[IMAGE_URL\\]](.+?)\\[\\[/IMAGE_URL\\]]"
         
@@ -88,8 +88,15 @@ class RichTextImageHandler {
                     }
                 }
                 
-                let attachment = NSTextAttachment()
+                let attachment = ResizableTextAttachment()
                 attachment.image = image
+                
+                let imageAspectRatio = image.size.height / image.size.width
+                let height = imageAspectRatio * screenWidth
+                
+                attachment.desiredHeight = height
+                attachment.desiredWidth = screenWidth
+
                 let attributedImage = NSAttributedString(attachment: attachment)
                 mutableAttrString.replaceCharacters(in: match.range, with: attributedImage)
                 
@@ -99,5 +106,17 @@ class RichTextImageHandler {
         }
         
         return mutableAttrString
+    }
+}
+
+// Custom NSTextAttachment that respects desired size
+class ResizableTextAttachment: NSTextAttachment {
+    var desiredWidth: CGFloat = 0
+    var desiredHeight: CGFloat = 0
+    override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+        if desiredWidth > 0 && desiredHeight > 0 {
+            return CGRect(x: 0, y: 0, width: desiredWidth, height: desiredHeight)
+        }
+        return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
     }
 }
