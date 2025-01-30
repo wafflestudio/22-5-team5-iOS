@@ -44,7 +44,7 @@ struct Post: Codable, Identifiable, Hashable {
         case likeCount = "article_likes"
         case commentCount = "article_comments"
         case protected
-        case commentsEnabeld = "comments_enabled"
+        case commentsEnabled = "comments_enabled"
     }
     
     static let defaultPost: Post = {
@@ -110,6 +110,6 @@ struct FileURLDto: Codable {
 import SwiftUI
 extension View {
     func tempPost() -> Post {
-        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5)
+        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5, protected: 0, commentsEnabled: 1)
     }
 }

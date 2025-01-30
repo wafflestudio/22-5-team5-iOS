@@ -127,47 +127,52 @@ struct ArticleSettingView: View {
                     Spacer()
                     
                     Button {
-                        // TODO: 공개 버튼
+                        viewModel.isSecret = false
+                        viewModel.isProtected = false
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "globe.asia.australia.fill")
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundStyle(.black)
+                            Image(systemName: (viewModel.isSecret == false && viewModel.isProtected == false)
+                                  ? "globe.asia.australia.fill"
+                                  : "globe.asia.australia")
+                                .font(.system(size: 17, weight: (viewModel.isSecret == false && viewModel.isProtected == false) ? .regular : .light))
+                                .foregroundStyle((viewModel.isSecret == false && viewModel.isProtected == false) ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("공개")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.black)
+                                .font(.system(size: 13, weight: (viewModel.isSecret == false && viewModel.isProtected == false) ? .semibold : .light))
+                                .foregroundStyle((viewModel.isSecret == false && viewModel.isProtected == false) ? .black : Color.emailCautionTextGray)
                         }
                     }
                     
                     Button {
-                        // TODO: 보호 버튼
+                        viewModel.isSecret = false
+                        viewModel.isProtected = true
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "lock")
-                                .font(.system(size: 17, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                            Image(systemName: viewModel.isProtected ? "lock.fill" : "lock")
+                                .font(.system(size: 17, weight: viewModel.isProtected ? .regular : .light))
+                                .foregroundStyle(viewModel.isProtected ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("보호")
-                                .font(.system(size: 13, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                                .font(.system(size: 13, weight: viewModel.isProtected ? .semibold : .light))
+                                .foregroundStyle(viewModel.isProtected ? .black : Color.emailCautionTextGray)
                         }
                     }
                     
                     Button {
-                        // TODO: 비공개 버튼
+                        viewModel.isSecret = true
+                        viewModel.isProtected = false
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "eye.slash")
-                                .font(.system(size: 17, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                            Image(systemName: viewModel.isSecret ? "eye.slash.fill" : "eye.slash")
+                                .font(.system(size: 17, weight: viewModel.isSecret ? .regular : .light))
+                                .foregroundStyle(viewModel.isSecret ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("비공개")
-                                .font(.system(size: 13, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                                .font(.system(size: 13, weight: viewModel.isSecret ? .semibold : .light))
+                                .foregroundStyle(viewModel.isSecret ? .black : Color.emailCautionTextGray)
                         }
                     }
                 }
@@ -247,6 +252,7 @@ struct ArticleSettingView: View {
         }
         .onAppear {
             viewModel.extractMainImage()
+            viewModel.articlePassword = viewModel.generateRandomPassword(length: 8)
         }
     }
 }
