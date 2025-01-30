@@ -26,7 +26,7 @@ struct Post: Codable, Identifiable, Hashable {
     var commentCount: Int           // Comment 개수
     
     var protected: Int              // 공개글 0 | 보호글 1
-    var commentsEnabled: Int        // 댓글 허용 1 | 댓글 불가 0
+    var commentsEnabled: Int?       // 댓글 허용 1 | 댓글 불가 0
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -48,7 +48,7 @@ struct Post: Codable, Identifiable, Hashable {
     }
     
     static let defaultPost: Post = {
-        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0, protected: 0, commentsEnabled: 1)
+        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0, protected: 0)
         }()
 }
 
@@ -110,6 +110,6 @@ struct FileURLDto: Codable {
 import SwiftUI
 extension View {
     func tempPost() -> Post {
-        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5, protected: 0, commentsEnabled: 1)
+        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5, protected: 0)
     }
 }
