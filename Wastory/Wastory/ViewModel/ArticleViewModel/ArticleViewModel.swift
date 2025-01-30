@@ -40,6 +40,14 @@ import RichTextKit
     var isCameraPickerPresent: Bool = false
     let screenWidth: CGFloat = UIScreen.main.bounds.width - 40
     
+    var isSubmitted: Bool = false
+    
+    var editingPost: Post?
+    
+    func initEditingPost(post: Post?) {
+        editingPost = post
+    }
+    
     func insertImage(inputImage: UIImage, context: RichTextContext) {
         let cursorLocation = context.selectedRange.location
         
