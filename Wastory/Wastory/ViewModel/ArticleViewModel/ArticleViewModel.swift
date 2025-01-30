@@ -41,16 +41,15 @@ import RichTextKit
     func insertImage(inputImage: UIImage, context: RichTextContext) {
         let cursorLocation = context.selectedRange.location
         
-        let imageAspectRatio = inputImage.size.height / inputImage.size.width
-        let height = imageAspectRatio * screenWidth
-
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: screenWidth, height: height))
-        let resizedImage = renderer.image { _ in
-            inputImage.draw(in: CGRect(origin: .zero, size: CGSize(width: screenWidth, height: height)))
-        }
+        let attachment = CustomTextAttachment()
+        attachment.image = inputImage
+        attachment.originalImage = inputImage
         
-        let insertion = RichTextInsertion<UIImage>.image(resizedImage, at: cursorLocation, moveCursor: true)
-        let action = RichTextAction.pasteImage(insertion)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16)    // 이미지가 삽입되어도 기존 폰트 사이즈를 유지 (유저가 입력하면서 변경 가능)
+        ]
+        let attributedString = NSAttributedString(attachment: attachment, attributes: attributes)
+        let action = RichTextAction.replaceText(in: NSRange(location: cursorLocation, length: 0), with: attributedString)
         context.handle(action)
     }
     

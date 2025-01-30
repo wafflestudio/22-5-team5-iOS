@@ -120,3 +120,17 @@ class ResizableTextAttachment: NSTextAttachment {
         return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
     }
 }
+
+// Custom NSTextAttachment for resizable insertion
+class CustomTextAttachment: NSTextAttachment {
+    var originalImage: UIImage?
+    override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+        guard let image = originalImage else {
+            return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
+        }
+        let screenWidth = UIScreen.main.bounds.width - 40
+        let imageAspectRatio = image.size.height / image.size.width
+        let height = imageAspectRatio * screenWidth
+        return CGRect(x: 0, y: 0, width: screenWidth, height: height)
+    }
+}
