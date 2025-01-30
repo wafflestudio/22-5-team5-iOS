@@ -315,7 +315,7 @@ extension NetworkRepository {
     }
     
     // MARK: - Article
-    func patchArticle(postID: Int, title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int, images: [FileURLDto]) async throws {
+    func patchArticle(postID: Int, title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int, protected: Int, password: String, images: [FileURLDto], commentsEnabled: Int) async throws {
         let requestBody = ArticleDto(
             title: title,
             content: content,
@@ -324,7 +324,10 @@ extension NetworkRepository {
             categoryID: categoryID,
             homeTopicID: homeTopicID,
             secret: secret,
-            images: images
+            protected: protected,
+            password: password,
+            images: images,
+            commentsEnabled: commentsEnabled
         )
         var urlRequest = try URLRequest(
             url:     NetworkRouter.patchArticle(postID: postID).url,
