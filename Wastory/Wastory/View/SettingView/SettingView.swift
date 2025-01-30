@@ -103,6 +103,7 @@ struct SettingView: View {
                                             .font(.system(size: 13))
                                             .underline()
                                             .foregroundStyle(Color.settingDropGray)
+                                            .padding(.bottom, 20)
                                         Spacer()
                                     }
                                     .padding(.leading, 20)
