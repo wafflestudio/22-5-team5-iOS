@@ -308,7 +308,7 @@ struct ArticleSettingView: View {
                         .frame(height: 20)
                     
                     Rectangle()
-                        .foregroundStyle(Color.settingDivderGray)
+                        .foregroundStyle(Color.dropCautionBoxEdgeGray)
                         .frame(width: 240, height: 1)
                     HStack(spacing: 40) {
                         Button {
@@ -319,7 +319,7 @@ struct ArticleSettingView: View {
                                 .font(.system(size: 15, weight: .regular))
                         }
                         Rectangle()
-                            .foregroundStyle(Color.settingDivderGray)
+                            .foregroundStyle(Color.dropCautionBoxEdgeGray)
                             .frame(width: 1, height: 50)
                         Button {
                             viewModel.articlePassword = viewModel.articlePasswordText
