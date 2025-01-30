@@ -154,43 +154,35 @@ struct ArticleView: View {
                 Spacer()
                     .frame(height: 20)
                 
-                ScrollView {
-                    // MARK: Title TextField
-                    TextField("제목", text: $viewModel.title)
-                        .font(.system(size: 26, weight: .regular))
-                        .foregroundStyle(Color.primaryLabelColor)
-                        .focused($isTitleFocused)
-                        .autocapitalization(.none)
-                        .padding(.horizontal, 23)
-                    
-                    Spacer()
-                        .frame(height: 10)
-                    
-                    // MARK: Contents TextField
-                    ZStack(alignment: .topLeading) {
-                        if viewModel.text.string.isEmpty {
-                            HStack {
-                                Text("내용을 입력해주세요.")
-                                    .font(.system(size: 15, weight: .regular))
-                                    .foregroundStyle(Color.promptLabelColor)
-                                    .padding(.horizontal, 26)
-                                    .padding(.top, 9)
-                                Spacer()
-                            }
-                        }
-                        RichTextEditor(text: $viewModel.text, context: viewModel.context)
-                            .focusedValue(\.richTextContext, viewModel.context)
-                            .focused($isTextFocused)
-                            .frame(height: 1000)
-                            .padding(.horizontal, 18)
-                            .id(viewModel.resetEditor)
-                    }
-                    Spacer()
-                }
-            }
-            
-            VStack {
+                // MARK: Title TextField
+                TextField("제목", text: $viewModel.title)
+                    .font(.system(size: 26, weight: .regular))
+                    .foregroundStyle(Color.primaryLabelColor)
+                    .focused($isTitleFocused)
+                    .autocapitalization(.none)
+                    .padding(.horizontal, 23)
+                
                 Spacer()
+                    .frame(height: 10)
+                
+                // MARK: Contents TextField
+                ZStack(alignment: .topLeading) {
+                    if viewModel.text.string.isEmpty {
+                        HStack {
+                            Text("내용을 입력해주세요.")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(Color.promptLabelColor)
+                                .padding(.horizontal, 26)
+                                .padding(.top, 9)
+                            Spacer()
+                        }
+                    }
+                    RichTextEditor(text: $viewModel.text, context: viewModel.context)
+                        .focusedValue(\.richTextContext, viewModel.context)
+                        .focused($isTextFocused)
+                        .padding(.horizontal, 18)
+                        .id(viewModel.resetEditor)
+                }
                 RichTextKeyboardToolbar(
                     context: viewModel.context,
                     leadingButtons: { _ in },
@@ -203,7 +195,7 @@ struct ArticleView: View {
                     },
                     formatSheet: { $0 }
                 )
-                .padding(.bottom, 30)
+                Spacer()
             }
             
             if isPickerSelectorPresent {
