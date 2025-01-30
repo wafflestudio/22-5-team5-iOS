@@ -17,9 +17,19 @@ import RichTextKit
     var blog: Blog = Blog.defaultBlog
     
     
+    var isMyPost: Bool = false
+    var showManageMode: Bool = false
     
-    var showComments = false
+    var showComments: Bool = false
     
+    var navToEdit: Bool = false
+    var isDeleteAlertPresent: Bool = false
+    
+    var isPostDeleted: Bool = false
+    
+    func getIsMyPost() -> Bool {
+        isMyPost
+    }
     
     private var isNavTitleHidden: Bool = false
     
@@ -76,6 +86,7 @@ import RichTextKit
         do {
             self.post = try await NetworkRepository.shared.getArticle(postID: postID)
             self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
+            self.isMyPost = (blog.id == UserInfoRepository.shared.getBlogID())
             self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName
         } catch {
             print("Error: \(error.localizedDescription)")
@@ -223,6 +234,14 @@ import RichTextKit
         }
     }
     
+    
+    func deletePost() async {
+        do {
+            try await NetworkRepository.shared.deleteArticle(postID: post.id)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
 }
 //
 //// Environment Key 정의

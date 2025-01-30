@@ -277,43 +277,100 @@ struct PostView: View {
                 
                 HStack(spacing: 0) {
                     
-                    //좋아요 버튼
-                    Button(action: {
-                        Task {
-                            await viewModel.likeButtonAction()
-                        }
-                    }) {
-                        HStack(spacing: 3) {
-                            Image(systemName: viewModel.isLiked ? "heart.fill" : "heart")
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
-                            
-                            Text("\(viewModel.post.likeCount)")
-                                .font(.system(size: 16, weight: .light))
-                                .foregroundStyle(Color.bottomBarLabelColor)
+                    if !viewModel.showManageMode {
+                        //좋아요 버튼
+                        Button(action: {
+                            Task {
+                                await viewModel.likeButtonAction()
+                            }
+                        }) {
+                            HStack(spacing: 3) {
+                                Image(systemName: viewModel.isLiked ? "heart.fill" : "heart")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
+                                
+                                Text("\(viewModel.post.likeCount)")
+                                    .font(.system(size: 16, weight: .light))
+                                    .foregroundStyle(Color.bottomBarLabelColor)
+                            }
                         }
                     }
                     
-                    Spacer()
-                        .frame(width: 25)
+                    if !viewModel.showManageMode {
+                        Spacer()
+                            .frame(width: 25)
+                    }
                     
-                    //댓글 버튼
-                    Button(action: {
-                        viewModel.showComments.toggle()
-                    }) {
-                        HStack(spacing: 3) {
-                            Image(systemName: "text.bubble")
+                    if !viewModel.showManageMode {
+                        //댓글 버튼
+                        Button(action: {
+                            viewModel.showComments.toggle()
+                        }) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "text.bubble")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                                
+                                Text("\(viewModel.post.commentCount)")
+                                    .font(.system(size: 16, weight: .light))
+                                    .foregroundStyle(Color.bottomBarLabelColor)
+                            }
+                        }
+                    }
+                    
+                    if viewModel.showManageMode {
+                        //수정 버튼
+                        Button(action: {
+                            viewModel.navToEdit.toggle()
+                        }) {
+                            Image(systemName: "square.and.pencil")
                                 .font(.system(size: 20, weight: .light))
                                 .foregroundStyle(Color.primaryLabelColor)
+                        }
+                    }
+                    
+                    if viewModel.showManageMode {
+                        Spacer()
+                            .frame(width: 25)
+                    }
+                    
+                    if viewModel.showManageMode {
+                        //삭제 버튼
+                        Button(action: {
+                            viewModel.isDeleteAlertPresent.toggle()
+                        }) {
+                            Image(systemName: "trash")
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundStyle(Color.loadingCoralRed)
+                        }
+                        .alert("글 삭제", isPresented: $viewModel.isDeleteAlertPresent) {
+                            Button("취소", role: .cancel) {}
                             
-                            Text("\(viewModel.post.commentCount)")
-                                .font(.system(size: 16, weight: .light))
-                                .foregroundStyle(Color.bottomBarLabelColor)
+                            Button("삭제", role: .destructive) {
+                                Task {
+                                    await viewModel.deletePost()
+                                    viewModel.isPostDeleted = true
+                                }
+                            }
+                        } message: {
+                            Text("글을 삭제하시겠습니까?")
                         }
                     }
                     
                     Spacer()
                     
+                    
+                    //글 관리(수정, 삭제) on/off 버튼
+                    if viewModel.isMyPost {
+                        Button(action: {
+                            viewModel.showManageMode.toggle()
+                        }) {
+                            Image(systemName: "ellipsis")
+                                .font(.system(size: 20, weight: .light))
+                                .foregroundStyle(Color.primaryLabelColor)
+                                .rotationEffect(.degrees(viewModel.showManageMode ? -90 : 0))
+                        }
+                    }
                 }
                 .frame(height: 50)
                 .padding(.horizontal, 20)
@@ -323,9 +380,18 @@ struct PostView: View {
                         CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id)
                     }
                 }
+                .fullScreenCover(isPresented: $viewModel.navToEdit) {
+                    NavigationStack {
+                        EmptyView()
+                    }
+                }
             }
         }
-
+        .onChange(of: viewModel.isPostDeleted) { oldValue, newValue in
+            if newValue {
+                dismiss()
+            }
+        }
     }
 }
 

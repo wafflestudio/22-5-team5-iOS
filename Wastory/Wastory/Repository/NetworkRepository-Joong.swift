@@ -684,6 +684,25 @@ extension NetworkRepository {
         return response
     }
     
+    func deleteArticle(postID: Int) async throws {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.deleteArticle(postID: postID).url,
+            method: NetworkRouter.deleteArticle(postID: postID).method,
+            headers: NetworkRouter.deleteArticle(postID: postID).headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+        
+        logResponse(response, url: urlRequest.url?.absoluteString ?? "unknown")
+    }
+    
     // MARK: - Comment
     func postComment(postID: Int, content: String, parentID: Int?, isSecret: Bool) async throws {
         var requestBody = [String: String]()
