@@ -188,9 +188,9 @@ struct ArticleSettingView: View {
                                 .foregroundStyle(.black)
                             Spacer()
                             Button {
-                                // TODO: 아티클 비밀번호 설정
+                                viewModel.showPasswordSettingBox = true
                             } label: {
-                                Text(viewModel.articlePassword)
+                                Text(viewModel.clippedPassword())
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(Color.articlePasswordGray)
                             }
@@ -272,6 +272,71 @@ struct ArticleSettingView: View {
             ArticleHomeTopicSheet(viewModel: viewModel)
                 .transition(.move(edge: .bottom))
                 .animation(.easeInOut, value: viewModel.isHomeTopicSheetPresent)
+            
+            if viewModel.showPasswordSettingBox {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    Text("보호글 비밀번호")
+                        .font(.system(size: 16, weight: .regular))
+                    Spacer()
+                        .frame(height: 30)
+                    
+                    HStack(spacing: 10) {
+                        Image(systemName: "lock")
+                            .font(.system(size: 16, weight: .light))
+                        SecureField("", text: $viewModel.articlePasswordText)
+                            .font(.system(size: 15, weight: .regular))
+                            .frame(width: 120)
+                            .autocapitalization(.none)
+                        Button {
+                            viewModel.clearArticlePasswordTextField()
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.articlePasswordGray)
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .foregroundStyle(.black)
+                        .frame(width: 176, height: 2)
+                    Spacer()
+                        .frame(height: 20)
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.settingDivderGray)
+                        .frame(width: 240, height: 1)
+                    HStack(spacing: 40) {
+                        Button {
+                            viewModel.articlePasswordText = viewModel.articlePassword
+                            viewModel.showPasswordSettingBox = false
+                        } label: {
+                            Text("취소")
+                                .font(.system(size: 15, weight: .regular))
+                        }
+                        Rectangle()
+                            .foregroundStyle(Color.settingDivderGray)
+                            .frame(width: 1, height: 50)
+                        Button {
+                            viewModel.articlePassword = viewModel.articlePasswordText
+                            viewModel.showPasswordSettingBox = false
+                        } label: {
+                            Text("확인")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(viewModel.articlePasswordText.isEmpty ? .black : .blue)
+                        }
+                    }
+                }
+                .padding(.top, 30)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                }
+            }
         }
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
@@ -280,6 +345,7 @@ struct ArticleSettingView: View {
         .onAppear {
             viewModel.extractMainImage()
             viewModel.articlePassword = viewModel.generateRandomPassword(length: 8)
+            viewModel.articlePasswordText = viewModel.articlePassword
         }
     }
 }

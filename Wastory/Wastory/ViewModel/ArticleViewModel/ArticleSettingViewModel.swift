@@ -100,8 +100,11 @@ import RichTextKit
     
     var isSecret: Bool = false
     var isProtected: Bool = false
-    var articlePassword: String = ""
     var isCommentEnabled: Bool = true
+    
+    var articlePassword: String = ""
+    var articlePasswordText: String = ""
+    var showPasswordSettingBox: Bool = false
 
     init(title: String, text: NSAttributedString) {
         self.title = title
@@ -274,5 +277,18 @@ import RichTextKit
     func generateRandomPassword(length: Int) -> String {
         let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         return String((0..<length).map { _ in characters.randomElement()! })
+    }
+    
+    func clippedPassword() -> String {
+        if self.articlePassword.count > 13 {
+            return String("\(articlePassword.prefix(13))...")
+        }
+        else {
+            return self.articlePassword
+        }
+    }
+    
+    func clearArticlePasswordTextField() {
+        self.articlePasswordText = ""
     }
 }
