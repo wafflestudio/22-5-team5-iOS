@@ -407,7 +407,7 @@ struct ArticleView: View {
                     viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
                     viewModel.inputImage = nil
                     viewModel.isImageLoading = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                         viewModel.isImageLoading = false
                     }
                 }
@@ -423,7 +423,7 @@ struct ArticleView: View {
                     viewModel.isImageLoading = true
                     viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
                     viewModel.inputImage = nil
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                         viewModel.isImageLoading = false
                     }
                 }
