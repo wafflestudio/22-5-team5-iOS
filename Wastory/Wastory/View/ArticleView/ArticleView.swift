@@ -49,6 +49,7 @@ struct ArticleView: View {
                                 viewModel.isEmptyTitleEntered = false
                                 viewModel.isDraftSaved = false
                                 viewModel.isDraftDeleted = false
+                                viewModel.isImageLoadPending = false
                                 debounceWorkItem?.cancel()
                                 let workItem = DispatchWorkItem {
                                     withAnimation {
@@ -64,8 +65,11 @@ struct ArticleView: View {
                                     viewModel.isEmptyTitleEntered = false
                                     viewModel.isDraftSaved = true
                                     viewModel.isDraftDeleted = false
+                                    viewModel.isImageLoadPending = false
+                                    
                                     await viewModel.storeDraft()
                                     await viewModel.resetView()
+                                    
                                     debounceWorkItem?.cancel()
                                     let workItem = DispatchWorkItem {
                                         withAnimation {
@@ -109,18 +113,37 @@ struct ArticleView: View {
                         Button {
                             isTitleFocused = false
                             isTextFocused = false
-                            viewModel.isEmptyDraftEntered = false
-                            viewModel.isEmptyTitleEntered = true
-                            viewModel.isDraftSaved = false
-                            viewModel.isDraftDeleted = false
-                            debounceWorkItem?.cancel()
-                            let workItem = DispatchWorkItem {
-                                withAnimation {
-                                    viewModel.isEmptyTitleEntered = false
+                            if viewModel.isEmptyTitleEntered {
+                                viewModel.isEmptyDraftEntered = false
+                                viewModel.isEmptyTitleEntered = true
+                                viewModel.isDraftSaved = false
+                                viewModel.isDraftDeleted = false
+                                viewModel.isImageLoadPending = false
+                                debounceWorkItem?.cancel()
+                                let workItem = DispatchWorkItem {
+                                    withAnimation {
+                                        viewModel.isEmptyTitleEntered = false
+                                    }
                                 }
+                                debounceWorkItem = workItem
+                                DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
                             }
-                            debounceWorkItem = workItem
-                            DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                            else {
+                                viewModel.isEmptyDraftEntered = false
+                                viewModel.isEmptyTitleEntered = false
+                                viewModel.isDraftSaved = false
+                                viewModel.isDraftDeleted = false
+                                viewModel.isImageLoadPending = true
+                                print("뭐함?")
+                                debounceWorkItem?.cancel()
+                                let workItem = DispatchWorkItem {
+                                    withAnimation {
+                                        viewModel.isImageLoadPending = false
+                                    }
+                                }
+                                debounceWorkItem = workItem
+                                DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                            }
                         } label: {
                             Text("완료")
                                 .font(.system(size: 14, weight: .regular))
@@ -132,7 +155,7 @@ struct ArticleView: View {
                             RoundedRectangle(cornerRadius: 40)
                                 .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                         )
-                        .opacity(viewModel.title.isEmpty ? 1 : 0)
+                        .opacity(viewModel.title.isEmpty || viewModel.isImageLoading ? 1 : 0)
                         
                         NavigationLink(destination: ArticleSettingView(mainTabViewModel: mainTabViewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
                             Text("완료")
@@ -145,7 +168,7 @@ struct ArticleView: View {
                             RoundedRectangle(cornerRadius: 40)
                                 .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                         )
-                        .opacity(viewModel.title.isEmpty ? 0 : 1)
+                        .opacity(viewModel.title.isEmpty || viewModel.isImageLoading ? 0 : 1)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -285,6 +308,7 @@ struct ArticleView: View {
                             viewModel.isEmptyTitleEntered = false
                             viewModel.isDraftSaved = false
                             viewModel.isDraftDeleted = true
+                            viewModel.isImageLoadPending = false
                             debounceWorkItem?.cancel()
                             let workItem = DispatchWorkItem {
                                 withAnimation {
@@ -355,18 +379,37 @@ struct ArticleView: View {
                     )
                     .transition(.opacity)
             }
+            
+            if viewModel.isImageLoadPending {
+                Text("이미지를 불러오는 중입니다.")
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(.white)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .foregroundStyle(Color.settingGearGray)
+                    )
+                    .transition(.opacity)
+            }
         }
         .navigationBarBackButtonHidden()
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyDraftEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isEmptyTitleEntered)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftSaved)
         .animation(.easeInOut(duration: 0.3), value: viewModel.isDraftDeleted)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.isImageLoadPending)
         .fullScreenCover(
             isPresented: $viewModel.isCameraPickerPresent,
             onDismiss: {
                 if let inputImage = viewModel.inputImage {
+                    viewModel.isImageLoading = true
                     viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
                     viewModel.inputImage = nil
+                    viewModel.isImageLoading = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        viewModel.isImageLoading = false
+                    }
                 }
             },
             content: {
@@ -377,8 +420,12 @@ struct ArticleView: View {
             isPresented: $viewModel.isGalleryPickerPresent,
             onDismiss: {
                 if let inputImage = viewModel.inputImage {
+                    viewModel.isImageLoading = true
                     viewModel.insertImage(inputImage: inputImage, context: viewModel.context)
                     viewModel.inputImage = nil
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        viewModel.isImageLoading = false
+                    }
                 }
             },
             content: {

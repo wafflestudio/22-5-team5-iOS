@@ -105,6 +105,19 @@ import RichTextKit
         self.text = text
     }
     
+    func extractMainImage() {
+        var firstImage: UIImage? = nil
+        text.enumerateAttributes(in: NSRange(location: 0, length: text.length), options: []) { attributes, range, stop in
+            if let attachment = attributes[.attachment] as? NSTextAttachment {
+                if let image = attachment.image {
+                    firstImage = image
+                    stop.pointee = true
+                }
+            }
+        }
+        mainImage = firstImage
+    }
+    
     // MARK: - Posting
     func postArticle() async {
         if let image = mainImage {

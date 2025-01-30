@@ -21,6 +21,8 @@ import RichTextKit
     var isEmptyTitleEntered: Bool = false
     var isDraftSaved: Bool = false
     var isDraftDeleted: Bool = false
+    var isImageLoading: Bool = false
+    var isImageLoadPending: Bool = false
     
     private var page: Int = 1
     private var isPageEnded: Bool = false
