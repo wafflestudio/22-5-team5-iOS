@@ -168,7 +168,3 @@ struct LicenseCell: View {
         .padding(.horizontal, 20)
     }
 }
-
-extension Color {
-    static let ossLinkBlue: Color = .init(red: 30 / 255, green: 29 / 255, blue: 176 / 255)   // OSS 하이퍼링크 색상
-}

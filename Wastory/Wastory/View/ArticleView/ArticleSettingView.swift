@@ -349,9 +349,3 @@ struct ArticleSettingView: View {
         }
     }
 }
-
-extension Color {
-    static let articleImageBackgroundGray: Color = .init(red: 233 / 255, green: 233 / 255, blue: 233 / 255)     // 대표 이미지 설정 배경 회색
-    static let articleImageTextGray: Color = .init(red: 201 / 255, green: 201 / 255, blue: 201 / 255)     // 대표 이미지 설정 문구 회색
-    static let articlePasswordGray: Color = .init(red: 120 / 255, green: 120 / 255, blue: 120 / 255)    // 글 비밀번호 회색
-}

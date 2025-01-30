@@ -202,10 +202,3 @@ struct SettingDivider: View {
             .foregroundStyle(Color.settingDivderGray)
     }
 }
-
-extension Color {
-    static let settingItemDescGray: Color = .init(red: 187 / 255, green: 187 / 255, blue: 187 / 255)   // 설정 목록 세부 정보 색상
-    static let settingDivderGray: Color = .init(red: 247 / 255, green: 247 / 255, blue: 247 / 255)   // 설정 분리선 색상
-    static let settingDropGray: Color = .init(red: 144 / 255, green: 144 / 255, blue: 144 / 255)   // 탈퇴하기 문구 색상
-    static let settingDisabledBlue: Color = .init(red: 108 / 255, green: 192 / 255, blue: 255 / 255)   // 불가능 항목 알림 색상 (불쾌감을 주지 않기 위해 청색을 채택)
-}

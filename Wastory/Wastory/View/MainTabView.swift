@@ -144,7 +144,3 @@ enum TabType: String {
     case notification
     case myBlog
 }
-
-#Preview {
-    MainTabView()
-}
