@@ -180,28 +180,35 @@ struct ArticleSettingView: View {
                 .padding(.vertical, 20)
                 SettingDivider(thickness: 1)
                 
-                Button {
-                    viewModel.toggleIsHomeTopicSheetPresent()
-                } label: {
-                    HStack {
-                        Text("홈주제")
-                            .font(.system(size: 17, weight: .light))
-                            .foregroundStyle(.black)
-                        Spacer()
-                        Text(viewModel.homeTopic.id == 0 ? "선택 안 함" : viewModel.homeTopic.name)
-                            .font(.system(size: 14, weight: .ultraLight))
-                            .foregroundStyle(Color.black)
-                            .lineLimit(1)
-                        Spacer()
-                            .frame(width: 10)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 15, weight: .light))
-                            .foregroundStyle(.black)
+                if viewModel.isSecret == false {
+                    if viewModel.isProtected {
+                        // TODO: Protected UI
+                    }
+                    else {
+                        Button {
+                            viewModel.toggleIsHomeTopicSheetPresent()
+                        } label: {
+                            HStack {
+                                Text("홈주제")
+                                    .font(.system(size: 17, weight: .light))
+                                    .foregroundStyle(.black)
+                                Spacer()
+                                Text(viewModel.homeTopic.id == 0 ? "선택 안 함" : viewModel.homeTopic.name)
+                                    .font(.system(size: 14, weight: .ultraLight))
+                                    .foregroundStyle(Color.black)
+                                    .lineLimit(1)
+                                Spacer()
+                                    .frame(width: 10)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 15, weight: .light))
+                                    .foregroundStyle(.black)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
+                        SettingDivider(thickness: 1)
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 20)
-                SettingDivider(thickness: 1)
                 
                 HStack {
                     Text("댓글 허용")
