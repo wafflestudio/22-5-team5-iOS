@@ -224,6 +224,7 @@ struct PostView: View {
         }// VStack
         //MARK: Networking
         .onAppear {
+            viewModel.showManageMode = false
             Task {
                 await viewModel.initContent(postID, blogID)
                 Task {

@@ -43,14 +43,15 @@ import RichTextKit
     var isSubmitted: Bool = false
     
     var editingPost: Post?
+    var isEditingTextLoaded: Bool = false
     
     func initEditingPost(post: Post) async {
         editingPost = post
-        
         title = editingPost!.title
         if let loadedText = RichTextHandler.DataTotext(editingPost?.content ?? "") {
             let restoredText = await RichTextImageHandler.restoreImage(loadedText, screenWidth: screenWidth)
             text = restoredText
+            isEditingTextLoaded = true
         }
     }
     
