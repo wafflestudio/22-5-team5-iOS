@@ -50,6 +50,7 @@ enum NetworkRouter {
     case getArticlesOfSubscription(blogID: Int)
     case searchArticlesInBlog(searchingWord: String, blogID: Int)
     case searchArticles(searchingWord: String)
+    case deleteArticle(postID: Int)
     
     //MARK: Comment
     case postComment(postID: Int)
@@ -140,6 +141,7 @@ enum NetworkRouter {
         case let .getArticlesOfSubscription(blogID): "/articles/blogs/\(blogID)/subscription"
         case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
         case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
+        case let .deleteArticle(postID): "/articles/delete/\(postID)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
@@ -262,6 +264,8 @@ enum NetworkRouter {
             return .get
         case .searchArticles:
             return .get
+        case .deleteArticle:
+            return .delete
             
         // MARK: Comment
         case .postComment:
@@ -411,6 +415,8 @@ enum NetworkRouter {
         case .searchArticlesInBlog:
             return ["Content-Type": "application/json"]
         case .searchArticles:
+            return ["Content-Type": "application/json"]
+        case .deleteArticle:
             return ["Content-Type": "application/json"]
             
         // MARK: Comment
