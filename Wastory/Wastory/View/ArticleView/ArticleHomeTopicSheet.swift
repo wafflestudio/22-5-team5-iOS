@@ -121,7 +121,7 @@ struct ArticleHomeTopicSheet: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 6)
-                .stroke(viewModel.isSelectedHomeTopic(homeTopic: homeTopic) ? Color.loadingCoralRed : Color.postingImageBackgroundGray, lineWidth: 1)
+                .stroke(viewModel.isSelectedHomeTopic(homeTopic: homeTopic) ? Color.loadingCoralRed : Color.articleImageBackgroundGray, lineWidth: 1)
         )
         .frame(width: buttonWidth)
     }

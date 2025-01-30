@@ -79,7 +79,7 @@ struct ArticleSettingView: View {
                         else {
                             ZStack {
                                 Rectangle()
-                                    .foregroundStyle(Color.postingImageBackgroundGray)
+                                    .foregroundStyle(Color.articleImageBackgroundGray)
                                     .frame(width: 100, height: 100)
                                 VStack(spacing: 0) {
                                     Image(systemName: "camera")
@@ -88,7 +88,7 @@ struct ArticleSettingView: View {
                                     Text("대표이미지")
                                         .font(.system(size: 12))
                                 }
-                                .foregroundStyle(Color.postingImageTextGray)
+                                .foregroundStyle(Color.articleImageTextGray)
                                 .padding(30)
                             }
                         }
@@ -182,7 +182,27 @@ struct ArticleSettingView: View {
                 
                 if viewModel.isSecret == false {
                     if viewModel.isProtected {
-                        // TODO: Protected UI
+                        HStack(spacing: 10) {
+                            Text("비밀번호")
+                                .font(.system(size: 17, weight: .light))
+                                .foregroundStyle(.black)
+                            Spacer()
+                            Button {
+                                // TODO: 아티클 비밀번호 설정
+                            } label: {
+                                Text(viewModel.articlePassword)
+                                    .font(.system(size: 15, weight: .regular))
+                                    .foregroundStyle(Color.articlePasswordGray)
+                            }
+                            Button {
+                                UIPasteboard.general.string = viewModel.articlePassword
+                            } label: {
+                                Text("복사")
+                                    .font(.system(size: 15, weight: .semibold))
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
                     }
                     else {
                         Button {
@@ -206,8 +226,8 @@ struct ArticleSettingView: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.vertical, 20)
-                        SettingDivider(thickness: 1)
                     }
+                    SettingDivider(thickness: 1)
                 }
                 
                 HStack {
@@ -216,7 +236,7 @@ struct ArticleSettingView: View {
                     Spacer()
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(viewModel.isCommentEnabled ? Color.postingImageTextGray : Color.postingImageBackgroundGray)
+                            .fill(viewModel.isCommentEnabled ? Color.articleImageTextGray : Color.articleImageBackgroundGray)
                             .frame(width: 30, height: 20)
                         
                         Circle()
@@ -265,6 +285,7 @@ struct ArticleSettingView: View {
 }
 
 extension Color {
-    static let postingImageBackgroundGray: Color = .init(red: 233 / 255, green: 233 / 255, blue: 233 / 255)     // 대표 이미지 설정 배경 회색
-    static let postingImageTextGray: Color = .init(red: 201 / 255, green: 201 / 255, blue: 201 / 255)     // 대표 이미지 설정 문구 회색
+    static let articleImageBackgroundGray: Color = .init(red: 233 / 255, green: 233 / 255, blue: 233 / 255)     // 대표 이미지 설정 배경 회색
+    static let articleImageTextGray: Color = .init(red: 201 / 255, green: 201 / 255, blue: 201 / 255)     // 대표 이미지 설정 문구 회색
+    static let articlePasswordGray: Color = .init(red: 120 / 255, green: 120 / 255, blue: 120 / 255)    // 글 비밀번호 회색
 }
