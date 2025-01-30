@@ -204,7 +204,7 @@ import RichTextKit
             .components(separatedBy: .whitespacesAndNewlines)
             .filter { !$0.isEmpty }
             .joined(separator: " ")
-        print("desc.: ", cleanedText)
+        
         return cleanedText
     }
 
