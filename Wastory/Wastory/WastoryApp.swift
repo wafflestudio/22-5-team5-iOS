@@ -13,9 +13,8 @@ struct WastoryApp: App {
     @AppStorage("userPW") private var userPW: String = ""
     @State private var isLoading: Bool = true
     
-    @State var userInfoRepository = UserInfoRepository.shared
-    
-//    @State private var contentViewModel = ContentViewModel()
+    @State private var userInfoRepository = UserInfoRepository.shared
+    @State private var tokenManger: TokenManager = TokenManager()
     
     var body: some Scene {
         WindowGroup {

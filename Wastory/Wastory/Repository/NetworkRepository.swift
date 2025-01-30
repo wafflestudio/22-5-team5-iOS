@@ -146,6 +146,25 @@ final class NetworkRepository {
         return response
     }
     
+    func refreshTokens() async throws -> TokenDto {
+        let urlRequest = try URLRequest(
+            url: NetworkRouter.refreshTokens.url,
+            method: NetworkRouter.refreshTokens.method,
+            headers: NetworkRouter.refreshTokens.headers
+        )
+        
+        logRequest(urlRequest)
+        
+        let response = try await AF.request(
+            urlRequest,
+            interceptor: NetworkRefreshInterceptor()
+        ).validate()
+        .serializingDecodable(TokenDto.self)
+        .value
+        
+        return response
+    }
+    
     func deleteMe() async throws {
         let urlRequest = try URLRequest(
             url: NetworkRouter.deleteMe.url,

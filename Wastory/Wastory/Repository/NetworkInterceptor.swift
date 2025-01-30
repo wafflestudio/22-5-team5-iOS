@@ -15,3 +15,11 @@ final class NetworkInterceptor: RequestInterceptor {
         completion(.success(urlRequest))
     }
 }
+
+final class NetworkRefreshInterceptor: RequestInterceptor {
+    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
+        var urlRequest = urlRequest
+        urlRequest.headers.add(.authorization("Bearer \(NetworkConfiguration.refreshToken)"))
+        completion(.success(urlRequest))
+    }
+}
