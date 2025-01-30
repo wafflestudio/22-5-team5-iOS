@@ -35,7 +35,7 @@ struct CommentCell: View {
                 
                 if viewModel.isMyBlog || comment.blogID == UserInfoRepository.shared.getBlogID() {
                     NavigateToBlogViewButton(comment.blogID) {
-                        KFImageWithDefault(imageURL: comment.blogMainImageURL)
+                        KFImageWithDefaultIcon(imageURL: comment.blogMainImageURL)
                             .scaledToFill()
                             .clipShape(Circle())
                             .frame(width: 40, height: 40)
@@ -154,7 +154,7 @@ struct CommentCell: View {
                         Spacer()
                             .frame(width: 10)
                     } else if comment.isSecret == 1 {
-                        KFImageWithDefault(imageURL: "")
+                        KFImageWithDefaultIcon(imageURL: "")
                             .scaledToFill()
                             .clipShape(Circle())
                             .frame(width: 40, height: 40)

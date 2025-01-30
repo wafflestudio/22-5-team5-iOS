@@ -138,7 +138,7 @@ struct SearchView: View {
                         ZStack {
                             if viewModel.isSearchKeywordEmpty() {
                                 HStack {
-                                    Text(viewModel.isSearchingInBlog ? "이 블로그에서 검색" : "티스토리 전체에서 검색")
+                                    Text(viewModel.isSearchingInBlog ? "이 블로그에서 검색" : "와스토리 전체에서 검색")
                                         .font(.system(size: 18, weight: .light))
                                         .foregroundStyle(Color.secondaryLabelColor)
                                         .padding(.leading, 15)

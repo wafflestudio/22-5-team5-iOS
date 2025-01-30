@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "myW.logo.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "myW.logo 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +25,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "myW.logo 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
