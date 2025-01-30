@@ -65,7 +65,35 @@ struct PostListDto: Codable {
     }()
 }
 
+struct ArticleDto: Codable {
+    let title: String
+    let content: String
+    let description: String
+    let mainImageURL: String
+    let categoryID: Int
+    let homeTopicID: Int
+    let secret: Int
+    let images: [FileURLDto]
+    
+    private enum CodingKeys: String, CodingKey {
+        case title
+        case content
+        case description
+        case mainImageURL = "main_image_url"
+        case categoryID = "category_id"
+        case homeTopicID = "hometopic_id"
+        case secret
+        case images
+    }
+}
 
+struct FileURLDto: Codable {
+    let fileURL: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case fileURL = "file_url"
+    }
+}
 
 
 import SwiftUI

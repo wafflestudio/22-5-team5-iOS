@@ -278,16 +278,17 @@ final class NetworkRepository {
     }
     
     // MARK: - Article
-    func postArticle(title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int) async throws {
-        let requestBody = [
-            "title": title,
-            "content": content,
-            "description": description,
-            "main_image_url": main_image_url,
-            "category_id": "\(categoryID)",
-            "hometopic_id": "\(homeTopicID)",
-            "secret": "\(secret)"
-        ]
+    func postArticle(title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int, images: [FileURLDto]) async throws {
+        let requestBody = ArticleDto(
+            title: title,
+            content: content,
+            description: description,
+            mainImageURL: main_image_url,
+            categoryID: categoryID,
+            homeTopicID: homeTopicID,
+            secret: secret,
+            images: images
+        )
         var urlRequest = try URLRequest(
             url: NetworkRouter.postArticle.url,
             method: NetworkRouter.postArticle.method,

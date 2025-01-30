@@ -116,17 +116,18 @@ import RichTextKit
             }
         }
         
-        let processedText = await RichTextImageHandler.convertImage(text)
+        let (processedText, URLs) = await RichTextImageHandler.convertImage(text)
         if let dataText = RichTextHandler.textToData(processedText) {
             do {
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: dataText,
                     description: getDescription(),
-                    main_image_url: mainImageURL ?? "",
+                    main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
                     categoryID: category.id,
                     homeTopicID: homeTopic.id,
-                    secret: 0
+                    secret: isCommentEnabled == false ? 1 : 0,
+                    images: URLs
                 )
             }
             catch {

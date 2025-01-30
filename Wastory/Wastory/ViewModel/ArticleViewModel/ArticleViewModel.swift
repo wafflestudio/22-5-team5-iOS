@@ -107,7 +107,7 @@ import RichTextKit
     }
     
     func storeDraft() async {
-        let processedText = await RichTextImageHandler.convertImage(text)
+        let processedText = await RichTextImageHandler.convertImage(text).text
         if let dataText = RichTextHandler.textToData(processedText) {
             if currentDraftID < 0 {
                 do {

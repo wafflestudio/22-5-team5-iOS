@@ -11,7 +11,7 @@ import Kingfisher
 @MainActor
 class RichTextImageHandler {
     // MARK: 이미지를 URL로 변환하고 NSAttributedString을 수정하는 함수
-    static func convertImage(_ attributedString: NSAttributedString) async -> NSAttributedString {
+    static func convertImage(_ attributedString: NSAttributedString) async -> (text: NSAttributedString, URLs: [FileURLDto]) {
         let mutableAttrString = NSMutableAttributedString(attributedString: attributedString)
         var attachmentRanges: [(NSRange, NSTextAttachment)] = []
         
@@ -22,12 +22,16 @@ class RichTextImageHandler {
             }
         }
         
+        var URLs: [FileURLDto] = []
+        
         // 역순으로 처리
         for (range, attachment) in attachmentRanges.reversed() {
             if let image = attachment.image ?? attachment.image(forBounds: attachment.bounds, textContainer: nil, characterIndex: 0) {
                 do {
                     let imageURL = try await NetworkRepository.shared.postImage(image)
                     let imageMarker = "[[IMAGE_URL]]\(imageURL)[[/IMAGE_URL]]"
+                    
+                    URLs.append(FileURLDto(fileURL: imageURL))
                     
                     // 기존 attachment 속성 제거
                     let attributes = mutableAttrString.attributes(at: range.location, effectiveRange: nil)
@@ -53,7 +57,7 @@ class RichTextImageHandler {
             }
         }
         
-        return mutableAttrString
+        return (mutableAttrString, URLs.reversed())
     }
     
     // MARK: URL로부터 이미지를 복원하는 함수
