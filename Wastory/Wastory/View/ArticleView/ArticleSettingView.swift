@@ -67,6 +67,7 @@ struct ArticleSettingView: View {
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)
                                 .clipped()
+                                .id(mainImage)
                         }
                         else {
                             ZStack {
@@ -236,6 +237,9 @@ struct ArticleSettingView: View {
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(selectedImage: $viewModel.mainImage, sourceType: .photoLibrary)
+        }
+        .onAppear {
+            viewModel.extractMainImage()
         }
     }
 }

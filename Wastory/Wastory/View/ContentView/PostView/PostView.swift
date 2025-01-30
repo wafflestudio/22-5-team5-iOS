@@ -98,6 +98,7 @@ struct PostView: View {
                             .frame(height: viewModel.textHeight)
                             .padding(.horizontal, 20)
                             .id(viewModel.isTextLoaded)
+                            .disabled(true)
                         
                         Spacer()
                             .frame(height: 30)
