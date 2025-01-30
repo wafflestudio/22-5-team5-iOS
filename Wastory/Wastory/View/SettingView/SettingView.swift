@@ -13,80 +13,100 @@ struct SettingView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                VStack(spacing: 0) {
+            ZStack(alignment: .top) {
+                Color.white
+                    .ignoresSafeArea(.container, edges: .top)
+                            
+                Color.settingDivderGray
+                    .ignoresSafeArea(.container, edges: .bottom)
+                
+                Color.white
+                    .frame(height: UIScreen.main.bounds.height * 0.5)
+                
+                VStack {
                     HStack {
-                        Text("설정")
-                            .font(.system(size: 24, weight: .semibold))
+                        CustomBackButton(size: 24, weight: .light)
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    Spacer()
-                        .frame(height: 30)
-                    
-                    SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.checkKaKaoLogin() ? "카카오에서 비밀번호를 변경해 주세요." : UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView(), disabled: UserInfoRepository.shared.checkKaKaoLogin())
-                    SettingDivider(thickness: 10)
-                    
-                    SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
-                    SettingDivider(thickness: 10)
-                    
-                    SettingItem(title: "공지사항", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "앱 정보", description: "버전 정보", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "이용약관", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "개인정보처리방침", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
-                    SettingDivider(thickness: 10)
-                    
-                    SettingItem(title: "도움말", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "운영정책", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    SettingItem(title: "문의하기", description: "", detailView: EmptyView())
-                    SettingDivider(thickness: 1)
-                    
-                    HStack(spacing: 0) {
-                        Text("로그아웃")
-                            .font(.system(size: 17, weight: .regular))
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundStyle(Color.settingItemDescGray)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
                     .background {
                         Rectangle()
-                            .foregroundStyle(.clear)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showLogoutAlert = true
+                            .foregroundStyle(.white)
                     }
                     
-                    ZStack(alignment: .top) {
-                        Color(Color.settingDivderGray)
-                            .ignoresSafeArea()
-                        NavigationLink(destination: DropView()) {
+                    ScrollView() {
+                        VStack(spacing: 0) {
                             HStack {
-                                Text("탈퇴하기")
-                                    .font(.system(size: 13))
-                                    .underline()
-                                    .foregroundStyle(Color.settingDropGray)
+                                Text("설정")
+                                    .font(.system(size: 24, weight: .semibold))
                                 Spacer()
                             }
-                            .padding(.leading, 20)
-                            .padding(.top, 25)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 30)
+                            Spacer()
+                                .frame(height: 30)
+                            
+                            SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.checkKaKaoLogin() ? "카카오에서 비밀번호를 변경해 주세요." : UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView(), disabled: UserInfoRepository.shared.checkKaKaoLogin())
+                            SettingDivider(thickness: 10)
+                            
+                            SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
+                            SettingDivider(thickness: 10)
+                            
+                            SettingItem(title: "공지사항", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "앱 정보", description: "버전 정보", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "이용약관", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "개인정보처리방침", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
+                            SettingDivider(thickness: 10)
+                            
+                            SettingItem(title: "도움말", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "운영정책", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            SettingItem(title: "문의하기", description: "", detailView: EmptyView())
+                            SettingDivider(thickness: 1)
+                            
+                            HStack(spacing: 0) {
+                                Text("로그아웃")
+                                    .font(.system(size: 17, weight: .regular))
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 15, weight: .regular))
+                                    .foregroundStyle(Color.settingItemDescGray)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 16)
+                            .background {
+                                Rectangle()
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                showLogoutAlert = true
+                            }
+                            
+                            NavigationLink(destination: DropView()) {
+                                HStack {
+                                    Text("탈퇴하기")
+                                        .font(.system(size: 13))
+                                        .underline()
+                                        .foregroundStyle(Color.settingDropGray)
+                                    Spacer()
+                                }
+                                .padding(.leading, 20)
+                                .padding(.top, 25)
+                            }
                         }
                     }
                 }
@@ -146,11 +166,6 @@ struct SettingView: View {
             }
         }
         .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                CustomBackButton(weight: .regular)
-            }
-        }
     }
 }
 
@@ -180,6 +195,10 @@ struct SettingItem<DetailView: View>: View {
         .disabled(disabled)
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
+        .background {
+            Rectangle()
+                .foregroundStyle(.white)
+        }
     }
 }
 
