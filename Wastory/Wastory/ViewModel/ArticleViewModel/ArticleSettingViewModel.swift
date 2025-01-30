@@ -122,7 +122,7 @@ import RichTextKit
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: dataText,
-                    description: String(text.string.prefix(80)),
+                    description: getDescription(),
                     main_image_url: mainImageURL ?? "",
                     categoryID: category.id,
                     homeTopicID: homeTopic.id,
@@ -133,6 +133,25 @@ import RichTextKit
                 print("Error: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func getDescription() -> String {
+        let mutableAttrString = NSMutableAttributedString(attributedString: text)
+                
+        mutableAttrString.enumerateAttribute(.attachment, in: NSRange(location: 0, length: mutableAttrString.length)) { value, range, _  in
+            if value is NSTextAttachment {
+                mutableAttrString.replaceCharacters(in: range, with: "")
+            }
+        }
+                
+        let pureText = mutableAttrString.string
+        let cleanedText = pureText
+            .replacingOccurrences(of: "\n", with: " ")
+            .components(separatedBy: .whitespacesAndNewlines)
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+        print("desc.: ", cleanedText)
+        return cleanedText
     }
 
     // MARK: - Title & Image
