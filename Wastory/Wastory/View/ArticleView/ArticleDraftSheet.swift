@@ -89,6 +89,7 @@ struct ArticleDraftSheet: View {
                     Text(draft.title.isEmpty ? "제목 없음" : draft.title)
                         .font(.system(size: 14, weight: .light))
                         .foregroundStyle(.black)
+                        .lineLimit(1)
                     Spacer()
                 }
                 HStack {
