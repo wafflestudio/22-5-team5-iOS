@@ -149,6 +149,37 @@ import RichTextKit
         }
     }
     
+    func patchArticle(postID: Int) async {
+        if let image = mainImage {
+            do {
+                let response = try await NetworkRepository.shared.postImage(image)
+                mainImageURL = response
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
+        let (processedText, URLs) = await RichTextImageHandler.convertImage(text)
+        if let dataText = RichTextHandler.textToData(processedText) {
+            do {
+                try await NetworkRepository.shared.patchArticle(
+                    postID: postID,
+                    title: title,
+                    content: dataText,
+                    description: getDescription(),
+                    main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
+                    categoryID: category.id,
+                    homeTopicID: homeTopic.id,
+                    secret: isCommentEnabled == false ? 1 : 0,
+                    images: URLs
+                )
+            }
+            catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func getDescription() -> String {
         let mutableAttrString = NSMutableAttributedString(attributedString: text)
                 

@@ -315,6 +315,34 @@ extension NetworkRepository {
     }
     
     // MARK: - Article
+    func patchArticle(postID: Int, title: String, content: String, description: String, main_image_url: String, categoryID: Int, homeTopicID: Int, secret: Int, images: [FileURLDto]) async throws {
+        let requestBody = ArticleDto(
+            title: title,
+            content: content,
+            description: description,
+            mainImageURL: main_image_url,
+            categoryID: categoryID,
+            homeTopicID: homeTopicID,
+            secret: secret,
+            images: images
+        )
+        var urlRequest = try URLRequest(
+            url:     NetworkRouter.patchArticle(postID: postID).url,
+            method:  NetworkRouter.patchArticle(postID: postID).method,
+            headers: NetworkRouter.patchArticle(postID: postID).headers
+        )
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        
+        logRequest(urlRequest)
+        
+        _ = try await AF.request(
+            urlRequest,
+            interceptor: NetworkInterceptor()
+        ).validate()
+        .serializingData()
+        .value
+    }
+    
     func getTopArticlesInBlog(blogID: Int, sortBy: String) async throws -> [Post] {
         let urlRequest = try URLRequest(
             url: NetworkRouter.getTopArticlesInBlog(blogID: blogID, sortBy: sortBy).url,

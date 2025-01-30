@@ -224,6 +224,7 @@ struct PostView: View {
         }// VStack
         //MARK: Networking
         .onAppear {
+            viewModel.showManageMode = false
             Task {
                 await viewModel.initContent(postID, blogID)
                 Task {
@@ -383,7 +384,7 @@ struct PostView: View {
                 }
                 .fullScreenCover(isPresented: $viewModel.navToEdit) {
                     NavigationStack {
-                        EmptyView()
+                        ArticleView(editingPost: viewModel.post)
                     }
                 }
             }

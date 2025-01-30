@@ -11,8 +11,9 @@ import RichTextKit
 
 @MainActor
 struct ArticleView: View {
-    @Bindable var mainTabViewModel: MainTabViewModel
     @State private var viewModel = ArticleViewModel()
+    @Environment(\.dismiss) private var dismiss
+    var editingPost: Post? = nil
     
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isTextFocused: Bool
@@ -32,7 +33,7 @@ struct ArticleView: View {
                 // MARK: Custom Navigation Bar
                 HStack(spacing: 12) {
                     Button {
-                        mainTabViewModel.toggleIsArticleViewPresent()
+                        dismiss()
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 24, weight: .light))
@@ -40,74 +41,76 @@ struct ArticleView: View {
                     }
                     Spacer()
                     
-                    HStack(spacing: 0) {
-                        Button {
-                            isTitleFocused = false
-                            isTextFocused = false
-                            if viewModel.title.isEmpty && viewModel.text.length == 0 {
-                                viewModel.isEmptyDraftEntered = true
-                                viewModel.isEmptyTitleEntered = false
-                                viewModel.isDraftSaved = false
-                                viewModel.isDraftDeleted = false
-                                viewModel.isImageLoadPending = false
-                                debounceWorkItem?.cancel()
-                                let workItem = DispatchWorkItem {
-                                    withAnimation {
-                                        viewModel.isEmptyDraftEntered = false
-                                    }
-                                }
-                                debounceWorkItem = workItem
-                                DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
-                            }
-                            else {
-                                Task {
-                                    viewModel.isEmptyDraftEntered = false
+                    if viewModel.editingPost == nil {
+                        HStack(spacing: 0) {
+                            Button {
+                                isTitleFocused = false
+                                isTextFocused = false
+                                if viewModel.title.isEmpty && viewModel.text.length == 0 {
+                                    viewModel.isEmptyDraftEntered = true
                                     viewModel.isEmptyTitleEntered = false
-                                    viewModel.isDraftSaved = true
+                                    viewModel.isDraftSaved = false
                                     viewModel.isDraftDeleted = false
                                     viewModel.isImageLoadPending = false
-                                    
-                                    await viewModel.storeDraft()
-                                    await viewModel.resetView()
-                                    
                                     debounceWorkItem?.cancel()
                                     let workItem = DispatchWorkItem {
                                         withAnimation {
-                                            viewModel.isDraftSaved = false
+                                            viewModel.isEmptyDraftEntered = false
                                         }
                                     }
                                     debounceWorkItem = workItem
                                     DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
                                 }
+                                else {
+                                    Task {
+                                        viewModel.isEmptyDraftEntered = false
+                                        viewModel.isEmptyTitleEntered = false
+                                        viewModel.isDraftSaved = true
+                                        viewModel.isDraftDeleted = false
+                                        viewModel.isImageLoadPending = false
+                                        
+                                        await viewModel.storeDraft()
+                                        await viewModel.resetView()
+                                        
+                                        debounceWorkItem?.cancel()
+                                        let workItem = DispatchWorkItem {
+                                            withAnimation {
+                                                viewModel.isDraftSaved = false
+                                            }
+                                        }
+                                        debounceWorkItem = workItem
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                                    }
+                                }
+                            } label: {
+                                Text("저장")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundStyle(.black)
+                                    .padding(.vertical, 7)
+                                    .padding(.leading, 15)
+                                    .padding(.trailing, 10)
                             }
-                        } label: {
-                            Text("저장")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 7)
-                                .padding(.leading, 15)
-                                .padding(.trailing, 10)
+                            Rectangle()
+                                .frame(width: 1, height: 10)
+                                .foregroundStyle(Color.codeRequestButtonGray)
+                            Button {
+                                isTitleFocused = false
+                                isTextFocused = false
+                                viewModel.isDraftSheetPresent = true
+                            } label: {
+                                Text(viewModel.getDraftsCount())
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundStyle(.black)
+                                    .padding(.vertical, 7)
+                                    .padding(.leading, 10)
+                                    .padding(.trailing, 15)
+                            }
                         }
-                        Rectangle()
-                            .frame(width: 1, height: 10)
-                            .foregroundStyle(Color.codeRequestButtonGray)
-                        Button {
-                            isTitleFocused = false
-                            isTextFocused = false
-                            viewModel.isDraftSheetPresent = true
-                        } label: {
-                            Text(viewModel.getDraftsCount())
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 7)
-                                .padding(.leading, 10)
-                                .padding(.trailing, 15)
-                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.codeRequestButtonGray, lineWidth: 1)
+                        )
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color.codeRequestButtonGray, lineWidth: 1)
-                    )
                     
                     ZStack {
                         Button {
@@ -157,7 +160,7 @@ struct ArticleView: View {
                         )
                         .opacity(viewModel.title.isEmpty || viewModel.isImageLoading ? 1 : 0)
                         
-                        NavigationLink(destination: ArticleSettingView(mainTabViewModel: mainTabViewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
+                        NavigationLink(destination: ArticleSettingView(articleViewModel: viewModel, viewModel: ArticleSettingViewModel(title: viewModel.title, text: viewModel.text))) {
                             Text("완료")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(.black)
@@ -204,7 +207,7 @@ struct ArticleView: View {
                         .focusedValue(\.richTextContext, viewModel.context)
                         .focused($isTextFocused)
                         .padding(.horizontal, 18)
-                        .id(viewModel.resetEditor)
+                        .id(viewModel.resetEditor || viewModel.isEditingTextLoaded)
                 }
                 RichTextKeyboardToolbar(
                     context: viewModel.context,
@@ -433,8 +436,18 @@ struct ArticleView: View {
             }
         )
         .onAppear {
+            if editingPost != nil && viewModel.editingPost == nil {
+                Task {
+                    await viewModel.initEditingPost(post: editingPost!)
+                }
+            }
             Task {
                 await viewModel.resetView()
+            }
+        }
+        .onChange(of: viewModel.isSubmitted) { oldValue, newValue in
+            if newValue {
+                dismiss()
             }
         }
     }

@@ -13,13 +13,15 @@ import Foundation
 
 @MainActor
 struct ArticleSettingView: View {
-    @Bindable private var mainTabViewModel: MainTabViewModel
+    @Bindable private var articleViewModel: ArticleViewModel
     @State private var viewModel: ArticleSettingViewModel
+    @Environment(\.dismiss) private var dismiss
     
-    init(mainTabViewModel: MainTabViewModel, viewModel: ArticleSettingViewModel) {
-        self.mainTabViewModel = mainTabViewModel
+    init(articleViewModel: ArticleViewModel, viewModel: ArticleSettingViewModel) {
+        self.articleViewModel = articleViewModel
         self.viewModel = viewModel
     }
+    
     
     var body: some View {
         ZStack {
@@ -31,9 +33,14 @@ struct ArticleSettingView: View {
                         Spacer()
                         Button {
                             Task {
-                                await viewModel.postArticle()
+                                if articleViewModel.editingPost == nil {
+                                    await viewModel.postArticle()
+                                } else {
+                                    await viewModel.patchArticle(postID: articleViewModel.editingPost!.id)
+                                }
+                                dismiss()
+                                articleViewModel.isSubmitted.toggle()
                             }
-                            mainTabViewModel.toggleIsArticleViewPresent()
                         } label: {
                             Text("발행")
                                 .font(.system(size: 14, weight: .regular))

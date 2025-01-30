@@ -51,6 +51,7 @@ enum NetworkRouter {
     case searchArticlesInBlog(searchingWord: String, blogID: Int)
     case searchArticles(searchingWord: String)
     case deleteArticle(postID: Int)
+    case patchArticle(postID: Int)
     
     //MARK: Comment
     case postComment(postID: Int)
@@ -142,6 +143,7 @@ enum NetworkRouter {
         case let .searchArticlesInBlog(searchingWord, blogID): "/articles/search/\(blogID)/\(searchingWord)"
         case let .searchArticles(searchingWord): "/articles/search/\(searchingWord)"
         case let .deleteArticle(postID): "/articles/delete/\(postID)"
+        case let .patchArticle(postID): "/articles/update/\(postID)"
             
         // MARK: Comment
         case let .postComment(postID): "/comments/article/\(postID)"
@@ -266,6 +268,8 @@ enum NetworkRouter {
             return .get
         case .deleteArticle:
             return .delete
+        case .patchArticle:
+            return .patch
             
         // MARK: Comment
         case .postComment:
@@ -417,6 +421,8 @@ enum NetworkRouter {
         case .searchArticles:
             return ["Content-Type": "application/json"]
         case .deleteArticle:
+            return ["Content-Type": "application/json"]
+        case .patchArticle:
             return ["Content-Type": "application/json"]
             
         // MARK: Comment
