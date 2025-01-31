@@ -87,7 +87,7 @@ import RichTextKit
             self.post = try await NetworkRepository.shared.getArticle(postID: postID)
             self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
             self.isMyPost = (blog.id == UserInfoRepository.shared.getBlogID())
-            self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName
+            self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName // 카테고리가 없으면 오류가 나, 마지막에 실행
         } catch {
             print("Error: \(error.localizedDescription)")
             

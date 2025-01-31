@@ -68,7 +68,7 @@ struct BlogPostListCell: View {
                             .foregroundStyle(Color.secondaryLabelColor)
                         
                         Spacer()
-                            .frame(width: 15)
+                            .frame(width: 5)
                         
                         if post.protected == 1 {
                             Image(systemName: "lock")
