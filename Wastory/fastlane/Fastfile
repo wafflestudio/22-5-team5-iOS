@@ -33,18 +33,23 @@ BUILD_NUMBER = ENV['BUILD_NUMBER']
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    match(type: "appstore", app_identifier: [BUNDLE_IDENTIFIER], readonly: true)
-    update_xcodeproj(type: "appstore")
-    build_app(scheme: APP_NAME,
-    output_directory: "./archive",
-    silent: true,
-    clean: true)
-    app_store_connect_api_key(
-      key_id: APP_STORE_CONNECT_KEY_ID,
-      issuer_id: APP_STORE_CONNECT_KEY_ISSUER,
-      key_content: APP_STORE_CONNECT_KEY_CONTENT,
-    )
-    upload_to_testflight(app_version: VERSION_NUMBER)
+    begin
+      setup_ci
+      match(type: "appstore", app_identifier: [BUNDLE_IDENTIFIER], readonly: true)
+      update_xcodeproj(type: "appstore")
+      increment_version_number_in_xcodeproj(version_number: VERSION_NUMBER)
+      increment_build_number_in_xcodeproj(build_number: BUILD_NUMBER)
+      build_app(scheme: APP_NAME,
+      output_directory: "./archive",
+      silent: true,
+      clean: true)
+      app_store_connect_api_key(
+        key_id: APP_STORE_CONNECT_KEY_ID,
+        issuer_id: APP_STORE_CONNECT_KEY_ISSUER,
+        key_content: APP_STORE_CONNECT_KEY_CONTENT,
+      )
+      upload_to_testflight(app_version: VERSION_NUMBER)
+    end
   end
 
   desc "Update xcodeproj file"
