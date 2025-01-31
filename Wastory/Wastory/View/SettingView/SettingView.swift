@@ -53,7 +53,7 @@ struct SettingView: View {
                                 SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
                                 SettingDivider(thickness: 10)
                                 
-                                SettingItem(title: "공지사항", description: "", detailView: EmptyView())
+                                SettingItem(title: "공지사항", description: "", detailView: AnnouncementView())
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "앱 정보", description: "버전 정보", detailView: EmptyView())
