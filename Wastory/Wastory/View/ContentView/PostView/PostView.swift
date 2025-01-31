@@ -432,7 +432,7 @@ struct PostView: View {
                         
                         if !viewModel.showManageMode {
                             //댓글 버튼
-                            if viewModel.post.commentsEnabled ?? 1 == 1 {
+                            if viewModel.post.commentsEnabled ?? 1 == 1 || viewModel.post.commentCount > 0 {
                                 Button(action: {
                                     viewModel.showComments.toggle()
                                 }) {

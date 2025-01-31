@@ -147,67 +147,77 @@ struct CommentView: View {
                     }
                     
                     ZStack {
-                        HStack(spacing: 0) {
-                            if viewModel.isWritingCommentEmpty() {
-                                Text("내용을 입력하세요")
+                        if postViewModel.post.commentsEnabled == 1 {
+                            HStack(spacing: 0) {
+                                if viewModel.isWritingCommentEmpty() {
+                                    Text("내용을 입력하세요")
+                                        .font(.system(size: 16, weight: .light))
+                                        .foregroundStyle(Color.secondaryLabelColor)
+                                }
+                                Spacer()
+                            }
+                            
+                            HStack(spacing: 0) {
+                                FocusableTextView(
+                                    text: $viewModel.writingCommentText,
+                                    isFirstResponder: $viewModel.isTextFieldFocused,
+                                    font: UIFont.systemFont(ofSize: 16, weight: .light) // 원하는 폰트 설정
+                                )
+                                .frame(height: 50)
+                                .frame(maxWidth: .infinity)
+                                
+                                Spacer()
+                                    .frame(width: 10)
+                                
+                                Button(action : {
+                                    viewModel.isWritingCommentSecret.toggle()
+                                }) {
+                                    Image(systemName: viewModel.isWritingCommentSecret ? "lock" : "lock.open")
+                                        .font(.system(size: 20, weight: .light))
+                                        .foregroundStyle(viewModel.isWritingCommentSecret ? Color.primaryLabelColor : Color.secondaryLabelColor)
+                                }
+                                
+                                Spacer()
+                                    .frame(width: 10)
+                                
+                                Button(action: {
+                                    Task {
+                                        await viewModel.postComment()
+                                        viewModel.resetPage()
+                                        viewModel.resetTargetComment()
+                                        viewModel.resetWritingCommentText()
+                                        await viewModel.getComments()
+                                        viewModel.unfocusTextField()
+                                    }
+                                }) {
+                                    Text("등록")
+                                        .font(.system(size: 16, weight: viewModel.isWritingCommentEmpty() ? .light : .semibold))
+                                        .foregroundStyle(viewModel.isWritingCommentEmpty() ? Color.secondaryLabelColor : Color.white)
+                                        .frame(width: 65, height: 35)
+                                        .background(
+                                            VStack(spacing: 0) {
+                                                if viewModel.isWritingCommentEmpty() {
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .stroke(style: StrokeStyle(lineWidth: 0.5))
+                                                        .foregroundStyle(Color.secondaryLabelColor)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .foregroundStyle(Color.primaryLabelColor)
+                                                }
+                                            }
+                                        )
+                                }
+                                .disabled(viewModel.isWritingCommentEmpty())
+                                
+                            }
+                        } else {
+                            HStack {
+                                Text("댓글 추가 작성이 허용되지 않은 글입니다.")
                                     .font(.system(size: 16, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
+                                
+                                Spacer()
                             }
-                            Spacer()
-                        }
-                        
-                        HStack(spacing: 0) {
-                            FocusableTextView(
-                                text: $viewModel.writingCommentText,
-                                isFirstResponder: $viewModel.isTextFieldFocused,
-                                font: UIFont.systemFont(ofSize: 16, weight: .light) // 원하는 폰트 설정
-                            )
-                            .frame(height: 50)
-                            .frame(maxWidth: .infinity)
-                            
-                            Spacer()
-                                .frame(width: 10)
-                            
-                            Button(action : {
-                                viewModel.isWritingCommentSecret.toggle()
-                            }) {
-                                Image(systemName: viewModel.isWritingCommentSecret ? "lock" : "lock.open")
-                                    .font(.system(size: 20, weight: .light))
-                                    .foregroundStyle(viewModel.isWritingCommentSecret ? Color.primaryLabelColor : Color.secondaryLabelColor)
-                            }
-                            
-                            Spacer()
-                                .frame(width: 10)
-                            
-                            Button(action: {
-                                Task {
-                                    await viewModel.postComment()
-                                    viewModel.resetPage()
-                                    viewModel.resetTargetComment()
-                                    viewModel.resetWritingCommentText()
-                                    await viewModel.getComments()
-                                    viewModel.unfocusTextField()
-                                }
-                            }) {
-                                Text("등록")
-                                    .font(.system(size: 16, weight: viewModel.isWritingCommentEmpty() ? .light : .semibold))
-                                    .foregroundStyle(viewModel.isWritingCommentEmpty() ? Color.secondaryLabelColor : Color.white)
-                                    .frame(width: 65, height: 35)
-                                    .background(
-                                        VStack(spacing: 0) {
-                                            if viewModel.isWritingCommentEmpty() {
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .stroke(style: StrokeStyle(lineWidth: 0.5))
-                                                    .foregroundStyle(Color.secondaryLabelColor)
-                                            } else {
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .foregroundStyle(Color.primaryLabelColor)
-                                            }
-                                        }
-                                    )
-                            }
-                            .disabled(viewModel.isWritingCommentEmpty())
-                            
                         }
                     }
                     .frame(height: 50)
