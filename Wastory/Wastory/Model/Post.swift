@@ -29,9 +29,11 @@ struct Post: Codable, Identifiable, Hashable {
     var secret: Int?                // 공개글 0 | 비밀글 1
     var commentsEnabled: Int?       // 댓글 허용 1 | 댓글 불가 0
     
+    var password: String?           // 보호 시 비밀번호
+    
     private enum CodingKeys: String, CodingKey {
         case id
-        case homeTopicID
+        case homeTopicID = "hometopic_id"
         case title
         case content
         case description
@@ -47,6 +49,7 @@ struct Post: Codable, Identifiable, Hashable {
         case protected
         case secret
         case commentsEnabled = "comments_enabled"
+        case password
     }
     
     static let defaultPost: Post = {

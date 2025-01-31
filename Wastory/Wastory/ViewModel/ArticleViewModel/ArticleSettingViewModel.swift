@@ -23,6 +23,10 @@ import RichTextKit
         isCommentEnabled = (post.commentsEnabled == 1)
         
         homeTopic = homeTopics.flatMap { $0 }.first { $0.id == post.homeTopicID } ?? defaultHomeTopic
+        if post.password ?? "" != "" {
+            articlePassword = post.password!
+            articlePasswordText = post.password!
+        }
         do {
             category = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID ?? 0)
             print(category)
@@ -155,13 +159,14 @@ import RichTextKit
         let (processedText, URLs) = await RichTextImageHandler.convertImage(text)
         if let dataText = RichTextHandler.textToData(processedText) {
             do {
+                print(articlePassword)
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: dataText,
                     description: getDescription(),
                     main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
                     categoryID: category.id,
-                    homeTopicID: homeTopic.id,
+                    homeTopicID: (isSecret || isProtected) ? 1 : homeTopic.id,
                     secret: isSecret ? 1 : 0,
                     protected: isProtected ? 1 : 0,
                     password: articlePassword,
@@ -195,7 +200,7 @@ import RichTextKit
                     description: getDescription(),
                     main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
                     categoryID: category.id,
-                    homeTopicID: homeTopic.id,
+                    homeTopicID: (isSecret || isProtected) ? 1 : homeTopic.id,
                     secret: isSecret ? 1 : 0,
                     protected: isProtected ? 1 : 0,
                     password: articlePassword,
