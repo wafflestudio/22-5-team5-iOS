@@ -150,6 +150,7 @@ struct SignUpStep2EmailView: View {
                                 .opacity(viewModel.isClearEmailButtonInactive() ? 0 : 1)
                                 
                                 Button {
+                                    viewModel.isCodeSendingInProgress = true
                                     Task {
                                         isEmailFocused = false
                                         viewModel.touchEmailScreen()
@@ -168,6 +169,7 @@ struct SignUpStep2EmailView: View {
                                     RoundedRectangle(cornerRadius: 40)
                                         .stroke(Color.codeRequestButtonGray, lineWidth: 1)
                                 )
+                                .disabled(viewModel.isCodeSendingInProgress)
                                 .padding(.trailing, 20)
                             }
                         }
@@ -388,6 +390,7 @@ struct SignUpStep2EmailView: View {
                         
                         Button {
                             viewModel.requestEmailReentry()
+                            viewModel.isCodeSendingInProgress = false
                             showRerequestEmailBox = false
                         } label: {
                             HStack {

@@ -17,7 +17,7 @@ import Observation
     var isArticleViewPresent: Bool = false
     
     var isNotificationTypeSheetPresent: Bool = false
-
+    
     //MARK: selectedTab
     func setSelectedTab(to tab: TabType) {
         selectedTab = tab
@@ -53,24 +53,20 @@ import Observation
     //MARK: Notification Icon
     var isNotificationUnread: Bool = false
     
-    var didAppear: Bool = false
     
     func setIsNotificationUnread() async {
-        if !didAppear {
-            do {
-                let response = try await NetworkRepository.shared.getNotifications(page: 1, type: nil)
-                
-                if response.isEmpty {
-                    isNotificationUnread = false
-                } else {
-                    if let _ = response.first(where: { !$0.checked }) {
-                        isNotificationUnread = true
-                    }
+        do {
+            let response = try await NetworkRepository.shared.getNotifications(page: 1, type: nil)
+            
+            if response.isEmpty {
+                isNotificationUnread = false
+            } else {
+                if let _ = response.first(where: { !$0.checked }) {
+                    isNotificationUnread = true
                 }
-                didAppear = true
-            } catch {
-                print("Error: \(error.localizedDescription)")
             }
+        } catch {
+            print("Error: \(error.localizedDescription)")
         }
     }
 }

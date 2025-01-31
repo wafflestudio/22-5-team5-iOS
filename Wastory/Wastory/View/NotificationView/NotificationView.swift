@@ -90,6 +90,7 @@ struct NotificationView: View {
             }
         }
         .onAppear {
+            viewModel.resetPage()
             Task {
                 await viewModel.getNotifications()
             }
