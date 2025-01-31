@@ -432,7 +432,7 @@ struct PostView: View {
                         
                         if !viewModel.showManageMode {
                             //댓글 버튼
-                            if viewModel.post.commentsEnabled ?? 1 == 1 || viewModel.post.commentCount > 0 {
+                            if (viewModel.post.commentsEnabled ?? 1 == 1) || (viewModel.post.commentCount > 0) {
                                 Button(action: {
                                     viewModel.showComments.toggle()
                                 }) {
@@ -513,7 +513,7 @@ struct PostView: View {
                     }
                     .fullScreenCover(isPresented: $viewModel.navToEdit) {
                         NavigationStack {
-                            ArticleView(editingPost: viewModel.post)
+                            ArticleView(postViewModel: viewModel)
                         }
                     }
                 }
@@ -521,6 +521,13 @@ struct PostView: View {
         }
         .onChange(of: viewModel.isPostDeleted) { oldValue, newValue in
             if newValue {
+                dismiss()
+            }
+        }
+        .onChange(of: viewModel.navToEdit) { oldValue, newValue in
+            print("oldValue: \(oldValue), newValue: \(newValue)")
+            if !newValue && viewModel.isSubmitted {
+                viewModel.isSubmitted.toggle()
                 dismiss()
             }
         }

@@ -13,7 +13,7 @@ import RichTextKit
 struct ArticleView: View {
     @State private var viewModel = ArticleViewModel()
     @Environment(\.dismiss) private var dismiss
-    var editingPost: Post? = nil
+    @Bindable var postViewModel: PostViewModel = PostViewModel()
     
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isTextFocused: Bool
@@ -426,9 +426,9 @@ struct ArticleView: View {
             }
         )
         .onAppear {
-            if editingPost != nil && viewModel.editingPost == nil {
+            if postViewModel.post != Post.defaultPost && viewModel.editingPost == nil {
                 Task {
-                    await viewModel.initEditingPost(post: editingPost!)
+                    await viewModel.initEditingPost(post: postViewModel.post)
                 }
             }
             Task {
@@ -437,6 +437,7 @@ struct ArticleView: View {
         }
         .onChange(of: viewModel.isSubmitted) { oldValue, newValue in
             if newValue {
+                postViewModel.isSubmitted = true
                 dismiss()
             }
         }
