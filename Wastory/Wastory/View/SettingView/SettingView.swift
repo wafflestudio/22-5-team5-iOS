@@ -56,7 +56,7 @@ struct SettingView: View {
                                 SettingItem(title: "공지사항", description: "", detailView: AnnouncementView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "앱 정보", description: "버전 정보", detailView: EmptyView())
+                                SettingItem(title: "앱 정보", description: "최신 버전 사용 중", detailView: VersionView())  // TODO: 앱 정보를 관리하는 싱글톤 필요
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "이용약관", description: "", detailView: EmptyView())
