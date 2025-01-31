@@ -328,6 +328,7 @@ struct ArticleSettingView: View {
                             Text("확인")
                                 .font(.system(size: 15, weight: .regular))
                                 .foregroundStyle(viewModel.articlePasswordText.isEmpty ? .black : .blue)
+                                .disabled(viewModel.articlePasswordText.isEmpty)
                         }
                     }
                 }
