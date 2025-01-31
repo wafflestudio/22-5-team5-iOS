@@ -74,7 +74,7 @@ struct SettingView: View {
                                 SettingItem(title: "운영정책", description: "", detailView: EmptyView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "문의하기", description: "", detailView: EmptyView())
+                                SettingItem(title: "문의하기", description: "", detailView: ContactView())
                                 SettingDivider(thickness: 1)
                                 
                                 HStack(spacing: 0) {
