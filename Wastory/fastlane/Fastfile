@@ -10,9 +10,6 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 APP_NAME = "Wastory"
@@ -22,7 +19,7 @@ BUNDLE_IDENTIFIER = ENV['BUNDLE_IDENTIFIER']
 TEAM_ID = ENV['TEAM_ID']
 
 APP_STORE_CONNECT_KEY_ID = ENV['APP_STORE_CONNECT_API_KEY_ID']
-APP_STORE_CONNECT_KEY_ISSUER = ENV['APP_STORE_CONNECT_API_KEY_ISSUER']
+APP_STORE_CONNECT_KEY_ISSUER = ENV['APP_STORE_CONNECT_API_ISSUER_ID']
 APP_STORE_CONNECT_KEY_CONTENT = ENV['APP_STORE_CONNECT_API_KEY_CONTENT']
 
 MATCH_KEYCHAIN_PASSWORD = ENV['MATCH_KEYCHAIN_PASSWORD']
