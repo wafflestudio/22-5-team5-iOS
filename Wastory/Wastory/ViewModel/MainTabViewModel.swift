@@ -57,7 +57,7 @@ import Observation
     func setIsNotificationUnread() async {
         do {
             let response = try await NetworkRepository.shared.getNotifications(page: 1, type: nil)
-            
+            print("set")
             if response.isEmpty {
                 isNotificationUnread = false
             } else {
