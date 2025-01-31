@@ -346,6 +346,12 @@ struct ArticleSettingView: View {
             viewModel.extractMainImage()
             viewModel.articlePassword = viewModel.generateRandomPassword(length: 8)
             viewModel.articlePasswordText = viewModel.articlePassword
+            
+            if articleViewModel.editingPost != Post.defaultPost {
+                Task {
+                    await viewModel.initEditingPost(post: articleViewModel.editingPost ?? Post.defaultPost)
+                }
+            }
         }
     }
 }
