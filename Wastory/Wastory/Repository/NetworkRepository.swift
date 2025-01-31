@@ -621,12 +621,22 @@ final class NetworkRepository {
         .value
     }
     
-    func getArticle(postID: Int) async throws -> Post {
-        let urlRequest = try URLRequest(
+    func getArticle(postID: Int, password: String? = nil) async throws -> Post {
+        var urlRequest = try URLRequest(
             url: NetworkRouter.getArticle(postID: postID).url,
             method: NetworkRouter.getArticle(postID: postID).method,
             headers: NetworkRouter.getArticle(postID: postID).headers
         )
+        
+        if password != nil {
+            if let url = urlRequest.url {
+                var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+                components?.queryItems = [
+                    URLQueryItem(name: "password", value: password)
+                ]
+                urlRequest.url = components?.url
+            }
+        }
         
         logRequest(urlRequest)
         

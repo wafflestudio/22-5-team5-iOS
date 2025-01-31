@@ -26,6 +26,7 @@ struct Post: Codable, Identifiable, Hashable {
     var commentCount: Int           // Comment 개수
     
     var protected: Int              // 공개글 0 | 보호글 1
+    var secret: Int?                // 공개글 0 | 비밀글 1
     var commentsEnabled: Int?       // 댓글 허용 1 | 댓글 불가 0
     
     private enum CodingKeys: String, CodingKey {
@@ -44,6 +45,7 @@ struct Post: Codable, Identifiable, Hashable {
         case likeCount = "article_likes"
         case commentCount = "article_comments"
         case protected
+        case secret
         case commentsEnabled = "comments_enabled"
     }
     

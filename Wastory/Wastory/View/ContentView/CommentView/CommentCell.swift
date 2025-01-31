@@ -102,7 +102,7 @@ struct CommentCell: View {
                 } else {
                     if comment.isSecret == 0 {
                         NavigateToBlogViewButton(comment.blogID) {
-                            KFImageWithDefault(imageURL: comment.blogMainImageURL)
+                            KFImageWithDefaultIcon(imageURL: comment.blogMainImageURL)
                                 .scaledToFill()
                                 .clipShape(Circle())
                                 .frame(width: 40, height: 40)

@@ -48,21 +48,45 @@ struct BlogPostListCell: View {
                             .frame(width: 15)
                         
                         //commentCount Text
-                        HStack(alignment: .center, spacing: 3) {
-                            Image(systemName: "ellipsis.bubble")
+                        if post.commentsEnabled ?? 1 == 1 {
+                            HStack(alignment: .center, spacing: 3) {
+                                Image(systemName: "ellipsis.bubble")
+                                
+                                Text("\(post.commentCount)")
+                            }
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundStyle(Color.secondaryLabelColor)
                             
-                            Text("\(post.commentCount)")
+                            
+                            Spacer()
+                                .frame(width: 15)
                         }
-                        .font(.system(size: 14, weight: .light))
-                        .foregroundStyle(Color.secondaryLabelColor)
-                        
-                        Spacer()
-                            .frame(width: 15)
                         
                         //조회수 Text
                         Text("\(timeAgo(from: post.createdAt))")
                             .font(.system(size: 14, weight: .light))
                             .foregroundStyle(Color.secondaryLabelColor)
+                        
+                        Spacer()
+                            .frame(width: 5)
+                        
+                        if post.protected == 1 {
+                            Image(systemName: "lock")
+                                .font(.system(size: 14, weight: .light))
+                                .foregroundStyle(Color.secondaryLabelColor)
+                            
+                            Spacer()
+                                .frame(width: 15)
+                        }
+                        
+                        if post.secret ?? 0 == 1 {
+                            Image(systemName: "eye.slash")
+                                .font(.system(size: 14, weight: .light))
+                                .foregroundStyle(Color.secondaryLabelColor)
+                            
+                            Spacer()
+                                .frame(width: 15)
+                        }
                     }
                 }
                 

@@ -12,6 +12,7 @@ struct CommentView: View {
     var blogID: Int? = nil
     @State var viewModel = CommentViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Bindable var postViewModel: PostViewModel = PostViewModel()
 //    @Environment(\.contentViewModel) var contentViewModel
     
     var body: some View {
@@ -103,6 +104,7 @@ struct CommentView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
+                    postViewModel.setCommentCount(viewModel.totalCommentsCount)
                     dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))

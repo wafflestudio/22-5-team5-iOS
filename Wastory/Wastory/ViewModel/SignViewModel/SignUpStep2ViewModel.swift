@@ -23,6 +23,8 @@ import Observation
     var isVerificationSuccessful: Bool = false
     var isVerificationFailed: Bool = false
     
+    var isCodeSendingInProgress: Bool = false
+    
     func getCodeLength() -> Int {
         return codeLength
     }

@@ -17,6 +17,8 @@ import RichTextKit
     var blog: Blog = Blog.defaultBlog
     
     
+    
+    
     var isMyPost: Bool = false
     var showManageMode: Bool = false
     
@@ -81,18 +83,51 @@ import RichTextKit
     
     var categoryName: String = ""
     
+        // protected post password
+    var isPasswordSheetPresent: Bool = false
     
-    func initContent(_ postID: Int, _ blogID: Int) async {
+    var postPasswordText: String = ""
+    
+    var isPasswordInCorrect: Bool = false
+    
+    func clearPostPasswordTextField() {
+        postPasswordText = ""
+    }
+    
+    func initPost(_ postID: Int) async {
         do {
             self.post = try await NetworkRepository.shared.getArticle(postID: postID)
-            self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
-            self.isMyPost = (blog.id == UserInfoRepository.shared.getBlogID())
-            self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName
         } catch {
+            self.isPasswordSheetPresent = true
             print("Error: \(error.localizedDescription)")
             
         }
     }
+    func initBlog(_ blogID: Int) async {
+        do {
+            self.blog = try await NetworkRepository.shared.getBlogByID(blogID: blogID)
+            self.isMyPost = (blog.id == UserInfoRepository.shared.getBlogID())
+            self.categoryName = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID!).categoryName // 카테고리가 없으면 오류가 나, 마지막에 실행
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func getProtectedPost(_ postID: Int) async {
+        do {
+            self.post = try await NetworkRepository.shared.getArticle(postID: postID, password: postPasswordText)
+            isPasswordSheetPresent = false
+            
+        } catch {
+            self.isPasswordInCorrect = true
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func setCommentCount(_ count: Int) {
+        self.post.commentCount = count
+    }
+    
     
     // MARK: - Rendering Content
     var text = NSAttributedString()

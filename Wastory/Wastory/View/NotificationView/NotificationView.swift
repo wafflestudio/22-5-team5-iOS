@@ -90,11 +90,14 @@ struct NotificationView: View {
             }
         }
         .onAppear {
+            viewModel.resetPage()
+            viewModel.setNotificationType(to: 0)
             Task {
                 await viewModel.getNotifications()
             }
         }
         .refreshable {
+            viewModel.resetPage()
             Task {
                 await viewModel.getNotifications()
             }
