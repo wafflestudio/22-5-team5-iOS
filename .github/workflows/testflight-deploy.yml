@@ -24,7 +24,7 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
       
-    runs-on: macos-14
+    runs-on: macos-15
     
     steps:
       - name: Parse tag name
