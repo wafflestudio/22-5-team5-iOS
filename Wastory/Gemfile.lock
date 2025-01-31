@@ -115,6 +115,7 @@ GEM
       fastlane (>= 2.148.1)
       rbnacl
       sshkey
+    fastlane-plugin-versioning (0.7.1)
     fastlane-sirp (1.0.0)
       sysrandom (~> 1.0)
     ffi (1.17.1-arm64-darwin)
@@ -226,6 +227,7 @@ PLATFORMS
 DEPENDENCIES
   fastlane
   fastlane-plugin-github_action
+  fastlane-plugin-versioning
 
 BUNDLED WITH
    2.4.22
