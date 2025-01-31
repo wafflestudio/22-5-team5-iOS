@@ -11,6 +11,7 @@ import RichTextKit
 struct PostView: View {
     let postID: Int
     let blogID: Int
+    @State var isProtected: Int = 0
     @State var toComment: Bool = false
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
@@ -19,213 +20,339 @@ struct PostView: View {
     @FocusState private var isTextFocused: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    Color.white
-                        .frame(height: 500)
-                        .padding(.top, -500)
-                    
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                                if abs(newValue - oldValue) > 200 {
-                                    viewModel.setInitialScrollPosition(oldValue)
-                                }
-                                viewModel.changeIsNavTitleHidden(by: newValue, oldValue)
-                            }
-                    }
-                    .frame(height: 0)
-                    Spacer()
+        ZStack {
+            VStack(spacing: 0) {
+                ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        Spacer()
-                            .frame(height: 100)
+                        Color.white
+                            .frame(height: 500)
+                            .padding(.top, -500)
                         
-                        // MARK: 카테고리 버튼
-                        NavigateToBlogViewButton(blogID, viewModel.post.categoryID) {
-                            Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
-                                .font(.system(size: 16, weight: .regular))
-                                .foregroundStyle(Color.primaryLabelColor)
-                                .lineLimit(1)
-                                .background(
-                                    VStack(spacing: 0) {
-                                        Spacer()
-                                        
-                                        Rectangle()
-                                            .fill(Color.middleDotColor)
-                                            .frame(height: 6)
-                                            .padding(.top, -8)
-                                        
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
+                                    if abs(newValue - oldValue) > 200 {
+                                        viewModel.setInitialScrollPosition(oldValue)
                                     }
-                                )
+                                    viewModel.changeIsNavTitleHidden(by: newValue, oldValue)
+                                }
                         }
-                        .padding(.horizontal, 20)
-                        
+                        .frame(height: 0)
                         Spacer()
-                            .frame(height: 10)
-                        
-                        // MARK: Title
-                        Text(viewModel.post.title)
-                            .font(.system(size: 34, weight: .medium))
-                            .foregroundStyle(Color.primaryLabelColor)
-                            .padding(.horizontal, 20)
-                        
-                        Spacer()
-                            .frame(height: 10)
-                        
-                        // MARK: 블로그 이름 . 작성일자
-                        HStack(spacing: 5) {
-                            Text(viewModel.blog.blogName)
-                                .font(.system(size: 14, weight: .light))
-                                .foregroundStyle(Color.secondaryLabelColor)
-                                .lineLimit(1)
-                            
-                            Image(systemName: "circle.fill")
-                                .font(.system(size: 3, weight: .regular))
-                                .foregroundStyle(Color.middleDotColor)
-                            
-                            Text("\(timeFormatter(from: viewModel.post.createdAt))")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundStyle(Color.secondaryLabelColor)
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        Spacer()
-                            .frame(height: 60)
-                        
-                        // MARK: Content
-                        RichTextViewer(viewModel.text)
-                            .frame(height: viewModel.textHeight)
-                            .padding(.horizontal, 20)
-                            .id(viewModel.isTextLoaded)
-                            .disabled(true)
-                        
-                        Spacer()
-                            .frame(height: 30)
-                        
-                        Divider()
-                            .foregroundStyle(Color.secondaryLabelColor)
-                        Spacer()
-                    }
-                    .background(Color.white)
-                    // TODO: 태그 버튼 추가하기
-                    
-                    Spacer()
-                    
-                    
-                    //Blog 세부설명 및 구독버튼
-                    HStack(alignment: .top, spacing: 20) {
                         VStack(alignment: .leading, spacing: 0) {
-                            NavigateToBlogViewButton(blogID) {
-                                Text(viewModel.blog.blogName)
-                                    .font(.system(size: 18, weight: .light))
+                            Spacer()
+                                .frame(height: 100)
+                            
+                            // MARK: 카테고리 버튼
+                            NavigateToBlogViewButton(blogID, viewModel.post.categoryID) {
+                                Text(viewModel.post.categoryID == 0 ? "카테고리 없음" : viewModel.categoryName)
+                                    .font(.system(size: 16, weight: .regular))
                                     .foregroundStyle(Color.primaryLabelColor)
-                                    .multilineTextAlignment(.leading)
-                                    .lineLimit(2)
+                                    .lineLimit(1)
+                                    .background(
+                                        VStack(spacing: 0) {
+                                            Spacer()
+                                            
+                                            Rectangle()
+                                                .fill(Color.middleDotColor)
+                                                .frame(height: 6)
+                                                .padding(.top, -8)
+                                            
+                                        }
+                                    )
                             }
+                            .padding(.horizontal, 20)
                             
                             Spacer()
-                                .frame(height: 5)
+                                .frame(height: 10)
                             
-                            NavigateToBlogViewButton(blogID) {
-                                Text(viewModel.blog.description)
+                            // MARK: Title
+                            Text(viewModel.post.title)
+                                .font(.system(size: 34, weight: .medium))
+                                .foregroundStyle(Color.primaryLabelColor)
+                                .padding(.horizontal, 20)
+                            
+                            Spacer()
+                                .frame(height: 10)
+                            
+                            // MARK: 블로그 이름 . 작성일자
+                            HStack(spacing: 5) {
+                                Text(viewModel.blog.blogName)
                                     .font(.system(size: 14, weight: .light))
                                     .foregroundStyle(Color.secondaryLabelColor)
-                                    .lineLimit(3)
-                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(1)
+                                
+                                Image(systemName: "circle.fill")
+                                    .font(.system(size: 3, weight: .regular))
+                                    .foregroundStyle(Color.middleDotColor)
+                                
+                                Text("\(timeFormatter(from: viewModel.post.createdAt))")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundStyle(Color.secondaryLabelColor)
                             }
+                            .padding(.horizontal, 20)
                             
                             Spacer()
-                                .frame(height: 15)
+                                .frame(height: 60)
                             
-                            if viewModel.blog.id != UserInfoRepository.shared.getBlogID() && viewModel.blog.id != Blog.defaultBlog.id {
-                                SubscribingButton(
-                                    blogID: viewModel.blog.id,
-                                    blogAddress: viewModel.blog.addressName,
-                                    subscribedContent: {
-                                        AnyView(
-                                            HStack(spacing: 0) {
-                                                Text("구독중 ")
-                                                
-                                                Image(systemName: "checkmark")
-                                            }
-                                            .font(.system(size: 14, weight: .light))
-                                            .foregroundStyle(Color.primaryLabelColor)
-                                            .frame(width: 87, height: 35)
-                                            .background(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .stroke(style: StrokeStyle(lineWidth: 1))
-                                                    .foregroundStyle(Color.secondaryLabelColor)
-                                            )
-                                        )
-                                    },
-                                    notSubscribedContent: {
-                                        AnyView(
-                                            Text("구독하기 +") // 구독중 V
-                                                .font(.system(size: 14, weight: .light))
-                                                .foregroundStyle(Color.primaryLabelColor)
-                                                .frame(width: 100, height: 35)
-                                                .background(
-                                                    RoundedRectangle(cornerRadius: 20)
-                                                        .stroke(style: StrokeStyle(lineWidth: 1))
-                                                        .foregroundStyle(Color.primaryLabelColor)
-                                                )
-                                        )
-                                    }
-                                )
-                            }
+                            // MARK: Content
+                            RichTextViewer(viewModel.text)
+                                .frame(height: viewModel.textHeight)
+                                .padding(.horizontal, 20)
+                                .id(viewModel.isTextLoaded)
+                                .disabled(true)
+                            
+                            Spacer()
+                                .frame(height: 30)
+                            
+                            Divider()
+                                .foregroundStyle(Color.secondaryLabelColor)
+                            Spacer()
                         }
-                        .padding(.leading, 20)
+                        .background(Color.white)
+                        // TODO: 태그 버튼 추가하기
                         
                         Spacer()
                         
-                        NavigateToBlogViewButton(blogID) {
-                            KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
-                                .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
-                                .frame(width: 60, height: 60)
-                                .clipShape(
-                                    RoundedRectangle(cornerRadius: 10)
-                                )
-                                .padding(.trailing, 20)
-                        }
-                    } // HStack
-                    .padding(.top, 25)
-                    .padding(.bottom, 30)
-                    .background(Color.blogDetailBackgroundColor)
-                    
-                    if !viewModel.categoryBlogPosts.isEmpty {
-                        CategoryPostListView(viewModel: viewModel)
-                    }
-                    
-                    if !viewModel.popularBlogPosts.isEmpty {
-                        BlogPopularPostGridView(viewModel: viewModel)
-                    }
-                    
-                    VStack(spacing: 10) {
-                        HStack {
+                        
+                        //Blog 세부설명 및 구독버튼
+                        HStack(alignment: .top, spacing: 20) {
+                            VStack(alignment: .leading, spacing: 0) {
+                                NavigateToBlogViewButton(blogID) {
+                                    Text(viewModel.blog.blogName)
+                                        .font(.system(size: 18, weight: .light))
+                                        .foregroundStyle(Color.primaryLabelColor)
+                                        .multilineTextAlignment(.leading)
+                                        .lineLimit(2)
+                                }
+                                
+                                Spacer()
+                                    .frame(height: 5)
+                                
+                                NavigateToBlogViewButton(blogID) {
+                                    Text(viewModel.blog.description)
+                                        .font(.system(size: 14, weight: .light))
+                                        .foregroundStyle(Color.secondaryLabelColor)
+                                        .lineLimit(3)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                
+                                Spacer()
+                                    .frame(height: 15)
+                                
+                                if viewModel.blog.id != UserInfoRepository.shared.getBlogID() && viewModel.blog.id != Blog.defaultBlog.id {
+                                    SubscribingButton(
+                                        blogID: viewModel.blog.id,
+                                        blogAddress: viewModel.blog.addressName,
+                                        subscribedContent: {
+                                            AnyView(
+                                                HStack(spacing: 0) {
+                                                    Text("구독중 ")
+                                                    
+                                                    Image(systemName: "checkmark")
+                                                }
+                                                    .font(.system(size: 14, weight: .light))
+                                                    .foregroundStyle(Color.primaryLabelColor)
+                                                    .frame(width: 87, height: 35)
+                                                    .background(
+                                                        RoundedRectangle(cornerRadius: 20)
+                                                            .stroke(style: StrokeStyle(lineWidth: 1))
+                                                            .foregroundStyle(Color.secondaryLabelColor)
+                                                    )
+                                            )
+                                        },
+                                        notSubscribedContent: {
+                                            AnyView(
+                                                Text("구독하기 +") // 구독중 V
+                                                    .font(.system(size: 14, weight: .light))
+                                                    .foregroundStyle(Color.primaryLabelColor)
+                                                    .frame(width: 100, height: 35)
+                                                    .background(
+                                                        RoundedRectangle(cornerRadius: 20)
+                                                            .stroke(style: StrokeStyle(lineWidth: 1))
+                                                            .foregroundStyle(Color.primaryLabelColor)
+                                                    )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            .padding(.leading, 20)
+                            
                             Spacer()
-                            Text("와스토리는 team5에서")
-                            Image(systemName: "clock")
-                            Text("을 넣어 만듭니다.")
-                                .padding(.leading, -5)
-                            Spacer()
+                            
+                            NavigateToBlogViewButton(blogID) {
+                                KFImageWithDefault(imageURL: viewModel.blog.mainImageURL)
+                                    .aspectRatio(contentMode: .fill) // 이미지비율 채워서 자르기
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(
+                                        RoundedRectangle(cornerRadius: 10)
+                                    )
+                                    .padding(.trailing, 20)
+                            }
+                        } // HStack
+                        .padding(.top, 25)
+                        .padding(.bottom, 30)
+                        .background(Color.blogDetailBackgroundColor)
+                        
+                        if !viewModel.categoryBlogPosts.isEmpty {
+                            CategoryPostListView(viewModel: viewModel)
                         }
                         
-                        Text("Waffle Studio")
-                    }
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundStyle(Color.secondaryLabelColor)
-                    .padding(.top, 50)
-                    .padding(.bottom, 150)
+                        if !viewModel.popularBlogPosts.isEmpty {
+                            BlogPopularPostGridView(viewModel: viewModel)
+                        }
+                        
+                        VStack(spacing: 10) {
+                            HStack {
+                                Spacer()
+                                Text("와스토리는 team5에서")
+                                Image(systemName: "clock")
+                                Text("을 넣어 만듭니다.")
+                                    .padding(.leading, -5)
+                                Spacer()
+                            }
+                            
+                            Text("Waffle Studio")
+                        }
+                        .font(.system(size: 14, weight: .light))
+                        .foregroundStyle(Color.secondaryLabelColor)
+                        .padding(.top, 50)
+                        .padding(.bottom, 150)
+                        
+                    }// VStack
+                }// ScrollView
+                .background(Color.backgourndSpaceColor)
+            }// VStack
+            
+            
+            //MARK: PasswordSheet
+            if (viewModel.isPasswordSheetPresent) {
+                Color.white
+                
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    Text("보호되어 있는 글입니다.\n비밀번호를 입력해주세요.")
+                        .font(.system(size: 16, weight: .regular))
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                        .frame(height: 30)
                     
-                }// VStack
-            }// ScrollView
-            .background(Color.backgourndSpaceColor)
-        }// VStack
+                    HStack(spacing: 10) {
+                        Image(systemName: "lock")
+                            .font(.system(size: 16, weight: .light))
+                        TextField("", text: $viewModel.postPasswordText)
+                            .font(.system(size: 15, weight: .regular))
+                            .frame(width: 120)
+                            .autocapitalization(.none)
+                        Button {
+                            viewModel.clearPostPasswordTextField()
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.articlePasswordGray)
+                        }
+                        if (viewModel.isPasswordInCorrect) {
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.loadingCoralRed)
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .foregroundStyle(viewModel.isPasswordInCorrect ? Color.loadingCoralRed : Color.primaryLabelColor)
+                        .frame(width: 176, height: 2)
+                    
+                    
+                    if (viewModel.isPasswordInCorrect) {
+                        Text("올바르지 않은 비밀번호입니다.")
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.loadingCoralRed)
+                            .padding(.vertical, 3)
+                    } else {
+                        Spacer()
+                            .frame(height: 20)
+                    }
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                        .frame(width: 240, height: 1)
+                    HStack(spacing: 40) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("취소")
+                                .font(.system(size: 15, weight: .regular))
+                        }
+                        
+                        Rectangle()
+                            .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                            .frame(width: 1, height: 50)
+                        Button {
+                            Task {
+                                await viewModel.getProtectedPost(postID)
+                            }
+                        } label: {
+                            Text("확인")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(viewModel.postPasswordText.isEmpty ? .black : .blue)
+                        }
+                        .disabled(viewModel.postPasswordText.isEmpty)
+                    }
+                }
+                .onChange(of: viewModel.postPasswordText) { oldValue, newValue in
+                    if viewModel.isPasswordInCorrect {
+                        viewModel.isPasswordInCorrect = false
+                    }
+                }
+                .padding(.top, 30)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                }
+            }
+            
+        }// ZStack
         //MARK: Networking
         .onAppear {
             viewModel.showManageMode = false
-            if viewModel.post == Post.defaultPost {
+            viewModel.clearPostPasswordTextField()
+            if isProtected == 1 {
+                viewModel.isPasswordSheetPresent = true
+            } else {
+                if viewModel.post == Post.defaultPost {
+                    Task {
+                        await viewModel.initPost(postID)
+                        
+                        if !viewModel.isPasswordSheetPresent {
+                            await viewModel.initBlog(blogID)
+                            Task {
+                                await viewModel.getPostsInBlogInCategory()
+                            }
+                            Task {
+                                await viewModel.getPopularBlogPosts()
+                            }
+                            Task {
+                                await viewModel.getIsLiked()
+                            }
+                            Task {
+                                await viewModel.loadText()
+                            }
+                            if toComment {
+                                viewModel.showComments.toggle()
+                                toComment = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .onChange(of: viewModel.isPasswordSheetPresent) { oldValue, newValue in
+            if !newValue {
                 Task {
                     await viewModel.initContent(postID, blogID)
                     Task {
@@ -274,119 +401,121 @@ struct PostView: View {
         .navigationBarBackButtonHidden()
         //MARK: bottomBar
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 0) {
-                Divider()
-                    .foregroundStyle(Color.secondaryLabelColor)
-                    .frame(maxWidth: .infinity)
-                
-                HStack(spacing: 0) {
+            if !viewModel.isPasswordSheetPresent {
+                VStack(spacing: 0) {
+                    Divider()
+                        .foregroundStyle(Color.secondaryLabelColor)
+                        .frame(maxWidth: .infinity)
                     
-                    if !viewModel.showManageMode {
-                        //좋아요 버튼
-                        Button(action: {
-                            Task {
-                                await viewModel.likeButtonAction()
-                            }
-                        }) {
-                            HStack(spacing: 3) {
-                                Image(systemName: viewModel.isLiked ? "heart.fill" : "heart")
-                                    .font(.system(size: 20, weight: .light))
-                                    .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
-                                
-                                Text("\(viewModel.post.likeCount)")
-                                    .font(.system(size: 16, weight: .light))
-                                    .foregroundStyle(Color.bottomBarLabelColor)
-                            }
-                        }
-                    }
-                    
-                    if !viewModel.showManageMode {
-                        Spacer()
-                            .frame(width: 25)
-                    }
-                    
-                    if !viewModel.showManageMode {
-                        //댓글 버튼
-                        Button(action: {
-                            viewModel.showComments.toggle()
-                        }) {
-                            HStack(spacing: 3) {
-                                Image(systemName: "text.bubble")
-                                    .font(.system(size: 20, weight: .light))
-                                    .foregroundStyle(Color.primaryLabelColor)
-                                
-                                Text("\(viewModel.post.commentCount)")
-                                    .font(.system(size: 16, weight: .light))
-                                    .foregroundStyle(Color.bottomBarLabelColor)
-                            }
-                        }
-                    }
-                    
-                    if viewModel.showManageMode {
-                        //수정 버튼
-                        Button(action: {
-                            viewModel.navToEdit.toggle()
-                        }) {
-                            Image(systemName: "square.and.pencil")
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(Color.primaryLabelColor)
-                        }
-                    }
-                    
-                    if viewModel.showManageMode {
-                        Spacer()
-                            .frame(width: 25)
-                    }
-                    
-                    if viewModel.showManageMode {
-                        //삭제 버튼
-                        Button(action: {
-                            viewModel.isDeleteAlertPresent.toggle()
-                        }) {
-                            Image(systemName: "trash")
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(Color.loadingCoralRed)
-                        }
-                        .alert("글 삭제", isPresented: $viewModel.isDeleteAlertPresent) {
-                            Button("취소", role: .cancel) {}
-                            
-                            Button("삭제", role: .destructive) {
+                    HStack(spacing: 0) {
+                        
+                        if !viewModel.showManageMode {
+                            //좋아요 버튼
+                            Button(action: {
                                 Task {
-                                    await viewModel.deletePost()
-                                    viewModel.isPostDeleted = true
+                                    await viewModel.likeButtonAction()
+                                }
+                            }) {
+                                HStack(spacing: 3) {
+                                    Image(systemName: viewModel.isLiked ? "heart.fill" : "heart")
+                                        .font(.system(size: 20, weight: .light))
+                                        .foregroundStyle(viewModel.isLiked ? Color.loadingCoralRed : Color.primaryLabelColor)
+                                    
+                                    Text("\(viewModel.post.likeCount)")
+                                        .font(.system(size: 16, weight: .light))
+                                        .foregroundStyle(Color.bottomBarLabelColor)
                                 }
                             }
-                        } message: {
-                            Text("글을 삭제하시겠습니까?")
+                        }
+                        
+                        if !viewModel.showManageMode {
+                            Spacer()
+                                .frame(width: 25)
+                        }
+                        
+                        if !viewModel.showManageMode {
+                            //댓글 버튼
+                            Button(action: {
+                                viewModel.showComments.toggle()
+                            }) {
+                                HStack(spacing: 3) {
+                                    Image(systemName: "text.bubble")
+                                        .font(.system(size: 20, weight: .light))
+                                        .foregroundStyle(Color.primaryLabelColor)
+                                    
+                                    Text("\(viewModel.post.commentCount)")
+                                        .font(.system(size: 16, weight: .light))
+                                        .foregroundStyle(Color.bottomBarLabelColor)
+                                }
+                            }
+                        }
+                        
+                        if viewModel.showManageMode {
+                            //수정 버튼
+                            Button(action: {
+                                viewModel.navToEdit.toggle()
+                            }) {
+                                Image(systemName: "square.and.pencil")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                            }
+                        }
+                        
+                        if viewModel.showManageMode {
+                            Spacer()
+                                .frame(width: 25)
+                        }
+                        
+                        if viewModel.showManageMode {
+                            //삭제 버튼
+                            Button(action: {
+                                viewModel.isDeleteAlertPresent.toggle()
+                            }) {
+                                Image(systemName: "trash")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(Color.loadingCoralRed)
+                            }
+                            .alert("글 삭제", isPresented: $viewModel.isDeleteAlertPresent) {
+                                Button("취소", role: .cancel) {}
+                                
+                                Button("삭제", role: .destructive) {
+                                    Task {
+                                        await viewModel.deletePost()
+                                        viewModel.isPostDeleted = true
+                                    }
+                                }
+                            } message: {
+                                Text("글을 삭제하시겠습니까?")
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        
+                        //글 관리(수정, 삭제) on/off 버튼
+                        if viewModel.isMyPost {
+                            Button(action: {
+                                viewModel.showManageMode.toggle()
+                            }) {
+                                Image(systemName: "ellipsis")
+                                    .font(.system(size: 20, weight: .light))
+                                    .foregroundStyle(Color.primaryLabelColor)
+                                    .rotationEffect(.degrees(viewModel.showManageMode ? -90 : 0))
+                            }
                         }
                     }
-                    
-                    Spacer()
-                    
-                    
-                    //글 관리(수정, 삭제) on/off 버튼
-                    if viewModel.isMyPost {
-                        Button(action: {
-                            viewModel.showManageMode.toggle()
-                        }) {
-                            Image(systemName: "ellipsis")
-                                .font(.system(size: 20, weight: .light))
-                                .foregroundStyle(Color.primaryLabelColor)
-                                .rotationEffect(.degrees(viewModel.showManageMode ? -90 : 0))
+                    .frame(height: 50)
+                    .padding(.horizontal, 20)
+                    .background(Color.white)
+                    .fullScreenCover(isPresented: $viewModel.showComments) {
+                        NavigationStack {
+                            CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id, postViewModel: viewModel)
                         }
                     }
-                }
-                .frame(height: 50)
-                .padding(.horizontal, 20)
-                .background(Color.white)
-                .fullScreenCover(isPresented: $viewModel.showComments) {
-                    NavigationStack {
-                        CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id, postViewModel: viewModel)
-                    }
-                }
-                .fullScreenCover(isPresented: $viewModel.navToEdit) {
-                    NavigationStack {
-                        ArticleView(editingPost: viewModel.post)
+                    .fullScreenCover(isPresented: $viewModel.navToEdit) {
+                        NavigationStack {
+                            ArticleView(editingPost: viewModel.post)
+                        }
                     }
                 }
             }
