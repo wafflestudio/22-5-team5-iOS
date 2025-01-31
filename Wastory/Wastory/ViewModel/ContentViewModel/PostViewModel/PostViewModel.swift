@@ -94,6 +94,11 @@ import RichTextKit
         }
     }
     
+    func setCommentCount(_ count: Int) {
+        self.post.commentCount = count
+    }
+    
+    
     // MARK: - Rendering Content
     var text = NSAttributedString()
     var context = RichTextContext()

@@ -245,13 +245,6 @@ struct PostView: View {
                 }
             }
         }
-        .onChange(of: viewModel.showComments) { oldValue, newValue in
-            if !newValue {
-                Task {
-                    await viewModel.initContent(postID, blogID)
-                }
-            }
-        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle("")
@@ -386,7 +379,7 @@ struct PostView: View {
                 .background(Color.white)
                 .fullScreenCover(isPresented: $viewModel.showComments) {
                     NavigationStack {
-                        CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id)
+                        CommentView(postID: viewModel.post.id, blogID: viewModel.blog.id, postViewModel: viewModel)
                     }
                 }
                 .fullScreenCover(isPresented: $viewModel.navToEdit) {
