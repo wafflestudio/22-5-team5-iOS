@@ -432,17 +432,19 @@ struct PostView: View {
                         
                         if !viewModel.showManageMode {
                             //댓글 버튼
-                            Button(action: {
-                                viewModel.showComments.toggle()
-                            }) {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "text.bubble")
-                                        .font(.system(size: 20, weight: .light))
-                                        .foregroundStyle(Color.primaryLabelColor)
-                                    
-                                    Text("\(viewModel.post.commentCount)")
-                                        .font(.system(size: 16, weight: .light))
-                                        .foregroundStyle(Color.bottomBarLabelColor)
+                            if viewModel.post.commentsEnabled ?? 1 == 1 {
+                                Button(action: {
+                                    viewModel.showComments.toggle()
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "text.bubble")
+                                            .font(.system(size: 20, weight: .light))
+                                            .foregroundStyle(Color.primaryLabelColor)
+                                        
+                                        Text("\(viewModel.post.commentCount)")
+                                            .font(.system(size: 16, weight: .light))
+                                            .foregroundStyle(Color.bottomBarLabelColor)
+                                    }
                                 }
                             }
                         }
