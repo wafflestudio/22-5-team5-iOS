@@ -105,7 +105,6 @@ struct CommentView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
                     postViewModel.setCommentCount(viewModel.totalCommentsCount)
-                    print(postViewModel.post)
                     dismiss()
                 } label: {
                     Text(Image(systemName: "chevron.backward"))

@@ -225,23 +225,25 @@ struct PostView: View {
         //MARK: Networking
         .onAppear {
             viewModel.showManageMode = false
-            Task {
-                await viewModel.initContent(postID, blogID)
+            if viewModel.post == Post.defaultPost {
                 Task {
-                    await viewModel.getPostsInBlogInCategory()
-                }
-                Task {
-                    await viewModel.getPopularBlogPosts()
-                }
-                Task {
-                    await viewModel.getIsLiked()
-                }
-                Task {
-                    await viewModel.loadText()
-                }
-                if toComment {
-                    viewModel.showComments.toggle()
-                    toComment = false
+                    await viewModel.initContent(postID, blogID)
+                    Task {
+                        await viewModel.getPostsInBlogInCategory()
+                    }
+                    Task {
+                        await viewModel.getPopularBlogPosts()
+                    }
+                    Task {
+                        await viewModel.getIsLiked()
+                    }
+                    Task {
+                        await viewModel.loadText()
+                    }
+                    if toComment {
+                        viewModel.showComments.toggle()
+                        toComment = false
+                    }
                 }
             }
         }
