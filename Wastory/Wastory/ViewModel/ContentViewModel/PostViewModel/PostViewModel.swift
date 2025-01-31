@@ -98,7 +98,7 @@ import RichTextKit
         do {
             self.post = try await NetworkRepository.shared.getArticle(postID: postID)
         } catch {
-            self.isPasswordInCorrect = true
+            self.isPasswordSheetPresent = true
             print("Error: \(error.localizedDescription)")
             
         }

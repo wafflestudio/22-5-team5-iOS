@@ -11,7 +11,6 @@ import RichTextKit
 struct PostView: View {
     let postID: Int
     let blogID: Int
-    @State var isProtected: Int = 0
     @State var toComment: Bool = false
     @State private var viewModel = PostViewModel()
     @Environment(\.dismiss) private var dismiss
@@ -227,8 +226,9 @@ struct PostView: View {
             
             
             //MARK: PasswordSheet
-            if (viewModel.isPasswordSheetPresent) {
+            if viewModel.isPasswordSheetPresent {
                 Color.white
+                    .ignoresSafeArea()
                 
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
@@ -321,31 +321,27 @@ struct PostView: View {
         .onAppear {
             viewModel.showManageMode = false
             viewModel.clearPostPasswordTextField()
-            if isProtected == 1 {
-                viewModel.isPasswordSheetPresent = true
-            } else {
-                if viewModel.post == Post.defaultPost {
-                    Task {
-                        await viewModel.initPost(postID)
-                        
-                        if !viewModel.isPasswordSheetPresent {
-                            await viewModel.initBlog(blogID)
-                            Task {
-                                await viewModel.getPostsInBlogInCategory()
-                            }
-                            Task {
-                                await viewModel.getPopularBlogPosts()
-                            }
-                            Task {
-                                await viewModel.getIsLiked()
-                            }
-                            Task {
-                                await viewModel.loadText()
-                            }
-                            if toComment {
-                                viewModel.showComments.toggle()
-                                toComment = false
-                            }
+            if viewModel.post == Post.defaultPost {
+                Task {
+                    await viewModel.initPost(postID)
+                    
+                    if !viewModel.isPasswordSheetPresent {
+                        await viewModel.initBlog(blogID)
+                        Task {
+                            await viewModel.getPostsInBlogInCategory()
+                        }
+                        Task {
+                            await viewModel.getPopularBlogPosts()
+                        }
+                        Task {
+                            await viewModel.getIsLiked()
+                        }
+                        Task {
+                            await viewModel.loadText()
+                        }
+                        if toComment {
+                            viewModel.showComments.toggle()
+                            toComment = false
                         }
                     }
                 }
@@ -354,7 +350,7 @@ struct PostView: View {
         .onChange(of: viewModel.isPasswordSheetPresent) { oldValue, newValue in
             if !newValue {
                 Task {
-                    await viewModel.initContent(postID, blogID)
+                    await viewModel.initBlog(blogID)
                     Task {
                         await viewModel.getPostsInBlogInCategory()
                     }
@@ -374,7 +370,7 @@ struct PostView: View {
                 }
             }
         }
-        .ignoresSafeArea(edges: .all)
+        .ignoresSafeArea(edges: .top)
         // MARK: NavBar
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -392,6 +388,7 @@ struct PostView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button{
                     dismiss()
+                    viewModel.post = Post.defaultPost
                 } label: {
                     Text(Image(systemName: "chevron.backward"))
                         .foregroundStyle(viewModel.getIsNavTitleHidden() ? Color.white : Color.black)
