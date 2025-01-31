@@ -349,7 +349,7 @@ struct ArticleSettingView: View {
             
             if articleViewModel.editingPost != nil {
                 Task {
-                    await viewModel.initEditingPost(post: articleViewModel.editingPost ?? Post.defaultPost)
+                    await viewModel.initEditingPost(post: articleViewModel.editingPost!)
                 }
             }
         }
