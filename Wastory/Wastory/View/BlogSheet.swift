@@ -87,7 +87,3 @@ struct BlogSheet: View {
         .ignoresSafeArea()
     }
 }
-
-extension Color {
-    static let settingGearGray: Color = .init(red: 77 / 255, green: 77 / 255, blue: 77 / 255)  // 블로그 시트 세팅 버튼 회색
-}

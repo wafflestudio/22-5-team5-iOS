@@ -98,7 +98,13 @@ import RichTextKit
         ]
     ]
     
+    var isSecret: Bool = false
+    var isProtected: Bool = false
     var isCommentEnabled: Bool = true
+    
+    var articlePassword: String = ""
+    var articlePasswordText: String = ""
+    var showPasswordSettingBox: Bool = false
 
     init(title: String, text: NSAttributedString) {
         self.title = title
@@ -139,8 +145,11 @@ import RichTextKit
                     main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
                     categoryID: category.id,
                     homeTopicID: homeTopic.id,
-                    secret: isCommentEnabled == false ? 1 : 0,
-                    images: URLs
+                    secret: isSecret ? 1 : 0,
+                    protected: isProtected ? 1 : 0,
+                    password: articlePassword,
+                    images: URLs,
+                    commentsEnabled: isCommentEnabled ? 1 : 0
                 )
             }
             catch {
@@ -170,8 +179,11 @@ import RichTextKit
                     main_image_url: mainImageURL ?? (URLs.isEmpty ? "" : URLs[0].fileURL),
                     categoryID: category.id,
                     homeTopicID: homeTopic.id,
-                    secret: isCommentEnabled == false ? 1 : 0,
-                    images: URLs
+                    secret: isSecret ? 1 : 0,
+                    protected: isProtected ? 1 : 0,
+                    password: articlePassword,
+                    images: URLs,
+                    commentsEnabled: isCommentEnabled ? 1 : 0
                 )
             }
             catch {
@@ -195,7 +207,7 @@ import RichTextKit
             .components(separatedBy: .whitespacesAndNewlines)
             .filter { !$0.isEmpty }
             .joined(separator: " ")
-        print("desc.: ", cleanedText)
+        
         return cleanedText
     }
 
@@ -261,5 +273,22 @@ import RichTextKit
         return self.homeTopic == homeTopic
     }
     
-    // MARK: - Optional: Public, Comment
+    // MARK: - Optional: Secret, Comment
+    func generateRandomPassword(length: Int) -> String {
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        return String((0..<length).map { _ in characters.randomElement()! })
+    }
+    
+    func clippedPassword() -> String {
+        if self.articlePassword.count > 13 {
+            return String("\(articlePassword.prefix(13))...")
+        }
+        else {
+            return self.articlePassword
+        }
+    }
+    
+    func clearArticlePasswordTextField() {
+        self.articlePasswordText = ""
+    }
 }

@@ -79,7 +79,7 @@ struct ArticleSettingView: View {
                         else {
                             ZStack {
                                 Rectangle()
-                                    .foregroundStyle(Color.postingImageBackgroundGray)
+                                    .foregroundStyle(Color.articleImageBackgroundGray)
                                     .frame(width: 100, height: 100)
                                 VStack(spacing: 0) {
                                     Image(systemName: "camera")
@@ -88,7 +88,7 @@ struct ArticleSettingView: View {
                                     Text("대표이미지")
                                         .font(.system(size: 12))
                                 }
-                                .foregroundStyle(Color.postingImageTextGray)
+                                .foregroundStyle(Color.articleImageTextGray)
                                 .padding(30)
                             }
                         }
@@ -127,47 +127,52 @@ struct ArticleSettingView: View {
                     Spacer()
                     
                     Button {
-                        // TODO: 공개 버튼
+                        viewModel.isSecret = false
+                        viewModel.isProtected = false
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "globe.asia.australia.fill")
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundStyle(.black)
+                            Image(systemName: (viewModel.isSecret == false && viewModel.isProtected == false)
+                                  ? "globe.asia.australia.fill"
+                                  : "globe.asia.australia")
+                                .font(.system(size: 17, weight: (viewModel.isSecret == false && viewModel.isProtected == false) ? .regular : .light))
+                                .foregroundStyle((viewModel.isSecret == false && viewModel.isProtected == false) ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("공개")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.black)
+                                .font(.system(size: 13, weight: (viewModel.isSecret == false && viewModel.isProtected == false) ? .semibold : .light))
+                                .foregroundStyle((viewModel.isSecret == false && viewModel.isProtected == false) ? .black : Color.emailCautionTextGray)
                         }
                     }
                     
                     Button {
-                        // TODO: 보호 버튼
+                        viewModel.isSecret = false
+                        viewModel.isProtected = true
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "lock")
-                                .font(.system(size: 17, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                            Image(systemName: viewModel.isProtected ? "lock.fill" : "lock")
+                                .font(.system(size: 17, weight: viewModel.isProtected ? .regular : .light))
+                                .foregroundStyle(viewModel.isProtected ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("보호")
-                                .font(.system(size: 13, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                                .font(.system(size: 13, weight: viewModel.isProtected ? .semibold : .light))
+                                .foregroundStyle(viewModel.isProtected ? .black : Color.emailCautionTextGray)
                         }
                     }
                     
                     Button {
-                        // TODO: 비공개 버튼
+                        viewModel.isSecret = true
+                        viewModel.isProtected = false
                     } label: {
                         VStack(spacing: 0) {
-                            Image(systemName: "eye.slash")
-                                .font(.system(size: 17, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                            Image(systemName: viewModel.isSecret ? "eye.slash.fill" : "eye.slash")
+                                .font(.system(size: 17, weight: viewModel.isSecret ? .regular : .light))
+                                .foregroundStyle(viewModel.isSecret ? .black : Color.emailCautionTextGray)
                             Spacer()
                                 .frame(height: 4)
                             Text("비공개")
-                                .font(.system(size: 13, weight: .light))
-                                .foregroundStyle(Color.emailCautionTextGray)
+                                .font(.system(size: 13, weight: viewModel.isSecret ? .semibold : .light))
+                                .foregroundStyle(viewModel.isSecret ? .black : Color.emailCautionTextGray)
                         }
                     }
                 }
@@ -175,28 +180,55 @@ struct ArticleSettingView: View {
                 .padding(.vertical, 20)
                 SettingDivider(thickness: 1)
                 
-                Button {
-                    viewModel.toggleIsHomeTopicSheetPresent()
-                } label: {
-                    HStack {
-                        Text("홈주제")
-                            .font(.system(size: 17, weight: .light))
-                            .foregroundStyle(.black)
-                        Spacer()
-                        Text(viewModel.homeTopic.id == 0 ? "선택 안 함" : viewModel.homeTopic.name)
-                            .font(.system(size: 14, weight: .ultraLight))
-                            .foregroundStyle(Color.black)
-                            .lineLimit(1)
-                        Spacer()
-                            .frame(width: 10)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 15, weight: .light))
-                            .foregroundStyle(.black)
+                if viewModel.isSecret == false {
+                    if viewModel.isProtected {
+                        HStack(spacing: 10) {
+                            Text("비밀번호")
+                                .font(.system(size: 17, weight: .light))
+                                .foregroundStyle(.black)
+                            Spacer()
+                            Button {
+                                viewModel.showPasswordSettingBox = true
+                            } label: {
+                                Text(viewModel.clippedPassword())
+                                    .font(.system(size: 15, weight: .regular))
+                                    .foregroundStyle(Color.articlePasswordGray)
+                            }
+                            Button {
+                                UIPasteboard.general.string = viewModel.articlePassword
+                            } label: {
+                                Text("복사")
+                                    .font(.system(size: 15, weight: .semibold))
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
                     }
+                    else {
+                        Button {
+                            viewModel.toggleIsHomeTopicSheetPresent()
+                        } label: {
+                            HStack {
+                                Text("홈주제")
+                                    .font(.system(size: 17, weight: .light))
+                                    .foregroundStyle(.black)
+                                Spacer()
+                                Text(viewModel.homeTopic.id == 0 ? "선택 안 함" : viewModel.homeTopic.name)
+                                    .font(.system(size: 14, weight: .ultraLight))
+                                    .foregroundStyle(Color.black)
+                                    .lineLimit(1)
+                                Spacer()
+                                    .frame(width: 10)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 15, weight: .light))
+                                    .foregroundStyle(.black)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
+                    }
+                    SettingDivider(thickness: 1)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 20)
-                SettingDivider(thickness: 1)
                 
                 HStack {
                     Text("댓글 허용")
@@ -204,7 +236,7 @@ struct ArticleSettingView: View {
                     Spacer()
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(viewModel.isCommentEnabled ? Color.postingImageTextGray : Color.postingImageBackgroundGray)
+                            .fill(viewModel.isCommentEnabled ? Color.articleImageTextGray : Color.articleImageBackgroundGray)
                             .frame(width: 30, height: 20)
                         
                         Circle()
@@ -240,6 +272,71 @@ struct ArticleSettingView: View {
             ArticleHomeTopicSheet(viewModel: viewModel)
                 .transition(.move(edge: .bottom))
                 .animation(.easeInOut, value: viewModel.isHomeTopicSheetPresent)
+            
+            if viewModel.showPasswordSettingBox {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    Text("보호글 비밀번호")
+                        .font(.system(size: 16, weight: .regular))
+                    Spacer()
+                        .frame(height: 30)
+                    
+                    HStack(spacing: 10) {
+                        Image(systemName: "lock")
+                            .font(.system(size: 16, weight: .light))
+                        TextField("", text: $viewModel.articlePasswordText)
+                            .font(.system(size: 15, weight: .regular))
+                            .frame(width: 120)
+                            .autocapitalization(.none)
+                        Button {
+                            viewModel.clearArticlePasswordTextField()
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.articlePasswordGray)
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 5)
+                    
+                    Rectangle()
+                        .foregroundStyle(.black)
+                        .frame(width: 176, height: 2)
+                    Spacer()
+                        .frame(height: 20)
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                        .frame(width: 240, height: 1)
+                    HStack(spacing: 40) {
+                        Button {
+                            viewModel.articlePasswordText = viewModel.articlePassword
+                            viewModel.showPasswordSettingBox = false
+                        } label: {
+                            Text("취소")
+                                .font(.system(size: 15, weight: .regular))
+                        }
+                        Rectangle()
+                            .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                            .frame(width: 1, height: 50)
+                        Button {
+                            viewModel.articlePassword = viewModel.articlePasswordText
+                            viewModel.showPasswordSettingBox = false
+                        } label: {
+                            Text("확인")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(viewModel.articlePasswordText.isEmpty ? .black : .blue)
+                        }
+                    }
+                }
+                .padding(.top, 30)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                }
+            }
         }
         .navigationBarBackButtonHidden()
         .fullScreenCover(isPresented: $viewModel.isImagePickerPresented) {
@@ -247,11 +344,8 @@ struct ArticleSettingView: View {
         }
         .onAppear {
             viewModel.extractMainImage()
+            viewModel.articlePassword = viewModel.generateRandomPassword(length: 8)
+            viewModel.articlePasswordText = viewModel.articlePassword
         }
     }
-}
-
-extension Color {
-    static let postingImageBackgroundGray: Color = .init(red: 233 / 255, green: 233 / 255, blue: 233 / 255)     // 대표 이미지 설정 배경 회색
-    static let postingImageTextGray: Color = .init(red: 201 / 255, green: 201 / 255, blue: 201 / 255)     // 대표 이미지 설정 문구 회색
 }

@@ -13,17 +13,20 @@ struct Post: Codable, Identifiable, Hashable {
     var homeTopicID: Int?          // Post의 홈토픽 Id
         
     var title: String               // Post 제목
-    var content: String?            // Post 내용 (HTML을 String으로 변환하여 저장)
+    var content: String?            // Post 내용 (SwiftData를 String으로 변환하여 저장)
     var description: String?        // Post 미리보기
     var createdAt: Date             // 발행일
     let blogID: Int                 // Post가 게시된 Blog Id(주소)
     var blogName: String?           // Blog 이름
     var blogMainImageURL: String?   // Blog 대표이미지 URL
     var mainImageURL: String?       // Post 대표이미지 URL
-    var categoryID: Int?           // Post가 블로그 내에 속한 카테고리 Id (카테고리 미제작 시 불필요)
+    var categoryID: Int?            // Post가 블로그 내에 속한 카테고리 Id
     var viewCount: Int              // 조회수
     var likeCount: Int              // Like 개수
     var commentCount: Int           // Comment 개수
+    
+    var protected: Int              // 공개글 0 | 보호글 1
+    var commentsEnabled: Int?       // 댓글 허용 1 | 댓글 불가 0
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -40,10 +43,12 @@ struct Post: Codable, Identifiable, Hashable {
         case viewCount = "views"
         case likeCount = "article_likes"
         case commentCount = "article_comments"
+        case protected
+        case commentsEnabled = "comments_enabled"
     }
     
     static let defaultPost: Post = {
-        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0)
+        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0, protected: 0)
         }()
 }
 
@@ -73,7 +78,10 @@ struct ArticleDto: Codable {
     let categoryID: Int
     let homeTopicID: Int
     let secret: Int
+    let protected: Int
+    let password: String
     let images: [FileURLDto]
+    let commentsEnabled: Int
     
     private enum CodingKeys: String, CodingKey {
         case title
@@ -83,7 +91,10 @@ struct ArticleDto: Codable {
         case categoryID = "category_id"
         case homeTopicID = "hometopic_id"
         case secret
+        case protected
+        case password
         case images
+        case commentsEnabled = "comments_enabled"
     }
 }
 
@@ -99,6 +110,6 @@ struct FileURLDto: Codable {
 import SwiftUI
 extension View {
     func tempPost() -> Post {
-        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5)
+        Post.init(id: 4, title: "글제목", createdAt: Date(), blogID: 0, viewCount: 555, likeCount: 55, commentCount: 5, protected: 0)
     }
 }

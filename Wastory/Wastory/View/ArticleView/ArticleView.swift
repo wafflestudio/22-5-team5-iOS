@@ -268,67 +268,57 @@ struct ArticleView: View {
                         viewModel.showDeleteAlert = false
                     }
                 
-                Rectangle()
-                    .foregroundStyle(.white)
-                    .frame(height: 120)
-                    .cornerRadius(12)
-                    .padding(.horizontal, 60)
-                Rectangle()
-                    .foregroundStyle(Color.dropCautionBoxEdgeGray)
-                    .frame(width: 1, height: 120)
-                Rectangle()
-                    .foregroundStyle(.white)
-                    .frame(height: 80)
-                    .cornerRadius(12)
-                    .offset(y: -20)
-                    .padding(.horizontal, 60)
-                Rectangle()
-                    .fill(Color.dropCautionBoxEdgeGray)
-                    .frame(height: 1)
-                    .offset(y: 20)
-                    .padding(.horizontal, 60)
-                
-                Text("해당 글을 삭제하시겠습니까?")
-                    .font(.system(size: 16, weight: .light))
-                    .offset(y: -18)
-                
-                HStack(spacing: 0) {
-                    Button {
-                        viewModel.showDeleteAlert = false
-                    } label: {
-                        Text("취소")
-                            .font(.system(size: 16, weight: .light))
-                            .foregroundStyle(.black)
-                    }
+                VStack(spacing: 0) {
+                    Text("해당 글을 삭제하시겠습니까?")
+                        .font(.system(size: 16, weight: .light))
                     Spacer()
-                        .frame(width: 95)
-                    Button {
-                        Task {
-                            await viewModel.deleteDraft()
+                        .frame(height: 30)
+                    
+                    Rectangle()
+                        .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                        .frame(width: 240, height: 1)
+                    HStack(spacing: 40) {
+                        Button {
                             viewModel.showDeleteAlert = false
-                            
-                            viewModel.isEmptyDraftEntered = false
-                            viewModel.isEmptyTitleEntered = false
-                            viewModel.isDraftSaved = false
-                            viewModel.isDraftDeleted = true
-                            viewModel.isImageLoadPending = false
-                            debounceWorkItem?.cancel()
-                            let workItem = DispatchWorkItem {
-                                withAnimation {
-                                    viewModel.isDraftDeleted = false
-                                }
-                            }
-                            debounceWorkItem = workItem
-                            DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                        } label: {
+                            Text("취소")
+                                .font(.system(size: 16, weight: .light))
+                                .foregroundStyle(.black)
                         }
-                    } label: {
-                        Text("삭제")
-                            .font(.system(size: 16, weight: .light))
-                            .foregroundStyle(.red)
+                        Rectangle()
+                            .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                            .frame(width: 1, height: 50)
+                        Button {
+                            Task {
+                                await viewModel.deleteDraft()
+                                viewModel.showDeleteAlert = false
+                                
+                                viewModel.isEmptyDraftEntered = false
+                                viewModel.isEmptyTitleEntered = false
+                                viewModel.isDraftSaved = false
+                                viewModel.isDraftDeleted = true
+                                viewModel.isImageLoadPending = false
+                                debounceWorkItem?.cancel()
+                                let workItem = DispatchWorkItem {
+                                    withAnimation {
+                                        viewModel.isDraftDeleted = false
+                                    }
+                                }
+                                debounceWorkItem = workItem
+                                DispatchQueue.main.asyncAfter(deadline: .now() + viewModel.cautionDuration, execute: workItem)
+                            }
+                        } label: {
+                            Text("삭제")
+                                .font(.system(size: 16, weight: .light))
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
-                .offset(x: 7)
-                .offset(y: 40)
+                .padding(.top, 30)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .foregroundStyle(.white)
+                }
             }
             
             if viewModel.isEmptyDraftEntered {
