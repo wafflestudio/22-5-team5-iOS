@@ -245,6 +245,13 @@ struct PostView: View {
                 }
             }
         }
+        .onChange(of: viewModel.showComments) { oldValue, newValue in
+            if !newValue {
+                Task {
+                    await viewModel.initContent(postID, blogID)
+                }
+            }
+        }
         .ignoresSafeArea(edges: .all)
         // MARK: NavBar
         .navigationTitle("")
