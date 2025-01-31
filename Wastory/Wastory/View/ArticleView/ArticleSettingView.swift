@@ -347,7 +347,7 @@ struct ArticleSettingView: View {
             viewModel.articlePassword = viewModel.generateRandomPassword(length: 8)
             viewModel.articlePasswordText = viewModel.articlePassword
             
-            if articleViewModel.editingPost != Post.defaultPost {
+            if articleViewModel.editingPost != nil {
                 Task {
                     await viewModel.initEditingPost(post: articleViewModel.editingPost ?? Post.defaultPost)
                 }
