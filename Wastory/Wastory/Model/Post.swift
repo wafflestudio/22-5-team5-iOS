@@ -50,7 +50,7 @@ struct Post: Codable, Identifiable, Hashable {
     }
     
     static let defaultPost: Post = {
-        Post(id: 0, title: "", createdAt: Date(), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0, protected: 0)
+        Post(id: 0, title: "", createdAt: Date(timeIntervalSince1970: 1704067200), blogID: 0, viewCount: 0, likeCount: 0, commentCount: 0, protected: 0)
         }()
 }
 

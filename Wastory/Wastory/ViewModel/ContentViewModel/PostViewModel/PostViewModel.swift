@@ -17,6 +17,7 @@ import RichTextKit
     var blog: Blog = Blog.defaultBlog
     
     
+    var isSubmitted: Bool = false
     
     
     var isMyPost: Bool = false

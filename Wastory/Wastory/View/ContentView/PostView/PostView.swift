@@ -432,17 +432,19 @@ struct PostView: View {
                         
                         if !viewModel.showManageMode {
                             //댓글 버튼
-                            Button(action: {
-                                viewModel.showComments.toggle()
-                            }) {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "text.bubble")
-                                        .font(.system(size: 20, weight: .light))
-                                        .foregroundStyle(Color.primaryLabelColor)
-                                    
-                                    Text("\(viewModel.post.commentCount)")
-                                        .font(.system(size: 16, weight: .light))
-                                        .foregroundStyle(Color.bottomBarLabelColor)
+                            if (viewModel.post.commentsEnabled ?? 1 == 1) || (viewModel.post.commentCount > 0) {
+                                Button(action: {
+                                    viewModel.showComments.toggle()
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "text.bubble")
+                                            .font(.system(size: 20, weight: .light))
+                                            .foregroundStyle(Color.primaryLabelColor)
+                                        
+                                        Text("\(viewModel.post.commentCount)")
+                                            .font(.system(size: 16, weight: .light))
+                                            .foregroundStyle(Color.bottomBarLabelColor)
+                                    }
                                 }
                             }
                         }
@@ -511,7 +513,7 @@ struct PostView: View {
                     }
                     .fullScreenCover(isPresented: $viewModel.navToEdit) {
                         NavigationStack {
-                            ArticleView(editingPost: viewModel.post)
+                            ArticleView(postViewModel: viewModel)
                         }
                     }
                 }
@@ -520,6 +522,17 @@ struct PostView: View {
         .onChange(of: viewModel.isPostDeleted) { oldValue, newValue in
             if newValue {
                 dismiss()
+            }
+        }
+        .onChange(of: viewModel.navToEdit) { oldValue, newValue in
+            print("oldValue: \(oldValue), newValue: \(newValue)")
+            if !newValue {
+                viewModel.showManageMode = false
+                
+                if viewModel.isSubmitted {
+                    viewModel.isSubmitted.toggle()
+                    dismiss()
+                }
             }
         }
     }

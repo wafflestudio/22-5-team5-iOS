@@ -14,6 +14,23 @@ import RichTextKit
     private let title: String
     private let text: NSAttributedString
     
+    var editingPost: Post? = nil
+    
+    func initEditingPost(post: Post) async {
+        print(post)
+        isSecret = (post.secret == 1)
+        isProtected = (post.protected == 1)
+        isCommentEnabled = (post.commentsEnabled == 1)
+        
+        homeTopic = homeTopics.flatMap { $0 }.first { $0.id == post.homeTopicID } ?? defaultHomeTopic
+        do {
+            category = try await NetworkRepository.shared.getCategory(categoryID: post.categoryID ?? 0)
+            print(category)
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
     var mainImage: UIImage? = nil
     var isImagePickerPresented: Bool = false
     var mainImageURL: String? = nil
@@ -238,7 +255,9 @@ import RichTextKit
     func getCategories() async {
         do {
             categories += try await NetworkRepository.shared.getCategoriesInUser()
-            category = categories[0]
+            if category == Category.allCategory {
+                category = categories[0]
+            }
         } catch {
             print("Error: \(error.localizedDescription)")
         }
