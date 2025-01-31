@@ -286,7 +286,7 @@ struct ArticleSettingView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "lock")
                             .font(.system(size: 16, weight: .light))
-                        SecureField("", text: $viewModel.articlePasswordText)
+                        TextField("", text: $viewModel.articlePasswordText)
                             .font(.system(size: 15, weight: .regular))
                             .frame(width: 120)
                             .autocapitalization(.none)
