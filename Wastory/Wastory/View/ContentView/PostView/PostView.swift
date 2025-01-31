@@ -526,9 +526,13 @@ struct PostView: View {
         }
         .onChange(of: viewModel.navToEdit) { oldValue, newValue in
             print("oldValue: \(oldValue), newValue: \(newValue)")
-            if !newValue && viewModel.isSubmitted {
-                viewModel.isSubmitted.toggle()
-                dismiss()
+            if !newValue {
+                viewModel.showManageMode = false
+                
+                if viewModel.isSubmitted {
+                    viewModel.isSubmitted.toggle()
+                    dismiss()
+                }
             }
         }
     }
