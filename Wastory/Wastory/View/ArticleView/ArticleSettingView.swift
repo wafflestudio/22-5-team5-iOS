@@ -199,6 +199,7 @@ struct ArticleSettingView: View {
                             } label: {
                                 Text("복사")
                                     .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(.black)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -310,13 +311,14 @@ struct ArticleSettingView: View {
                     Rectangle()
                         .foregroundStyle(Color.dropCautionBoxEdgeGray)
                         .frame(width: 240, height: 1)
-                    HStack(spacing: 40) {
+                    HStack(spacing: 45) {
                         Button {
                             viewModel.articlePasswordText = viewModel.articlePassword
                             viewModel.showPasswordSettingBox = false
                         } label: {
                             Text("취소")
                                 .font(.system(size: 15, weight: .regular))
+                                .foregroundStyle(.black)
                         }
                         Rectangle()
                             .foregroundStyle(Color.dropCautionBoxEdgeGray)
