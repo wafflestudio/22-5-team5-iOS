@@ -89,4 +89,8 @@ extension Color {
     static let settingDisabledBlue: Color = .init(red: 108 / 255, green: 192 / 255, blue: 255 / 255)            // 불가능 항목 알림 색상 (불쾌감을 주지 않기 위해 청색을 채택)
     
     static let settingGearGray: Color = .init(red: 77 / 255, green: 77 / 255, blue: 77 / 255)                   // 블로그 시트 세팅 버튼 회색
+    
+    static let navyBlue: Color = .init(red: 0 / 255, green: 0 / 255, blue: 128 / 255)                           // 평범한 남색
+    
+    static let skyBlue: Color = .init(red: 0 / 255, green: 255 / 255, blue: 255 / 255)                            // 평범한 하늘색
 }

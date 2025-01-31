@@ -68,7 +68,7 @@ struct SettingView: View {
                                 SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
                                 SettingDivider(thickness: 10)
                                 
-                                SettingItem(title: "도움말", description: "", detailView: EmptyView())
+                                SettingItem(title: "도움말", description: "", detailView: HelpView())
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "운영정책", description: "", detailView: EmptyView())
