@@ -146,6 +146,13 @@ import RichTextKit
     }
     
     // MARK: - Posting
+    var isWaitingResponse: Bool = false
+    
+    func callAPIRequest() {
+        isWaitingResponse = true
+    }
+    
+    
     func postArticle() async {
         if let image = mainImage {
             do {
@@ -159,7 +166,6 @@ import RichTextKit
         let (processedText, URLs) = await RichTextImageHandler.convertImage(text)
         if let dataText = RichTextHandler.textToData(processedText) {
             do {
-                print(articlePassword)
                 try await NetworkRepository.shared.postArticle(
                     title: title,
                     content: dataText,
@@ -173,9 +179,11 @@ import RichTextKit
                     images: URLs,
                     commentsEnabled: isCommentEnabled ? 1 : 0
                 )
+                isWaitingResponse = false
             }
             catch {
                 print("Error: \(error.localizedDescription)")
+                isWaitingResponse = false
             }
         }
     }
@@ -207,9 +215,11 @@ import RichTextKit
                     images: URLs,
                     commentsEnabled: isCommentEnabled ? 1 : 0
                 )
+                isWaitingResponse = false
             }
             catch {
                 print("Error: \(error.localizedDescription)")
+                isWaitingResponse = false
             }
         }
     }

@@ -33,6 +33,7 @@ struct ArticleSettingView: View {
                         Spacer()
                         Button {
                             Task {
+                                viewModel.callAPIRequest()
                                 if articleViewModel.editingPost == nil {
                                     await viewModel.postArticle()
                                 } else {
@@ -51,6 +52,7 @@ struct ArticleSettingView: View {
                         .background(.black)
                         .cornerRadius(40)
                         .padding(.trailing, 7)
+                        .disabled(viewModel.isWaitingResponse)
                     }
                     Text("발행 설정")
                 }
