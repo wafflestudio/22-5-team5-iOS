@@ -53,16 +53,22 @@ import Observation
     //MARK: Notification Icon
     var isNotificationUnread: Bool = false
     
+    var prevFirstNotificationID: Int = -1
+    
     
     func setIsNotificationUnread() async {
         do {
             let response = try await NetworkRepository.shared.getNotifications(page: 1, type: nil)
-            print("set")
             if response.isEmpty {
                 isNotificationUnread = false
             } else {
-                if let _ = response.first(where: { !$0.checked }) {
-                    isNotificationUnread = true
+                if prevFirstNotificationID == response.first!.id && !isNotificationUnread {
+                    isNotificationUnread = false
+                } else {
+                    prevFirstNotificationID = response.first!.id
+                    if let _ = response.first(where: { !$0.checked }) {
+                        isNotificationUnread = true
+                    }
                 }
             }
         } catch {
