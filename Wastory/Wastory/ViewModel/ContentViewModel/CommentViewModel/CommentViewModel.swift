@@ -87,6 +87,8 @@ import Observation
     var isMyBlog: Bool = false
     
     
+    var isWaitingResponse: Bool = false
+    
     var writingCommentText: String = ""
     var isWritingCommentSecret: Bool = false
     var isTextFieldFocused: Bool = false
@@ -159,14 +161,20 @@ import Observation
         isEditingCommentSecret = 1 - isEditingCommentSecret
     }
     
+    func callAPIRequest() {
+        isWaitingResponse = true
+    }
+    
     func patchComment() async {
         if !editingCommentText.isEmpty {
             do {
                 print("patch comment")
                 _ = try await NetworkRepository.shared.patchComment(
                     commentID: editingComment?.id ?? 0, content: editingCommentText, isSecret: isEditingCommentSecret)
+                isWaitingResponse = false
             } catch {
                 print("Error: \(error.localizedDescription)")
+                isWaitingResponse = false
             }
         }
     }
@@ -197,8 +205,10 @@ import Observation
                         isSecret: self.isWritingCommentSecret
                     )
                 }
+                isWaitingResponse = false
             } catch {
                 print("Error: \(error.localizedDescription)")
+                isWaitingResponse = false
             }
         }
     }

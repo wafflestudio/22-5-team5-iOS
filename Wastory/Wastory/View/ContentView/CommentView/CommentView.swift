@@ -182,6 +182,7 @@ struct CommentView: View {
                                 
                                 Button(action: {
                                     Task {
+                                        viewModel.callAPIRequest()
                                         await viewModel.postComment()
                                         viewModel.resetPage()
                                         viewModel.resetTargetComment()
@@ -207,7 +208,7 @@ struct CommentView: View {
                                             }
                                         )
                                 }
-                                .disabled(viewModel.isWritingCommentEmpty())
+                                .disabled(viewModel.isWritingCommentEmpty() || viewModel.isWaitingResponse)
                                 
                             }
                         } else {
