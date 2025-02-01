@@ -72,6 +72,7 @@ import Observation
         page = 1
         isPageEnded = false
         comments = []
+        isWaitingResponse = false
     }
     
     //Network
