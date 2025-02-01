@@ -1,5 +1,5 @@
 //
-//  PrivacyPolicyView.swift
+//  TermsOfServiceView.swift
 //  Wastory
 //
 //  Created by mujigae on 2/1/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PrivacyPolicyView: View {
-    @State private var viewModel = PrivacyPolicyViewModel()
+struct TOSView: View {
+    @State private var viewModel = TOSViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -24,7 +24,7 @@ struct PrivacyPolicyView: View {
             HStack(spacing: 8) {
                 Text("wastory")
                     .font(.system(size: 24, weight: .regular))
-                Text(viewModel.languageType == .kor ? "개인정보 처리방침" : "Privacy Policy")
+                Text(viewModel.languageType == .kor ? "이용약관" : "Terms of Service")
                     .font(.system(size: 20, weight: .regular))
                 Spacer()
                 
@@ -52,7 +52,7 @@ struct PrivacyPolicyView: View {
                 .frame(height: 30)
             
             HStack {
-                Text(viewModel.languageType == .kor ? "개인정보 처리방침" : "Privacy Policy")
+                Text(viewModel.languageType == .kor ? "이용약관" : "Terms of Service")
                 Spacer()
             }
             .padding(.horizontal, 20)
