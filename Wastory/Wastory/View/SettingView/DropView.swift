@@ -106,28 +106,7 @@ struct DropView: View {
                             showDropAlert = false
                         }
                     
-                    Rectangle()
-                        .foregroundStyle(.white)
-                        .frame(height: 160)
-                        .cornerRadius(12)
-                        .padding(.horizontal, 60)
-                    Rectangle()
-                        .foregroundStyle(Color.dropCautionBoxEdgeGray)
-                        .frame(width: 1, height: 160)
-                    Rectangle()
-                        .foregroundStyle(.white)
-                        .frame(height: 110)
-                        .cornerRadius(12)
-                        .offset(y: -25)
-                        .padding(.horizontal, 60)
-                    Rectangle()
-                        .fill(Color.dropCautionBoxEdgeGray)
-                        .frame(height: 1)
-                        .offset(y: 30)
-                        .padding(.horizontal, 60)
-                    
                     VStack(spacing: 0) {
-                        Text("")    // UI 위치를 위한 더미 텍스트
                         Text("와스토리를 탈퇴하시겠습니까?")
                             .font(.system(size: 16, weight: .light))
                         Spacer()
@@ -141,9 +120,12 @@ struct DropView: View {
                             .font(.system(size: 12, weight: .light))
                             .foregroundStyle(Color.settingDropGray)
                         Spacer()
-                            .frame(height: 40)
+                            .frame(height: 30)
                         
-                        HStack(spacing: 0) {
+                        Rectangle()
+                            .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                            .frame(width: 240, height: 1)
+                        HStack(spacing: 45) {
                             Button {
                                 showDropAlert = false
                             } label: {
@@ -151,8 +133,9 @@ struct DropView: View {
                                     .font(.system(size: 16, weight: .light))
                                     .foregroundStyle(.black)
                             }
-                            Spacer()
-                                .frame(width: 110)
+                            Rectangle()
+                                .foregroundStyle(Color.dropCautionBoxEdgeGray)
+                                .frame(width: 1, height: 50)
                             Button {
                                 Task {
                                     await viewModel.deleteAccount()
@@ -163,6 +146,11 @@ struct DropView: View {
                                     .foregroundStyle(.red)
                             }
                         }
+                    }
+                    .padding(.top, 30)
+                    .background {
+                        RoundedRectangle(cornerRadius: 12)
+                            .foregroundStyle(.white)
                     }
                 }
             }

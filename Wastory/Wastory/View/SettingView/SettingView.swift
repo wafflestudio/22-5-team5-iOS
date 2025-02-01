@@ -50,31 +50,33 @@ struct SettingView: View {
                                 SettingItem(title: "비밀번호 변경", description: UserInfoRepository.shared.checkKaKaoLogin() ? "카카오에서 비밀번호를 변경해 주세요." : UserInfoRepository.shared.getUsername(), detailView: PasswordSettingView(), disabled: UserInfoRepository.shared.checkKaKaoLogin())
                                 SettingDivider(thickness: 10)
                                 
+                                /* 미구현으로 주석 상태로 변경
                                 SettingItem(title: "알림 설정", description: "푸시 알림 상태", detailView: EmptyView())
                                 SettingDivider(thickness: 10)
+                                */
                                 
-                                SettingItem(title: "공지사항", description: "", detailView: EmptyView())
+                                SettingItem(title: "공지사항", description: "", detailView: AnnouncementView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "앱 정보", description: "버전 정보", detailView: EmptyView())
+                                SettingItem(title: "앱 정보", description: "최신 버전 사용 중", detailView: VersionView())  // TODO: 앱 정보를 관리하는 싱글톤 필요
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "이용약관", description: "", detailView: EmptyView())
+                                SettingItem(title: "이용약관", description: "", detailView: TOSView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "개인정보처리방침", description: "", detailView: EmptyView())
+                                SettingItem(title: "개인정보 처리방침", description: "", detailView: PrivacyPolicyView())
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
                                 SettingDivider(thickness: 10)
                                 
-                                SettingItem(title: "도움말", description: "", detailView: EmptyView())
+                                SettingItem(title: "도움말", description: "", detailView: HelpView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "운영정책", description: "", detailView: EmptyView())
+                                SettingItem(title: "운영정책", description: "", detailView: ServicePolicyView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "문의하기", description: "", detailView: EmptyView())
+                                SettingItem(title: "문의하기", description: "", detailView: ContactView())
                                 SettingDivider(thickness: 1)
                                 
                                 HStack(spacing: 0) {
