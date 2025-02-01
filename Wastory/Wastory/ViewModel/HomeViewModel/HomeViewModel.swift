@@ -94,12 +94,21 @@ import Observation
     var todaysWastoryListItems: [Post] = []
     
     //Category Popular Post List
-    var categoryList: [HomeTopic] = []
+    var categoryList: [HomeTopic] = [
+        HomeTopic(id: 2, name: "여행·맛집", highCategory: 0),
+        HomeTopic(id: 3, name: "리빙·스타일", highCategory: 0),
+        HomeTopic(id: 4, name: "가족·연애", highCategory: 0),
+        HomeTopic(id: 5, name: "직장·자기계발", highCategory: 0),
+        HomeTopic(id: 6, name: "시사·지식", highCategory: 0),
+        HomeTopic(id: 7, name: "도서·창작", highCategory: 0),
+        HomeTopic(id: 8, name: "엔터테인먼트", highCategory: 0),
+        HomeTopic(id: 9, name: "취미·건강", highCategory: 0)
+    ]
     
     let categoryIcons : [Int: String] =
     [2: "airplane.departure", 3: "sofa", 4: "person.2", 5: "cpu", 6: "chart.bar.xaxis", 7: "book", 8: "tv", 9: "figure.indoor.soccer"]
     
-    var selectedCategory: HomeTopic = HomeTopic.defaultHomeTopic
+    var selectedCategory: HomeTopic = HomeTopic(id: 2, name: "여행·맛집", highCategory: 0)
     
     var categoryPopularPostItems: [Post] = []
     
@@ -121,15 +130,6 @@ import Observation
     func getTodaysWastoryListItems() async {
         do {
             todaysWastoryListItems = try await NetworkRepository.shared.getArticlesWeeklyWastory()
-        } catch {
-            print("Error: \(error.localizedDescription)")
-        }
-    }
-    
-    func getHomeTopicList() async {
-        do {
-            categoryList = Array(try await NetworkRepository.shared.getHomeTopicList()[1...8])
-            selectedCategory = categoryList.first!
         } catch {
             print("Error: \(error.localizedDescription)")
         }

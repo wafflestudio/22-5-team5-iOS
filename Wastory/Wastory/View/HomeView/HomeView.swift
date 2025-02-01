@@ -94,7 +94,6 @@ struct HomeView: View {
         // MARK: Network
         .onAppear {
             Task {
-                await viewModel.getHomeTopicList()
                 await viewModel.getCategoryPopularPostItems()
             }
             Task {
