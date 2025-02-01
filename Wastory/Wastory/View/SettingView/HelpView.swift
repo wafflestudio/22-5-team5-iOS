@@ -19,12 +19,13 @@ struct HelpView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
+            .padding(.top, 10)
             .padding(.bottom, 10)
             SettingDivider(thickness: 1)
             Spacer()
                 .frame(height: 16)
             
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 Text("와스토리")
                     .font(.system(size: 26, weight: .semibold))
                 Image("myW.logo")

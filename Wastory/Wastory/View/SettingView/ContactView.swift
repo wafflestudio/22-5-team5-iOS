@@ -19,6 +19,7 @@ struct ContactView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
+            .padding(.top, 10)
             .padding(.bottom, 10)
             SettingDivider(thickness: 1)
             Spacer()

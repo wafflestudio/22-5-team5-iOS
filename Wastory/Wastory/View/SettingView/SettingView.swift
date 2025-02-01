@@ -71,7 +71,7 @@ struct SettingView: View {
                                 SettingItem(title: "도움말", description: "", detailView: HelpView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "운영정책", description: "", detailView: EmptyView())
+                                SettingItem(title: "운영정책", description: "", detailView: PolicyView())
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "문의하기", description: "", detailView: ContactView())
