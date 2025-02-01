@@ -62,7 +62,7 @@ struct SettingView: View {
                                 SettingItem(title: "이용약관", description: "", detailView: EmptyView())
                                 SettingDivider(thickness: 1)
                                 
-                                SettingItem(title: "개인정보처리방침", description: "", detailView: EmptyView())
+                                SettingItem(title: "개인정보 처리방침", description: "", detailView: PrivacyPolicyView())
                                 SettingDivider(thickness: 1)
                                 
                                 SettingItem(title: "오픈소스 라이선스", description: "", detailView: OSSView())
