@@ -46,7 +46,7 @@ struct CommentCell: View {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(spacing: 5) {
-                            NavigateToBlogViewButton(tempBlog().id) {
+                            NavigateToBlogViewButton(comment.blogID) {
                                 Text(comment.userName)
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(Color.primaryLabelColor)
@@ -113,7 +113,7 @@ struct CommentCell: View {
                         
                         VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 5) {
-                                NavigateToBlogViewButton(tempBlog().id) {
+                                NavigateToBlogViewButton(comment.blogID) {
                                     Text(comment.userName)
                                         .font(.system(size: 14, weight: .semibold))
                                         .foregroundStyle(Color.primaryLabelColor)
