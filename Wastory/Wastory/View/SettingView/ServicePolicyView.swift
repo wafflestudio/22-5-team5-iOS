@@ -1,5 +1,5 @@
 //
-//  PolicyView.swift
+//  ServicePolicyView.swift
 //  Wastory
 //
 //  Created by mujigae on 2/1/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PolicyView: View {
-    @State private var viewModel = PolicyViewModel()
+struct ServicePolicyView: View {
+    @State private var viewModel = ServicePolicyViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -92,7 +92,7 @@ struct PolicyView: View {
                         
                         VStack(spacing: 24) {
                             ForEach(viewModel.policies) { policy in
-                                PolicyCell(viewModel: $viewModel, policy: policy)
+                                ServicePolicyCell(viewModel: $viewModel, policy: policy)
                             }
                         }
                     }
@@ -113,9 +113,9 @@ struct PolicyView: View {
     }
 }
 
-struct PolicyCell: View {
-    @Binding var viewModel: PolicyViewModel
-    let policy: Policy
+struct ServicePolicyCell: View {
+    @Binding var viewModel: ServicePolicyViewModel
+    let policy: ServicePolicy
     var body: some View {
         VStack(spacing: 0) {
             HStack {

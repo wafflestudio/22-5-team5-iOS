@@ -1,5 +1,5 @@
 //
-//  PolicyViewModel.swift
+//  ServicePolicyViewModel.swift
 //  Wastory
 //
 //  Created by mujigae on 2/1/25.
@@ -8,15 +8,15 @@
 import SwiftUI
 import Observation
 
-@Observable final class PolicyViewModel {
-    let policies: [Policy] = [
-        Policy(
+@Observable final class ServicePolicyViewModel {
+    let policies: [ServicePolicy] = [
+        ServicePolicy(
             title: "1. 회사가 제공하는 서비스",
             terms: [
                 "서비스는 와스토리(Wastory) 서비스와 이에 부가하여 회사가 제공하는 일체의 서비스를 말합니다. 여기에는 아래의 와스토리, 팀블로그, 응원하기 등을 포함하며 이에 한정되지 않습니다."
             ]
         ),
-        Policy(
+        ServicePolicy(
             title: "1-1. 와스토리(Wastory) 서비스",
             terms: [
                 "회원은 블로그를 개설하여 콘텐츠를 게시하거나, 다른 회원이 공개한 콘텐츠를 보거나 댓글을 달 수 있습니다.",
@@ -25,7 +25,7 @@ import Observation
                 "회원이 게시물 등에 Youtube 플러그인 기능을 사용할 경우 회원은 Youtube 서비스 이용약관을 준수하여야 합니다."
             ]
         ),
-        Policy(
+        ServicePolicy(
             title: "1-2. 팀블로그 서비스",
             terms: [
                 "회사의 서비스에서 제공하는 모든 블로그는 블로그를 개설한 회원의 의사에 따라 팀블로그로 운영할 수 있습니다.",
@@ -42,7 +42,7 @@ import Observation
                 "휴면 등의 사유로 팀블로그 소유자의 계정이 탈퇴되는 경우 및 소유자가 자신의 권한을 정상적으로 유지하지 못할 경우 회사는 소유자 다음으로 회원 등급이 높은 회원(관리자, 편집자, 필자 순)에게 팀블로그 소유자의 지위를 자동으로 양도합니다. 이때 동일 등급의 회원이 여러 명이라면 가입 시점이 가장 빠른 회원에게 지위를 양도하며, 지위의 양도는 소유자의 계정이 탈퇴되는 즉시 이루어집니다."
             ]
         ),
-        Policy(
+        ServicePolicy(
             title: "1-3. 응원하기",
             terms: [
                 "응원하기란 콘텐츠의 창작자에 대한 감사와 응원을 후원금과 메시지로 표현하는 것을 의미합니다.",
@@ -53,7 +53,7 @@ import Observation
                 "회사는 서비스에 게재된 콘텐츠에 회원이 자발적으로 응원하기를 할 수 있는 시스템을 운영 및 관리하고 제공할 뿐이며, 회원을 대리하지 않습니다."
             ]
         ),
-        Policy(
+        ServicePolicy(
             title: "2. 이용제한 사유에 해당하는 금지활동",
             terms: [
                 "회원 정보에 허위 내용을 등록하는 행위",
@@ -78,7 +78,7 @@ import Observation
                 "기타 현행 법령, 본 운영정책 등 회사가 제공하는 서비스 관련 약관, 운영정책, 기타 서비스 이용에 관한 규정을 위반하는 행위"
             ]
         ),
-        Policy(
+        ServicePolicy(
             title: "3. 이용제한 조치",
             terms: [
                 "회사는 회원이 이용제한 사유에 해당하는 행위를 하는 경우 해당 게시물 등을 삭제 또는 임시조치할 수 있고 회원의 서비스 이용을 일시적 또는 영구적으로 제한하거나 일방적으로 본 계약을 해지할 수 있습니다.",

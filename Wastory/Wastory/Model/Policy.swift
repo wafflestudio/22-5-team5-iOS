@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Policy: Identifiable {
+struct ServicePolicy: Identifiable {
     let id: UUID = UUID()
     let title: String
     let terms: [String]
