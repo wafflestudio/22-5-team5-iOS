@@ -92,5 +92,5 @@ extension Color {
     
     static let navyBlue: Color = .init(red: 0 / 255, green: 0 / 255, blue: 128 / 255)                           // 평범한 남색
     
-    static let skyBlue: Color = .init(red: 0 / 255, green: 255 / 255, blue: 255 / 255)                            // 평범한 하늘색
+    static let skyBlue: Color = .init(red: 0 / 255, green: 255 / 255, blue: 255 / 255)                          // 평범한 하늘색
 }
