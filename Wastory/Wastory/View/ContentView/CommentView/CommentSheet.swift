@@ -105,9 +105,8 @@ struct CommentSheet: View {
                                     
                                     Button(action: {
                                         Task {
-                                            print("patch comment")
+                                            viewModel.callAPIRequest()
                                             await viewModel.patchComment()
-                                            print("patch comment2")
                                             viewModel.resetPage()
                                             viewModel.resetEditingComment()
                                             viewModel.resetEditingCommentText()
@@ -133,7 +132,7 @@ struct CommentSheet: View {
                                                 }
                                             )
                                     }
-                                    .disabled(viewModel.isEditingCommentEmpty())
+                                    .disabled(viewModel.isEditingCommentEmpty() || viewModel.isWaitingResponse)
                                     .padding(.horizontal, 20)
                                     .padding(.bottom, 10)
                                 }
