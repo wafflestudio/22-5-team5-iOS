@@ -181,8 +181,8 @@ struct CommentView: View {
                                     .frame(width: 10)
                                 
                                 Button(action: {
-                                    viewModel.callAPIRequest()
                                     Task {
+                                        viewModel.callAPIRequest()
                                         await viewModel.postComment()
                                         viewModel.resetPage()
                                         viewModel.resetTargetComment()

@@ -104,8 +104,8 @@ struct CommentSheet: View {
                                         .frame(width: 10)
                                     
                                     Button(action: {
-                                        viewModel.callAPIRequest()
                                         Task {
+                                            viewModel.callAPIRequest()
                                             await viewModel.patchComment()
                                             viewModel.resetPage()
                                             viewModel.resetEditingComment()
