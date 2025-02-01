@@ -147,7 +147,7 @@ struct CommentView: View {
                     }
                     
                     ZStack {
-                        if postViewModel.post.commentsEnabled == 1 {
+                        if postViewModel.post.commentsEnabled == 1 || postID == nil {
                             HStack(spacing: 0) {
                                 if viewModel.isWritingCommentEmpty() {
                                     Text("내용을 입력하세요")
