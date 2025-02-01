@@ -110,6 +110,7 @@ struct NotificationView: View {
                     await viewModel.deleteNotificationRead()
                     viewModel.resetPage()
                     await viewModel.getNotifications()
+                    mainTabViewModel.prevFirstNotificationID = viewModel.notifications.first?.id ?? -2
                 }
             }
         } message: {
