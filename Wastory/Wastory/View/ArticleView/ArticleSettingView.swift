@@ -32,8 +32,8 @@ struct ArticleSettingView: View {
                         CustomBackButton(size: 24, weight: .light)
                         Spacer()
                         Button {
+                            viewModel.callAPIRequest()
                             Task {
-                                viewModel.callAPIRequest()
                                 if articleViewModel.editingPost == nil {
                                     await viewModel.postArticle()
                                 } else {

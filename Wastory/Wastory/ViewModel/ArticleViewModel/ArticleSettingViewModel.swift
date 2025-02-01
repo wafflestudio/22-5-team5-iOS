@@ -179,11 +179,9 @@ import RichTextKit
                     images: URLs,
                     commentsEnabled: isCommentEnabled ? 1 : 0
                 )
-                isWaitingResponse = false
             }
             catch {
                 print("Error: \(error.localizedDescription)")
-                isWaitingResponse = false
             }
         }
     }
@@ -215,11 +213,9 @@ import RichTextKit
                     images: URLs,
                     commentsEnabled: isCommentEnabled ? 1 : 0
                 )
-                isWaitingResponse = false
             }
             catch {
                 print("Error: \(error.localizedDescription)")
-                isWaitingResponse = false
             }
         }
     }
