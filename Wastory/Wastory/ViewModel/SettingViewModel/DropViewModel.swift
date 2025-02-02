@@ -12,6 +12,7 @@ import Observation
     @AppStorage("userID") @ObservationIgnored private var userID: String = ""
     @AppStorage("userPW") @ObservationIgnored private var userPW: String = ""
     @AppStorage("loginAutoSave") @ObservationIgnored private var loginInfoSave: Bool = false
+    @AppStorage("didKakaoLogin") @ObservationIgnored private var didKakaoLogin: Bool = false
     
     var isDropAgreed: Bool = false
 
@@ -34,5 +35,7 @@ import Observation
         userID = ""
         userPW = ""
         loginInfoSave = false
+        didKakaoLogin = false
     }
 }
+

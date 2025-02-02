@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignTypeView: View {
-    //@State private var viewModel = SignTypeViewModel()
+    @State private var viewModel = SignTypeViewModel()
     
     var body: some View {
         NavigationStack {
@@ -78,5 +78,29 @@ struct SignTypeView: View {
                 await DeepLinkHandler.shared.authHandler(url: url)
             }
         }
+        .onAppear {
+            print(viewModel.getDidkakaoLogin())
+            if viewModel.getDidkakaoLogin() {
+                Task {
+                    if let url = URL(string: "https://wastory.store/api/users/auth/kakao") {
+                        await UIApplication.shared.open(url)
+                    }
+                }
+            }
+        }
     }
 }
+
+
+@Observable final class SignTypeViewModel {
+    @AppStorage("didKakaoLogin") @ObservationIgnored private var didKakaoLogin: Bool = false
+
+    func getDidkakaoLogin() -> Bool {
+        didKakaoLogin
+    }
+    
+    func doKakaoLogin() {
+        didKakaoLogin = true
+    }
+}
+

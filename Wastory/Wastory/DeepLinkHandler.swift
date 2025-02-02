@@ -10,6 +10,7 @@ import Foundation
 @MainActor
 struct DeepLinkHandler {
     static let shared = DeepLinkHandler()    // 싱글톤 인스턴스
+    var viewModel = SignTypeViewModel()
     
     func authHandler(url: URL) async {
         guard url.scheme == "wastory",
@@ -23,7 +24,9 @@ struct DeepLinkHandler {
         Task {
             NetworkConfiguration.accessToken = accessToken
             NetworkConfiguration.refreshToken = refreshToken
+            viewModel.doKakaoLogin()
             await UserInfoRepository.shared.loadKakaoUserInfo()
+            print(viewModel.getDidkakaoLogin())
         }
     }
 }
