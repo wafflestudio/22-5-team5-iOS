@@ -6,13 +6,11 @@
 //
 
 import Foundation
-import SwiftUI
 
 @MainActor
 struct DeepLinkHandler {
     static let shared = DeepLinkHandler()    // 싱글톤 인스턴스
-    
-    @AppStorage("didKakaoLogin") private var didKakaoLogin: Bool = false
+    var viewModel = SignTypeViewModel()
     
     func authHandler(url: URL) async {
         guard url.scheme == "wastory",
@@ -26,7 +24,7 @@ struct DeepLinkHandler {
         Task {
             NetworkConfiguration.accessToken = accessToken
             NetworkConfiguration.refreshToken = refreshToken
-            didKakaoLogin = true
+            viewModel.doKakaoLogin()
             await UserInfoRepository.shared.loadKakaoUserInfo()
         }
     }
