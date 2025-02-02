@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignTypeView: View {
     //@State private var viewModel = SignTypeViewModel()
+    @AppStorage("didKakaoLogin") private var didKakaoLogin: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -76,6 +77,15 @@ struct SignTypeView: View {
         .onOpenURL { url in
             Task {
                 await DeepLinkHandler.shared.authHandler(url: url)
+            }
+        }
+        .onAppear {
+            if didKakaoLogin {
+                Task {
+                    if let url = URL(string: "https://wastory.store/api/users/auth/kakao") {
+                        await DeepLinkHandler.shared.authHandler(url: url)
+                    }
+                }
             }
         }
     }

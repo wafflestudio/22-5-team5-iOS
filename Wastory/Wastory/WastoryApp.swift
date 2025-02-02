@@ -11,6 +11,7 @@ import SwiftUI
 struct WastoryApp: App {
     @AppStorage("userID") private var userID: String = ""
     @AppStorage("userPW") private var userPW: String = ""
+    @AppStorage("didKakaoLogin") private var didKakaoLogin: Bool = false
     @State private var isLoading: Bool = true
     
     @State private var userInfoRepository = UserInfoRepository.shared
