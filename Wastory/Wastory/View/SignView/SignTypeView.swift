@@ -83,7 +83,7 @@ struct SignTypeView: View {
             if viewModel.getDidkakaoLogin() {
                 Task {
                     if let url = URL(string: "https://wastory.store/api/users/auth/kakao") {
-                        await DeepLinkHandler.shared.authHandler(url: url)
+                        await UIApplication.shared.open(url)
                     }
                 }
             }
