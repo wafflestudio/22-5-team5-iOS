@@ -26,6 +26,7 @@ struct DeepLinkHandler {
             NetworkConfiguration.refreshToken = refreshToken
             viewModel.doKakaoLogin()
             await UserInfoRepository.shared.loadKakaoUserInfo()
+            print(viewModel.getDidkakaoLogin())
         }
     }
 }

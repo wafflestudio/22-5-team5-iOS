@@ -79,6 +79,7 @@ struct SignTypeView: View {
             }
         }
         .onAppear {
+            print(viewModel.getDidkakaoLogin())
             if viewModel.getDidkakaoLogin() {
                 Task {
                     if let url = URL(string: "https://wastory.store/api/users/auth/kakao") {
