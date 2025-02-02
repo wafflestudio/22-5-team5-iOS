@@ -33,37 +33,8 @@ struct NotificationCell: View {
             .padding(.top, 5)
             
             VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    Text(notification.username.prefix(7) + ((notification.username.count > 7) ? "..." : ""))
-                        .font(.system(size: 15, weight: .semibold))
-                    
-                    switch notification.type {
-                    case 1:
-                        Text("님이 새 글을 발행했습니다.")
-                            .font(.system(size: 15, weight: .light))
-                    case 2:
-                        Text("님이 내 블로그를 구독합니다.")
-                            .font(.system(size: 15, weight: .light))
-                    case 3:
-                        HStack(spacing: 0) {
-                            Text("님이 ")
-                                .font(.system(size: 15, weight: .light))
-                            Text((notification.postTitle ?? "").prefix(7) + ((notification.postTitle ?? "").count > 7 ? "..." : ""))
-                                .font(.system(size: 15, weight: .semibold))
-                            Text("에 댓글을 남겼습니다.")
-                                .font(.system(size: 15, weight: .light))
-                        }
-                    case 4:
-                        Text("님이 방명록을 남겼습니다.")
-                            .font(.system(size: 15, weight: .light))
-                    case 5:
-                        Text("님이 쪽지를 보냈습니다.")
-                            .font(.system(size: 15, weight: .light))
-                    default:
-                        Text("")
-                    }
-                }
-                .padding(.bottom, 8)
+                notificationText
+                        .padding(.bottom, 8)
                 
                 switch notification.type {
                 case 1:
@@ -129,6 +100,38 @@ struct NotificationCell: View {
             viewModel.setTargetNotification(notification)
             viewModel.toggleIsAlertPresent()
         }
+    }
+    
+    private var notificationText: Text {
+        let usernameText = Text(notification.username.prefix(7) + ((notification.username.count > 7) ? "..." : ""))
+            .font(.system(size: 15, weight: .semibold))
+        
+        let contentText: Text
+        switch notification.type {
+        case 1:
+            contentText = Text("님이 새 글을 발행했습니다.")
+                .font(.system(size: 15, weight: .light))
+        case 2:
+            contentText = Text("님이 내 블로그를 구독합니다.")
+                .font(.system(size: 15, weight: .light))
+        case 3:
+            contentText = Text("님이 ")
+                .font(.system(size: 15, weight: .light)) +
+            Text((notification.postTitle ?? "").prefix(7) + ((notification.postTitle ?? "").count > 7 ? "..." : ""))
+                .font(.system(size: 15, weight: .semibold)) +
+            Text("에 댓글을 남겼습니다.")
+                .font(.system(size: 15, weight: .light))
+        case 4:
+            contentText = Text("님이 방명록을 남겼습니다.")
+                .font(.system(size: 15, weight: .light))
+        case 5:
+            contentText = Text("님이 쪽지를 보냈습니다.")
+                .font(.system(size: 15, weight: .light))
+        default:
+            contentText = Text("")
+        }
+        
+        return usernameText + contentText
     }
 }
 
