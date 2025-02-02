@@ -72,6 +72,7 @@ import Observation
         page = 1
         isPageEnded = false
         comments = []
+        isWaitingResponse = false
     }
     
     //Network
@@ -171,10 +172,8 @@ import Observation
                 print("patch comment")
                 _ = try await NetworkRepository.shared.patchComment(
                     commentID: editingComment?.id ?? 0, content: editingCommentText, isSecret: isEditingCommentSecret)
-                isWaitingResponse = false
             } catch {
                 print("Error: \(error.localizedDescription)")
-                isWaitingResponse = false
             }
         }
     }
@@ -205,10 +204,8 @@ import Observation
                         isSecret: self.isWritingCommentSecret
                     )
                 }
-                isWaitingResponse = false
             } catch {
                 print("Error: \(error.localizedDescription)")
-                isWaitingResponse = false
             }
         }
     }
